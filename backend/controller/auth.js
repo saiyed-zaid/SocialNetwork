@@ -24,9 +24,13 @@ exports.postSignup = async (req, res, next) => {
 
     console.log("req data_", req.body);
     await user.save();
-    res.status(200).json({ msg:'Signup successfully, proced to login!' });
+    res.status(200).json({ msg: "Signup successfully, proced to login!" });
   } catch (error) {
     console.log("Error while creating User", error);
     res.status(422).json({ msg: "Error while creating User" });
   }
+};
+
+exports.postSignin = async (req, res, next) => {
+  const user =  await User.findOne({ email: req.email });
 };
