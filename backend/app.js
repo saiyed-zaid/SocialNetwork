@@ -2,18 +2,20 @@
 const express = require("express");
 const app = express();
 const bodyParser = require("body-parser");
-const morgan = require('morgan');
+const morgan = require("morgan");
+const dotenv = require("dotenv");
+const mongoose = require("mongoose");
+dotenv.config();
 
-const getRoutes = require('./routes/get');
+const getRoutes = require("./routes/get");
 /* Import Required Packages END*/
-
 
 /* Registering middleware BEGIN*/
 app.use(bodyParser.json());
 /* Registering middleware END*/
 
 /* Handling Requests BEGIN */
-app.use(morgan('tiny'));
+app.use(morgan("tiny"));
 app.use(getRoutes);
 /* Handling Requests END */
 
@@ -21,4 +23,12 @@ app.use(getRoutes);
 app.use((error, req, res, next) => {});
 /* Error Handling Middleware END */
 
-app.listen(5000);
+mongoose
+  .connect(process.env.MONGO_URI,{ useNewUrlParser: true,useUnifiedTopology: true })
+  .then(result => {
+    console.log("Connected with Mongodb");
+    app.listen(5000);
+  })
+  .catch(err => {
+    console.log("Error while connecting with database", err);
+  });
