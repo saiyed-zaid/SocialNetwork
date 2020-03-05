@@ -1,3 +1,10 @@
 exports.getPosts = (req, res, next) => {
-  res.send("all posts");
+  res.json({
+      posts:[
+          {
+              title:'first post #1',
+              message:'This is my first post'
+          }
+      ]
+  });
 };
