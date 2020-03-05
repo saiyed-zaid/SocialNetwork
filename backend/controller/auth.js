@@ -1,5 +1,6 @@
 const User = require("../model/user");
 const md5 = require("md5");
+const jwt = require("jsonwebtoken");
 const { validationResult } = require("express-validator");
 
 exports.postSignup = async (req, res, next) => {
@@ -32,5 +33,31 @@ exports.postSignup = async (req, res, next) => {
 };
 
 exports.postSignin = async (req, res, next) => {
-  const user =  await User.findOne({ email: req.email });
+  const user = await User.findOne({ email: req.body.email });
+  if (!user) {
+    return res.status(422).json({
+      msg: "User with this email does not exists"
+    });
+  }
+  if (user.password !== md5(req.body.password)) {
+    return res.status(422).json({
+      msg: "Incorrect password."
+    });
+  }
+
+  let token;
+  token = jwt.sign(
+    { _id: user._id, email: user.email, token: token },
+    "MysecreatKey",
+    { expiresIn: "1h" }
+  );
+
+  res.json({
+    message: "Logged in!",
+    user:{
+      _Id: user._id,
+      email: user.email,
+      token: token
+    }
+  });
 };

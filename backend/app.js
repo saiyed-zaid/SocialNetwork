@@ -7,6 +7,8 @@ const dotenv = require("dotenv");
 const mongoose = require("mongoose");
 dotenv.config();
 
+//Make sure u change `getRoutes` variable name
+
 const getRoutes = require("./routes/post");
 const authRoute = require("./routes/auth");
 /* Import Required Packages END*/
@@ -17,6 +19,21 @@ app.use(bodyParser.json());
 
 /* Handling Requests BEGIN */
 app.use(morgan("tiny"));
+app.use((req, res, next) => {
+  //Which domain can acces it
+  res.setHeader("Access-Control-Allow-Origin", "*");
+
+  //allowed headers for client to set
+  res.setHeader(
+    "Access-Control-Allow-Headers",
+    "Origin, X-Requested-With, Content-Type, Accept, Authorization"
+  );
+
+  //methods that can be supported by client requirest
+  res.setHeader("Access-Control-Allow-Methods", "GET, POST, PATCH, DELETE");
+
+  next();
+});
 app.use(getRoutes);
 app.use(authRoute);
 /* Handling Requests END */
