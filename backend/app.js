@@ -2,6 +2,7 @@
 const express = require("express");
 const app = express();
 const bodyParser = require("body-parser");
+const morgan = require('morgan');
 
 const getRoutes = require('./routes/get');
 /* Import Required Packages END*/
@@ -12,6 +13,7 @@ app.use(bodyParser.json());
 /* Registering middleware END*/
 
 /* Handling Requests BEGIN */
+app.use(morgan('tiny'));
 app.use(getRoutes);
 /* Handling Requests END */
 
