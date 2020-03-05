@@ -1,16 +1,17 @@
 import React, { Component } from "react";
+import { Redirect } from "react-router-dom";
 import Spinner from "../Components/Spinner";
-import { signup } from "../auth/";
+import { signin, authenticate } from "../auth/";
 
-class Signup extends Component {
+class Signin extends Component {
   constructor() {
     super();
     this.state = {
-      name: "",
       email: "",
       password: "",
       error: "",
-      loading: ""
+      redirectToRefferer: false,
+      loading: false
     };
   }
 
@@ -21,40 +22,26 @@ class Signup extends Component {
 
   clickSubmit = event => {
     event.preventDefault();
-    const { name, email, password } = this.state;
+    this.setState({ loading: true });
+    const { email, password } = this.state;
     const user = {
-      name,
       email,
       password
     };
-    signup(user).then(data => {
+    signin(user).then(data => {
       if (data.error) {
-        this.setState({ error: data.error });
+        this.setState({ error: data.error, loading: false });
       } else {
-        this.setState({
-          error: "",
-          name: "",
-          email: "",
-          password: "",
-          open: false
+        this.authenticate(data, () => {
+          this.setState({ redirectToRefferer: true });
         });
       }
     });
   };
 
-  signupForm = (name, email, password) => {
+  signinForm = (email, password) => {
     return (
       <form method="post">
-        <div className="form-group">
-          <label className="bmd-label-floating">Name</label>
-          <input
-            onChange={this.handleChange("name")}
-            type="text"
-            className="form-control"
-            value={name}
-          />
-        </div>
-
         <div className="form-group">
           <label className="bmd-label-floating">Email</label>
           <input
@@ -77,22 +64,27 @@ class Signup extends Component {
           onClick={this.clickSubmit}
           className="btn btn-raised btn-primary"
         >
-          Sign Up
+          Sign in
+          {/*  <span>
+            <Spinner />
+          </span> */}
         </button>
       </form>
     );
   };
 
   render() {
-    const { name, email, password, error, open, loading } = this.state;
-
+    const { email, password, error, redirectToRefferer, loading } = this.state;
+    if (redirectToRefferer) {
+      return <Redirect to="/" />;
+    }
     return (
       <div className="container col-lg-3">
         <div
           className="card p-3 mt-5"
           style={{ borderRadius: "5px", boxShadow: "5px 5px 5px lightgrey" }}
         >
-          <h2 className="mb-5 mt-4">Signup</h2>
+          <h2 className="mb-5 mt-4">Signin</h2>
           <div
             className="alert alert-danger alert-dismissible fade show"
             style={{ display: error ? "" : "none" }}
@@ -107,26 +99,12 @@ class Signup extends Component {
               <span aria-hidden="true">&times;</span>
             </button>
           </div>
-          <div
-            className="alert alert-success alert-dismissible fade show"
-            style={{ display: open ? "" : "none" }}
-          >
-            New Account Is Successfully Created. Please Sign In.
-            <button
-              type="button"
-              className="close"
-              data-dismiss="alert"
-              aria-label="Close"
-            >
-              <span aria-hidden="true">&times;</span>
-            </button>
-          </div>
-          {/*  {loading ? <Spinner /> : ""} */}
-          {this.signupForm(name, email, password)}
+
+          {this.signinForm(email, password)}
         </div>
       </div>
     );
   }
 }
 
-export default Signup;
+export default Signin;
