@@ -1,14 +1,13 @@
 const Post = require("../model/posts");
 const { validationResult } = require("express-validator");
-exports.getPosts = (req, res, next) => {
-  res.json({
-    posts: [
-      {
-        title: "first post #1",
-        message: "This is my first post"
-      }
-    ]
-  });
+exports.getPosts = async (req, res, next) => {
+  try {
+    const posts = await Post.find().select("_id title body");
+    res.json({ posts });
+  } catch (error) {
+    console.log("Error while fetching posts", error);
+    res.status(422).json({ msg: "Error while fetching posts" });
+  }
 };
 exports.createPost = async (req, res, next) => {
   const errors = validationResult(req);
