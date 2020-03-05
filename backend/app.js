@@ -7,7 +7,7 @@ const dotenv = require("dotenv");
 const mongoose = require("mongoose");
 dotenv.config();
 
-const getRoutes = require("./routes/get");
+const getRoutes = require("./routes/post");
 /* Import Required Packages END*/
 
 /* Registering middleware BEGIN*/
