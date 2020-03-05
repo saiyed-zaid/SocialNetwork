@@ -1,6 +1,8 @@
 const express = require("express");
 const router = express.Router();
 
-exports.getPosts = router.use((req, res, next) => {
+router.get('/',(req, res, next) => {
     res.send('all posts');
 });
+
+module.exports = router

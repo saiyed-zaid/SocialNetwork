@@ -12,7 +12,7 @@ app.use(bodyParser.json());
 /* Registering middleware END*/
 
 /* Handling Requests BEGIN */
-app.get("/", getRoutes.getPosts);
+app.use(getRoutes);
 /* Handling Requests END */
 
 /* Error Handling Middleware BEGIN */
