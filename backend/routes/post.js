@@ -5,6 +5,7 @@ const { body } = require("express-validator");
 
 router.get("/", postController.getPosts);
 
+
 router.post(
   "/post",
   [

@@ -8,6 +8,7 @@ const mongoose = require("mongoose");
 dotenv.config();
 
 const getRoutes = require("./routes/post");
+const authRoute = require("./routes/auth");
 /* Import Required Packages END*/
 
 /* Registering middleware BEGIN*/
@@ -17,6 +18,7 @@ app.use(bodyParser.json());
 /* Handling Requests BEGIN */
 app.use(morgan("tiny"));
 app.use(getRoutes);
+app.use(authRoute);
 /* Handling Requests END */
 
 /* Error Handling Middleware BEGIN */
@@ -24,7 +26,10 @@ app.use((error, req, res, next) => {});
 /* Error Handling Middleware END */
 
 mongoose
-  .connect(process.env.MONGO_URI,{ useNewUrlParser: true,useUnifiedTopology: true })
+  .connect(process.env.MONGO_URI, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true
+  })
   .then(result => {
     console.log("Connected with Mongodb");
     app.listen(5000);
