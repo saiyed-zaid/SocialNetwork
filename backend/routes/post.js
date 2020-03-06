@@ -30,6 +30,7 @@ router.post(
 );
 
 router.delete("/api/post/:postId", auth_check, postController.deletePost);
+router.patch("/api/post/:postId", auth_check, postController.updatePost);
 
 router.param("userId", userController.userById);
 

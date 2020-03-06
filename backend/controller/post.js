@@ -1,5 +1,7 @@
 const Post = require("../model/posts");
 const { validationResult } = require("express-validator");
+const _ = require("lodash");
+
 
 exports.postById = async (req, res, next, id) => {
   try {
@@ -80,3 +82,21 @@ exports.deletePost =  async (req, res, next) => {
     return res.json({ msg: "Error while deleting post." });
   }
 }
+
+exports.updatePost = async (req, res, next) => {
+  if (req.auth._id != req.post.postedBy) {
+    return res.json({ msg: "Not authorized user for Updating this post." });
+  }
+
+  let post = req.post;
+  post = _.extend(post, req.body);
+  post.updated = Date.now();
+  try {
+    const result = await post.save();
+    res.json({ post });
+  } catch (error) {
+    res.json({
+      msg: "Error while updating profile"
+    });
+  }
+};
