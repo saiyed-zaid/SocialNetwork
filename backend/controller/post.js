@@ -22,7 +22,7 @@ exports.createPost = async (req, res, next) => {
   const post = new Post(req.body);
   try {
     const result = await post.save();
-    res.json(result);
+    res.json({result});
   } catch (err) {
     console.log("Error while Creating Post", err);
   }

@@ -1,13 +1,14 @@
 const express = require("express");
 const router = express.Router();
 const postController = require("../controller/post");
+const userController = require('../controller/user');
 const { body } = require("express-validator");
+const auth_check = require('../middleware/auth-check');
 
-router.get("/", postController.getPosts);
-
+router.get("/api/post",auth_check, postController.getPosts);
 
 router.post(
-  "/post",
+  "/api/post",auth_check,
   [
     body("title")
       .notEmpty()
@@ -24,5 +25,7 @@ router.post(
   ],
   postController.createPost
 );
+
+router.param("userId", userController.userById);
 
 module.exports = router;

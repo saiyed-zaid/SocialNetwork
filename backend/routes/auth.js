@@ -2,9 +2,10 @@ const express = require("express");
 const router = express.Router();
 const authController = require("../controller/auth");
 const { body } = require("express-validator");
+const userController = require("../controller/user");
 
 router.post(
-  "/signup",
+  "/api/signup",
   [
     body("name")
       .notEmpty()
@@ -25,5 +26,14 @@ router.post(
   ],
   authController.postSignup
 );
+router.post("/api/signin", authController.postSignin);
+
+router.get("/api/logout", (req, res, next) => {
+  res.json({
+    msg: "Logoun Success"
+  });
+});
+
+router.param("userId", userController.userById);
 
 module.exports = router;

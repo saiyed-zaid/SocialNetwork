@@ -7,8 +7,11 @@ const dotenv = require("dotenv");
 const mongoose = require("mongoose");
 dotenv.config();
 
+//Make sure u change `getRoutes` variable name
+
 const getRoutes = require("./routes/post");
 const authRoute = require("./routes/auth");
+const userRoutes = require("./routes/user");
 /* Import Required Packages END*/
 
 /* Registering middleware BEGIN*/
@@ -17,12 +20,32 @@ app.use(bodyParser.json());
 
 /* Handling Requests BEGIN */
 app.use(morgan("tiny"));
-app.use(getRoutes);
+app.use((req, res, next) => {
+  //Which domain can acces it
+  res.setHeader("Access-Control-Allow-Origin", "*");
+
+  //allowed headers for client to set
+  res.setHeader(
+    "Access-Control-Allow-Headers",
+    "Origin, X-Requested-With, Content-Type, Accept, Authorization"
+  );
+
+  //methods that can be supported by client requirest
+  res.setHeader("Access-Control-Allow-Methods", "GET, POST, PATCH, DELETE");
+
+  next();
+});
+app.use(userRoutes);
 app.use(authRoute);
+app.use(getRoutes);
 /* Handling Requests END */
 
 /* Error Handling Middleware BEGIN */
-app.use((error, req, res, next) => {});
+app.use((error, req, res, next) => {
+  res.status(401).json({
+    message : error.message
+  });
+});
 /* Error Handling Middleware END */
 
 mongoose
