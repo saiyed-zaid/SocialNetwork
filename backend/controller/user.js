@@ -38,3 +38,8 @@ exports.getUsers = async (req, res, next) => {
     });
   }
 };
+
+exports.getUser = async (req, res, next) => {
+  req.profile.password = undefined;
+    return res.json({ user: req.profile });
+};
