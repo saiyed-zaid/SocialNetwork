@@ -39,7 +39,11 @@ app.use(getRoutes);
 /* Handling Requests END */
 
 /* Error Handling Middleware BEGIN */
-app.use((error, req, res, next) => {});
+app.use((error, req, res, next) => {
+  res.status(401).json({
+    message : error.message
+  });
+});
 /* Error Handling Middleware END */
 
 mongoose

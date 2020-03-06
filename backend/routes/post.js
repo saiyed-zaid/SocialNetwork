@@ -5,14 +5,14 @@ const { body } = require("express-validator");
 const jwt = require('jsonwebtoken');
 const auth_check = require('../middleware/auth-check');
 
-router.get("/api/post", postController.getPosts);
+router.get("/api/post",auth_check, postController.getPosts);
 
 /* Checking Autherization */
-router.use(auth_check);
+/* router.use(auth_check); */
 /* Checking Autherization */
 
 router.post(
-  "/api/post",
+  "/api/post",auth_check,
   [
     body("title")
       .notEmpty()
