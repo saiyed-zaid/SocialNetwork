@@ -2,32 +2,17 @@ const express = require("express");
 const router = express.Router();
 const postController = require("../controller/post");
 const { body } = require("express-validator");
+const jwt = require('jsonwebtoken');
+const auth_check = require('../middleware/auth-check');
 
-router.get("/", postController.getPosts);
+router.get("/api/post", postController.getPosts);
 
 /* Checking Autherization */
-router.use((req, res, next) => {
- /*  if (req.method === "OPTIONS") {
-    return next();
-  } */
- /*  try {
-    const token = req.headers.authorization.split(" ")[1];
-    console.log("__TOKEN", token);
-    if (!token) {
-    return  res.status(401).json({ msg: "Autherization failed" });
-    }
-    const decodedToken = jwt.verify("MysecreatKey");
-    req.userData = { email: decodedToken.email };
-    next();
-  } catch (error) {
-    return  res.status(401).json({ msg: "Autherization failedd" });
-  } */
-  next();
-});
+router.use(auth_check);
 /* Checking Autherization */
 
 router.post(
-  "/post",
+  "/api/post",
   [
     body("title")
       .notEmpty()

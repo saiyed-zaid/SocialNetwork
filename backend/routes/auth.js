@@ -4,7 +4,7 @@ const authController = require("../controller/auth");
 const { body } = require("express-validator");
 
 router.post(
-  "/signup",
+  "/api/signup",
   [
     body("name")
       .notEmpty()
@@ -25,6 +25,12 @@ router.post(
   ],
   authController.postSignup
 );
-router.post('/signin',authController.postSignin);
+router.post("/api/signin", authController.postSignin);
+
+router.get("/api/logout", (req, res, next) => {
+  res.json({
+    msg: "Logoun Success"
+  });
+});
 
 module.exports = router;

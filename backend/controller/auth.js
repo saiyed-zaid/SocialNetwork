@@ -33,13 +33,13 @@ exports.postSignup = async (req, res, next) => {
 };
 
 exports.postSignin = async (req, res, next) => {
-  const user = await User.findOne({ email: req.body.email });
-  if (!user) {
+  const userExists = await User.findOne({ email: req.body.email });
+  if (!userExists) {
     return res.status(422).json({
       msg: "User with this email does not exists"
     });
   }
-  if (user.password !== md5(req.body.password)) {
+  if (userExists.password !== md5(req.body.password)) {
     return res.status(422).json({
       msg: "Incorrect password."
     });
@@ -47,16 +47,16 @@ exports.postSignin = async (req, res, next) => {
 
   let token;
   token = jwt.sign(
-    { _id: user._id, email: user.email, token: token },
-    "MysecreatKey",
+    { _id: userExists._id, email: userExists.email, token: token },
+    process.env.JWT_KEY,
     { expiresIn: "1h" }
   );
 
   res.json({
     message: "Logged in!",
     user:{
-      _Id: user._id,
-      email: user.email,
+      _Id: userExists._id,
+      email: userExists.email,
       token: token
     }
   });

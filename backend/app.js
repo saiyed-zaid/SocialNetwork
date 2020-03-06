@@ -34,8 +34,8 @@ app.use((req, res, next) => {
 
   next();
 });
-app.use(getRoutes);
 app.use(authRoute);
+app.use(getRoutes);
 /* Handling Requests END */
 
 /* Error Handling Middleware BEGIN */
