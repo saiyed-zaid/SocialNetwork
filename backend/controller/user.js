@@ -1,4 +1,5 @@
 const User = require("../model/user");
+const _ = require("lodash");
 exports.userById = async (req, res, next, id) => {
   try {
     const user = await User.findById(id);
@@ -35,6 +36,38 @@ exports.getUsers = async (req, res, next) => {
   } catch (error) {
     return res.status(404).json({
       msg: "No User Found"
+    });
+  }
+};
+
+exports.getUser = async (req, res, next) => {
+  req.profile.password = undefined;
+  return res.json({ user: req.profile });
+};
+
+exports.updateUser = async (req, res, next) => {
+  let user = req.profile;
+  user = _.extend(user, req.body);
+  user.updated = Date.now();
+  try {
+    const result = await user.save();
+    user.password = undefined;
+    res.json({ user });
+  } catch (error) {
+    res.json({
+      msg: "Error while updating profile"
+    });
+  }
+};
+
+exports.deleteUser = async (req, res, next) => {
+  let user = req.profile;
+  try {
+    const result = await user.remove();
+    res.json({ 'msg':'User Deleted succesfully' });
+  } catch (error) {
+    res.json({
+      msg: "Error while deleting profile"
     });
   }
 };
