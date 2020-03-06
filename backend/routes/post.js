@@ -1,15 +1,11 @@
 const express = require("express");
 const router = express.Router();
 const postController = require("../controller/post");
+const userController = require('../controller/user');
 const { body } = require("express-validator");
-const jwt = require('jsonwebtoken');
 const auth_check = require('../middleware/auth-check');
 
 router.get("/api/post",auth_check, postController.getPosts);
-
-/* Checking Autherization */
-/* router.use(auth_check); */
-/* Checking Autherization */
 
 router.post(
   "/api/post",auth_check,
@@ -29,5 +25,7 @@ router.post(
   ],
   postController.createPost
 );
+
+router.param("userId", userController.userById);
 
 module.exports = router;
