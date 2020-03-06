@@ -2,7 +2,7 @@ const Post = require("../model/posts");
 const { validationResult } = require("express-validator");
 exports.getPosts = async (req, res, next) => {
   try {
-    const posts = await Post.find().select("_id title body");
+    const posts = await Post.find().select("_id title body postedBy");
     res.json({ posts });
   } catch (error) {
     console.log("Error while fetching posts", error);
@@ -19,7 +19,6 @@ exports.createPost = async (req, res, next) => {
       msg: err
     });
   }
-  //req.body
   const post = new Post({
     title: req.body.title,
     body: req.body.body,
