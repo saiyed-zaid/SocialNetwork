@@ -11,6 +11,7 @@ dotenv.config();
 
 const getRoutes = require("./routes/post");
 const authRoute = require("./routes/auth");
+const userRoutes = require("./routes/user");
 /* Import Required Packages END*/
 
 /* Registering middleware BEGIN*/
@@ -34,6 +35,7 @@ app.use((req, res, next) => {
 
   next();
 });
+app.use(userRoutes);
 app.use(authRoute);
 app.use(getRoutes);
 /* Handling Requests END */

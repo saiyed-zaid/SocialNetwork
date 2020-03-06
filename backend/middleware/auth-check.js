@@ -17,7 +17,7 @@ module.exports = async (req, res, next) => {
     }
     const decodedToken = jwt.verify(token, process.env.JWT_KEY);
 
-    req.userData = { email: decodedToken.email };
+    req.auth = { _id: decodedToken._id };
 
     next();
   } catch (error) {
