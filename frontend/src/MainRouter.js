@@ -4,15 +4,26 @@ import Home from "./core/Home";
 import Menu from "./core/Menu";
 import Signup from "./user/Signup";
 import Signin from "./user/Signin";
+import Profile from "./user/Profile";
+import Users from "./user/Users";
+import EditProfile from "./user/EditProfile";
+import PrivateRoute from "./auth/PrivateRoute";
 
 const MainRouter = props => {
   return (
     <div>
       <Menu />
       <Switch>
-        <Route path="/" exact component={Home}></Route>
-        <Route path="/signup" exact component={Signup}></Route>
-        <Route path="/signin" exact component={Signin}></Route>
+        <Route path="/" exact component={Home} />
+        <Route path="/users" exact component={Users} />
+        <Route path="/signup" exact component={Signup} />
+        <Route path="/signin" exact component={Signin} />
+        <PrivateRoute
+          path="/profile/edit/:userId"
+          exact
+          component={EditProfile}
+        />
+        <PrivateRoute path="/profile/:userId" exact component={Profile} />
       </Switch>
     </div>
   );

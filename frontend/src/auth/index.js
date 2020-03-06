@@ -1,5 +1,11 @@
+/**
+ * Function For Sending Signup User Data To Server
+ *
+ * @param {json} user
+ *
+ */
 export const signup = user => {
-  return fetch("http://localhost:5000/signup", {
+  return fetch(`${process.env.REACT_APP_API_URL}/signup`, {
     method: "POST",
     headers: {
       Accept: "application/json",
@@ -13,8 +19,13 @@ export const signup = user => {
     .catch(err => console.log(err));
 };
 
+/**
+ * Function For Sending Signin User Data To Server
+ *
+ * @param {json} user
+ */
 export const signin = user => {
-  return fetch("http://localhost:5000/signin", {
+  return fetch(`${process.env.REACT_APP_API_URL}/signin`, {
     method: "POST",
     headers: {
       Accept: "application/json",
@@ -28,6 +39,12 @@ export const signin = user => {
     .catch(err => console.log(err));
 };
 
+/**
+ * Function For Authenticating User
+ *
+ * @param {Token} jwt
+ * @param {function} next
+ */
 export const authenticate = (jwt, next) => {
   if (typeof window !== "undefined") {
     localStorage.setItem("jwt", JSON.stringify(jwt));
@@ -35,12 +52,24 @@ export const authenticate = (jwt, next) => {
   }
 };
 
+export const setName = (name, next) => {
+  if (typeof window !== "undefined") {
+    localStorage.setItem("username", JSON.stringify(name));
+    next();
+  }
+};
+
+/**
+ * Function For Signin Out User
+ *
+ * @param {function} next
+ */
 export const signout = next => {
   if (typeof window !== "undefined") {
     localStorage.removeItem("jwt");
   }
   next();
-  return fetch("http://localhost:5000/signout", {
+  return fetch(`${process.env.REACT_APP_API_URL}/signout`, {
     method: "GET"
   })
     .then(response => {
@@ -51,6 +80,9 @@ export const signout = next => {
     .catch(err => console.log(err));
 };
 
+/**
+ * Function For Checking User Is Authenticated Or Not
+ */
 export const isAuthenticated = () => {
   if (typeof window == "undefined") {
     return false;
