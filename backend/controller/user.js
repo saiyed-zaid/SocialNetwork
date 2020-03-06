@@ -1,4 +1,5 @@
 const User = require("../model/user");
+const _ = require("lodash");
 exports.userById = async (req, res, next, id) => {
   try {
     const user = await User.findById(id);
@@ -41,5 +42,19 @@ exports.getUsers = async (req, res, next) => {
 
 exports.getUser = async (req, res, next) => {
   req.profile.password = undefined;
-    return res.json({ user: req.profile });
+  return res.json({ user: req.profile });
+};
+
+exports.updateUser = async (req, res, next) => {
+  let user = req.profile;
+  user = _.extend(user, req.body);
+  user.updated = Date.now();
+  try {
+    const result = await user.save();
+    res.json({ user });
+  } catch (error) {
+    res.json({
+      msg: "Error while updating profile"
+    });
+  }
 };
