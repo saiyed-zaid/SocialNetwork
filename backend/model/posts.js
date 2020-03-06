@@ -12,6 +12,16 @@ const PostSchema = new Schema({
     required: true,
     minlength: 5,
     maxlength: 2000
+  },
+  photo: {
+    type: String
+  },
+  postedBy: {
+    type: ObjectId
+  },
+  created:{
+    type:Date,
+    default:Date.now
   }
 });
 

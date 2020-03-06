@@ -19,10 +19,15 @@ exports.createPost = async (req, res, next) => {
       msg: err
     });
   }
-  const post = new Post(req.body);
+  //req.body
+  const post = new Post({
+    title: req.body.title,
+    body: req.body.body,
+    postedBy: req.auth._id
+  });
   try {
     const result = await post.save();
-    res.json({result});
+    res.json({ result });
   } catch (err) {
     console.log("Error while Creating Post", err);
   }
