@@ -1,5 +1,18 @@
 const Post = require("../model/posts");
 const { validationResult } = require("express-validator");
+
+exports.postById = async (req, res, next, id) => {
+  try {
+    const post = await Post.findOne({ _id: id });
+    if (post) {
+      req.post = post;
+    }
+  } catch (error) {
+    console.log("Error while fatching post.", error);
+  }
+  next();
+};
+
 exports.getPosts = async (req, res, next) => {
   try {
     const posts = await Post.find().select("_id title body postedBy");
@@ -9,6 +22,25 @@ exports.getPosts = async (req, res, next) => {
     res.status(422).json({ msg: "Error while fetching posts" });
   }
 };
+
+exports.getPostsByUser = async (req, res, next) => {
+  try {
+    const posts = await Post.find({ postedBy: req.profile._id });
+    if (posts.length == 0) {
+      return res.json({
+        msg: "There is no posts by this user"
+      });
+    }
+    return res.json({
+      posts
+    });
+  } catch (error) {
+    return res.json({
+      msg: "Error while fetching Posts"
+    });
+  }
+};
+
 exports.createPost = async (req, res, next) => {
   const errors = validationResult(req);
 
@@ -31,3 +63,20 @@ exports.createPost = async (req, res, next) => {
     console.log("Error while Creating Post", err);
   }
 };
+
+exports.deletePost =  async (req, res, next) => {
+  const post = req.post;
+  if (!post) {
+    return res.json({ msg: "Post not Found" });
+  }
+
+  if (req.auth._id != req.post.postedBy) {
+    return res.json({ msg: "Not authorized user for deleting this post." });
+  }
+  try {
+    const result = await Post.remove({ _id: req.post._id });
+    return res.json({ msg: "Post deleted successfully." });
+  } catch (error) {
+    return res.json({ msg: "Error while deleting post." });
+  }
+}
