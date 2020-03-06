@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import { Link } from "react-router-dom";
 import Spinner from "../Components/Spinner";
 import { signup } from "../auth/";
 
@@ -111,7 +112,8 @@ class Signup extends Component {
             className="alert alert-success alert-dismissible fade show"
             style={{ display: open ? "" : "none" }}
           >
-            New Account Is Successfully Created. Please Sign In.
+            New Account Is Successfully Created. Please
+            <Link to="/signin">Sign In</Link>.
             <button
               type="button"
               className="close"

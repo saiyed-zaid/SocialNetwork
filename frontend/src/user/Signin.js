@@ -32,7 +32,7 @@ class Signin extends Component {
       if (data.error) {
         this.setState({ error: data.error, loading: false });
       } else {
-        this.authenticate(data, () => {
+        authenticate(data, () => {
           this.setState({ redirectToRefferer: true });
         });
       }
