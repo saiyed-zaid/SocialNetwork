@@ -51,10 +51,23 @@ exports.updateUser = async (req, res, next) => {
   user.updated = Date.now();
   try {
     const result = await user.save();
+    user.password = undefined;
     res.json({ user });
   } catch (error) {
     res.json({
       msg: "Error while updating profile"
+    });
+  }
+};
+
+exports.deleteUser = async (req, res, next) => {
+  let user = req.profile;
+  try {
+    const result = await user.remove();
+    res.json({ 'msg':'User Deleted succesfully' });
+  } catch (error) {
+    res.json({
+      msg: "Error while deleting profile"
     });
   }
 };
