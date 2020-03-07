@@ -1,5 +1,4 @@
 export const read = async (userId, token) => {
-  console.log("TOKEN__", token);
   const user = await fetch(
     `${process.env.REACT_APP_API_URL}/api/user/${userId}`,
     {
@@ -20,23 +19,13 @@ export const list = async (userId, token) => {
     method: "GET"
   });
   return await users.json({ users });
-
-  /*   return  fetch(`${process.env.REACT_APP_API_URL}/api/users`, {
-    method: "GET"
-  })
-    .then(response => {
-      console.log('FRONt REPOS__',response);
-      return await response.json();
-    })
-    .catch(err => console.log(err));
- */
 };
 
 export const remove = (userId, token) => {
   return fetch(`${process.env.REACT_APP_API_URL}/api/user/${userId}`, {
     method: "DELETE",
     headers: {
-      Accept: "applicayion/json",
+      Accept: "application/json",
       "Content-Type": "Applicatiom/json",
       Authorization: `Bearer ${token}`
     }
@@ -49,9 +38,9 @@ export const remove = (userId, token) => {
 
 export const update = (userId, token, user) => {
   return fetch(`${process.env.REACT_APP_API_URL}/api/user/${userId}`, {
-    method: "PUT",
+    method: "PATCH",
     headers: {
-      Accept: "applicayion/json",
+      Accept: "application/json",
       Authorization: `Bearer ${token}`
     },
     body: user
@@ -64,8 +53,8 @@ export const update = (userId, token, user) => {
 
 export const updateUser = (user, next) => {
   if (typeof window != "undefined") {
-    if (localStorage.getItem("jwt")) {
-      let auth = JSON.parse(localStorage.getItem("jwt"));
+    if (localStorage.getItem("jwt").user) {
+      let auth = JSON.parse(localStorage.getItem("jwt").user);
       auth.user = user;
       localStorage.setItem("jwt", JSON.stringify(auth));
       next();

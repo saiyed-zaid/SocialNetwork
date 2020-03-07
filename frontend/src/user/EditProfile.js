@@ -84,11 +84,14 @@ class EditProfile extends Component {
 
     if (this.isValid) {
       const userId = this.props.match.params.userId;
-      const token = isAuthenticated().token;
+      const token = isAuthenticated().user.token;
+      console.log(userId);
+
       update(userId, token, this.userData).then(data => {
-        if (data.error) {
-          this.setState({ error: data.error });
-          // console.log(data);
+        console.log(data);
+
+        if (data.msg) {
+          this.setState({ error: data.msg });
         } else {
           updateUser(data, () => {
             this.setState({
@@ -134,7 +137,7 @@ class EditProfile extends Component {
         <div className="form-group">
           <label className="bmd-label-floating">About</label>
           <textarea
-            onChange={this.handleChange("photo")}
+            onChange={this.handleChange("about")}
             className="form-control"
             value={about}
           />
