@@ -31,7 +31,7 @@ app.use((req, res, next) => {
   );
 
   //methods that can be supported by client requirest
-  res.setHeader("Access-Control-Allow-Methods", "GET, POST, PATCH, DELETE");
+  res.setHeader("Access-Control-Allow-Methods", "GET,POST,PATCH,DELETE,PUT");
 
   next();
 });
@@ -43,7 +43,7 @@ app.use(getRoutes);
 /* Error Handling Middleware BEGIN */
 app.use((error, req, res, next) => {
   res.status(401).json({
-    message : error.message
+    message: error.message
   });
 });
 /* Error Handling Middleware END */

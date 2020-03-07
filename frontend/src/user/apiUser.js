@@ -37,13 +37,17 @@ export const remove = (userId, token) => {
 };
 
 export const update = (userId, token, user) => {
+  console.log("data to updated", user);
+
   return fetch(`${process.env.REACT_APP_API_URL}/api/user/${userId}`, {
     method: "PATCH",
     headers: {
       Accept: "application/json",
+      "Content-Type": "application/json",
       Authorization: `Bearer ${token}`
     },
-    body: user
+    body: JSON.stringify(user)
+    
   })
     .then(response => {
       return response.json();
