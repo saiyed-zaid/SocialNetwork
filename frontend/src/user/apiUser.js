@@ -13,14 +13,24 @@ export const read = (userId, token) => {
     .catch(err => console.log(err));
 };
 
-export const list = (userId, token) => {
-  return fetch(`${process.env.REACT_APP_API_URL}/users`, {
+export const list = async (userId, token) => {
+
+  const users = await fetch(`${process.env.REACT_APP_API_URL}/api/users`, {
+    method: "GET"
+  })
+   return await users.json({users});
+
+
+
+/*   return  fetch(`${process.env.REACT_APP_API_URL}/api/users`, {
     method: "GET"
   })
     .then(response => {
-      return response.json();
+      console.log('FRONt REPOS__',response);
+      return await response.json();
     })
     .catch(err => console.log(err));
+ */
 };
 
 export const remove = (userId, token) => {
