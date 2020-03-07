@@ -36,12 +36,14 @@ exports.postSignin = async (req, res, next) => {
   const userExists = await User.findOne({ email: req.body.email });
   if (!userExists) {
     return res.status(422).json({
-      msg: "User with this email does not exists"
+      msg: "User with this email does not exists",
+      user: {}
     });
   }
   if (userExists.password !== md5(req.body.password)) {
     return res.status(422).json({
-      msg: "Incorrect password."
+      msg: "Incorrect password.",
+      user: {}
     });
   }
 

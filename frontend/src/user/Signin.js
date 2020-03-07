@@ -28,9 +28,10 @@ class Signin extends Component {
       email,
       password
     };
+
     signin(user).then(data => {
-      if (data.error) {
-        this.setState({ error: data.error, loading: false });
+      if (data.msg) {
+        this.setState({ error: data.msg, loading: false });
       } else {
         authenticate(data, () => {
           this.setState({ redirectToRefferer: true });

@@ -24,10 +24,12 @@ class Signup extends Component {
     event.preventDefault();
     const { name, email, password } = this.state;
     const user = {
-      name,
-      email,
-      password
+      name: name,
+      email: email,
+      password: password
     };
+    console.log(user);
+
     signup(user).then(data => {
       if (data.error) {
         this.setState({ error: data.error });
