@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { Redirect } from "react-router-dom";
-import Spinner from "../Components/Spinner";
+// import Spinner from "../Components/Spinner";
 import { signin, authenticate } from "../auth/";
 
 class Signin extends Component {

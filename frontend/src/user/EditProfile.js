@@ -48,6 +48,7 @@ class EditProfile extends Component {
   handleChange = name => event => {
     this.setState({ error: "" });
     const value = name === "photo" ? event.target.files[0] : event.target.value;
+
     const fileSize = name === "photo" ? event.target.files[0].size : 0;
     this.userData.set(name, value);
     this.setState({ [name]: value, fileSize });
@@ -203,8 +204,9 @@ class EditProfile extends Component {
           onError={i => (i.target.src = `${DefaultProfile}`)}
           alt={name}
         />
+        {console.log(name)}
 
-        {this.editForm(name, email, password)}
+        {this.editForm(name, email, password, about)}
       </div>
     );
   }

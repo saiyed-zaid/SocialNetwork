@@ -15,7 +15,7 @@ class Profile extends Component {
   }
 
   init = userId => {
-    const token = isAuthenticated().token;
+    const token = isAuthenticated().user.token;
     read(userId, token).then(data => {
       if (data.error) {
         this.setState({ redirectToSignin: true });
@@ -44,6 +44,7 @@ class Profile extends Component {
           user._id
         }?${new Date().getTime()}`
       : DefaultProfile;
+
     if (redirectToSignin) return <Redirect to="/signin" />;
     return (
       <div className="container">

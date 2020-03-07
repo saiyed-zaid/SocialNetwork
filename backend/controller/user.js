@@ -42,11 +42,13 @@ exports.getUsers = async (req, res, next) => {
 
 exports.getUser = async (req, res, next) => {
   req.profile.password = undefined;
-  return res.json({ user: req.profile });
+  console.log("userid", req.userId);
+  return res.json(req.profile);
 };
 
 exports.updateUser = async (req, res, next) => {
   let user = req.profile;
+
   user = _.extend(user, req.body);
   user.updated = Date.now();
   try {
@@ -64,7 +66,7 @@ exports.deleteUser = async (req, res, next) => {
   let user = req.profile;
   try {
     const result = await user.remove();
-    res.json({ 'msg':'User Deleted succesfully' });
+    res.json({ msg: "User Deleted succesfully" });
   } catch (error) {
     res.json({
       msg: "Error while deleting profile"

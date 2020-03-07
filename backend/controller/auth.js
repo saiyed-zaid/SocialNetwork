@@ -47,15 +47,21 @@ exports.postSignin = async (req, res, next) => {
 
   let token;
   token = jwt.sign(
-    { _id: userExists._id, email: userExists.email, token: token },
+    {
+      _id: userExists._id,
+      name: userExists.name,
+      email: userExists.email,
+      token: token
+    },
     process.env.JWT_KEY,
     { expiresIn: "1h" }
   );
 
   res.json({
     message: "Logged in!",
-    user:{
-      _Id: userExists._id,
+    user: {
+      _id: userExists._id,
+      name: userExists.name,
       email: userExists.email,
       token: token
     }
