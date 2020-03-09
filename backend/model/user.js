@@ -20,6 +20,9 @@ const UserSchema = new Schema({
   },
   updated: {
     type: Date
+  },
+  photo: {
+    type: String
   }
 });
 

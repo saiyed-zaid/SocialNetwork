@@ -48,12 +48,14 @@ class EditProfile extends Component {
   }
 
   handleChange = name => event => {
+    console.log("field name__", name);
     this.setState({ error: "" });
     const value = name === "photo" ? event.target.files[0] : event.target.value;
 
     const fileSize = name === "photo" ? event.target.files[0].size : 0;
 
     this.userData.set(name, value);
+
     this.setState({ [name]: value, fileSize });
   };
 
@@ -84,24 +86,20 @@ class EditProfile extends Component {
   clickSubmit = event => {
     event.preventDefault();
 
-    /* const { name, email, password } = this.state;
-    const user = { name, email, password };
-    console.log(user); */
+    const { name, email, password } = this.state;
+    const user = {
+      name,
+      email,
+      password: password || undefined
+    };
 
     this.setState({ loading: true });
 
     if (this.isValid) {
       const userId = this.props.match.params.userId;
       const token = isAuthenticated().user.token;
-      console.log(userId);
 
-      for (var val of this.userData.values()) {
-        console.log("data to update", val);
-      }
-
-      update(userId, token, this.userData).then(data => {
-        console.log("Update Data", data);
-
+      update(userId, token, user).then(data => {
         if (data.msg) {
           this.setState({ error: data.msg });
         } else {
