@@ -49,6 +49,7 @@ exports.getUser = async (req, res, next) => {
 exports.updateUser = async (req, res, next) => {
   /* User.updateOne({_id:req.profile._id},req.body) */
   let user = req.profile;
+  //req.file.path
   console.log('requested data ',req.body);
   user = _.extend(user, req.body);
   user.updated = Date.now();

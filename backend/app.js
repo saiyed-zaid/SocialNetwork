@@ -5,6 +5,7 @@ const bodyParser = require("body-parser");
 const morgan = require("morgan");
 const dotenv = require("dotenv");
 const mongoose = require("mongoose");
+const multer = require("multer");
 dotenv.config();
 
 //Make sure u change `getRoutes` variable name
@@ -14,12 +15,30 @@ const authRoute = require("./routes/auth");
 const userRoutes = require("./routes/user");
 /* Import Required Packages END*/
 
+const MulterStorage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(err, "upload");
+  },
+  filename: (req, file, cb) => {
+    cb(err, file.originalname);
+  }
+});
+
 /* Registering middleware BEGIN*/
+app.use(
+  multer({
+    storage: MulterStorage,
+    fileFilter: (req, file, cb) => {
+      if (file.mimetype == "image/jpg" || file.mimetype == "image/jpeg")
+        cb(err, true);
+    }
+  }).single("img")
+);
 app.use(bodyParser.json());
+app.use(morgan("tiny"));
 /* Registering middleware END*/
 
 /* Handling Requests BEGIN */
-app.use(morgan("tiny"));
 app.use((req, res, next) => {
   //Which domain can acces it
   res.setHeader("Access-Control-Allow-Origin", "*");
