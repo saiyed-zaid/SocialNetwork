@@ -6,15 +6,19 @@ const morgan = require("morgan");
 const dotenv = require("dotenv");
 const mongoose = require("mongoose");
 const multer = require("multer");
+const cors = require('cors')
 dotenv.config();
+/* Import Required Packages END*/
 
+
+/* Importing Routes BEGIN*/
 //Make sure u change `getRoutes` variable name
-
 const getRoutes = require("./routes/post");
 const authRoute = require("./routes/auth");
 const userRoutes = require("./routes/user");
-/* Import Required Packages END*/
+/* Importing Routes BEGIN*/
 
+/* Configes BEGIN */
 const MulterStorage = multer.diskStorage({
   destination: (req, file, cb) => {
     cb(err, "upload");
@@ -23,6 +27,7 @@ const MulterStorage = multer.diskStorage({
     cb(err, file.originalname);
   }
 });
+/* Configes END */
 
 /* Registering middleware BEGIN*/
 app.use(
@@ -35,6 +40,10 @@ app.use(
   }).single("img")
 );
 app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({
+  extended: false
+  }));
+  app.use(cors());
 app.use(morgan("tiny"));
 /* Registering middleware END*/
 
@@ -67,6 +76,7 @@ app.use((error, req, res, next) => {
 });
 /* Error Handling Middleware END */
 
+/* Connecting with DATABASE BEGIN*/
 mongoose
   .connect(process.env.MONGO_URI, {
     useNewUrlParser: true,
@@ -79,3 +89,4 @@ mongoose
   .catch(err => {
     console.log("Error while connecting with database", err);
   });
+/* Connecting with DATABASE END*/

@@ -3,6 +3,10 @@ const md5 = require("md5");
 const jwt = require("jsonwebtoken");
 const { validationResult } = require("express-validator");
 
+/**
+ * @function middleware
+ * @description Handling post request for creating new post
+ */
 exports.postSignup = async (req, res, next) => {
   const errs = validationResult(req);
   if (!errs.isEmpty()) {
@@ -32,6 +36,10 @@ exports.postSignup = async (req, res, next) => {
   }
 };
 
+/**
+ * @function middleware
+ * @description Handling post request for handling login data
+ */
 exports.postSignin = async (req, res, next) => {
   const userExists = await User.findOne({ email: req.body.email });
   if (!userExists) {

@@ -2,7 +2,10 @@ const Post = require("../model/posts");
 const { validationResult } = require("express-validator");
 const _ = require("lodash");
 
-
+/**
+ * @function middleware
+ * @description Handling get request which fetch all posts
+  */
 exports.postById = async (req, res, next, id) => {
   try {
     const post = await Post.findOne({ _id: id });
@@ -15,6 +18,10 @@ exports.postById = async (req, res, next, id) => {
   next();
 };
 
+/**
+ * @function middleware
+ * @description Handling get request which fetch all posts by userId
+  */
 exports.getPosts = async (req, res, next) => {
   try {
     const posts = await Post.find().select("_id title body postedBy");
@@ -25,6 +32,10 @@ exports.getPosts = async (req, res, next) => {
   }
 };
 
+/**
+ * @function middleware
+ * @description Handling get request which fetch all posts by userId
+  */
 exports.getPostsByUser = async (req, res, next) => {
   try {
     const posts = await Post.find({ postedBy: req.profile._id });
@@ -43,6 +54,10 @@ exports.getPostsByUser = async (req, res, next) => {
   }
 };
 
+/**
+ * @function middleware
+ * @description Handling post request which create new post in database
+  */
 exports.createPost = async (req, res, next) => {
   const errors = validationResult(req);
 
@@ -66,6 +81,10 @@ exports.createPost = async (req, res, next) => {
   }
 };
 
+/**
+ * @function middleware
+ * @description Handling delete request which delete post in database
+  */
 exports.deletePost =  async (req, res, next) => {
   const post = req.post;
   if (!post) {
@@ -83,6 +102,10 @@ exports.deletePost =  async (req, res, next) => {
   }
 }
 
+/**
+ * @function middleware
+ * @description Handling patch request which update post in database
+  */
 exports.updatePost = async (req, res, next) => {
   if (req.auth._id != req.post.postedBy) {
     return res.json({ msg: "Not authorized user for Updating this post." });
