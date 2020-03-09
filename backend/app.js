@@ -5,8 +5,8 @@ const bodyParser = require("body-parser");
 const morgan = require("morgan");
 const dotenv = require("dotenv");
 const mongoose = require("mongoose");
-const multer = require("multer");
-
+/* const multer = require("multer");
+ */
 const cors = require("cors");
 
 dotenv.config();
@@ -20,7 +20,7 @@ const userRoutes = require("./routes/user");
 /* Importing Routes BEGIN*/
 
 /* Configes BEGIN */
-const MulterStorage = multer.diskStorage({
+/* const MulterStorage = multer.diskStorage({
   destination: (req, file, cb) => {
     cb(err, "upload");
   },
@@ -28,11 +28,11 @@ const MulterStorage = multer.diskStorage({
     console.log("FILE__", file);
     cb(err, file.originalname);
   }
-});
+}); */
 /* Configes END */
 
 /* Registering middleware BEGIN*/
-app.use(
+/* app.use(
   multer({
     storage: MulterStorage,
     fileFilter: (req, file, cb) => {
@@ -40,15 +40,15 @@ app.use(
         cb(err, true);
     }
   }).single("img")
-);
+); */
 app.use(bodyParser.json());
 
-app.use(
+/* app.use(
   bodyParser.urlencoded({
     extended: false
   })
 );
-app.use(cors());
+app.use(cors()); */
 app.use("/upload", express.static("upload"));
 
 app.use(morgan("tiny"));

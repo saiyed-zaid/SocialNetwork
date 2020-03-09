@@ -102,7 +102,7 @@ class Signup extends Component {
   };
 
   render() {
-    const { name, email, password, error, open, loading } = this.state;
+    const { name, email, password, error, open } = this.state;
 
     return (
       <div className="container col-lg-3">

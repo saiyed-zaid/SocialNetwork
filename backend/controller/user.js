@@ -1,5 +1,7 @@
 const User = require("../model/user");
 const _ = require("lodash");
+const formidable = require("formidable");
+const fs = require("fs");
 
 exports.userById = async (req, res, next, id) => {
   try {
@@ -60,21 +62,35 @@ exports.getUser = async (req, res, next) => {
  * @description Handling put request which Update single user
  */
 exports.updateUser = async (req, res, next) => {
-  /* User.updateOne({_id:req.profile._id},req.body) */
-  let user = req.profile;
-  //req.file.path
+  let form = new formidable.IncomingForm();
+  form.keepExtensions = true;
+  form.parse(req, (err, fields, files) => {
+    if (err) {
+      return res.status(400).json({
+        error: "Photo could not be uploaded"
+      });
+    }
+    // save user
+    let user = req.profile;
+    user = _.extend(user, fields);
+    user.updated = Date.now();
 
-  user.updated = Date.now();
-  try {
-    const result = await User.updateOne({ _id: req.profile._id }, req.body);
-    user.password = undefined;
+    if (files.photo) {
+      user.photo.data = fs.readFileSync(files.photo.path);
+      user.photo.contentType = files.photo.type;
+    }
 
-    res.json({ user });
-  } catch (error) {
-    res.json({
-      msg: "Error while updating profile"
+    user.save((err, result) => {
+      if (err) {
+        return res.status(400).json({
+          error: err
+        });
+      }
+      user.hashed_password = undefined;
+      user.salt = undefined;
+      res.json(user);
     });
-  }
+  });
 };
 
 /**

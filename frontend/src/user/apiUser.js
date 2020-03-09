@@ -65,34 +65,21 @@ export const remove = async (userId, token) => {
  * @param {json} user        User data
  */
 export const update = async (userId, token, user) => {
-  console.log("__PATH", user.get("image"));
-  const fileData = user.get("image");
-  console.log(fileData.name);
-  const dest = fileData.name;
+  console.log("DATA___-", user);
 
   const userData = await fetch(
     `${process.env.REACT_APP_API_URL}/api/user/${userId}`,
     {
       method: "PUT",
+
       headers: {
         Accept: "application/json",
-        Authorization: `Bearer ${token}`,
-        "Content-Type": "application/json"
+        Authorization: `Bearer ${token}`
       },
-
-      /* formData.append("name", this.state.name);
-    formData.append("email", this.state.email);
-    formData.append("password", this.state.password);
-    formData.append("image", this.state.image);
- */
-      body: JSON.stringify({
-        name: user.get("name"),
-        email: user.get("email"),
-        password: user.get("password"),
-        photo: user.get("image")
-      })
+      body: user
     }
   );
+
   return await userData.json();
 };
 
