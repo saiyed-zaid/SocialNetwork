@@ -8,6 +8,9 @@ class DeleteUser extends Component {
     redirect: false
   };
 
+  /**
+   * function For Deleteing The User Account
+   */
   deleteAccount = () => {
     const token = isAuthenticated().token;
     const userId = this.props.userId;
@@ -20,6 +23,10 @@ class DeleteUser extends Component {
       }
     });
   };
+
+  /**
+   * Function For Confirming The Account Deletion
+   */
   deleteConfirmed = () => {
     let answer = window.confirm(
       "Are Youe Sure. You Want To Delete your Acccount?"
@@ -28,6 +35,7 @@ class DeleteUser extends Component {
       this.deleteAccount();
     }
   };
+
   render() {
     if (this.state.redirect) {
       return <Redirect to="/" />;

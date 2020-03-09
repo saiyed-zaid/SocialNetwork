@@ -15,7 +15,7 @@ router.get("/api/users", userController.getUsers);
  * @function get
  * @description Handling get request which fetch single User
  * @param {middleware} Checking Authorization
- * @param {middleware} getUser 
+ * @param {middleware} getUser
  */
 router.get("/api/user/:userId", auth_check, userController.getUser);
 
@@ -23,7 +23,7 @@ router.get("/api/user/:userId", auth_check, userController.getUser);
  * @function put
  * @description Handling put request which Update single user
  * @param {middleware} Checking Authorization
- * @param {middleware} updateUser 
+ * @param {middleware} updateUser
  */
 router.put("/api/user/:userId", auth_check, userController.updateUser);
 
@@ -31,7 +31,7 @@ router.put("/api/user/:userId", auth_check, userController.updateUser);
  * @function delete
  * @description Handling delete request which delete single user
  * @param {middleware} Checking Authorization
- * @param {middleware} deleteUser 
+ * @param {middleware} deleteUser
  */
 router.delete("/api/user/:userId", auth_check, userController.deleteUser);
 
@@ -42,6 +42,5 @@ router.delete("/api/user/:userId", auth_check, userController.deleteUser);
  * @param {middleware} userById 
  */
 router.param("userId", userController.userById);
-
 
 module.exports = router;

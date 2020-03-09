@@ -15,11 +15,19 @@ class Signin extends Component {
     };
   }
 
+  /**
+   * Fuction For Handling Onchange Events On Controls
+   *
+   *  @param {string} name   Name Of The Control
+   */
   handleChange = name => event => {
     this.setState({ error: "" });
     this.setState({ [name]: event.target.value });
   };
 
+  /**
+   *Function For Handling Submition Of Form
+   */
   clickSubmit = event => {
     event.preventDefault();
     this.setState({ loading: true });
@@ -40,6 +48,12 @@ class Signin extends Component {
     });
   };
 
+  /**
+   * Function For Creating Controls For Sign In form
+   *
+   * @param {string} email  Email Of The User
+   * @param {string} password Password Of the User
+   */
   signinForm = (email, password) => {
     return (
       <form method="post">

@@ -1,3 +1,13 @@
+import axios from "axios";
+
+/**
+ * Api For Reading Data From Database
+ *
+ * @param {string} userId   User Id Of The Logged In User
+ * @param {string} token    token Of The Logged In User
+ *
+ * @returns {json}
+ */
 export const read = async (userId, token) => {
   const user = await fetch(
     `${process.env.REACT_APP_API_URL}/api/user/${userId}`,
@@ -14,47 +24,80 @@ export const read = async (userId, token) => {
   return await user.json({ user });
 };
 
-export const list = async (userId, token) => {
+/**
+ * Api for Listing All The Users
+ *
+ * @returns {json}
+ */
+export const list = async () => {
   const users = await fetch(`${process.env.REACT_APP_API_URL}/api/users`, {
     method: "GET"
   });
   return await users.json({ users });
 };
 
-export const remove = (userId, token) => {
-  return fetch(`${process.env.REACT_APP_API_URL}/api/user/${userId}`, {
-    method: "DELETE",
-    headers: {
-      Accept: "application/json",
-      "Content-Type": "Applicatiom/json",
-      Authorization: `Bearer ${token}`
+/**
+ * Api For Deleting The User Profile
+ *
+ * @param {string} userId         User Id Of The Logged In User
+ * @param {string} tokentoken     Of The Logged In User
+ */
+export const remove = async (userId, token) => {
+  const deleteUser = await fetch(
+    `${process.env.REACT_APP_API_URL}/api/user/${userId}`,
+    {
+      method: "DELETE",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "Application/json",
+        Authorization: `Bearer ${token}`
+      }
     }
-  })
-    .then(response => {
-      return response.json();
-    })
-    .catch(err => console.log(err));
+  );
+  return await deleteUser.json();
 };
 
+/**
+ * Api For Updating The UserData In Database
+ *
+ * @param {string} userId    User Id Of The Logged In User
+ * @param {string} token     token Of The Logged In User
+ * @param {json} user        User data
+ */
 export const update = async (userId, token, user) => {
-/*   for (const iterator of user.values()) {
-    console.log('datae_',iterator);
-    
-  } */
+
   const userData = await fetch(
     `${process.env.REACT_APP_API_URL}/api/user/${userId}`,
     {
       method: "PUT",
       headers: {
         Accept: "application/json",
-        Authorization: `Bearer ${token}`
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json"
       },
-      body: user
+
+      /* formData.append("name", this.state.name);
+    formData.append("email", this.state.email);
+    formData.append("password", this.state.password);
+    formData.append("image", this.state.image);
+ */
+      body: JSON.stringify({
+        name: user.get("name"),
+        email: user.get("email"),
+        password: user.get("password"),
+        photo: user.get("image")
+      })
     }
   );
   return await userData.json();
 };
 
+/**
+ * Api for Updating The User Data In Browser Localstorage
+ *
+ * @param {json} user       user Data
+ * @param {function} next  Function To be Executed After Updating Data
+ */
 export const updateUser = (user, next) => {
   if (typeof window != "undefined") {
     if (localStorage.getItem("jwt").user) {

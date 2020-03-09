@@ -1,7 +1,10 @@
 const User = require("../model/user");
 const _ = require("lodash");
+<<<<<<< HEAD
 const formidable = require("formidable");
 const fs = require("fs");
+=======
+>>>>>>> 47b6896cd3a8360e984ad96de674c542caf49f01
 
 exports.userById = async (req, res, next, id) => {
   try {
@@ -95,12 +98,12 @@ exports.updateUser = async (req, res, next) => {
 
   /*  let user = req.profile;
   //req.file.path
-  console.log('REQ.DATA_____',req.body);
-  user = _.extend(user, req.body);
+
   user.updated = Date.now();
   try {
-    const result = await User.updateOne({_id:req.profile._id},req.body)
+    const result = await User.updateOne({ _id: req.profile._id }, req.body);
     user.password = undefined;
+
     res.json({ user });
   } catch (error) {
     res.json({

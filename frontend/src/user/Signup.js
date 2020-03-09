@@ -15,11 +15,19 @@ class Signup extends Component {
     };
   }
 
+  /**
+   * Fuction For Handling Onchange Events On Controls
+   *
+   *  @param {string} name   Name Of The Control
+   */
   handleChange = name => event => {
     this.setState({ error: "" });
     this.setState({ [name]: event.target.value });
   };
 
+  /**
+   *Function For Handling Submition Of Form
+   */
   clickSubmit = event => {
     event.preventDefault();
     const { name, email, password } = this.state;
@@ -45,6 +53,13 @@ class Signup extends Component {
     });
   };
 
+  /**
+   * Function For Creating Controls For Sign Un form
+   *
+   * @param {string} name  Name Of The User
+   * @param {string} email  Email Of The User
+   * @param {string} password Password Of the User
+   */
   signupForm = (name, email, password) => {
     return (
       <form method="post">
