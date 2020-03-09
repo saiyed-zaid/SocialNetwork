@@ -36,19 +36,22 @@ export const remove = (userId, token) => {
     .catch(err => console.log(err));
 };
 
-export const update = (userId, token, user) => {
-  return fetch(`${process.env.REACT_APP_API_URL}/api/user/${userId}`, {
-    method: "PATCH",
-    headers: {
-      Accept: "application/json",
-      Authorization: `Bearer ${token}`
-    },
-    body: user
-  })
-    .then(response => {
-      return response.json();
-    })
-    .catch(err => console.log(err));
+export const update = async (userId, token, user) => {
+  for (var iterator of user.values()) {
+    console.log("H_", iterator);
+  }
+  const userData = await fetch(
+    `${process.env.REACT_APP_API_URL}/api/user/${userId}`,
+    {
+      method: "PATCH",
+      headers: {
+        Accept: "application/json",
+        Authorization: `Bearer ${token}`
+      },
+      body: user
+    }
+  );
+  return await userData.json();
 };
 
 export const updateUser = (user, next) => {

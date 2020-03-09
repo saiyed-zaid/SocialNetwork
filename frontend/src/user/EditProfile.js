@@ -21,7 +21,9 @@ class EditProfile extends Component {
     };
   }
   init = userId => {
-    const token = isAuthenticated().token;
+    const token = isAuthenticated().user.token;
+    console.log("id", userId);
+
     read(userId, token).then(data => {
       if (data.error) {
         this.setState({ redirectToProfile: true });
@@ -50,6 +52,7 @@ class EditProfile extends Component {
     const value = name === "photo" ? event.target.files[0] : event.target.value;
 
     const fileSize = name === "photo" ? event.target.files[0].size : 0;
+
     this.userData.set(name, value);
     this.setState({ [name]: value, fileSize });
   };
@@ -80,6 +83,11 @@ class EditProfile extends Component {
 
   clickSubmit = event => {
     event.preventDefault();
+
+    /* const { name, email, password } = this.state;
+    const user = { name, email, password };
+    console.log(user); */
+
     this.setState({ loading: true });
 
     if (this.isValid) {
@@ -87,8 +95,12 @@ class EditProfile extends Component {
       const token = isAuthenticated().user.token;
       console.log(userId);
 
+      for (var val of this.userData.values()) {
+        console.log("data to update", val);
+      }
+
       update(userId, token, this.userData).then(data => {
-        console.log(data);
+        console.log("Update Data", data);
 
         if (data.msg) {
           this.setState({ error: data.msg });
@@ -105,16 +117,18 @@ class EditProfile extends Component {
 
   editForm = (name, email, password, about) => {
     return (
-      <form method="post">
-        <div className="form-group">
-          <label className="bmd-label-floating">Profile Photo</label>
-          <input
-            onChange={this.handleChange("photo")}
-            type="file"
-            accept="image/*"
-            className="form-control"
-          />
-        </div>
+      <form method="post" encType="multipart/form-data">
+        {
+          <div className="form-group">
+            <label className="bmd-label-floating">Profile Photo</label>
+            <input
+              onChange={this.handleChange("photo")}
+              type="file"
+              accept="image/*"
+              className="form-control"
+            />
+          </div>
+        }
         <div className="form-group">
           <label className="bmd-label-floating">Name</label>
           <input
@@ -122,6 +136,7 @@ class EditProfile extends Component {
             type="text"
             className="form-control"
             value={name}
+            name="name"
           />
         </div>
 
@@ -132,16 +147,18 @@ class EditProfile extends Component {
             type="email"
             className="form-control"
             value={email}
+            name="email"
           />
         </div>
-        <div className="form-group">
+        {/*   <div className="form-group">
           <label className="bmd-label-floating">About</label>
           <textarea
             onChange={this.handleChange("about")}
             className="form-control"
             value={about}
+            name="about"
           />
-        </div>
+        </div> */}
         <div className="form-group">
           <label className="bmd-label-floating">Password</label>
           <input
@@ -149,6 +166,7 @@ class EditProfile extends Component {
             type="password"
             className="form-control"
             value={password}
+            name="password"
           />
         </div>
         <button
@@ -172,15 +190,16 @@ class EditProfile extends Component {
       loading,
       about
     } = this.state;
+
     if (redirectToProfile) {
       return <Redirect to={`/user/${id}`} />;
     }
 
-    const photoUrl = id
+    /*   const photoUrl = id
       ? `${
           process.env.REACT_APP_API_URL
         }/user/photo/${id}?${new Date().getTime()}`
-      : DefaultProfile;
+      : DefaultProfile; */
 
     return (
       <div className="container">
@@ -201,13 +220,13 @@ class EditProfile extends Component {
         </div>
         {loading ? <div></div> : ""}
 
-        <img
+        {/* <img
           style={{ height: "200px", width: "200px" }}
           className="img-thumbnail"
           src={photoUrl}
           onError={i => (i.target.src = `${DefaultProfile}`)}
           alt={name}
-        />
+        /> */}
         {console.log(name)}
 
         {this.editForm(name, email, password, about)}
