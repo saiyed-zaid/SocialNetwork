@@ -19,18 +19,18 @@ const userRoutes = require("./routes/user");
 /* Importing Routes BEGIN*/
 
 /* Configes BEGIN */
-const MulterStorage = multer.diskStorage({
+/* const MulterStorage = multer.diskStorage({
   destination: (req, file, cb) => {
     cb(err, "upload");
   },
   filename: (req, file, cb) => {
     cb(err, file.originalname);
   }
-});
+}); */
 /* Configes END */
 
 /* Registering middleware BEGIN*/
-app.use(
+/* app.use(
   multer({
     storage: MulterStorage,
     fileFilter: (req, file, cb) => {
@@ -38,12 +38,12 @@ app.use(
         cb(err, true);
     }
   }).single("img")
-);
+); */
 app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({
+/* app.use(bodyParser.urlencoded({
   extended: false
-  }));
-  app.use(cors());
+  })); */
+app.use(cors());
 app.use(morgan("tiny"));
 /* Registering middleware END*/
 
@@ -60,7 +60,6 @@ app.use((req, res, next) => {
 
   //methods that can be supported by client requirest
   res.setHeader("Access-Control-Allow-Methods", "GET,POST,PATCH,DELETE,PUT");
-
   next();
 });
 app.use(userRoutes);

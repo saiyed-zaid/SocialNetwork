@@ -37,13 +37,14 @@ export const remove = (userId, token) => {
 };
 
 export const update = async (userId, token, user) => {
-  for (var iterator of user.values()) {
-    console.log("H_", iterator);
-  }
+/*   for (const iterator of user.values()) {
+    console.log('datae_',iterator);
+    
+  } */
   const userData = await fetch(
     `${process.env.REACT_APP_API_URL}/api/user/${userId}`,
     {
-      method: "PATCH",
+      method: "PUT",
       headers: {
         Accept: "application/json",
         Authorization: `Bearer ${token}`

@@ -22,7 +22,8 @@ const UserSchema = new Schema({
     type: Date
   },
   photo: {
-    type: String
+    data:Buffer,
+    contentType:String
   }
 });
 

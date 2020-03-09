@@ -1,6 +1,7 @@
 const User = require("../model/user");
 const _ = require("lodash");
-
+const formidable = require("formidable");
+const fs = require("fs");
 
 exports.userById = async (req, res, next, id) => {
   try {
@@ -28,7 +29,7 @@ exports.hasAuthorization = (req, res, next) => {
 /**
  * @function middleware
  * @description Handling get request which fetch all Users
-  */
+ */
 exports.getUsers = async (req, res, next) => {
   try {
     const users = await User.find().select("_id name email created updated");
@@ -59,10 +60,40 @@ exports.getUser = async (req, res, next) => {
 /**
  * @function middleware
  * @description Handling put request which Update single user
-  */
+ */
 exports.updateUser = async (req, res, next) => {
   /* User.updateOne({_id:req.profile._id},req.body) */
-  let user = req.profile;
+  let form = formidable.IncomingForm();
+
+  form.keepExtensions = true;
+  form.parse(req, (err, fields, files) => {
+    console.log("FILES__", files);
+
+    if (err) {
+      res.status(400).json(err.message);
+    }
+    let user = req.profile;
+    user = _.extend(user, fields);
+    user.updated = Date.now();
+
+    if (files.photo) {
+      user.photo.data = fs.readFileSync(files.photo.path);
+      user.photo.contentType = files.photo.type;
+    } else {
+    }
+    user
+      .save()
+      .then(result => {
+        console.log(result);
+        res.status(200).json(result);
+
+      })
+      .catch(err => {
+        console.log("Error while uploading");
+      });
+  });
+
+  /*  let user = req.profile;
   //req.file.path
   console.log('REQ.DATA_____',req.body);
   user = _.extend(user, req.body);
@@ -75,13 +106,13 @@ exports.updateUser = async (req, res, next) => {
     res.json({
       msg: "Error while updating profile"
     });
-  }
+  } */
 };
 
 /**
  * @function middleware
  * @description Handling delete request which delete single user
-  */
+ */
 exports.deleteUser = async (req, res, next) => {
   let user = req.profile;
   try {

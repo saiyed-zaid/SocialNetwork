@@ -17,12 +17,12 @@ class EditProfile extends Component {
       error: "",
       fileSize: 0,
       loading: false,
-      about: ""
+      about: "",
+      photo: ""
     };
   }
   init = userId => {
     const token = isAuthenticated().user.token;
-    console.log("id", userId);
 
     read(userId, token).then(data => {
       if (data.error) {
@@ -33,7 +33,8 @@ class EditProfile extends Component {
           name: data.name,
           email: data.email,
           error: "",
-          about: data.about
+          about: data.about,
+          photo: data.image
         });
       }
     });
@@ -48,7 +49,6 @@ class EditProfile extends Component {
   }
 
   handleChange = name => event => {
-    console.log("field name__", name);
     this.setState({ error: "" });
     const value = name === "photo" ? event.target.files[0] : event.target.value;
 
@@ -56,7 +56,7 @@ class EditProfile extends Component {
 
     this.userData.set(name, value);
 
-    this.setState({ [name]: value, fileSize });
+    this.setState({ [name]: value });
   };
 
   isValid = () => {
@@ -99,7 +99,7 @@ class EditProfile extends Component {
       const userId = this.props.match.params.userId;
       const token = isAuthenticated().user.token;
 
-      update(userId, token, user).then(data => {
+      update(userId, token, this.userData).then(data => {
         if (data.msg) {
           this.setState({ error: data.msg });
         } else {
