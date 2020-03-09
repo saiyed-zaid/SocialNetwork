@@ -18,20 +18,10 @@ class EditProfile extends Component {
       fileSize: 0,
       loading: false,
       about: "",
-<<<<<<< HEAD
-      photo: ""
-=======
-      image: ""
->>>>>>> 47b6896cd3a8360e984ad96de674c542caf49f01
+      photo: DefaultProfile
     };
-    this.onFileChange = this.onFileChange.bind(this);
-    this.onNameChange = this.onNameChange.bind(this);
-    this.onEmailChange = this.onEmailChange.bind(this);
-    this.onPasswordChange = this.onPasswordChange.bind(this);
-    this.onSubmit = this.onSubmit.bind(this);
   }
-
-  /*   init = userId => {
+  init = userId => {
     const token = isAuthenticated().user.token;
 
     read(userId, token).then(data => {
@@ -48,32 +38,25 @@ class EditProfile extends Component {
         });
       }
     });
-  }; */
+  };
 
-  /*  componentDidMount() {
+  componentDidMount() {
     this.userData = new FormData();
-
     const userId = this.props.match.params.userId;
     this.init(userId);
-  } */
-  /* 
+  }
+
   handleChange = name => event => {
     this.setState({ error: "" });
     const value = name === "photo" ? event.target.files[0] : event.target.value;
-    const fileSize = name === "photo" ? event.target.files[0].size : 0;
-    this.userData.set(name, value);
-<<<<<<< HEAD
-
+    /*     const fileSize = name === "photo" ? event.target.files[0].size : 0;
+     */ this.userData.set(name, value);
     this.setState({ [name]: value });
   };
-=======
-    this.setState({ [name]: value, fileSize });
-  }; */
->>>>>>> 47b6896cd3a8360e984ad96de674c542caf49f01
 
-  /*   isValid = () => {
+  isValid = () => {
     const { name, email, password, fileSize } = this.state;
-    if (fileSize > 100000) {
+    if (fileSize > 10000000) {
       this.setState({ error: "Photo Must Be Smaller then 100kb" });
       return false;
     }
@@ -93,50 +76,20 @@ class EditProfile extends Component {
       return false;
     }
     return true;
-  }; */
+  };
 
-  /* hANDLED bUTTON SUBMIT EVENT BEGIN */
+  clickSubmit = event => {
+    event.preventDefault();
 
-  /* const { name, email, password } = this.state;
-    const user = {
-      name,
-      email,
-      password: password || undefined,
+    /*     this.setState({ loading: true });
+     */
+    if (this.isValid) {
+      const userId = this.props.match.params.userId;
+      const token = isAuthenticated().user.token;
 
-    }; */
-  // this.setState({ loading: true });
-
-  /* this.userData.append("img", this.state.image); */
-
-  onFileChange(e) {
-    this.setState({ image: e.target.files[0] });
-  }
-
-  onNameChange(e) {
-    this.setState({ name: e.target.value });
-  }
-  onEmailChange(e) {
-    this.setState({ email: e.target.value });
-  }
-  onPasswordChange(e) {
-    this.setState({ password: e.target.value });
-  }
-
-  onSubmit(e) {
-    e.preventDefault();
-
-    const userId = this.props.match.params.userId;
-    const token = isAuthenticated().user.token;
-
-    const formData = new FormData();
-
-    formData.append("name", this.state.name);
-    formData.append("email", this.state.email);
-    formData.append("password", this.state.password);
-    formData.append("image", this.state.image);
-
-<<<<<<< HEAD
       update(userId, token, this.userData).then(data => {
+        console.log("DATTA", data);
+
         if (data.msg) {
           this.setState({ error: data.msg });
         } else {
@@ -144,54 +97,30 @@ class EditProfile extends Component {
             this.setState({
               redirectToProfile: true
             });
-=======
-    /*    axios.post("http://localhost:3001/api/user-profile", formData, {
-    }).then(res => {
-        console.log(res)
-    }) */
-
-    update(userId, token, formData).then(data => {
-      for (const iterator of formData.values()) {
-        /* console.log("DATA TO UPDATED__", iterator); */
-      }
-      if (data.msg) {
-        this.setState({ error: data.msg });
-      } else {
-        updateUser(data, () => {
-          this.setState({
-            redirectToProfile: true
->>>>>>> 47b6896cd3a8360e984ad96de674c542caf49f01
           });
-        });
-      }
-    });
-  }
-
-  /* HANDLED bUTTON SUBMIT EVENT END */
+        }
+      });
+    }
+  };
 
   editForm = (name, email, password, about) => {
     return (
-      <form
-        method="post"
-        onSubmit={this.onSubmit}
-        encType="multipart/form-data"
-      >
+      <form method="post">
         {
           <div className="form-group">
             <label className="bmd-label-floating">Profile Photo</label>
             <input
-              /* onChange={this.handleChange("img")} */
+              onChange={this.handleChange("photo")}
               type="file"
+              accept="image/*"
               className="form-control"
-              name="img"
-              onChange={this.onFileChange}
             />
           </div>
         }
         <div className="form-group">
           <label className="bmd-label-floating">Name</label>
           <input
-            onChange={this.onNameChange}
+            onChange={this.handleChange("name")}
             type="text"
             className="form-control"
             value={name}
@@ -202,14 +131,14 @@ class EditProfile extends Component {
         <div className="form-group">
           <label className="bmd-label-floating">Email</label>
           <input
-            onChange={this.onEmailChange}
+            onChange={this.handleChange("email")}
             type="email"
             className="form-control"
             value={email}
             name="email"
           />
         </div>
-        {/*   <div className="form-group">
+        <div className="form-group">
           <label className="bmd-label-floating">About</label>
           <textarea
             onChange={this.handleChange("about")}
@@ -217,12 +146,11 @@ class EditProfile extends Component {
             value={about}
             name="about"
           />
-        </div> */}
+        </div>
         <div className="form-group">
           <label className="bmd-label-floating">Password</label>
           <input
-            //onChange={this.handleChange("password")}
-            onChange={this.onPasswordChange}
+            onChange={this.handleChange("password")}
             type="password"
             className="form-control"
             value={password}
@@ -230,8 +158,7 @@ class EditProfile extends Component {
           />
         </div>
         <button
-          //onClick={this.clickSubmit}
-          type="submit"
+          onClick={this.clickSubmit}
           className="btn btn-raised btn-primary"
         >
           Update
@@ -281,13 +208,13 @@ class EditProfile extends Component {
         </div>
         {loading ? <div></div> : ""}
 
-        {/* <img
+        <img
           style={{ height: "200px", width: "200px" }}
           className="img-thumbnail"
           src={photoUrl}
           onError={i => (i.target.src = `${DefaultProfile}`)}
           alt={name}
-        /> */}
+        />
 
         {this.editForm(name, email, password, about)}
       </div>

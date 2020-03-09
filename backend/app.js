@@ -5,8 +5,8 @@ const bodyParser = require("body-parser");
 const morgan = require("morgan");
 const dotenv = require("dotenv");
 const mongoose = require("mongoose");
-const multer = require("multer");
-
+/* const multer = require("multer");
+ */
 const cors = require("cors");
 
 dotenv.config();
@@ -42,22 +42,11 @@ const userRoutes = require("./routes/user");
   }).single("img")
 ); */
 app.use(bodyParser.json());
-<<<<<<< HEAD
 /* app.use(bodyParser.urlencoded({
   extended: false
   })); */
 app.use(cors());
-=======
 
-app.use(
-  bodyParser.urlencoded({
-    extended: false
-  })
-);
-app.use(cors());
-app.use("/upload", express.static("upload"));
-
->>>>>>> 47b6896cd3a8360e984ad96de674c542caf49f01
 app.use(morgan("tiny"));
 
 /* Registering middleware END*/
