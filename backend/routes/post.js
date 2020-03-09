@@ -6,9 +6,30 @@ const Post = require("../model/posts");
 const { body } = require("express-validator");
 const auth_check = require("../middleware/auth-check");
 
+/**
+ * @function get
+ * @description Handling get request which fetch all posts
+ * @param {String} path of router
+ * @param {property} property getPosts
+ */
 router.get("/api/post", auth_check, postController.getPosts);
+
+/**
+ * @function get
+ * @description Handling get request which fetch all posts by userId
+ * @param {String} path of router
+ * @param {property} property getPostsByUser
+ */
 router.get("/api/post/by/:userId", auth_check, postController.getPostsByUser);
 
+/**
+ * @function post
+ * @description Handling post request which create new post in database
+ * @param {String} path of router
+ * @param {router} auth_check for checking authorization
+ * @param {array} validation
+ * @param {property} property createPost
+ */
 router.post(
   "/api/post",
   auth_check,
@@ -29,11 +50,38 @@ router.post(
   postController.createPost
 );
 
+/**
+ * @function delete
+ * @description Handling delete request which delete post in database
+ * @param {String} path of router
+ * @param {router} auth_check for checking authorization
+ * @param {property} property deletePost
+ */
 router.delete("/api/post/:postId", auth_check, postController.deletePost);
+
+/**
+ * @function patch
+ * @description Handling patch request which update post in database
+ * @param {String} path of router
+ * @param {router} auth_check for checking authorization
+ * @param {property} property updatePost
+ */
 router.patch("/api/post/:postId", auth_check, postController.updatePost);
 
+/**
+ * @function param
+ * @description Invoked a callback function whenever userId appended in URL
+ * @param {String} userId
+ * @param {property} property userById
+ */
 router.param("userId", userController.userById);
 
+/**
+ * @function param
+ * @description Invoked a callback function whenever postId appended in URL
+ * @param {String} userId
+ * @param {property} property postById
+ */
 router.param("postId", postController.postById);
 
 module.exports = router;

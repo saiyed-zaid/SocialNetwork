@@ -4,6 +4,13 @@ const authController = require("../controller/auth");
 const { body } = require("express-validator");
 const userController = require("../controller/user");
 
+/**
+ * @function post
+ * @description Handling post request for creating new post
+ * @param {String} path of router
+ * @param {array} validations
+ * @param {property} controller name
+ */
 router.post(
   "/api/signup",
   [
@@ -26,6 +33,13 @@ router.post(
   ],
   authController.postSignup
 );
+
+/**
+ * @function post
+ * @description Handling post request for handling login data
+ * @param {String} path of router
+ * @param {property} controller name
+ */
 router.post("/api/signin", authController.postSignin);
 
 router.get("/api/logout", (req, res, next) => {
@@ -34,6 +48,12 @@ router.get("/api/logout", (req, res, next) => {
   });
 });
 
+/**
+ * @function param
+ * @description Invoked whenever param with userId appended in url and store user data in req object
+ * @param {String} param name
+ * @param {property} property userId
+ */
 router.param("userId", userController.userById);
 
 module.exports = router;

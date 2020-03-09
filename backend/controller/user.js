@@ -1,5 +1,6 @@
 const User = require("../model/user");
 const _ = require("lodash");
+
 exports.userById = async (req, res, next, id) => {
   try {
     const user = await User.findById(id);
@@ -23,6 +24,10 @@ exports.hasAuthorization = (req, res, next) => {
   }
 };
 
+/**
+ * @function middleware
+ * @description Handling get request which fetch all Users
+ */
 exports.getUsers = async (req, res, next) => {
   try {
     const users = await User.find().select("_id name email created updated");
@@ -40,18 +45,25 @@ exports.getUsers = async (req, res, next) => {
   }
 };
 
+/**
+ * @function get
+ * @description Handling get request which fetch single User
+ */
 exports.getUser = async (req, res, next) => {
   req.profile.password = undefined;
   console.log("userid", req.userId);
   return res.json(req.profile);
 };
 
+/**
+ * @function middleware
+ * @description Handling put request which Update single user
+ */
 exports.updateUser = async (req, res, next) => {
   /* User.updateOne({_id:req.profile._id},req.body) */
   let user = req.profile;
   //req.file.path
-  console.log("REQ. DATA__ ", req.body);
-  user = _.extend(user, req.body);
+
   user.updated = Date.now();
   try {
     const result = await User.updateOne({ _id: req.profile._id }, req.body);
@@ -65,6 +77,10 @@ exports.updateUser = async (req, res, next) => {
   }
 };
 
+/**
+ * @function middleware
+ * @description Handling delete request which delete single user
+ */
 exports.deleteUser = async (req, res, next) => {
   let user = req.profile;
   try {
