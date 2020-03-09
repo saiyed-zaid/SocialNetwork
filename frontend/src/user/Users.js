@@ -12,7 +12,6 @@ class Users extends Component {
   }
   componentDidMount() {
     list().then(data => {
-
       if (data.error) {
         console.log(data.error);
       } else {
@@ -20,12 +19,18 @@ class Users extends Component {
       }
     });
   }
+
+  /**
+   * Function For Creating Controls For  Users Page
+   *
+   * @param {json} users  Users To Be renderd On page
+   */
   renderUsers = users => (
     <div className="row">
       {users.map((user, i) => (
-        <div className="card col-md-4" key={i}>
+        <div className="card col-md-4 m-1" key={i}>
           <img
-            style={{ height: "200px", width: "200px" }}
+            style={{ height: "200px", width: "auto" }}
             className="img-thumbnail"
             src={`${process.env.REACT_APP_API_URL}/user/photo/${user._id}`}
             onError={i => (i.target.src = `${DefaultProfile}`)}

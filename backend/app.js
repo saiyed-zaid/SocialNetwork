@@ -6,6 +6,7 @@ const morgan = require("morgan");
 const dotenv = require("dotenv");
 const mongoose = require("mongoose");
 const multer = require("multer");
+const cors = require("cors");
 dotenv.config();
 
 //Make sure u change `getRoutes` variable name
@@ -20,6 +21,7 @@ const MulterStorage = multer.diskStorage({
     cb(err, "upload");
   },
   filename: (req, file, cb) => {
+    console.log("FILE__", file);
     cb(err, file.originalname);
   }
 });
@@ -35,7 +37,16 @@ app.use(
   }).single("img")
 );
 app.use(bodyParser.json());
+app.use(
+  bodyParser.urlencoded({
+    extended: false
+  })
+);
+app.use(cors());
+app.use("/upload", express.static("upload"));
+
 app.use(morgan("tiny"));
+
 /* Registering middleware END*/
 
 /* Handling Requests BEGIN */
