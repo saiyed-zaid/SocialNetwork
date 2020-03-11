@@ -4,6 +4,14 @@ const userController = require("../controller/user");
 const auth_check = require("../middleware/auth-check");
 
 /**
+ * @function put
+ * @description Handling put request which Update user follow and add followers
+ * @param {middleware} Checking Authorization
+ * @param {middleware} updateUser
+ */
+router.put("/api/user/:userId", auth_check, userController.addFollowing,userController.addFollower);
+
+/**
  * @function get
  * @description Handling get request which fetch all Users
  * @param {String} path of router

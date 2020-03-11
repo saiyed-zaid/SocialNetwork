@@ -111,3 +111,50 @@ exports.deleteUser = async (req, res, next) => {
     });
   }
 };
+
+/**
+ * @function middleware
+ * @description Handling put request which add following
+ */
+exports.addFollowing = async (req, res, next) => {
+  try {
+    //req.body.userId
+    const result = await User.findByIdAndUpdate(req.body.userId, {
+      $push: {
+        following: req.body.followId
+      }
+    });
+    next();
+  } catch (error) {
+    return res.status(400).json({
+      err: error
+    });
+  }
+};
+/**
+ * @function middleware
+ * @description Handling put request which add followers
+ */
+exports.addFollower = async (req, res, next) => {
+  try {
+    //req.body.userId
+    const result = await User.findByIdAndUpdate(
+      req.body.followId,
+      {
+        $push: {
+          following: req.body.userId
+        }
+      },
+      {
+        $new: true
+      }
+    )
+      .populate("following", "_id name")
+      .populate("followers", "_id name");
+      res.json(result);
+  } catch (error) {
+    return res.status(400).json({
+      err: error
+    });
+  }
+};
