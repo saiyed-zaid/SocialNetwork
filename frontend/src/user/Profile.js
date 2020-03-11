@@ -20,6 +20,8 @@ class Profile extends Component {
       if (data.error) {
         this.setState({ redirectToSignin: true });
       } else {
+        console.table("IMAGE__", process.env.REACT_APP_API_URL);
+        // /data.photo.path
         this.setState({ user: data });
       }
     });
@@ -39,12 +41,10 @@ class Profile extends Component {
 
   render() {
     const { redirectToSignin, user } = this.state;
-    const photoUrl = user._id
-      ? `${process.env.REACT_APP_API_URL}/user/photo/${
-          user._id
-        }?${new Date().getTime()}`
+    {console.log('data_',user)}
+    const photoUrl = user._id && user.photo
+      ? `${process.env.REACT_APP_API_URL}/${user.photo.path}`
       : DefaultProfile;
-
     if (redirectToSignin) return <Redirect to="/signin" />;
     return (
       <div className="container">
