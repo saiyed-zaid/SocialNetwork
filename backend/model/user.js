@@ -23,8 +23,7 @@ const UserSchema = new Schema({
     type: Date
   },
   photo: {
-    data: Buffer,
-    contentType: String
+    type: Object
   },
   following: [
     {

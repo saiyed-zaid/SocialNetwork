@@ -56,7 +56,7 @@ exports.getUsers = async (req, res, next) => {
  */
 exports.getUser = async (req, res, next) => {
   req.profile.password = undefined;
-  console.log("userid", req.userId);
+  /* console.log("userid", req.profile._id); */
   return res.json(req.profile);
 };
 
@@ -65,34 +65,24 @@ exports.getUser = async (req, res, next) => {
  * @description Handling put request which Update single user
  */
 exports.updateUser = async (req, res, next) => {
-  let form = new formidable.IncomingForm();
-  form.keepExtensions = true;
-  form.parse(req, (err, fields, files) => {
+  let user = req.profile;
+
+ 
+  user = _.extend(user, req.body);
+  user.updated = Date.now();
+
+  user.photo = req.file;
+
+  user.save(req.body, async (err, result) => {
     if (err) {
       return res.status(400).json({
-        error: "Photo could not be uploaded"
+        error: err
       });
-    }
-    // save user
-    let user = req.profile;
-    user = _.extend(user, fields);
-    user.updated = Date.now();
-
-    if (files.photo) {
-      user.photo.data = fs.readFileSync(files.photo.path);
-      user.photo.contentType = files.photo.type;
-    }
-
-    user.save((err, result) => {
-      if (err) {
-        return res.status(400).json({
-          error: err
-        });
-      }
+    } else {
       user.hashed_password = undefined;
       user.salt = undefined;
-      res.json(user);
-    });
+      await res.json(user);
+    }
   });
 };
 

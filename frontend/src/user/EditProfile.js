@@ -47,17 +47,17 @@ class EditProfile extends Component {
   handleChange = name => event => {
     this.setState({ error: "" });
     const value = name === "photo" ? event.target.files[0] : event.target.value;
-    const fileSize = name === "photo" ? event.target.files[0].size : 0;
+    // const fileSize = name === "photo" ? event.target.files[0].size : 0;
     this.userData.set(name, value);
-    this.setState({ [name]: value, fileSize });
+    this.setState({ [name]: value });
   };
 
   isValid = () => {
     const { name, email, password, fileSize } = this.state;
-    if (fileSize > 1000000000) {
+    /* if (fileSize > 1000000000) {
       this.setState({ error: "Photo Must Be Smaller then 100kb" });
       return false;
-    }
+    } */
     if (name.length === 0) {
       this.setState({ error: "Name Is Required", loading: false });
       return false;
@@ -174,11 +174,12 @@ class EditProfile extends Component {
       loading,
       about
     } = this.state;
-
+    {
+      console.log("PRO_", redirectToProfile);
+    }
     if (redirectToProfile) {
       return <Redirect to={`/user/${id}`} />;
     }
-
     const photoUrl = id
       ? `${
           process.env.REACT_APP_API_URL
