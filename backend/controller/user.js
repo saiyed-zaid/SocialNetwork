@@ -1,13 +1,14 @@
 const User = require("../model/user");
 const _ = require("lodash");
 
-
 const formidable = require("formidable");
 const fs = require("fs");
 
 exports.userById = async (req, res, next, id) => {
   try {
-    const user = await User.findById(id);
+    const user = await User.findById(id)
+      .populate("following", "_id name")
+      .populate("followers", "_id name");
     if (!user) {
       return next(new Error("User not Found."));
     }
@@ -92,7 +93,6 @@ exports.updateUser = async (req, res, next) => {
       user.salt = undefined;
       res.json(user);
     });
-
   });
 };
 
