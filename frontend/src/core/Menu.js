@@ -52,9 +52,12 @@ const Menu = ({ history }) => (
           <>
             <li className="nav-item">
               <Link
-                to="/findpeople"
+                to={`/findpeople/${isAuthenticated().user._id}`}
                 className="nav-link"
-                style={isActive(history, "/findpeople")}
+                style={isActive(
+                  history,
+                  `/findpeople/${isAuthenticated().user._id}`
+                )}
               >
                 Find Friends
               </Link>

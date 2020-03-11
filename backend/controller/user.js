@@ -140,8 +140,8 @@ exports.addFollower = async (req, res, next) => {
         $new: true
       }
     )
-      .populate("following", "_id name")
-      .populate("followers", "_id name");
+      .populate("following", "_id name photo")
+      .populate("followers", "_id name photo");
     res.json(result);
   } catch (error) {
     return res.status(400).json({
@@ -187,8 +187,8 @@ exports.removeFollower = async (req, res, next) => {
         $new: true
       }
     )
-      .populate("following", "_id name")
-      .populate("followers", "_id name");
+      .populate("following", "_id name photo")
+      .populate("followers", "_id name photo");
     res.json(result);
   } catch (error) {
     return res.status(400).json({
@@ -201,8 +201,10 @@ exports.findPeople = async (req, res, next) => {
   let following = req.profile.following;
   following.push(req.profile._id);
   try {
-    const users = await User.find({ _id: { $nin: following } }).select("name");
-    res.json(users);
+    const users = await User.find({ _id: { $nin: following } }).select(
+      "name photo"
+    );
+    await res.json(users);
   } catch (error) {
     res.status(400).json({ err: error });
   }

@@ -5,16 +5,19 @@ import { DefaultProfile } from "../images/avatar.jpg";
 class ProfileTabs extends Component {
   render() {
     const { following, followers } = this.props;
+
     return (
       <div>
         <div className="row">
           <div className="col-md-4">
             <h3 className="text-primary">Following </h3>
             <hr />
+            {console.log("asdsa", following)}
             {following.map((person, i) => {
               return (
                 <div key={i}>
                   <div>
+                    {console.log("person ", person)}
                     <Link to={`/user/${person._id}`}>
                       <img
                         style={{
@@ -23,11 +26,12 @@ class ProfileTabs extends Component {
                         }}
                         className="float-left mr-2 "
                         height="30px"
+                        src={DefaultProfile}
                         width="30px"
-                        src={`${process.env.REACT_APP_API_URL}/user/photo/${person._id}`}
                         alt={person.name}
-                        //   onError={i => (i.target.src = `${DefaultProfile}`)}
+                        onError={i => (i.target.src = `${DefaultProfile}`)}
                       />
+
                       <div>
                         <h4 className="lead"> {person.name}</h4>
                       </div>

@@ -78,7 +78,7 @@ class Profile extends Component {
         : DefaultProfile;
     if (redirectToSignin) return <Redirect to="/signin" />;
     return (
-      <div className="container">
+      <div className="container card mt-5">
         <h2 className="mb-5 mt-4">Profile</h2>
         <div className="row">
           <div className="col-md-6">
@@ -121,6 +121,7 @@ class Profile extends Component {
             <p className="lead">{user.about}</p>
             <hr />
             <ProfileTabs
+              /* photoUrl={photoUrl} */
               followers={user.followers}
               following={user.following}
             />

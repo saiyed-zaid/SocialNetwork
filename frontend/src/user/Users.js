@@ -28,21 +28,8 @@ class Users extends Component {
   renderUsers = users => (
     <div className="row">
       {users.map((user, i) => (
-        <div
-          className="card col-md-3 mr-5 p-0 "
-          style={{
-            borderRadius: "8px",
-            overflow: "hidden",
-            boxShadow: "0.3em 0.3em 0.4em rgba(0,0,0,0.3)"
-          }}
-          key={i}
-        >
+        <div className="card col-md-3 mr-5 p-0" key={i}>
           <img
-            style={{
-              height: "200px",
-              width: "auto",
-              border: "none"
-            }}
             className="img-thumbnail"
             src={`${process.env.REACT_APP_API_URL}/${
               user.photo ? user.photo.path : DefaultProfile

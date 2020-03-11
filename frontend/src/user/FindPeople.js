@@ -14,20 +14,22 @@ class FindPeople extends Component {
     };
   }
   componentDidMount() {
-    const userId = isAuthenticated().user._Id;
+    const userId = isAuthenticated().user._id;
     const token = isAuthenticated().user.token;
 
     findPeople(userId, token).then(data => {
-      if (data.error) {
-        console.log(data.error);
+      console.log("test", data);
+
+      if (data.err) {
+        console.log(data.err);
       } else {
-        this.setState({ users: data.users });
+        this.setState({ users: data });
       }
     });
   }
 
   clickFollow = (user, i) => {
-    const userId = isAuthenticated().user._Id;
+    const userId = isAuthenticated().user._id;
     const token = isAuthenticated().user.token;
 
     follow(userId, token, user._id).then(data => {
@@ -53,9 +55,8 @@ class FindPeople extends Component {
   renderUsers = users => (
     <div className="row">
       {users.map((user, i) => (
-        <div className="card col-md-4 " key={i}>
+        <div className="card col-md-3 mr-5 p-0 " key={i}>
           <img
-            style={{ height: "200px", width: "auto" }}
             className="img-thumbnail"
             src={`${process.env.REACT_APP_API_URL}/user/photo/${user._id}`}
             onError={i => (i.target.src = `${DefaultProfile}`)}
@@ -64,18 +65,37 @@ class FindPeople extends Component {
           <div className="card-body">
             <h5 className="card-title">{user.name}</h5>
             <p className="card-text">{user.email}</p>
-            <Link
-              to={`/user/${user._id}`}
-              className="btn btn-raised btn-primary btn-sm"
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+                margin: "3px"
+              }}
             >
-              View Profile
-            </Link>
-            <button
-              onClick={() => this.clickFollow(user, i)}
-              className="btn btn-raised btn-info float-right-btn-sm"
-            >
-              Follow
-            </button>
+              <button
+                onClick={() => this.clickFollow(user, i)}
+                className="btn btn-raised btn-info float-right btn-sm"
+                style={{
+                  flex: "1",
+                  border: "none !important",
+                  margin: "1px"
+                }}
+              >
+                Follow
+              </button>
+              <Link
+                to={`/user/${user._id}`}
+                className="btn btn-outline-info text-info btn-sm"
+                style={{
+                  flex: "1",
+                  border: "none !important",
+                  margin: "1px"
+                }}
+              >
+                View Profile
+              </Link>
+            </div>
           </div>
         </div>
       ))}
