@@ -12,7 +12,7 @@ class DeleteUser extends Component {
    * function For Deleteing The User Account
    */
   deleteAccount = () => {
-    const token = isAuthenticated().token;
+    const token = isAuthenticated().user.token;
     const userId = this.props.userId;
     remove(userId, token).then(data => {
       if (data.error) {

@@ -17,8 +17,7 @@ class EditProfile extends Component {
       error: "",
       fileSize: 0,
       loading: false,
-      about: "",
-      photo: DefaultProfile
+      about: ""
     };
   }
   init = userId => {
@@ -33,8 +32,7 @@ class EditProfile extends Component {
           name: data.name,
           email: data.email,
           error: "",
-          about: data.about,
-          photo: data.image
+          about: data.about
         });
       }
     });
@@ -49,14 +47,14 @@ class EditProfile extends Component {
   handleChange = name => event => {
     this.setState({ error: "" });
     const value = name === "photo" ? event.target.files[0] : event.target.value;
-    /*     const fileSize = name === "photo" ? event.target.files[0].size : 0;
-     */ this.userData.set(name, value);
-    this.setState({ [name]: value });
+    const fileSize = name === "photo" ? event.target.files[0].size : 0;
+    this.userData.set(name, value);
+    this.setState({ [name]: value, fileSize });
   };
 
   isValid = () => {
     const { name, email, password, fileSize } = this.state;
-    if (fileSize > 10000000) {
+    if (fileSize > 1000000000) {
       this.setState({ error: "Photo Must Be Smaller then 100kb" });
       return false;
     }
@@ -81,8 +79,8 @@ class EditProfile extends Component {
   clickSubmit = event => {
     event.preventDefault();
 
-    /*     this.setState({ loading: true });
-     */
+    this.setState({ loading: true });
+
     if (this.isValid) {
       const userId = this.props.match.params.userId;
       const token = isAuthenticated().user.token;
@@ -206,7 +204,13 @@ class EditProfile extends Component {
             <span aria-hidden="true">&times;</span>
           </button>
         </div>
-        {loading ? <div></div> : ""}
+        {loading ? (
+          <div className="jumbotron text-center">
+            <h2>Loading...</h2>
+          </div>
+        ) : (
+          ""
+        )}
 
         <img
           style={{ height: "200px", width: "200px" }}

@@ -1,6 +1,5 @@
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
-// import Spinner from "../Components/Spinner";
 import { signup } from "../auth/";
 
 class Signup extends Component {
@@ -102,7 +101,7 @@ class Signup extends Component {
   };
 
   render() {
-    const { name, email, password, error, open } = this.state;
+    const { name, email, password, error, open, loading } = this.state;
 
     return (
       <div className="container col-lg-3">
@@ -140,7 +139,13 @@ class Signup extends Component {
               <span aria-hidden="true">&times;</span>
             </button>
           </div>
-          {/*  {loading ? <Spinner /> : ""} */}
+          {loading ? (
+            <div class="spinner-border text-primary" role="status">
+              <span class="sr-only">Loading...</span>
+            </div>
+          ) : (
+            ""
+          )}
           {this.signupForm(name, email, password)}
         </div>
       </div>
