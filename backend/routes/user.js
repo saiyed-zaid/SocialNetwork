@@ -9,7 +9,9 @@ const auth_check = require("../middleware/auth-check");
  * @param {middleware} Checking Authorization
  * @param {middleware} updateUser
  */
-router.put("/api/user/:userId", auth_check, userController.addFollowing,userController.addFollower);
+router.put("/api/user", auth_check, userController.addFollowing,userController.addFollower);
+
+router.put("/api/user", auth_check, userController.removeFollowing,userController.removeFollower);
 
 /**
  * @function get
