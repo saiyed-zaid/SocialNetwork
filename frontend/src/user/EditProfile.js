@@ -92,6 +92,7 @@ class EditProfile extends Component {
         if (data.msg) {
           this.setState({ error: data.msg });
         } else {
+
           updateUser(data, () => {
             this.setState({
               redirectToProfile: true
@@ -105,6 +106,7 @@ class EditProfile extends Component {
   editForm = (name, email, password, about) => {
     return (
       <form method="post">
+        
         {
           <div className="form-group">
             <label className="bmd-label-floating">Profile Photo</label>
@@ -167,6 +169,7 @@ class EditProfile extends Component {
   };
 
   render() {
+
     const {
       id,
       name,
@@ -177,11 +180,11 @@ class EditProfile extends Component {
       loading,
       about
     } = this.state;
-
+    {console.log('PRO_',redirectToProfile)
+    }
     if (redirectToProfile) {
       return <Redirect to={`/user/${id}`} />;
     }
-
     const photoUrl = id
       ? `${
           process.env.REACT_APP_API_URL

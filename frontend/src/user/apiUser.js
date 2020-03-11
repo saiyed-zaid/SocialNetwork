@@ -86,9 +86,9 @@ export const update = async (userId, token, user) => {
  */
 export const updateUser = (user, next) => {
   if (typeof window != "undefined") {
-    if (localStorage.getItem("jwt").user) {
-      let auth = JSON.parse(localStorage.getItem("jwt").user);
-      auth.user = user;
+    if (JSON.parse(localStorage.getItem("jwt")).user) {
+      let auth = JSON.parse(localStorage.getItem("jwt"));
+      auth.user = { token: auth.user.token, ...user };
       localStorage.setItem("jwt", JSON.stringify(auth));
       next();
     }

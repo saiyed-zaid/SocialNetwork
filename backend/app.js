@@ -29,6 +29,7 @@ const MulterStorage = multer.diskStorage({
   }
 });
 /* Configes END */
+app.use('/upload',express.static('upload'));
 app.use(cors());
 /* Registering middleware BEGIN*/
 app.use(
