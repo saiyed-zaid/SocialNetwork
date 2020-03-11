@@ -1,5 +1,6 @@
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
+//Add about field
 const UserSchema = new Schema({
   name: {
     type: String,
@@ -22,9 +23,21 @@ const UserSchema = new Schema({
     type: Date
   },
   photo: {
-    data:Buffer,
-    contentType:String
-  }
+    data: Buffer,
+    contentType: String
+  },
+  following: [
+    {
+      type: Schema.Types.ObjectId,
+      ref: "User"
+    }
+  ],
+  followers: [
+    {
+      type: Schema.Types.ObjectId,
+      ref: "User"
+    }
+  ]
 });
 
 module.exports = mongoose.model("User", UserSchema);

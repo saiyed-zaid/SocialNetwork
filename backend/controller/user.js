@@ -1,13 +1,14 @@
 const User = require("../model/user");
 const _ = require("lodash");
 
-
 const formidable = require("formidable");
 const fs = require("fs");
 
 exports.userById = async (req, res, next, id) => {
   try {
-    const user = await User.findById(id);
+    const user = await User.findById(id)
+      .populate("following", "_id name")
+      .populate("followers", "_id name");
     if (!user) {
       return next(new Error("User not Found."));
     }
@@ -92,7 +93,6 @@ exports.updateUser = async (req, res, next) => {
       user.salt = undefined;
       res.json(user);
     });
-
   });
 };
 
@@ -108,6 +108,101 @@ exports.deleteUser = async (req, res, next) => {
   } catch (error) {
     res.json({
       msg: "Error while deleting profile"
+    });
+  }
+};
+
+/**
+ * @function middleware
+ * @description Handling put request which add following
+ */
+exports.addFollowing = async (req, res, next) => {
+  try {
+    //req.body.userId
+    const result = await User.findByIdAndUpdate(req.body.userId, {
+      $push: {
+        following: req.body.followId
+      }
+    });
+    next();
+  } catch (error) {
+    return res.status(400).json({
+      err: error
+    });
+  }
+};
+/**
+ * @function middleware
+ * @description Handling put request which add followers
+ */
+exports.addFollower = async (req, res, next) => {
+  try {
+    //req.body.userId
+    const result = await User.findByIdAndUpdate(
+      req.body.followId,
+      {
+        $push: {
+          following: req.body.userId
+        }
+      },
+      {
+        $new: true
+      }
+    )
+      .populate("following", "_id name")
+      .populate("followers", "_id name");
+      res.json(result);
+  } catch (error) {
+    return res.status(400).json({
+      err: error
+    });
+  }
+};
+
+
+/**
+ * @function middleware
+ * @description Handling put request which remove following
+ */
+exports.removeFollowing = async (req, res, next) => {
+  try {
+    //req.body.userId
+    const result = await User.findByIdAndUpdate(req.body.userId, {
+      $pull: {
+        following: req.body.unfollowId
+      }
+    });
+    next();
+  } catch (error) {
+    return res.status(400).json({
+      err: error
+    });
+  }
+};
+/**
+ * @function middleware
+ * @description Handling put request which remove followers
+ */
+exports.removeFollower = async (req, res, next) => {
+  try {
+    //req.body.userId
+    const result = await User.findByIdAndUpdate(
+      req.body.unfollowId,
+      {
+        $pull: {
+          following: req.body.userId
+        }
+      },
+      {
+        $new: true
+      }
+    )
+      .populate("following", "_id name")
+      .populate("followers", "_id name");
+      res.json(result);
+  } catch (error) {
+    return res.status(400).json({
+      err: error
     });
   }
 };
