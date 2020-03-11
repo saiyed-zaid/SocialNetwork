@@ -49,7 +49,7 @@ class EditProfile extends Component {
     const value = name === "photo" ? event.target.files[0] : event.target.value;
     const fileSize = name === "photo" ? event.target.files[0].size : 0;
     this.userData.set(name, value);
-    this.setState({ [name]: value, fileSize });
+    this.setState({ [name]: value });
   };
 
   isValid = () => {
@@ -86,8 +86,6 @@ class EditProfile extends Component {
       const token = isAuthenticated().user.token;
 
       update(userId, token, this.userData).then(data => {
-        console.log("DATTA", data);
-
         if (data.msg) {
           this.setState({ error: data.msg });
         } else {
@@ -176,11 +174,12 @@ class EditProfile extends Component {
       loading,
       about
     } = this.state;
-
+    {
+      console.log("PRO_", redirectToProfile);
+    }
     if (redirectToProfile) {
       return <Redirect to={`/user/${id}`} />;
     }
-
     const photoUrl = id
       ? `${
           process.env.REACT_APP_API_URL

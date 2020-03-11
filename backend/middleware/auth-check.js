@@ -8,7 +8,7 @@ module.exports = async (req, res, next) => {
     let token;
     token = req.headers.authorization.split(" ")[1];
 
-    console.log("__TOKEN", token);
+    //console.log("__TOKEN", token);
 
     if (!token) {
       //return res.status(401).json({ msg: "Autherization failed" });
