@@ -35,7 +35,9 @@ exports.hasAuthorization = (req, res, next) => {
  */
 exports.getUsers = async (req, res, next) => {
   try {
-    const users = await User.find().select("_id name email created updated");
+    const users = await User.find().select(
+      "_id name email created updated photo"
+    );
     if (!users) {
       return res.json({
         msg: "No User Found"
@@ -67,7 +69,6 @@ exports.getUser = async (req, res, next) => {
 exports.updateUser = async (req, res, next) => {
   let user = req.profile;
 
- 
   user = _.extend(user, req.body);
   user.updated = Date.now();
 
