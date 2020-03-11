@@ -132,7 +132,7 @@ exports.addFollower = async (req, res, next) => {
       req.body.followId,
       {
         $push: {
-          following: req.body.userId
+          followers: req.body.userId
         }
       },
       {

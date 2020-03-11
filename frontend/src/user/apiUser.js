@@ -94,3 +94,67 @@ export const updateUser = (user, next) => {
     }
   }
 };
+
+/**
+ * Api to Follow Peoples
+ *
+ * @param  {string}  userId
+ * @param  {string}  token
+ * @param  {string}  followId
+ */
+export const follow = async (userId, token, followId) => {
+  const userData = await fetch(
+    `${process.env.REACT_APP_API_URL}/api/user/follow/${userId}`,
+    {
+      method: "PUT",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`
+      },
+      body: JSON.stringify({ userId, followId })
+    }
+  );
+
+  return await userData.json();
+};
+
+/**
+ * Api to unFollow Peoples
+ *
+ * @param  {string}  userId
+ * @param  {string}  token
+ * @param  {string}  followId
+ */
+export const unfollow = async (userId, token, unfollowId) => {
+  const userData = await fetch(
+    `${process.env.REACT_APP_API_URL}/api/user/unfollow/${userId}`,
+    {
+      method: "PUT",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`
+      },
+      body: JSON.stringify({ userId, unfollowId })
+    }
+  );
+
+  return await userData.json();
+};
+
+export const findPeople = async (userId, token) => {
+  const user = await fetch(
+    `${process.env.REACT_APP_API_URL}/api/user/findpeople/${userId}`,
+    {
+      method: "GET",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`
+      }
+    }
+  );
+
+  return await user.json();
+};
