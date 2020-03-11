@@ -1,5 +1,3 @@
-import axios from "axios";
-
 /**
  * Api For Reading Data From Database
  *
@@ -65,12 +63,10 @@ export const remove = async (userId, token) => {
  * @param {json} user        User data
  */
 export const update = async (userId, token, user) => {
-
   const userData = await fetch(
     `${process.env.REACT_APP_API_URL}/api/user/${userId}`,
     {
       method: "PUT",
-
       headers: {
         Accept: "application/json",
         Authorization: `Bearer ${token}`

@@ -49,8 +49,8 @@ class EditProfile extends Component {
   handleChange = name => event => {
     this.setState({ error: "" });
     const value = name === "photo" ? event.target.files[0] : event.target.value;
-    /*     const fileSize = name === "photo" ? event.target.files[0].size : 0;
-     */ this.userData.set(name, value);
+    const fileSize = name === "photo" ? event.target.files[0].size : 0;
+    this.userData.set(name, value);
     this.setState({ [name]: value });
   };
 
@@ -88,7 +88,6 @@ class EditProfile extends Component {
       const token = isAuthenticated().user.token;
 
       update(userId, token, this.userData).then(data => {
-        console.log("DATTA", data);
 
         if (data.msg) {
           this.setState({ error: data.msg });
