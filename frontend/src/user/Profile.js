@@ -4,35 +4,65 @@ import { Redirect, Link } from "react-router-dom";
 import { read } from "./apiUser";
 import DefaultProfile from "../images/avatar.jpg";
 import DeleteUser from "./DeleteUser";
+import FollowProfileButton from "./FollowProfileButton";
+import ProfileTabs from "./ProfileTabs";
 
 class Profile extends Component {
   constructor() {
     super();
     this.state = {
-      user: "",
-      redirectToSignin: false
+      user: { followers: [], following: [] },
+      redirectToSignin: false,
+      following: false,
+      error: ""
     };
   }
+
+  checkFollow = user => {
+    const jwt = isAuthenticated();
+    const match = user.followers.find(follower => {
+      return follower._id === jwt.user._id;
+    });
+    return match;
+  };
+
+  clickFollowButton = callApi => {
+    const userId = isAuthenticated().user._id;
+    const token = isAuthenticated().user.token;
+
+    callApi(userId, token, this.state.user._id)
+      .then(data => {
+        if (data.error) {
+          this.setState({ error: data.error });
+        } else {
+          this.setState({
+            user: data,
+            following: !this.state.following,
+            followers: !this.state.followers
+          });
+        }
+      })
+      .catch();
+  };
 
   init = userId => {
     const token = isAuthenticated().user.token;
     read(userId, token).then(data => {
-      if (data.error) {
+      if (data.msg) {
         this.setState({ redirectToSignin: true });
       } else {
-        this.setState({ user: data });
+        let following = this.checkFollow(data);
+        this.setState({ user: data, following });
       }
     });
   };
 
   componentDidMount() {
-    //console.log("user id from route params", this.props.match.params.userId);
     const userId = this.props.match.params.userId;
     this.init(userId);
   }
 
   componentWillReceiveProps(props) {
-    //console.log("user id from route params", this.props.match.params.userId);
     const userId = this.props.match.params.userId;
     this.init(userId);
   }
@@ -65,7 +95,8 @@ class Profile extends Component {
               <p>Email : {user.email}</p>
               <p>Joined {new Date(user.created).toDateString()}</p>
             </div>
-            {isAuthenticated().user && isAuthenticated().user._id === user._id && (
+            {isAuthenticated().user &&
+            isAuthenticated().user._id === user._id ? (
               <div className="d-inline-block">
                 <Link
                   to={`/user/edit/${user._id}`}
@@ -75,6 +106,11 @@ class Profile extends Component {
                 </Link>
                 <DeleteUser userId={user._id} />
               </div>
+            ) : (
+              <FollowProfileButton
+                following={this.state.following}
+                onButtonClick={this.clickFollowButton}
+              />
             )}
           </div>
         </div>
@@ -83,6 +119,10 @@ class Profile extends Component {
             <hr />
             <p className="lead">{user.about}</p>
             <hr />
+            <ProfileTabs
+              followers={user.followers}
+              following={user.following}
+            />
           </div>
         </div>
       </div>

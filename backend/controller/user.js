@@ -142,7 +142,7 @@ exports.addFollower = async (req, res, next) => {
       req.body.followId,
       {
         $push: {
-          following: req.body.userId
+          followers: req.body.userId
         }
       },
       {
@@ -151,14 +151,13 @@ exports.addFollower = async (req, res, next) => {
     )
       .populate("following", "_id name")
       .populate("followers", "_id name");
-      res.json(result);
+    res.json(result);
   } catch (error) {
     return res.status(400).json({
       err: error
     });
   }
 };
-
 
 /**
  * @function middleware
@@ -199,7 +198,7 @@ exports.removeFollower = async (req, res, next) => {
     )
       .populate("following", "_id name")
       .populate("followers", "_id name");
-      res.json(result);
+    res.json(result);
   } catch (error) {
     return res.status(400).json({
       err: error

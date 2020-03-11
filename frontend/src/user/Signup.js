@@ -106,8 +106,12 @@ class Signup extends Component {
     return (
       <div className="container col-lg-3">
         <div
-          className="card p-3 mt-5"
-          style={{ borderRadius: "5px", boxShadow: "5px 5px 5px lightgrey" }}
+          className="card mt-5 p-3 "
+          style={{
+            borderRadius: "8px",
+            overflow: "hidden",
+            boxShadow: "0.3em 0.3em 0.4em rgba(0,0,0,0.3)"
+          }}
         >
           <h2 className="mb-5 mt-4">Signup</h2>
           <div
@@ -140,8 +144,8 @@ class Signup extends Component {
             </button>
           </div>
           {loading ? (
-            <div class="spinner-border text-primary" role="status">
-              <span class="sr-only">Loading...</span>
+            <div className="spinner-border text-primary" role="status">
+              <span className="sr-only">Loading...</span>
             </div>
           ) : (
             ""

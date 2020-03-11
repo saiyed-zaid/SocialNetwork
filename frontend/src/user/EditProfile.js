@@ -86,8 +86,6 @@ class EditProfile extends Component {
       const token = isAuthenticated().user.token;
 
       update(userId, token, this.userData).then(data => {
-        console.log("DATTA", data);
-
         if (data.msg) {
           this.setState({ error: data.msg });
         } else {
@@ -205,8 +203,8 @@ class EditProfile extends Component {
           </button>
         </div>
         {loading ? (
-          <div className="jumbotron text-center">
-            <h2>Loading...</h2>
+          <div className="spinner-border text-primary" role="status">
+            <span className="sr-only">Loading...</span>
           </div>
         ) : (
           ""
