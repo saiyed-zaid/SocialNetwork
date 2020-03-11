@@ -46,6 +46,14 @@ router.put("/api/user/:userId", auth_check, userController.updateUser);
 router.delete("/api/user/:userId", auth_check, userController.deleteUser);
 
 /**
+ * @function get
+ * @description Handling get request which findpeople to follow
+ * @param {middleware} Checking Authorization
+ * @param {middleware} findPeople
+ */
+router.get("/api/user/findpeople/:userId", auth_check, userController.findPeople);
+
+/**
  * @function router.param("userId", userController.userById);
 
  * @description Invoked callback function whenever userId appended in URL which fetch user data and stored in req object
