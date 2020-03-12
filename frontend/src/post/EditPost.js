@@ -1,27 +1,43 @@
 import React, { Component } from "react";
+import { singlePost, update } from "./apiPost";
 import { isAuthenticated } from "../auth/index";
-import { create } from "./apiPost";
 import { Redirect } from "react-router-dom";
-import DefaultProfile from "../images/avatar.jpg";
+import DefaultPost from "../images/post.jpg";
 
-class NewPost extends Component {
+class EditPost extends Component {
   constructor() {
     super();
     this.state = {
+      id: "",
       title: "",
       body: "",
-      photo: "",
+      redirectToProfile: false,
       error: "",
-      user: {},
       fileSize: 0,
       loading: false,
-      redirectToProfile: false
+      photo: ""
     };
   }
+  init = postId => {
+    singlePost(postId).then(data => {
+      if (data.error) {
+        this.setState({ redirectToProfile: true });
+      } else {
+        this.setState({
+          id: data._id,
+          name: data.title,
+          body: data.body,
+          error: "",
+          photo: data.photo ? data.photo.path : DefaultProfile
+        });
+      }
+    });
+  };
 
   componentDidMount() {
     this.postData = new FormData();
-    this.setState({ user: isAuthenticated().user });
+    const postId = this.props.match.params.postId;
+    this.init(postId);
   }
 
   handleChange = name => event => {
@@ -48,26 +64,28 @@ class NewPost extends Component {
 
   clickSubmit = event => {
     event.preventDefault();
-
     this.setState({ loading: true });
 
     if (this.isValid) {
-      const userId = isAuthenticated().user._id;
+      const postId = this.state.id;
       const token = isAuthenticated().user.token;
 
-      create(userId, token, this.postData).then(data => {
-        console.log("sfdsffgsfg", data);
-
+      update(postId, token, this.postData).then(data => {
         if (data.msg) {
           this.setState({ error: data.msg });
         } else {
-          console.log("data", data);
+          this.setState({
+            title: "",
+            body: "",
+            redirectToProfile: true,
+            loading: false
+          });
         }
       });
     }
   };
 
-  newPostForm = (title, body) => {
+  editPostForm = (title, body) => {
     return (
       <form method="post">
         <div className="form-group">
@@ -105,33 +123,29 @@ class NewPost extends Component {
           onClick={this.clickSubmit}
           className="btn btn-raised btn-primary"
         >
-          Create Post
+          Update Post
         </button>
       </form>
     );
   };
-
   render() {
-    const {
-      title,
-      body,
-      photo,
-      user,
-      error,
-      loading,
-      redirectToProfile
-    } = this.state;
-
+    const { id, title, body, redirectToProfile, error, loading } = this.state;
     if (redirectToProfile) {
-      return <Redirect to={`/user/${user._id}`} />;
+      return <Redirect to={`/user/${isAuthenticated().user._id}`} />;
     }
-    /* const photoUrl = id
+    const photoUrl = id
       ? `${process.env.REACT_APP_API_URL}/${photo}`
-      : DefaultProfile;
- */
+      : DefaultPost;
     return (
-      <div className="container">
-        <h2 className="mb-5 mt-4">Create A New Post</h2>
+      <div>
+        <h2>{title}</h2>
+        <img
+          style={{ height: "200px", width: "200px" }}
+          className="img-thumbnail"
+          src={photoUrl}
+          // onError={i => (i.target.src = `${DefaultProfile}`)}
+          alt={title}
+        />
         <div
           className="alert alert-danger alert-dismissible fade show"
           style={{ display: error ? "" : "none" }}
@@ -153,19 +167,10 @@ class NewPost extends Component {
         ) : (
           ""
         )}
-
-        {/* <img
-          style={{ height: "200px", width: "200px" }}
-          className="img-thumbnail"
-          src={photoUrl}
-          // onError={i => (i.target.src = `${DefaultProfile}`)}
-          alt={name}
-        /> */}
-
-        {this.newPostForm(title, body)}
+        {this.editPostForm(title, body)}
       </div>
     );
   }
 }
 
-export default NewPost;
+export default EditPost;

@@ -20,6 +20,7 @@ class EditProfile extends Component {
       photo: ""
     };
   }
+
   init = userId => {
     const token = isAuthenticated().user.token;
 
