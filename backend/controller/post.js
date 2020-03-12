@@ -5,7 +5,7 @@ const _ = require("lodash");
 /**
  * @function middleware
  * @description Handling get request which fetch all posts
-  */
+ */
 exports.postById = async (req, res, next, id) => {
   try {
     const post = await Post.findOne({ _id: id });
@@ -20,11 +20,19 @@ exports.postById = async (req, res, next, id) => {
 
 /**
  * @function middleware
+ * @description Handling get request which fetch single post by postId
+ */
+exports.getPost = async (req, res, next) => {
+  return res.json(req.post);
+};
+
+/**
+ * @function middleware
  * @description Handling get request which fetch all posts by userId
-  */
+ */
 exports.getPosts = async (req, res, next) => {
   try {
-    const posts = await Post.find().select("_id title body postedBy");
+    const posts = await Post.find().select("_id title body postedBy photo");
     res.json({ posts });
   } catch (error) {
     console.log("Error while fetching posts", error);
@@ -35,7 +43,7 @@ exports.getPosts = async (req, res, next) => {
 /**
  * @function middleware
  * @description Handling get request which fetch all posts by userId
-  */
+ */
 exports.getPostsByUser = async (req, res, next) => {
   try {
     const posts = await Post.find({ postedBy: req.profile._id });
@@ -57,7 +65,7 @@ exports.getPostsByUser = async (req, res, next) => {
 /**
  * @function middleware
  * @description Handling post request which create new post in database
-  */
+ */
 exports.createPost = async (req, res, next) => {
   const errors = validationResult(req);
 
@@ -84,8 +92,8 @@ exports.createPost = async (req, res, next) => {
 /**
  * @function middleware
  * @description Handling delete request which delete post in database
-  */
-exports.deletePost =  async (req, res, next) => {
+ */
+exports.deletePost = async (req, res, next) => {
   const post = req.post;
   if (!post) {
     return res.json({ msg: "Post not Found" });
@@ -100,12 +108,12 @@ exports.deletePost =  async (req, res, next) => {
   } catch (error) {
     return res.json({ msg: "Error while deleting post." });
   }
-}
+};
 
 /**
  * @function middleware
  * @description Handling patch request which update post in database
-  */
+ */
 exports.updatePost = async (req, res, next) => {
   if (req.auth._id != req.post.postedBy) {
     return res.json({ msg: "Not authorized user for Updating this post." });

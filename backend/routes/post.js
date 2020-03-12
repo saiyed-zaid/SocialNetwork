@@ -8,6 +8,14 @@ const auth_check = require("../middleware/auth-check");
 
 /**
  * @function get
+ * @description Handling get request which fetch single post
+ * @param {String} path of router
+ * @param {property} property getPost
+ */
+router.get("/api/post/:postId", auth_check, postController.getPost);
+
+/**
+ * @function get
  * @description Handling get request which fetch all posts
  * @param {String} path of router
  * @param {property} property getPosts
