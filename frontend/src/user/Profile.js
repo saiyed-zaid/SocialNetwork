@@ -70,7 +70,7 @@ class Profile extends Component {
   render() {
     const { redirectToSignin, user } = this.state;
     {
-      console.log("data_", user);
+      /* console.log("data_", user); */
     }
     const photoUrl =
       user._id && user.photo
