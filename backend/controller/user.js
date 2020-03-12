@@ -1,7 +1,5 @@
 const User = require("../model/user");
 const _ = require("lodash");
-
-const formidable = require("formidable");
 const fs = require("fs");
 
 exports.userById = async (req, res, next, id) => {
@@ -68,6 +66,12 @@ exports.getUser = async (req, res, next) => {
  */
 exports.updateUser = async (req, res, next) => {
   let user = req.profile;
+
+  if (user.photo) {
+    fs.unlink(user.photo.path, err => {
+      console.log("Error while unlink user image", err);
+    });
+  }
 
   user = _.extend(user, req.body);
   user.updated = Date.now();

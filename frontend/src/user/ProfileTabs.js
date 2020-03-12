@@ -8,24 +8,17 @@ class ProfileTabs extends Component {
 
     return (
       <div>
-        {/* {console.log('data__',following)} */}
         <div className="row">
           <div className="col-md-4">
             <h3 className="text-primary">Following </h3>
             <hr />
             {following.map((person, i) => {
-              /*  const imgPath =
-                (person._id && person.photo)
-                  ? process.env.REACT_APP_API_URL + "/" + person.photo.path
-                  : DefaultProfile; */
               const imgPath = person.photo
                 ? process.env.REACT_APP_API_URL + "/" + person.photo.path
                 : DefaultProfile;
-              console.log("PATH_", person);
               return (
                 <div key={i}>
                   <div>
-                    {/* {console.log("person_", person.photo.path)} */}
                     <Link to={`/user/${person._id}`}>
                       <img
                         style={{
@@ -37,7 +30,6 @@ class ProfileTabs extends Component {
                         src={imgPath}
                         width="30px"
                         alt={person.name}
-                        onError={i => (i.target.src = `${DefaultProfile}`)}
                       />
                       <div>
                         <h4 className="lead"> {person.name}</h4>
@@ -66,7 +58,6 @@ class ProfileTabs extends Component {
                         width="30px"
                         src={`${process.env.REACT_APP_API_URL}/user/photo/${person._id}`}
                         alt={person.name}
-                        //   onError={i => (i.target.src = `${DefaultProfile}`)}
                       />
                       <div>
                         <h4 className="lead"> {person.name}</h4>
