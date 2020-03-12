@@ -95,6 +95,24 @@ router.patch("/api/post/like", auth_check, postController.likePost);
 router.patch("/api/post/unlike", auth_check, postController.unlikePost);
 
 /**
+ * @function patch
+ * @description Handling patch request which update/Add post Comment in database
+ * @param {String} path of router
+ * @param {router} auth_check for checking authorization
+ * @param {property} property commentPost
+ */
+router.patch("/api/post/comment", auth_check, postController.commentPost);
+
+/**
+ * @function patch
+ * @description Handling patch request which update post Uncomment in database
+ * @param {String} path of router
+ * @param {router} auth_check for checking authorization
+ * @param {property} property uncommentPost
+ */
+router.patch("/api/post/uncomment", auth_check, postController.uncommentPost);
+
+/**
  * @function param
  * @description Invoked a callback function whenever userId appended in URL
  * @param {String} userId

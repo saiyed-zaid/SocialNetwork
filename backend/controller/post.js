@@ -8,7 +8,10 @@ const _ = require("lodash");
  */
 exports.postById = async (req, res, next, id) => {
   try {
-    const post = await Post.findOne({ _id: id });
+    const post = await Post.findOne({ _id: id })
+      .populate("postedBy", "_id name")
+      .populate("comments", "text created")
+      .populate("comments.postedBy", "_id name");
     if (post) {
       req.post = post;
     }
@@ -33,8 +36,10 @@ exports.getPost = async (req, res, next) => {
 exports.getPosts = async (req, res, next) => {
   try {
     const posts = await Post.find()
-    .populate('postedBy','_id name')
-      .select("_id title body created postedBy photo")
+      .populate("postedBy", "_id name")
+      .populate("comments", "text created")
+      .populate("comments.postedBy", "_id name")
+      .select("_id title body created likes photo")
       .sort({ created: -1 });
     res.json({ posts });
   } catch (error) {
@@ -49,7 +54,10 @@ exports.getPosts = async (req, res, next) => {
  */
 exports.getPostsByUser = async (req, res, next) => {
   try {
-    const posts = await Post.find({ postedBy: req.profile._id }).populate('postedBy','_id name').select('_id title body created likes').sort('_created');
+    const posts = await Post.find({ postedBy: req.profile._id })
+      .populate("postedBy", "_id name")
+      .select("_id title body created likes")
+      .sort("_created");
     if (posts.length == 0) {
       return res.json({
         msg: "There is no posts by this user"
@@ -166,6 +174,51 @@ exports.unlikePost = async (req, res, next) => {
       },
       { new: true }
     );
+  } catch (error) {
+    res.status(400).json(error);
+  }
+};
+
+/**
+ * @function middleware
+ * @description Handling patch request which update/Add post Comment in database
+ */
+exports.commentPost = async (req, res, next) => {
+  try {
+    let comment = req.body.comment;
+    comment.postedBy = req.body.userId;
+
+    const UpdatedCommentPost = await Post.findByIdAndUpdate(
+      req.body.postId,
+      {
+        $push: { comments: comment }
+      },
+      { new: true }
+    )
+      .populate("comments.postedBy", "_id name")
+      .populate("postedBy", "_id name");
+  } catch (error) {
+    res.status(400).json(error);
+  }
+};
+
+/**
+ * @function middleware
+ * @description Handling patch request which update post Uncomment in database
+ */
+exports.uncommentPost = async (req, res, next) => {
+  try {
+    let comment = req.body.comment;
+
+    const UpdatedCommentPost = await Post.findByIdAndUpdate(
+      req.body.postId,
+      {
+        $pull: { comments: { _id: comment._id } }
+      },
+      { new: true }
+    )
+      .populate("comments.postedBy", "_id name")
+      .populate("postedBy", "_id name");
   } catch (error) {
     res.status(400).json(error);
   }
