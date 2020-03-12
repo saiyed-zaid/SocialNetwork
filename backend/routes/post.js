@@ -77,6 +77,24 @@ router.delete("/api/post/:postId", auth_check, postController.deletePost);
 router.patch("/api/post/:postId", auth_check, postController.updatePost);
 
 /**
+ * @function patch
+ * @description Handling patch request which update post Like status in database
+ * @param {String} path of router
+ * @param {router} auth_check for checking authorization
+ * @param {property} property likePost
+ */
+router.patch("/api/post/like", auth_check, postController.likePost);
+
+/**
+ * @function patch
+ * @description Handling patch request which update post Unlike status in database
+ * @param {String} path of router
+ * @param {router} auth_check for checking authorization
+ * @param {property} property unlikePost
+ */
+router.patch("/api/post/unlike", auth_check, postController.unlikePost);
+
+/**
  * @function param
  * @description Invoked a callback function whenever userId appended in URL
  * @param {String} userId

@@ -19,7 +19,8 @@ const PostSchema = new Schema({
     type: String
   },
   postedBy: {
-    type: ObjectId
+    type: ObjectId,
+    ref: "User"
   },
   created:{
     type:Date,
@@ -27,7 +28,11 @@ const PostSchema = new Schema({
   },
   updated:{
     type:Date
-  }
+  },
+  likes:[{
+    type:ObjectId,
+    ref:"User"
+  }]
 });
 
 module.exports = mongoose.model("Post", PostSchema);
