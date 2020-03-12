@@ -26,7 +26,7 @@ const MainRouter = props => {
         <Route path="/users" exact component={Users} />
         <Route path="/signup" exact component={Signup} />
         <Route path="/signin" exact component={Signin} />
-        <PrivateRoute path="/user/:userId" exact component={EditProfile} />
+        <PrivateRoute path="/user/edit/:userId" exact component={EditProfile} />
         <PrivateRoute path="/findpeople/:userId" exact component={FindPeople} />
         <PrivateRoute path="/user/:userId" exact component={Profile} />
       </Switch>

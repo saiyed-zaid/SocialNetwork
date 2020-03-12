@@ -25,10 +25,10 @@ class EditPost extends Component {
       } else {
         this.setState({
           id: data._id,
-          name: data.title,
+          title: data.title,
           body: data.body,
           error: "",
-          photo: data.photo ? data.photo.path : DefaultProfile
+          photo: data.photo ? data.photo.path : DefaultPost
         });
       }
     });
@@ -129,7 +129,15 @@ class EditPost extends Component {
     );
   };
   render() {
-    const { id, title, body, redirectToProfile, error, loading } = this.state;
+    const {
+      id,
+      title,
+      body,
+      redirectToProfile,
+      error,
+      loading,
+      photo
+    } = this.state;
     if (redirectToProfile) {
       return <Redirect to={`/user/${isAuthenticated().user._id}`} />;
     }
@@ -137,7 +145,7 @@ class EditPost extends Component {
       ? `${process.env.REACT_APP_API_URL}/${photo}`
       : DefaultPost;
     return (
-      <div>
+      <div className="container">
         <h2>{title}</h2>
         <img
           style={{ height: "200px", width: "200px" }}

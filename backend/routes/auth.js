@@ -42,9 +42,9 @@ router.post(
  */
 router.post("/api/signin", authController.postSignin);
 
-router.get("/api/logout", (req, res, next) => {
+router.get("/api/signout", (req, res, next) => {
   res.json({
-    msg: "Logoun Success"
+    msg: "Logout Success"
   });
 });
 

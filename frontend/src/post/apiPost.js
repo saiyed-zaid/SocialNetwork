@@ -54,7 +54,7 @@ export const singlePost = async postId => {
  */
 export const listByUser = async (userId, token) => {
   const posts = await fetch(
-    `${process.env.REACT_APP_API_URL}/api/posts/by/${userId}`,
+    `${process.env.REACT_APP_API_URL}/api/post/by/${userId}`,
     {
       method: "GET",
       headers: {
@@ -73,9 +73,9 @@ export const listByUser = async (userId, token) => {
  * @param {string} userId  User Id Of The User
  * @param {string} token   Token Of Loged In User
  */
-export const remove = async (userId, token) => {
+export const remove = async (postId, token) => {
   const deletePost = await fetch(
-    `${process.env.REACT_APP_API_URL}/api/post/${userId}`,
+    `${process.env.REACT_APP_API_URL}/api/post/${postId}`,
     {
       method: "DELETE",
       headers: {
@@ -99,7 +99,7 @@ export const update = async (postId, token, post) => {
   const postData = await fetch(
     `${process.env.REACT_APP_API_URL}/api/post/${postId}`,
     {
-      method: "PUT",
+      method: "PATCH",
       headers: {
         Accept: "application/json",
         Authorization: `Bearer ${token}`

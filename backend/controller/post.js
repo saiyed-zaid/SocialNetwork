@@ -26,6 +26,8 @@ exports.postById = async (req, res, next, id) => {
  * @description Handling get request which fetch single post by postId
  */
 exports.getPost = async (req, res, next) => {
+  console.log("POST_", req.post);
+
   return res.json(req.post);
 };
 
@@ -112,8 +114,10 @@ exports.deletePost = async (req, res, next) => {
     return res.json({ msg: "Post not Found" });
   }
 
-  if (req.auth._id != req.post.postedBy) {
-    return res.json({ msg: "Not authorized user for deleting this post." });
+  if (req.auth._id != req.post.postedBy._id) {
+    return res(401).json({
+      msg: "Not authorized user for deleting this post."
+    });
   }
   try {
     const result = await Post.remove({ _id: req.post._id });
@@ -128,7 +132,7 @@ exports.deletePost = async (req, res, next) => {
  * @description Handling patch request which update post in database
  */
 exports.updatePost = async (req, res, next) => {
-  if (req.auth._id != req.post.postedBy) {
+  if (req.auth._id != req.post.postedBy._id) {
     return res.json({ msg: "Not authorized user for Updating this post." });
   }
 

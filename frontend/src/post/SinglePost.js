@@ -24,6 +24,8 @@ class SinglePost extends Component {
     const postId = this.props.match.params.postId;
     const token = isAuthenticated().user.token;
     remove(postId, token).then(data => {
+      console.log("data", data);
+
       if (data.error) {
         console.log(data.error);
       } else {
@@ -45,31 +47,34 @@ class SinglePost extends Component {
   };
 
   renderPost = post => {
-    const posterId = post.postedBy ? `/user/${post.postedBy}` : "";
+    const posterId = post.postedBy ? `/user/${post.postedBy._id}` : "";
     const posterName = post.postedBy ? post.postedBy.name : "Unknown";
     return (
-      <div className="card col-md-3 mr-5 mb-2 p-0">
+      <div className=" container-fluid col-md-11 card mr-5 mb-2 mt-2 p-0 ">
         <img
-          className="img-thumbnail"
+          className="img-thumbnail p-0"
           src={`${process.env.REACT_APP_API_URL}/${
             post.photo ? post.photo.path : DefaultPost
           }`}
-          alt={post.name}
-          style={{ height: "300px", width: "auto", objectFit: "cover" }}
+          alt={post.title}
+          style={{ height: "400px", width: "100%" }}
         />
+
         <div className="card-body">
-          <p className="card-text">{post.body}...</p>
+          <h2>{post.title}</h2>
+          <p className="card-text lead">{post.body}</p>
 
           <p className="font-italic mark">
-            Posted By <Link to={`${posterId}`}>{posterName}s</Link> on{" "}
+            Posted By <Link to={`${posterId}`}>{posterName}</Link> on{" "}
             {new Date(post.created).toDateString()}
           </p>
           <div className="d-inline-block">
-            <Link to={`/`} className="btn btn-raised btn-primary btn-sm mr-5">
+            <Link to="/" className="btn btn-raised btn-primary btn-sm mr-5">
               Back To Posts
             </Link>
+
             {isAuthenticated().user &&
-              isAuthenticated().post.user._id === post.postedBy._id && (
+              isAuthenticated().user._id === post.postedBy._id && (
                 <>
                   <Link
                     to={`/post/edit/${post._id}`}
@@ -77,7 +82,10 @@ class SinglePost extends Component {
                   >
                     Update Post
                   </Link>
-                  <button className="btn btn-raised btn-warning mr-5">
+                  <button
+                    onClick={this.deleteConfirmed}
+                    className="btn btn-raised btn-warning mr-5"
+                  >
                     Delete Post
                   </button>
                 </>
@@ -94,7 +102,6 @@ class SinglePost extends Component {
     }
     return (
       <div>
-        <h2>{post.title}</h2>
         {!post ? (
           <div className="spinner-border text-primary" role="status">
             <span className="sr-only">Loading...</span>

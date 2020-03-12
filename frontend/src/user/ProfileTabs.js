@@ -5,7 +5,6 @@ import { DefaultProfile } from "../images/avatar.jpg";
 class ProfileTabs extends Component {
   render() {
     const { following, followers, posts } = this.props;
-
     return (
       <div>
         <div className="row">
@@ -43,6 +42,7 @@ class ProfileTabs extends Component {
           <div className="col-md-4">
             <h3 className="text-primary">Followers </h3>
             <hr />
+
             {followers.map((person, i) => {
               return (
                 <div key={i}>
@@ -71,7 +71,7 @@ class ProfileTabs extends Component {
           <div className="col-md-4">
             {" "}
             <h3 className="text-primary">Posts </h3>
-            <hr />{" "}
+            <hr />
             {posts.map((post, i) => {
               return (
                 <div key={i}>

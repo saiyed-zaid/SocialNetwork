@@ -66,7 +66,7 @@ class Profile extends Component {
       if (data.error) {
         console.log(data.error);
       } else {
-        this.setState({ posts: data });
+        this.setState({ posts: data.posts });
       }
     });
   };
@@ -86,6 +86,7 @@ class Profile extends Component {
       user._id && user.photo
         ? `${process.env.REACT_APP_API_URL}/${user.photo.path}`
         : DefaultProfile;
+
     if (redirectToSignin) return <Redirect to="/signin" />;
     return (
       <div className="container card mt-5">
@@ -135,6 +136,7 @@ class Profile extends Component {
             <hr />
             <p className="lead">{user.about}</p>
             <hr />
+
             <ProfileTabs
               followers={user.followers}
               following={user.following}

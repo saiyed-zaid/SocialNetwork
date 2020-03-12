@@ -12,8 +12,6 @@ class Posts extends Component {
   }
   componentDidMount() {
     list().then(data => {
-      console.log("data", data);
-
       if (data.error) {
         console.log(data.error);
       } else {
@@ -31,7 +29,7 @@ class Posts extends Component {
     return (
       <div className="row">
         {posts.map((post, i) => {
-          const posterId = post.postedBy ? `/user/${post.postedBy}` : "";
+          const posterId = post.postedBy ? `/user/${post.postedBy._id}` : "";
           const posterName = post.postedBy ? post.postedBy.name : "Unknown";
 
           return (
@@ -49,7 +47,7 @@ class Posts extends Component {
                 <p className="card-text">{post.body.substring(0, 10)}...</p>
 
                 <p className="font-italic mark">
-                  Posted By <Link to={`${posterId}`}>{posterName}s</Link> on{" "}
+                  Posted By <Link to={`${posterId}`}>{posterName}</Link> on{" "}
                   {new Date(post.created).toDateString()}
                 </p>
                 <Link

@@ -6,6 +6,7 @@ const morgan = require("morgan");
 const dotenv = require("dotenv");
 const mongoose = require("mongoose");
 const multer = require("multer");
+var cookieParser = require("cookie-parser");
 
 const cors = require("cors");
 
@@ -29,7 +30,8 @@ const MulterStorage = multer.diskStorage({
   }
 });
 /* Configes END */
-app.use('/upload',express.static('upload'));
+app.use(cookieParser());
+app.use("/upload", express.static("upload"));
 app.use(cors());
 /* Registering middleware BEGIN*/
 app.use(

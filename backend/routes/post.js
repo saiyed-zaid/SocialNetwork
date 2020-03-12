@@ -12,7 +12,7 @@ const auth_check = require("../middleware/auth-check");
  * @param {String} path of router
  * @param {property} property getPost
  */
-router.get("/api/post/:postId", auth_check, postController.getPost);
+router.get("/api/post/:postId", postController.getPost);
 
 /**
  * @function get

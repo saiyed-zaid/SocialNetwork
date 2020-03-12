@@ -52,12 +52,12 @@ export const authenticate = (jwt, next) => {
   }
 };
 
-export const setName = (name, next) => {
+/* export const setName = (name, next) => {
   if (typeof window !== "undefined") {
     localStorage.setItem("username", JSON.stringify(name));
     next();
   }
-};
+}; */
 
 /**
  * Function For Signin Out User
