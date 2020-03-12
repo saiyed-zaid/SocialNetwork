@@ -40,6 +40,7 @@ exports.getPosts = async (req, res, next) => {
       .populate("comments", "text created")
       .populate("comments.postedBy", "_id name")
       .select("_id title body created likes photo")
+
       .sort({ created: -1 });
     res.json({ posts });
   } catch (error) {
@@ -90,7 +91,8 @@ exports.createPost = async (req, res, next) => {
   const post = new Post({
     title: req.body.title,
     body: req.body.body,
-    postedBy: req.auth._id
+    postedBy: req.auth._id,
+    photo: req.file
   });
   try {
     const result = await post.save();

@@ -18,8 +18,6 @@ class FindPeople extends Component {
     const token = isAuthenticated().user.token;
 
     findPeople(userId, token).then(data => {
-      console.log("test", data);
-
       if (data.err) {
         console.log(data.err);
       } else {

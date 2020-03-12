@@ -16,34 +16,38 @@ const PostSchema = new Schema({
     maxlength: 2000
   },
   photo: {
-    type: String
+    type: Object
   },
   postedBy: {
     type: ObjectId,
     ref: "User"
   },
-  created:{
-    type:Date,
-    default:Date.now
+  created: {
+    type: Date,
+    default: Date.now
   },
-  updated:{
-    type:Date
+  updated: {
+    type: Date
   },
-  likes:[{
-    type:ObjectId,
-    ref:"User"
-  }],
-  comments:[{
-    text:String,
-    created:{
-      type:Date,
-      default: Date.now
-    },
-    postedBy:{
+  likes: [
+    {
       type: ObjectId,
       ref: "User"
     }
-  }]
+  ],
+  comments: [
+    {
+      text: String,
+      created: {
+        type: Date,
+        default: Date.now
+      },
+      postedBy: {
+        type: ObjectId,
+        ref: "User"
+      }
+    }
+  ]
 });
 
 module.exports = mongoose.model("Post", PostSchema);

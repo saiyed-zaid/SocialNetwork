@@ -1,9 +1,8 @@
 import React, { Component } from "react";
 import { isAuthenticated } from "../auth/index";
-import { read, update } from "./apiUser";
+import { read, update, updateUser } from "./apiUser";
 import { Redirect } from "react-router-dom";
 import DefaultProfile from "../images/avatar.jpg";
-import { updateUser } from "./apiUser";
 
 class EditProfile extends Component {
   constructor() {
@@ -17,9 +16,11 @@ class EditProfile extends Component {
       error: "",
       fileSize: 0,
       loading: false,
-      about: ""
+      about: "",
+      photo: ""
     };
   }
+
   init = userId => {
     const token = isAuthenticated().user.token;
 
@@ -32,7 +33,8 @@ class EditProfile extends Component {
           name: data.name,
           email: data.email,
           error: "",
-          about: data.about
+          about: data.about,
+          photo: data.photo ? data.photo.path : DefaultProfile
         });
       }
     });
@@ -102,17 +104,16 @@ class EditProfile extends Component {
   editForm = (name, email, password, about) => {
     return (
       <form method="post">
-        {
-          <div className="form-group">
-            <label className="bmd-label-floating">Profile Photo</label>
-            <input
-              onChange={this.handleChange("photo")}
-              type="file"
-              accept="image/*"
-              className="form-control"
-            />
-          </div>
-        }
+        <div className="form-group">
+          <label className="bmd-label-floating">Profile Photo</label>
+          <input
+            onChange={this.handleChange("photo")}
+            type="file"
+            accept="image/*"
+            className="form-control"
+          />
+        </div>
+
         <div className="form-group">
           <label className="bmd-label-floating">Name</label>
           <input
@@ -172,18 +173,15 @@ class EditProfile extends Component {
       redirectToProfile,
       error,
       loading,
-      about
+      about,
+      photo
     } = this.state;
-    {
-      console.log("PRO_", redirectToProfile);
-    }
+
     if (redirectToProfile) {
       return <Redirect to={`/user/${id}`} />;
     }
     const photoUrl = id
-      ? `${
-          process.env.REACT_APP_API_URL
-        }/user/photo/${id}?${new Date().getTime()}`
+      ? `${process.env.REACT_APP_API_URL}/${photo}`
       : DefaultProfile;
 
     return (
@@ -215,7 +213,7 @@ class EditProfile extends Component {
           style={{ height: "200px", width: "200px" }}
           className="img-thumbnail"
           src={photoUrl}
-          onError={i => (i.target.src = `${DefaultProfile}`)}
+          // onError={i => (i.target.src = `${DefaultProfile}`)}
           alt={name}
         />
 
