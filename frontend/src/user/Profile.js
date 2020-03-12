@@ -63,8 +63,8 @@ class Profile extends Component {
   loadPosts = userId => {
     const token = isAuthenticated().user.token;
     listByUser(userId, token).then(data => {
-      if (data.error) {
-        console.log(data.error);
+      if (data.msg) {
+        this.setState({ error: data.msg });
       } else {
         this.setState({ posts: data.posts });
       }
@@ -81,7 +81,7 @@ class Profile extends Component {
   }
 
   render() {
-    const { redirectToSignin, user, posts } = this.state;
+    const { redirectToSignin, user, posts, error } = this.state;
     const photoUrl =
       user._id && user.photo
         ? `${process.env.REACT_APP_API_URL}/${user.photo.path}`
@@ -136,11 +136,11 @@ class Profile extends Component {
             <hr />
             <p className="lead">{user.about}</p>
             <hr />
-
             <ProfileTabs
               followers={user.followers}
               following={user.following}
               posts={posts}
+              error={error}
             />
           </div>
         </div>

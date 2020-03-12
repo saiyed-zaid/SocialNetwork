@@ -4,7 +4,8 @@ import { DefaultProfile } from "../images/avatar.jpg";
 
 class ProfileTabs extends Component {
   render() {
-    const { following, followers, posts } = this.props;
+    const { following, followers, posts, error } = this.props;
+
     return (
       <div>
         <div className="row">
@@ -44,6 +45,9 @@ class ProfileTabs extends Component {
             <hr />
 
             {followers.map((person, i) => {
+              const photoUrl = person.photo
+                ? person.photo.path
+                : DefaultProfile;
               return (
                 <div key={i}>
                   <div>
@@ -56,7 +60,7 @@ class ProfileTabs extends Component {
                         className="float-left mr-2"
                         height="30px"
                         width="30px"
-                        src={`${process.env.REACT_APP_API_URL}/user/photo/${person._id}`}
+                        src={`${process.env.REACT_APP_API_URL}/${photoUrl}`}
                         alt={person.name}
                       />
                       <div>
@@ -72,19 +76,23 @@ class ProfileTabs extends Component {
             {" "}
             <h3 className="text-primary">Posts </h3>
             <hr />
-            {posts.map((post, i) => {
-              return (
-                <div key={i}>
-                  <div>
-                    <Link to={`/post/${post._id}`}>
-                      <div>
-                        <h4 className="lead"> {post.title}</h4>
-                      </div>
-                    </Link>
+            {posts.length === 0 ? (
+              <div>{error}</div>
+            ) : (
+              posts.map((post, i) => {
+                return (
+                  <div key={i}>
+                    <div>
+                      <Link to={`/post/${post._id}`}>
+                        <div>
+                          <h4 className="lead"> {post.title}</h4>
+                        </div>
+                      </Link>
+                    </div>
                   </div>
-                </div>
-              );
-            })}
+                );
+              })
+            )}
           </div>
         </div>
       </div>

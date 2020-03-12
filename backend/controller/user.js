@@ -1,6 +1,7 @@
 const User = require("../model/user");
 const _ = require("lodash");
 const fs = require("fs");
+const md5 = require("md5");
 
 exports.userById = async (req, res, next, id) => {
   try {
@@ -73,6 +74,14 @@ exports.updateUser = async (req, res, next) => {
     });
   }
 
+  if (!req.file) {
+    req.file = user.photo;
+  }
+  if (req.body.password) {
+    req.body.password = md5(req.body.password);
+  } else {
+    req.body.password = user.password;
+  }
   user = _.extend(user, req.body);
   user.updated = Date.now();
 
@@ -84,8 +93,7 @@ exports.updateUser = async (req, res, next) => {
         error: err
       });
     } else {
-      user.hashed_password = undefined;
-      user.salt = undefined;
+      user.password = undefined;
       await res.json(user);
     }
   });

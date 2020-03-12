@@ -63,7 +63,8 @@ exports.getPostsByUser = async (req, res, next) => {
       .sort("_created");
     if (posts.length == 0) {
       return res.json({
-        msg: "There is no posts by this user"
+        msg: "There is no posts by this user",
+        posts: []
       });
     }
     return res.json({
