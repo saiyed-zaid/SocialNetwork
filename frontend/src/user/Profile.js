@@ -69,9 +69,6 @@ class Profile extends Component {
 
   render() {
     const { redirectToSignin, user } = this.state;
-    {
-      console.log("data_", user);
-    }
     const photoUrl =
       user._id && user.photo
         ? `${process.env.REACT_APP_API_URL}/${user.photo.path}`

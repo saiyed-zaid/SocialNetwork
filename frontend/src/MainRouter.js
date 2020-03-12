@@ -22,6 +22,7 @@ const MainRouter = props => {
         <PrivateRoute path="/user/edit/:userId" exact component={EditProfile} />
         <PrivateRoute path="/findpeople/:userId" exact component={FindPeople} />
         <PrivateRoute path="/user/:userId" exact component={Profile} />
+        <PrivateRoute path="/post/new/:userId" exact component={Profile} />
       </Switch>
     </div>
   );

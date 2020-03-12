@@ -7,8 +7,8 @@ const fs = require("fs");
 exports.userById = async (req, res, next, id) => {
   try {
     const user = await User.findById(id)
-      .populate("following", "_id name")
-      .populate("followers", "_id name");
+      .populate("following", "_id name photo")
+      .populate("followers", "_id name photo");
     if (!user) {
       return next(new Error("User not Found."));
     }
@@ -140,8 +140,8 @@ exports.addFollower = async (req, res, next) => {
         $new: true
       }
     )
-      .populate("following", "_id name photo")
-      .populate("followers", "_id name photo");
+      .populate("following", "_id name")
+      .populate("followers", "_id name");
     res.json(result);
   } catch (error) {
     return res.status(400).json({
@@ -187,8 +187,8 @@ exports.removeFollower = async (req, res, next) => {
         $new: true
       }
     )
-      .populate("following", "_id name photo")
-      .populate("followers", "_id name photo");
+      .populate("following", "_id name")
+      .populate("followers", "_id name");
     res.json(result);
   } catch (error) {
     return res.status(400).json({
