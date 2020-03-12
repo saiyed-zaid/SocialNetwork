@@ -4,7 +4,7 @@ import { DefaultProfile } from "../images/avatar.jpg";
 
 class ProfileTabs extends Component {
   render() {
-    const { following, followers } = this.props;
+    const { following, followers, posts } = this.props;
 
     return (
       <div>
@@ -12,7 +12,6 @@ class ProfileTabs extends Component {
           <div className="col-md-4">
             <h3 className="text-primary">Following </h3>
             <hr />
-            {console.log("asdsa", following)}
             {following.map((person, i) => {
               return (
                 <div key={i}>
@@ -70,7 +69,24 @@ class ProfileTabs extends Component {
               );
             })}
           </div>
-          <div className="col-md-4"> </div>
+          <div className="col-md-4">
+            {" "}
+            <h3 className="text-primary">Posts </h3>
+            <hr />{" "}
+            {posts.map((post, i) => {
+              return (
+                <div key={i}>
+                  <div>
+                    <Link to={`/post/${post._id}`}>
+                      <div>
+                        <h4 className="lead"> {post.title}</h4>
+                      </div>
+                    </Link>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
         </div>
       </div>
     );

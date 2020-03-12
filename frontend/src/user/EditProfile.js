@@ -1,9 +1,8 @@
 import React, { Component } from "react";
 import { isAuthenticated } from "../auth/index";
-import { read, update } from "./apiUser";
+import { read, update, updateUser } from "./apiUser";
 import { Redirect } from "react-router-dom";
 import DefaultProfile from "../images/avatar.jpg";
-import { updateUser } from "./apiUser";
 
 class EditProfile extends Component {
   constructor() {
