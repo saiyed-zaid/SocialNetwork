@@ -17,7 +17,11 @@ class ProfileTabs extends Component {
                 ? process.env.REACT_APP_API_URL + "/" + person.photo.path
                 : DefaultProfile;
               return (
-                <div key={i}>
+                <div
+                  key={i}
+                  className="card p-2 mt-1"
+                  style={{ backgroundColor: "black" }}
+                >
                   <div>
                     <Link to={`/user/${person._id}`}>
                       <img
@@ -31,7 +35,7 @@ class ProfileTabs extends Component {
                         width="30px"
                         alt={person.name}
                       />
-                      <div>
+                      <div style={{ color: "white" }}>
                         <h4 className="lead"> {person.name}</h4>
                       </div>
                     </Link>
@@ -49,7 +53,11 @@ class ProfileTabs extends Component {
                 ? person.photo.path
                 : DefaultProfile;
               return (
-                <div key={i}>
+                <div
+                  key={i}
+                  className="card p-2 mt-1"
+                  style={{ backgroundColor: "black" }}
+                >
                   <div>
                     <Link to={`/user/${person._id}`}>
                       <img
@@ -63,7 +71,7 @@ class ProfileTabs extends Component {
                         src={`${process.env.REACT_APP_API_URL}/${photoUrl}`}
                         alt={person.name}
                       />
-                      <div>
+                      <div style={{ color: "white" }}>
                         <h4 className="lead"> {person.name}</h4>
                       </div>
                     </Link>
@@ -81,10 +89,14 @@ class ProfileTabs extends Component {
             ) : (
               posts.map((post, i) => {
                 return (
-                  <div key={i}>
+                  <div
+                    key={i}
+                    className="card p-2 mt-1"
+                    style={{ backgroundColor: "black" }}
+                  >
                     <div>
                       <Link to={`/post/${post._id}`}>
-                        <div>
+                        <div style={{ color: "white" }}>
                           <h4 className="lead"> {post.title}</h4>
                         </div>
                       </Link>
