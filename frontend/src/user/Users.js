@@ -26,9 +26,9 @@ class Users extends Component {
    * @param {json} users  Users To Be renderd On page
    */
   renderUsers = users => (
-    <div className="row">
+    <div className="row m-0">
       {users.map((user, i) => (
-        <div className="card col-md-3 mr-5 p-0" key={i}>
+        <div className="card col-md-3 mr-0 ml-3" key={i}>
           <img
             className="img-thumbnail"
             src={`${process.env.REACT_APP_API_URL}/${
@@ -54,8 +54,10 @@ class Users extends Component {
   render() {
     const { users } = this.state;
     return (
-      <div className="container">
-        <h2 className="mb-5 mt-4">Users</h2>
+      <div className="container-fluid p-0">
+        <div className="jumbotron p-3">
+          <h2> Users</h2>
+        </div>
         {this.renderUsers(users)}
       </div>
     );

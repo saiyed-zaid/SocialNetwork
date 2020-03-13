@@ -103,64 +103,66 @@ class EditProfile extends Component {
 
   editForm = (name, email, password, about) => {
     return (
-      <form method="post">
-        <div className="form-group">
-          <label className="bmd-label-floating">Profile Photo</label>
-          <input
-            onChange={this.handleChange("photo")}
-            type="file"
-            accept="image/*"
-            className="form-control"
-          />
-        </div>
+      <div>
+        <form method="post">
+          <div className="form-group">
+            <label className="bmd-label-floating">Profile Photo</label>
+            <input
+              onChange={this.handleChange("photo")}
+              type="file"
+              accept="image/*"
+              className="form-control"
+            />
+          </div>
 
-        <div className="form-group">
-          <label className="bmd-label-floating">Name</label>
-          <input
-            onChange={this.handleChange("name")}
-            type="text"
-            className="form-control"
-            value={name}
-            name="name"
-          />
-        </div>
+          <div className="form-group">
+            <label className="bmd-label-floating">Name</label>
+            <input
+              onChange={this.handleChange("name")}
+              type="text"
+              className="form-control"
+              value={name}
+              name="name"
+            />
+          </div>
 
-        <div className="form-group">
-          <label className="bmd-label-floating">Email</label>
-          <input
-            onChange={this.handleChange("email")}
-            type="email"
-            className="form-control"
-            value={email}
-            name="email"
-          />
-        </div>
-        <div className="form-group">
-          <label className="bmd-label-floating">About</label>
-          <textarea
-            onChange={this.handleChange("about")}
-            className="form-control"
-            value={about}
-            name="about"
-          />
-        </div>
-        <div className="form-group">
-          <label className="bmd-label-floating">Password</label>
-          <input
-            onChange={this.handleChange("password")}
-            type="password"
-            className="form-control"
-            value={password}
-            name="password"
-          />
-        </div>
-        <button
-          onClick={this.clickSubmit}
-          className="btn btn-raised btn-primary"
-        >
-          Update
-        </button>
-      </form>
+          <div className="form-group">
+            <label className="bmd-label-floating">Email</label>
+            <input
+              onChange={this.handleChange("email")}
+              type="email"
+              className="form-control"
+              value={email}
+              name="email"
+            />
+          </div>
+          <div className="form-group">
+            <label className="bmd-label-floating">About</label>
+            <textarea
+              onChange={this.handleChange("about")}
+              className="form-control"
+              value={about}
+              name="about"
+            />
+          </div>
+          <div className="form-group">
+            <label className="bmd-label-floating">Password</label>
+            <input
+              onChange={this.handleChange("password")}
+              type="password"
+              className="form-control"
+              value={password}
+              name="password"
+            />
+          </div>
+          <button
+            onClick={this.clickSubmit}
+            className="btn btn-raised btn-primary"
+          >
+            Update
+          </button>
+        </form>
+      </div>
     );
   };
 
@@ -185,38 +187,44 @@ class EditProfile extends Component {
       : DefaultProfile;
 
     return (
-      <div className="container">
-        <h2 className="mb-5 mt-4">Edit Profile</h2>
-        <div
-          className="alert alert-danger alert-dismissible fade show"
-          style={{ display: error ? "" : "none" }}
-        >
-          {error}
-          <button
-            type="button"
-            className="close"
-            data-dismiss="alert"
-            aria-label="Close"
-          >
-            <span aria-hidden="true">&times;</span>
-          </button>
+      <div>
+        <div className="jumbotron p-3">
+          <h2>Edit Profile</h2>
         </div>
-        {loading ? (
-          <div className="spinner-border text-primary" role="status">
-            <span className="sr-only">Loading...</span>
+        <div
+          className="container-fluid p-0"
+          style={{ border: "1px solid red", display: "flex" }}
+        >
+          <div
+            className="alert alert-danger alert-dismissible fade show"
+            style={{ display: error ? "" : "none" }}
+          >
+            {error}
+            <button
+              type="button"
+              className="close"
+              data-dismiss="alert"
+              aria-label="Close"
+            >
+              <span aria-hidden="true">&times;</span>
+            </button>
           </div>
-        ) : (
-          ""
-        )}
+          {loading ? (
+            <div className="spinner-border text-primary" role="status">
+              <span className="sr-only">Loading...</span>
+            </div>
+          ) : (
+            ""
+          )}
 
-        <img
-          style={{ height: "200px", width: "200px" }}
-          className="img-thumbnail"
-          src={photoUrl}
-          // onError={i => (i.target.src = `${DefaultProfile}`)}
-          alt={name}
-        />
-
+          <img
+            style={{ height: "200px", width: "200px" }}
+            className="img-thumbnail"
+            src={photoUrl}
+            onError={i => (i.target.src = `${DefaultProfile}`)}
+            alt={name}
+          />
+        </div>
         {this.editForm(name, email, password, about)}
       </div>
     );

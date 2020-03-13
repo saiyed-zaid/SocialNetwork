@@ -27,7 +27,13 @@ class Posts extends Component {
    */
   renderPosts = posts => {
     return (
-      <div className="row">
+      <div
+        className="row"
+        style={{
+          display: "flex",
+          justifyContent: "center"
+        }}
+      >
         {posts.map((post, i) => {
           const posterId = post.postedBy ? `/user/${post.postedBy._id}` : "";
           const posterName = post.postedBy ? post.postedBy.name : "Unknown";
@@ -66,8 +72,8 @@ class Posts extends Component {
   render() {
     const { posts } = this.state;
     return (
-      <div className="container">
-        <h2 className="mb-5 mt-4">Recent Posts</h2>
+      <div className="container-fluid">
+        <h4 className="mb-5 mt-4">Recent Posts</h4>
         {!posts.length ? (
           <div className="spinner-border text-primary" role="status">
             <span className="sr-only">Loading...</span>

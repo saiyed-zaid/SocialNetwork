@@ -70,55 +70,72 @@ class NewPost extends Component {
 
   newPostForm = (title, body) => {
     return (
-      <form method="post">
-        <div className="form-group">
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "space-around",
+          flexWrap: "wrap"
+        }}
+      >
+        <div>
           <div className="form-group">
-            {console.log('img DATA__',this.state.prevPhoto)}
             <label className="bmd-label-floating">Preview Post Photo</label>
             <img
-              src={(this.state.prevPhoto)?URL.createObjectURL(this.state.prevPhoto):''}
+              src={
+                this.state.prevPhoto
+                  ? URL.createObjectURL(this.state.prevPhoto)
+                  : ""
+              }
               alt=""
               className="form-control"
-              style={{ height: "120px", width: "120px" }}
+              style={{
+                height: "auto",
+                width: "300px",
+                objectFit: "scale-down"
+              }}
             />
           </div>
-          <label className="bmd-label-floating">Post Photo</label>
-          <input
-            onChange={this.handleChange("photo")}
-            type="file"
-            accept="image/*"
-            className="form-control"
-          />
         </div>
+        <form method="post" className="col-md-6">
+          <div className="form-group  ">
+            <label className="bmd-label-floating">Post Photo</label>
+            <input
+              onChange={this.handleChange("photo")}
+              type="file"
+              accept="image/*"
+              className="form-control"
+            />
+          </div>
 
-        <div className="form-group">
-          <label className="bmd-label-floating">Title</label>
-          <input
-            onChange={this.handleChange("title")}
-            type="text"
-            className="form-control"
-            value={title}
-            name="title"
-          />
-        </div>
+          <div className="form-group">
+            <label className="bmd-label-floating">Title</label>
+            <input
+              onChange={this.handleChange("title")}
+              type="text"
+              className="form-control"
+              value={title}
+              name="title"
+            />
+          </div>
 
-        <div className="form-group">
-          <label className="bmd-label-floating">Body</label>
-          <textarea
-            onChange={this.handleChange("body")}
-            className="form-control"
-            value={body}
-            name="body"
-          />
-        </div>
+          <div className="form-group">
+            <label className="bmd-label-floating">Body</label>
+            <textarea
+              onChange={this.handleChange("body")}
+              className="form-control"
+              value={body}
+              name="body"
+            />
+          </div>
 
-        <button
-          onClick={this.clickSubmit}
-          className="btn btn-raised btn-primary"
-        >
-          Create Post
-        </button>
-      </form>
+          <button
+            onClick={this.clickSubmit}
+            className="btn btn-raised btn-primary"
+          >
+            Create Post
+          </button>
+        </form>
+      </div>
     );
   };
 
@@ -136,13 +153,12 @@ class NewPost extends Component {
     if (redirectToProfile) {
       return <Redirect to={`/user/${user._id}`} />;
     }
-    /* const photoUrl = id
-      ? `${process.env.REACT_APP_API_URL}/${photo}`
-      : DefaultProfile;
- */
+
     return (
-      <div className="container">
-        <h2 className="mb-5 mt-4">Create A New Post</h2>
+      <div className="container-fluid p-0">
+        <div className="jumbotron p-3">
+          <h2>Create A New Post</h2>
+        </div>
         <div
           className="alert alert-danger alert-dismissible fade show"
           style={{ display: error ? "" : "none" }}
@@ -165,15 +181,7 @@ class NewPost extends Component {
           ""
         )}
 
-        {/* <img
-          style={{ height: "200px", width: "200px" }}
-          className="img-thumbnail"
-          src={photoUrl}
-          // onError={i => (i.target.src = `${DefaultProfile}`)}
-          alt={name}
-        /> */}
-
-        {this.newPostForm(title, body)}
+        <div className="pl-3">{this.newPostForm(title, body)}</div>
       </div>
     );
   }

@@ -77,24 +77,6 @@ router.patch("/api/post/like", auth_check, postController.likePost);
 router.patch("/api/post/unlike", auth_check, postController.unlikePost);
 
 /**
- * @function delete
- * @description Handling delete request which delete post in database
- * @param {String} path of router
- * @param {router} auth_check for checking authorization
- * @param {property} property deletePost
- */
-router.delete("/api/post/:postId", auth_check, postController.deletePost);
-
-/**
- * @function patch
- * @description Handling patch request which update post in database
- * @param {String} path of router
- * @param {router} auth_check for checking authorization
- * @param {property} property updatePost
- */
-router.patch("/api/post/:postId", auth_check, postController.updatePost);
-
-/**
  * @function patch
  * @description Handling patch request which update/Add post Comment in database
  * @param {String} path of router
@@ -111,6 +93,23 @@ router.patch("/api/post/comment", auth_check, postController.commentPost);
  * @param {property} property uncommentPost
  */
 router.patch("/api/post/uncomment", auth_check, postController.uncommentPost);
+/**
+ * @function delete
+ * @description Handling delete request which delete post in database
+ * @param {String} path of router
+ * @param {router} auth_check for checking authorization
+ * @param {property} property deletePost
+ */
+router.delete("/api/post/:postId", auth_check, postController.deletePost);
+
+/**
+ * @function patch
+ * @description Handling patch request which update post in database
+ * @param {String} path of router
+ * @param {router} auth_check for checking authorization
+ * @param {property} property updatePost
+ */
+router.patch("/api/post/:postId", auth_check, postController.updatePost);
 
 /**
  * @function param

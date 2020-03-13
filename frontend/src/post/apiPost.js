@@ -160,3 +160,53 @@ export const unlike = async (userId, token, postId) => {
 
   return await postData.json();
 };
+
+/**
+ * Api For comment The Post Data In Database
+ *
+ * @param {string} userId   user Id Of The Logged In User
+ * @param {string} token    token Of The Logged In User
+ * @param {json} postId     post Id Of Post To be liked
+ * @param {string} comment  Comment To Be Send
+ */
+export const comment = async (userId, token, postId, comment) => {
+  const commentData = await fetch(
+    `${process.env.REACT_APP_API_URL}/api/post/comment`,
+    {
+      method: "PATCH",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "Application/json",
+        Authorization: `Bearer ${token}`
+      },
+      body: JSON.stringify({ userId, postId, comment })
+    }
+  );
+
+  return await commentData.json();
+};
+
+/**
+ * Api For comment The Post Data In Database
+ *
+ * @param {string} userId   user Id Of The Logged In User
+ * @param {string} token    token Of The Logged In User
+ * @param {json} postId     post Id Of Post To be liked
+ * @param {string} uncomment  Comment To Be Send
+ */
+export const uncomment = async (userId, token, postId, comment) => {
+  const commentData = await fetch(
+    `${process.env.REACT_APP_API_URL}/api/post/uncomment`,
+    {
+      method: "PATCH",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "Application/json",
+        Authorization: `Bearer ${token}`
+      },
+      body: JSON.stringify({ userId, postId, comment })
+    }
+  );
+
+  return await commentData.json();
+};

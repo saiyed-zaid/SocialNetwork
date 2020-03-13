@@ -90,7 +90,13 @@ class Profile extends Component {
     if (redirectToSignin) return <Redirect to="/signin" />;
     return (
       <div className="container-fluid mt-1">
-        <div className="profile p-2" style={{ border: "none",backgroundColor:'rgba(0,0,0,0.2)' }}>
+        <div
+          className="profile p-2"
+          style={{
+            border: "none",
+            backgroundColor: "rgba(223, 223, 223, 0.37)"
+          }}
+        >
           <h2 className="mb-5 mt-4 p-2">Profile</h2>
           <div className="row" style={{ border: "none" }}>
             <div className="col-md-4">

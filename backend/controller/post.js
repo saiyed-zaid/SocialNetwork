@@ -10,8 +10,10 @@ exports.postById = async (req, res, next, id) => {
   try {
     const post = await Post.findOne({ _id: id })
       .populate("postedBy", "_id name")
-      .populate("comments", "text created")
-      .populate("comments.postedBy", "_id name");
+      .populate("likes", "_id name")
+      .populate("comments.postedBy", "_id name photo")
+      .select("comments title body photo created");
+
     if (post) {
       req.post = post;
     }
@@ -208,6 +210,7 @@ exports.commentPost = async (req, res, next) => {
     )
       .populate("comments.postedBy", "_id name")
       .populate("postedBy", "_id name");
+    res.json(UpdatedCommentPost);
   } catch (error) {
     res.status(400).json(error);
   }
@@ -230,6 +233,7 @@ exports.uncommentPost = async (req, res, next) => {
     )
       .populate("comments.postedBy", "_id name")
       .populate("postedBy", "_id name");
+    res.json(UpdatedCommentPost);
   } catch (error) {
     res.status(400).json(error);
   }

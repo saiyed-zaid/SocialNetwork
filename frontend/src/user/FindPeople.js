@@ -102,8 +102,10 @@ class FindPeople extends Component {
   render() {
     const { users, open, followMessage, error } = this.state;
     return (
-      <div className="container">
-        <h2 className="mb-5 mt-4">Find Friends</h2>
+      <div className="container-fluid p-0">
+        <div className="jumbotron p-3">
+          <h2>Find Friends</h2>
+        </div>
         {open && (
           <div className="alert alert-info alert-dismissible fade show">
             {followMessage}

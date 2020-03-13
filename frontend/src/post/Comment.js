@@ -1,0 +1,192 @@
+import React, { Component } from "react";
+import { comment, uncomment } from "./apiPost";
+import { isAuthenticated } from "../auth/index";
+import { Link } from "react-router-dom";
+import DefaultProfile from "../images/avatar.jpg";
+
+class Comment extends Component {
+  state = {
+    text: "",
+    error: ""
+  };
+
+  isValid = () => {
+    const { text } = this.state;
+
+    if (!text.length > 0 || text.length > 150) {
+      this.setState({
+        error: "Comment Should Not Be Empty Or Greater Than 150 Characters"
+      });
+      return false;
+    }
+    return true;
+  };
+  handleChange = event => {
+    this.setState({ error: "" });
+    this.setState({ text: event.target.value });
+  };
+
+  addComment = event => {
+    event.preventDefault();
+    if (!isAuthenticated()) {
+      this.setState({ error: "Please Login To Leave The Comment" });
+      return false;
+    }
+    if (this.isValid()) {
+      const userId = isAuthenticated().user._id;
+      const token = isAuthenticated().user.token;
+      const postId = this.props.postId;
+
+      comment(userId, token, postId, { text: this.state.text }).then(data => {
+        if (data.error) {
+          console.log(data.error);
+        } else {
+          this.setState({ text: "" });
+
+          this.props.updateComments(data.comments);
+        }
+      });
+    }
+  };
+
+  deleteComment = comment => {
+    const userId = isAuthenticated().user._id;
+    const token = isAuthenticated().user.token;
+    const postId = this.props.postId;
+
+    uncomment(userId, token, postId, comment).then(data => {
+      if (data.error) {
+        console.log(data.error);
+      } else {
+        this.props.updateComments(data.comments);
+      }
+    });
+  };
+
+  /**
+   * Function For Confirming The Comment Deletion
+   */
+  deleteConfirmed = comment => {
+    let answer = window.confirm(
+      "Are Youe Sure. You Want To Delete your Comment?"
+    );
+    if (answer) {
+      this.deleteComment(comment);
+    }
+  };
+
+  render() {
+    const { comments } = this.props;
+    const { error } = this.state;
+    return (
+      <div className="ml-3 mr-5">
+        <h4 className="mt-5 mb-2 ">Leave A Comment</h4>
+        <form>
+          <div className="form-group">
+            <input
+              type="text"
+              className="form-control"
+              onChange={this.handleChange}
+              value={this.state.text}
+              placeholder="Leave A Comment"
+            />
+          </div>
+          <button
+            onClick={this.addComment}
+            className="btn btn-raised btn-primary"
+          >
+            Add Comment <i className="fa fa-plus"></i>
+          </button>
+        </form>
+        <div
+          className="alert alert-danger alert-dismissible fade show"
+          style={{ display: error ? "" : "none" }}
+        >
+          {error}
+          <button
+            type="button"
+            className="close"
+            data-dismiss="alert"
+            aria-label="Close"
+          >
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <hr />
+        <div className="col-md-12">
+          <h3 className="text-primary">
+            {" "}
+            {comments.length === 1
+              ? `${comments.length} Comment`
+              : `${comments.length} Comments`}
+          </h3>
+          <hr />
+
+          {comments.map((comment, i) => {
+            const photoUrl = comment.postedBy.photo
+              ? comment.postedBy.photo.path
+              : DefaultProfile;
+            return (
+              <div key={i} className="p-2 mt-1">
+                <div>
+                  <Link to={`/user/${comment.postedBy._id}`}>
+                    <img
+                      style={{
+                        borderRadius: "50%",
+                        border: "1px solid black"
+                      }}
+                      className="float-left mr-2"
+                      height="30px"
+                      width="30px"
+                      src={`${process.env.REACT_APP_API_URL}/${photoUrl}`}
+                      alt={comment.postedBy.name}
+                    />
+                  </Link>
+                  <div>
+                    <h4 className="lead">
+                      {comment.text}
+                      &nbsp;{" "}
+                      {isAuthenticated().user &&
+                        isAuthenticated().user._id === comment.postedBy._id && (
+                          <button
+                            style={{
+                              justifyContent: "flex-end",
+                              border: "1px solid red"
+                            }}
+                            onClick={() => this.deleteConfirmed(comment)}
+                            className="btn text-danger float-right"
+                          >
+                            <i className="fa fa-trash"></i>
+                          </button>
+                        )}
+                      <br />
+                      <br />
+                      <div
+                        style={{
+                          display: "flex",
+                          justifyContent: "flex-end"
+                        }}
+                      >
+                        <small>
+                          <span
+                            className=" font-italic"
+                            style={{ fontSize: "12px" }}
+                          >
+                            Comment By : {comment.postedBy.name} {"  "}
+                            {comment.created}
+                          </span>
+                        </small>
+                      </div>
+                    </h4>
+                  </div>
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      </div>
+    );
+  }
+}
+
+export default Comment;
