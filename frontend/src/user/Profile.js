@@ -89,46 +89,48 @@ class Profile extends Component {
 
     if (redirectToSignin) return <Redirect to="/signin" />;
     return (
-      <div className="container card mt-5">
-        <h2 className="mb-5 mt-4">Profile</h2>
-        <div className="row">
-          <div className="col-md-4">
-            <img
-              style={{ height: "200px", width: "200px" }}
-              className="img-thumbnail"
-              src={photoUrl}
-              alt={user.name}
-            />
-          </div>
-          <div className="col-md-8">
-            <div className="lead mt-2">
-              <p>Hey {user.name}</p>
-              <p>Email : {user.email}</p>
-              <p>Joined {new Date(user.created).toDateString()}</p>
-            </div>
-            {isAuthenticated().user &&
-            isAuthenticated().user._id === user._id ? (
-              <div className="d-inline-block">
-                <Link
-                  to={`/post/create`}
-                  className="btn btn-raised btn-info mr-5"
-                >
-                  Create Post
-                </Link>
-                <Link
-                  to={`/user/edit/${user._id}`}
-                  className="btn btn-raised btn-success mr-5"
-                >
-                  Edit Profile
-                </Link>
-                <DeleteUser userId={user._id} />
-              </div>
-            ) : (
-              <FollowProfileButton
-                following={this.state.following}
-                onButtonClick={this.clickFollowButton}
+      <div className="container-fluid mt-1">
+        <div className="profile p-2" style={{ border: "none",backgroundColor:'rgba(0,0,0,0.2)' }}>
+          <h2 className="mb-5 mt-4 p-2">Profile</h2>
+          <div className="row" style={{ border: "none" }}>
+            <div className="col-md-4">
+              <img
+                style={{ height: "200px", width: "200px" }}
+                className="img-thumbnail"
+                src={photoUrl}
+                alt={user.name}
               />
-            )}
+            </div>
+            <div className="col-md-8">
+              <div className="lead mt-2">
+                <p>Hey {user.name}</p>
+                <p>Email : {user.email}</p>
+                <p>Joined {new Date(user.created).toDateString()}</p>
+              </div>
+              {isAuthenticated().user &&
+              isAuthenticated().user._id === user._id ? (
+                <div className="d-inline-block">
+                  <Link
+                    to={`/post/create`}
+                    className="btn btn-raised btn-info mr-5"
+                  >
+                    Create Post
+                  </Link>
+                  <Link
+                    to={`/user/edit/${user._id}`}
+                    className="btn btn-raised btn-success mr-5"
+                  >
+                    Edit Profile
+                  </Link>
+                  <DeleteUser userId={user._id} />
+                </div>
+              ) : (
+                <FollowProfileButton
+                  following={this.state.following}
+                  onButtonClick={this.clickFollowButton}
+                />
+              )}
+            </div>
           </div>
         </div>
         <div>

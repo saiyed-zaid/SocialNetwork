@@ -13,6 +13,7 @@ class NewPost extends Component {
       error: "",
       user: {},
       fileSize: 0,
+      prevPhoto: "",
       loading: false,
       redirectToProfile: false
     };
@@ -25,6 +26,9 @@ class NewPost extends Component {
 
   handleChange = name => event => {
     this.setState({ error: "" });
+    if (name === "photo") {
+      this.state.prevPhoto = event.target.files[0];
+    }
     const value = name === "photo" ? event.target.files[0] : event.target.value;
     const fileSize = name === "photo" ? event.target.files[0].size : 0;
     this.postData.set(name, value);
@@ -55,8 +59,6 @@ class NewPost extends Component {
       const token = isAuthenticated().user.token;
 
       create(userId, token, this.postData).then(data => {
-        console.log("sfdsffgsfg", data);
-
         if (data.msg) {
           this.setState({ error: data.msg });
         } else {
@@ -70,7 +72,17 @@ class NewPost extends Component {
     return (
       <form method="post">
         <div className="form-group">
-          <label className="bmd-label-floating">Profile Photo</label>
+          <div className="form-group">
+            {console.log('img DATA__',this.state.prevPhoto)}
+            <label className="bmd-label-floating">Preview Post Photo</label>
+            <img
+              src={(this.state.prevPhoto)?URL.createObjectURL(this.state.prevPhoto):''}
+              alt=""
+              className="form-control"
+              style={{ height: "120px", width: "120px" }}
+            />
+          </div>
+          <label className="bmd-label-floating">Post Photo</label>
           <input
             onChange={this.handleChange("photo")}
             type="file"
