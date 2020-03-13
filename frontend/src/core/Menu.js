@@ -25,7 +25,15 @@ const Menu = ({ history }) => (
             Users
           </Link>
         </li>
-        {/* {console.log(isAuthenticated())} */}
+        <li className="nav-item">
+          <Link
+            to={`/post/create`}
+            className="nav-link"
+            style={isActive(history, `/post/create`)}
+          >
+            Create Post
+          </Link>
+        </li>
         {!isAuthenticated() && (
           <>
             <li className="nav-item">
@@ -60,18 +68,6 @@ const Menu = ({ history }) => (
                 )}
               >
                 Find Friends
-              </Link>
-            </li>
-            <li className="nav-item">
-              <Link
-                to={`/post/create`}
-                className="nav-link"
-                style={isActive(
-                  history,
-                  `/post/create/${isAuthenticated().user._id}`
-                )}
-              >
-                Create Post
               </Link>
             </li>
             <li className="nav-item">

@@ -110,3 +110,53 @@ export const update = async (postId, token, post) => {
 
   return await postData.json();
 };
+
+/**like
+ * Api For like The Post Data In Database
+ *
+ * @param {string} userId    post Id Of The Logged In User
+ * @param {string} token     token Of The Logged In User
+ * @param {json} postId        post data
+ */
+export const like = async (userId, token, postId) => {
+  console.log("u", userId, "t", token, "p", postId);
+
+  const postData = await fetch(
+    `${process.env.REACT_APP_API_URL}/api/post/like`,
+    {
+      method: "PATCH",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "Application/json",
+        Authorization: `Bearer ${token}`
+      },
+      body: JSON.stringify({ userId, postId })
+    }
+  );
+
+  return await postData.json();
+};
+
+/**
+ * Api For unlike The Post Data In Database
+ *
+ * @param {string} userId   user Id Of The Logged In User
+ * @param {string} token    token Of The Logged In User
+ * @param {json} postId     post Id Of Post To be liked
+ */
+export const unlike = async (userId, token, postId) => {
+  const postData = await fetch(
+    `${process.env.REACT_APP_API_URL}/api/post/unlike`,
+    {
+      method: "PATCH",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "Application/json",
+        Authorization: `Bearer ${token}`
+      },
+      body: JSON.stringify({ userId, postId })
+    }
+  );
+
+  return await postData.json();
+};
