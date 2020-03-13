@@ -59,24 +59,6 @@ router.post(
 );
 
 /**
- * @function delete
- * @description Handling delete request which delete post in database
- * @param {String} path of router
- * @param {router} auth_check for checking authorization
- * @param {property} property deletePost
- */
-router.delete("/api/post/:postId", auth_check, postController.deletePost);
-
-/**
- * @function patch
- * @description Handling patch request which update post in database
- * @param {String} path of router
- * @param {router} auth_check for checking authorization
- * @param {property} property updatePost
- */
-router.patch("/api/post/:postId", auth_check, postController.updatePost);
-
-/**
  * @function patch
  * @description Handling patch request which update post Like status in database
  * @param {String} path of router
@@ -93,6 +75,24 @@ router.patch("/api/post/like", auth_check, postController.likePost);
  * @param {property} property unlikePost
  */
 router.patch("/api/post/unlike", auth_check, postController.unlikePost);
+
+/**
+ * @function delete
+ * @description Handling delete request which delete post in database
+ * @param {String} path of router
+ * @param {router} auth_check for checking authorization
+ * @param {property} property deletePost
+ */
+router.delete("/api/post/:postId", auth_check, postController.deletePost);
+
+/**
+ * @function patch
+ * @description Handling patch request which update post in database
+ * @param {String} path of router
+ * @param {router} auth_check for checking authorization
+ * @param {property} property updatePost
+ */
+router.patch("/api/post/:postId", auth_check, postController.updatePost);
 
 /**
  * @function patch

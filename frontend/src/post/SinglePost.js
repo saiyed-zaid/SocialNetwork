@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { singlePost, remove } from "./apiPost";
+import { singlePost, remove, like, unlike } from "./apiPost";
 import { Link, Redirect } from "react-router-dom";
 import { isAuthenticated } from "../auth/index";
 import DefaultPost from "../images/post.jpg";
@@ -7,7 +7,10 @@ import DefaultPost from "../images/post.jpg";
 class SinglePost extends Component {
   state = {
     post: "",
-    redirectToHome: false
+    redirectToHome: false,
+    redirectToSignin: false,
+    like: false,
+    likes: 0
   };
   componentDidMount() {
     const postId = this.props.match.params.postId;
@@ -15,7 +18,11 @@ class SinglePost extends Component {
       if (data.error) {
         console.log(data.error);
       } else {
-        this.setState({ post: data });
+        this.setState({
+          post: data,
+          likes: data.likes.length,
+          like: this.checkLike(data.likes)
+        });
       }
     });
   }
@@ -24,8 +31,6 @@ class SinglePost extends Component {
     const postId = this.props.match.params.postId;
     const token = isAuthenticated().user.token;
     remove(postId, token).then(data => {
-      console.log("data", data);
-
       if (data.error) {
         console.log(data.error);
       } else {
@@ -46,9 +51,37 @@ class SinglePost extends Component {
     }
   };
 
+  checkLike = likes => {
+    const userId = isAuthenticated() && isAuthenticated().user._id;
+    let match = likes.indexOf(userId) !== -1;
+    return match;
+  };
+
+  likeToggle = () => {
+    if (!isAuthenticated()) {
+      this.setState({ redirectToSignin: true });
+      return false;
+    }
+    let callApi = this.state.like ? unlike : like;
+    const userId = isAuthenticated().user._id;
+    const postId = this.state.post._id;
+    const token = isAuthenticated().user.token;
+    callApi(userId, token, postId).then(data => {
+      if (data.error) {
+        console.log(data.error);
+      } else {
+        this.setState({
+          like: !this.state.like,
+          likes: data.likes.length
+        });
+      }
+    });
+  };
+
   renderPost = post => {
     const posterId = post.postedBy ? `/user/${post.postedBy._id}` : "";
     const posterName = post.postedBy ? post.postedBy.name : "Unknown";
+    const { like, likes } = this.state;
     return (
       <div className=" container-fluid col-md-11 card mr-5 mb-2 mt-2 p-0 ">
         <img
@@ -61,6 +94,17 @@ class SinglePost extends Component {
         />
 
         <div className="card-body">
+          {like ? (
+            <h4 onClick={this.likeToggle}>
+              <i class="fa fa-heart text-danger"></i> {likes}
+              Likes
+            </h4>
+          ) : (
+            <h4 onClick={this.likeToggle}>
+              <i class="fa fa-heart-o"></i>
+              {likes} Likes
+            </h4>
+          )}
           <h2>{post.title}</h2>
           <p className="card-text lead">{post.body}</p>
 
@@ -96,9 +140,12 @@ class SinglePost extends Component {
     );
   };
   render() {
-    const { post, redirectToHome } = this.state;
+    const { post, redirectToHome, redirectToSignin } = this.state;
     if (redirectToHome) {
       return <Redirect to="/" />;
+    }
+    if (redirectToSignin) {
+      return <Redirect to="/signin" />;
     }
     return (
       <div>

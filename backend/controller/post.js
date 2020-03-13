@@ -155,6 +155,8 @@ exports.updatePost = async (req, res, next) => {
  * @description Handling patch request which update post like in database
  */
 exports.likePost = async (req, res, next) => {
+  console.log("uiserID__", req.body);
+
   try {
     const UpdatedLikePost = await Post.findByIdAndUpdate(
       req.body.postId,
@@ -163,6 +165,7 @@ exports.likePost = async (req, res, next) => {
       },
       { new: true }
     );
+    res.json(UpdatedLikePost);
   } catch (error) {
     res.status(400).json(error);
   }
@@ -181,6 +184,7 @@ exports.unlikePost = async (req, res, next) => {
       },
       { new: true }
     );
+    res.json(UpdatedLikePost);
   } catch (error) {
     res.status(400).json(error);
   }
