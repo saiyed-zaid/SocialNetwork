@@ -36,7 +36,11 @@ const UserSchema = new Schema({
       type: Schema.Types.ObjectId,
       ref: "User"
     }
-  ]
+  ],
+  resetPasswordLink:{
+    type:String,
+    default:''
+  }
 });
 
 module.exports = mongoose.model("User", UserSchema);
