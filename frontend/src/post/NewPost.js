@@ -27,7 +27,7 @@ class NewPost extends Component {
   handleChange = name => event => {
     this.setState({ error: "" });
     if (name === "photo") {
-      this.state.prevPhoto = event.target.files[0];
+      this.setState({ prevPhoto: event.target.files[0] });
     }
     const value = name === "photo" ? event.target.files[0] : event.target.value;
     const fileSize = name === "photo" ? event.target.files[0].size : 0;
@@ -140,15 +140,7 @@ class NewPost extends Component {
   };
 
   render() {
-    const {
-      title,
-      body,
-      photo,
-      user,
-      error,
-      loading,
-      redirectToProfile
-    } = this.state;
+    const { title, body, user, error, loading, redirectToProfile } = this.state;
 
     if (redirectToProfile) {
       return <Redirect to={`/user/${user._id}`} />;

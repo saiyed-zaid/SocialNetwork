@@ -49,17 +49,17 @@ class EditProfile extends Component {
   handleChange = name => event => {
     this.setState({ error: "" });
     const value = name === "photo" ? event.target.files[0] : event.target.value;
-    // const fileSize = name === "photo" ? event.target.files[0].size : 0;
+    const fileSize = name === "photo" ? event.target.files[0].size : 0;
     this.userData.set(name, value);
     this.setState({ [name]: value });
   };
 
   isValid = () => {
     const { name, email, password, fileSize } = this.state;
-    /* if (fileSize > 1000000000) {
+    if (fileSize > 1000000000) {
       this.setState({ error: "Photo Must Be Smaller then 100kb" });
       return false;
-    } */
+    }
     if (name.length === 0) {
       this.setState({ error: "Name Is Required", loading: false });
       return false;
@@ -103,7 +103,7 @@ class EditProfile extends Component {
 
   editForm = (name, email, password, about) => {
     return (
-      <div>
+      <div className=" col-md-6">
         <form method="post">
           <div className="form-group">
             <label className="bmd-label-floating">Profile Photo</label>
@@ -193,7 +193,11 @@ class EditProfile extends Component {
         </div>
         <div
           className="container-fluid p-0"
-          style={{ border: "1px solid red", display: "flex" }}
+          style={{
+            display: "flex",
+            justifyContent: "space-around",
+            flexWrap: "wrap"
+          }}
         >
           <div
             className="alert alert-danger alert-dismissible fade show"
@@ -224,8 +228,8 @@ class EditProfile extends Component {
             onError={i => (i.target.src = `${DefaultProfile}`)}
             alt={name}
           />
+          {this.editForm(name, email, password, about)}
         </div>
-        {this.editForm(name, email, password, about)}
       </div>
     );
   }

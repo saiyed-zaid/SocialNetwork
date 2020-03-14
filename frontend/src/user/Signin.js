@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Redirect } from "react-router-dom";
+import { Redirect, Link } from "react-router-dom";
 // import Spinner from "../Components/Spinner";
 import { signin, authenticate } from "../auth/";
 
@@ -126,6 +126,10 @@ class Signin extends Component {
             ""
           )}
           {this.signinForm(email, password)}
+          <Link to="/forgot-password" className="text-danger">
+            {" "}
+            Forgot Password ?
+          </Link>
         </div>
       </div>
     );

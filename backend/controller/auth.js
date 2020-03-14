@@ -2,6 +2,8 @@ const User = require("../model/user");
 const md5 = require("md5");
 const jwt = require("jsonwebtoken");
 const { validationResult } = require("express-validator");
+const sendMail = require("../helper/mailer");
+const _ = require("lodash");
 
 /**
  * @function middleware
@@ -72,4 +74,69 @@ exports.postSignin = async (req, res, next) => {
       token: token
     }
   });
+};
+exports.forgetPassword = async (req, res, next) => {
+  const { email } = req.body;
+  User.findOne({ email }, (err, user) => {
+    if (err) {
+      return res.json("User with this email does not exists");
+    }
+    //sign token
+    const token = jwt.sign({ _id: user._id }, process.env.JWT_KEY, {
+      expiresIn: 300
+    });
+
+    const emailData = {
+      from: "zss@narola.email",
+      to: email,
+      subject: "Password Reset Instructions",
+      text: `Please use the following link to reset your password: ${process.env.CLIENT_URL}/reset-password/${token}`,
+      html: `<p>Please use the following link to reset your password:</p> <a href='${process.env.CLIENT_URL}/reset-password/${token}'>click here.</a>`
+    };
+
+    user.updateOne(
+      {
+        resetPasswordLink: token
+      },
+      (err, data) => {
+        if (err) {
+          return res.json({ error: err });
+        } else {
+          sendMail(emailData);
+          /* .then(result => {
+              console.log("result", result);
+            })
+            .catch(err => {
+              console.log("Error while sending mail", err);
+            }); */
+          return res.status(200).json({
+            message: `Email has been sent to ${email}. Follow the instructions to reset your password.`
+          });
+        }
+      }
+    );
+  });
+};
+exports.resetPassword = async (req, res) => {
+  const { resetPasswordLink, newPassword } = req.body;
+
+  try {
+    const user = await User.findOne({ resetPasswordLink });
+    console.log("data_", user);
+
+    const updatedFields = {
+      password: md5(newPassword),
+      resetPasswordLink: ""
+    };
+    user.updated = Date.now();
+
+    const userData = _.extend(user, updatedFields);
+
+    await userData.save();
+    res.json({
+      message: `Great! Now you can login with your new password.`
+    });
+  } catch (error) {
+    return res.status("401").json(error);
+  }
 };
