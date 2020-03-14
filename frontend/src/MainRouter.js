@@ -11,6 +11,8 @@ import EditProfile from "./user/EditProfile";
 import NewPost from "./post/NewPost";
 import SinglePost from "./post/SinglePost";
 import EditPost from "./post/EditPost";
+import ForgotPassword from "./user/ForgotPassword";
+import ResetPassword from "./user/ResetPassword";
 
 import PrivateRoute from "./auth/PrivateRoute";
 
@@ -20,6 +22,12 @@ const MainRouter = props => {
       <Menu />
       <Switch>
         <Route path="/" exact component={Home} />
+        <Route exact path="/forgot-password" component={ForgotPassword} />
+        <Route
+          exact
+          path="/reset-password/:resetPasswordToken"
+          component={ResetPassword}
+        />
         <PrivateRoute path="/post/create" exact component={NewPost} />
         <Route path="/post/:postId" exact component={SinglePost} />
         <PrivateRoute path="/post/edit/:postId" exact component={EditPost} />

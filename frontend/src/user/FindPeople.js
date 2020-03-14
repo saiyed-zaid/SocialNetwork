@@ -100,7 +100,7 @@ class FindPeople extends Component {
     </div>
   );
   render() {
-    const { users, open, followMessage, error } = this.state;
+    const { users, open, followMessage } = this.state;
     return (
       <div className="container-fluid p-0">
         <div className="jumbotron p-3">

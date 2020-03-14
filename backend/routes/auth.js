@@ -42,6 +42,21 @@ router.post(
  */
 router.post("/api/signin", authController.postSignin);
 
+/**
+ * @function put
+ * @description Handling put request which send mail for forget password
+ * @param {middleware} forgetPassword
+ */
+
+router.put("/api/forgot-password", authController.forgetPassword);
+
+/**
+ * @function put
+ * @description Handling put request which Reset user password
+ * @param {middleware} resetPassword
+ */
+router.put("/api/reset-password", authController.resetPassword);
+
 router.get("/api/signout", (req, res, next) => {
   res.json({
     msg: "Logout Success"
