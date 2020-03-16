@@ -36,6 +36,14 @@ router.post(
 
 /**
  * @function post
+ * @description Handling post request for handling login with social
+ * @param {String} path of router
+ * @param {property} controller postSignin
+ */
+router.post("/api/social-login", authController.socialLogin);
+
+/**
+ * @function post
  * @description Handling post request for handling login data
  * @param {String} path of router
  * @param {property} controller name
