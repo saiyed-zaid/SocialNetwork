@@ -80,24 +80,6 @@ class Comment extends Component {
     const { error } = this.state;
     return (
       <div className="ml-3 mr-5">
-        <h4 className="mt-5 mb-2 ">Leave A Comment</h4>
-        <form>
-          <div className="form-group">
-            <input
-              type="text"
-              className="form-control"
-              onChange={this.handleChange}
-              value={this.state.text}
-              placeholder="Leave A Comment"
-            />
-          </div>
-          <button
-            onClick={this.addComment}
-            className="btn btn-raised btn-primary"
-          >
-            Add Comment <i className="fa fa-plus"></i>
-          </button>
-        </form>
         <div
           className="alert alert-danger alert-dismissible fade show"
           style={{ display: error ? "" : "none" }}
@@ -114,12 +96,12 @@ class Comment extends Component {
         </div>
         <hr />
         <div className="col-md-12">
-          <h3 className="text-primary">
+          <h5 className="text-primary">
             {" "}
             {comments.length === 1
               ? `${comments.length} Comment`
               : `${comments.length} Comments`}
-          </h3>
+          </h5>
           <hr />
 
           {comments.map((comment, i) => {
@@ -127,8 +109,8 @@ class Comment extends Component {
               ? comment.postedBy.photo.path
               : DefaultProfile;
             return (
-              <div key={i} className="p-2 mt-1">
-                <div>
+              <div key={i} className="p-0 mt-0">
+                <div className="comment-block">
                   <Link to={`/user/${comment.postedBy._id}`}>
                     <img
                       style={{
@@ -143,7 +125,7 @@ class Comment extends Component {
                     />
                   </Link>
                   <div>
-                    <h4 className="lead">
+                    <h6 className="lead">
                       {comment.text}
                       &nbsp;{" "}
                       {isAuthenticated().user &&
@@ -154,12 +136,13 @@ class Comment extends Component {
                               border: "1px solid red"
                             }}
                             onClick={() => this.deleteConfirmed(comment)}
-                            className="btn text-danger float-right"
+                            className="btn text-danger float-right btn-delete"
                           >
                             <i className="fa fa-trash"></i>
                           </button>
                         )}
                       <br />
+                      
                       <br />
                       <div
                         style={{
@@ -177,12 +160,30 @@ class Comment extends Component {
                           </span>
                         </small>
                       </div>
-                    </h4>
+                    </h6>
                   </div>
                 </div>
               </div>
             );
           })}
+          <form>
+            <div className="form-group" style={{flex:2}}>
+              <input
+                type="text"
+                className="form-control"
+                onChange={this.handleChange}
+                value={this.state.text}
+                placeholder="Leave A Comment"
+              />
+            </div>
+            <button
+              onClick={this.addComment}
+              className="btn btn-raised btn-primary"
+              style={{flex:1}}
+            >
+              Add Comment <i className="fa fa-plus"></i>
+            </button>
+          </form>
         </div>
       </div>
     );

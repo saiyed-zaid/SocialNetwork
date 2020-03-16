@@ -51,9 +51,9 @@ class FindPeople extends Component {
    * @param {json} users  Users To Be renderd On page
    */
   renderUsers = users => (
-    <div className="row ml-3">
+    <div className="row m-0">
       {users.map((user, i) => (
-        <div className="card col-md-3 mr-5 p-0 " key={i}>
+        <div className="card custom-card-load" key={i}>
           <img
             className="img-thumbnail"
             src={`${process.env.REACT_APP_API_URL}/user/photo/${user._id}`}
@@ -61,7 +61,7 @@ class FindPeople extends Component {
             alt={user.name}
           />
           <div className="card-body">
-            <h5 className="card-title">{user.name}</h5>
+            <h6 className="card-title">{user.name}</h6>
             <p className="card-text">{user.email}</p>
             <div
               style={{
@@ -73,7 +73,7 @@ class FindPeople extends Component {
             >
               <button
                 onClick={() => this.clickFollow(user, i)}
-                className="btn btn-raised btn-info float-right btn-sm"
+                className="btn btn-raised btn-primary mr-0"
                 style={{
                   flex: "1",
                   border: "none !important",
@@ -84,7 +84,7 @@ class FindPeople extends Component {
               </button>
               <Link
                 to={`/user/${user._id}`}
-                className="btn btn-outline-info text-info btn-sm"
+                className="btn btn-outline-primary"
                 style={{
                   flex: "1",
                   border: "none !important",
@@ -104,7 +104,7 @@ class FindPeople extends Component {
     return (
       <div className="container-fluid p-0">
         <div className="jumbotron p-3">
-          <h2>Find Friends</h2>
+          <h4>Find Friends</h4>
         </div>
         {open && (
           <div className="alert alert-info alert-dismissible fade show">

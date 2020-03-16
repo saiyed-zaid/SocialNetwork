@@ -28,7 +28,7 @@ class Users extends Component {
   renderUsers = users => (
     <div className="row m-0">
       {users.map((user, i) => (
-        <div className="card col-md-3 mr-0 ml-3" key={i}>
+        <div className="card col-md-0 custom-card-load" key={i} style={{width:'250px'}}>
           <img
             className="img-thumbnail"
             src={`${process.env.REACT_APP_API_URL}/${
@@ -38,11 +38,11 @@ class Users extends Component {
             alt={user.name}
           />
           <div className="card-body">
-            <h5 className="card-title">{user.name}</h5>
+            <h6 className="card-title">{user.name}</h6>
             <p className="card-text">{user.email}</p>
             <Link
               to={`/user/${user._id}`}
-              className="btn btn-raised btn-primary btn-sm"
+              className="btn btn-outline-primary custom-Read-more"
             >
               View Profile
             </Link>
@@ -56,7 +56,7 @@ class Users extends Component {
     return (
       <div className="container-fluid p-0">
         <div className="jumbotron p-3">
-          <h2> Users</h2>
+          <h4> Users</h4>
         </div>
         {this.renderUsers(users)}
       </div>

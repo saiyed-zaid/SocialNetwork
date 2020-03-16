@@ -29,17 +29,13 @@ class Posts extends Component {
     return (
       <div
         className="row"
-        style={{
-          display: "flex",
-          justifyContent: "center"
-        }}
       >
         {posts.map((post, i) => {
           const posterId = post.postedBy ? `/user/${post.postedBy._id}` : "";
           const posterName = post.postedBy ? post.postedBy.name : "Unknown";
 
           return (
-            <div className="card col-md-3 mr-5 mb-2 p-0" key={i}>
+            <div className="card col-md-0 custom-card-load" key={i}>
               <img
                 className="img-thumbnail"
                 src={`${process.env.REACT_APP_API_URL}/${
@@ -49,7 +45,7 @@ class Posts extends Component {
                 alt={post.name}
               />
               <div className="card-body">
-                <h5 className="card-title">{post.title}</h5>
+                <h6 className="card-title">{post.title}</h6>
                 <p className="card-text">{post.body.substring(0, 10)}...</p>
 
                 <p className="font-italic mark">
@@ -58,7 +54,7 @@ class Posts extends Component {
                 </p>
                 <Link
                   to={`/post/${post._id}`}
-                  className="btn btn-raised btn-primary btn-sm"
+                  className="btn btn-outline-primary custom-Read-more"
                 >
                   Read More
                 </Link>
@@ -73,7 +69,6 @@ class Posts extends Component {
     const { posts } = this.state;
     return (
       <div className="container-fluid">
-        <h4 className="mb-5 mt-4">Recent Posts</h4>
         {!posts.length ? (
           <div className="spinner-border text-primary" role="status">
             <span className="sr-only">Loading...</span>

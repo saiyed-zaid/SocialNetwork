@@ -10,9 +10,9 @@ class ProfileTabs extends Component {
       <div>
         <div className="row">
           <div className="col-md-4">
-            <h3 className="text-primary">
+            <h5 className="text-primary">
               Following ({following ? following.length : 0})
-            </h3>
+            </h5>
             <hr />
             {following.map((person, i) => {
               const imgPath = person.photo
@@ -50,9 +50,9 @@ class ProfileTabs extends Component {
             })}
           </div>
           <div className="col-md-4">
-            <h3 className="text-primary">
+            <h5 className="text-primary">
               Followers ({followers ? followers.length : 0})
-            </h3>
+            </h5>
             <hr />
 
             {followers.map((person, i) => {
@@ -92,9 +92,9 @@ class ProfileTabs extends Component {
           </div>
           <div className="col-md-4">
             {" "}
-            <h3 className="text-primary">
+            <h5 className="text-primary">
               Posts ({posts ? posts.length : 0}){" "}
-            </h3>
+            </h5>
             <hr />
             {posts.length === 0 ? (
               <div>{error}</div>

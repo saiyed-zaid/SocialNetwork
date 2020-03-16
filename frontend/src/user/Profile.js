@@ -97,11 +97,11 @@ class Profile extends Component {
             backgroundColor: "rgba(223, 223, 223, 0.37)"
           }}
         >
-          <h2 className="mb-5 mt-4 p-2">Profile</h2>
+          <h4 className="mb-5 mt-4 p-2">Profile</h4>
           <div className="row" style={{ border: "none" }}>
             <div className="col-md-4">
               <img
-                style={{ height: "200px", width: "200px" }}
+                style={{ height: "200px", width: "200px",borderRadius:'50%' }}
                 className="img-thumbnail"
                 src={photoUrl}
                 alt={user.name}
@@ -118,13 +118,13 @@ class Profile extends Component {
                 <div className="d-inline-block">
                   <Link
                     to={`/post/create`}
-                    className="btn btn-raised btn-info mr-5"
+                    className="btn btn-raised btn-default mr-2"
                   >
                     Create Post
                   </Link>
                   <Link
                     to={`/user/edit/${user._id}`}
-                    className="btn btn-raised btn-success mr-5"
+                    className="btn btn-raised btn-default mr-2"
                   >
                     Edit Profile
                   </Link>
