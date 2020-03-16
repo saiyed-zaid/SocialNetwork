@@ -92,8 +92,8 @@ class SinglePost extends Component {
     const { like, likes } = this.state;
 
     return (
-      <div style={{ position: "relative" }}>
-        <div style={{ backgroundAttachment: "fixed", position: "relative" }}>
+      <div>
+        <div>
           <img
             className="img-thumbnail p-0"
             src={`${process.env.REACT_APP_API_URL}/${
@@ -121,7 +121,7 @@ class SinglePost extends Component {
           )}
           <hr />
           <div>
-            <h2>{post.title}</h2>
+            <h3>{post.title}</h3>
             <h4 className="lead">
               <small>
                 {" "}
@@ -170,7 +170,7 @@ class SinglePost extends Component {
       return <Redirect to="/signin" />;
     }
     return (
-      <div className=" container-fluid col-md-11 card mr-5 mb-2 mt-2 p-0 ">
+      <div className=" container-fluid col-md-11 mr-5 mb-2 mt-2 p-0 ">
         {!post ? (
           <div className="spinner-border text-primary" role="status">
             <span className="sr-only">Loading...</span>

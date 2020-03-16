@@ -41,7 +41,7 @@ class Home extends Component {
       <div>
         <div>
           <div className="jumbotron p-3">
-            <h2>Home</h2>
+            <h4>Recent Posts</h4>
           </div>
           <div className="container-fluid">
             <Posts />

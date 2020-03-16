@@ -2,6 +2,8 @@ import React, { Component } from "react";
 import { isAuthenticated } from "../auth/index";
 import { create } from "./apiPost";
 import { Redirect } from "react-router-dom";
+import DefaultPost from "../images/post.jpg";
+
 
 class NewPost extends Component {
   constructor() {
@@ -84,13 +86,13 @@ class NewPost extends Component {
               src={
                 this.state.prevPhoto
                   ? URL.createObjectURL(this.state.prevPhoto)
-                  : ""
+                  : DefaultPost
               }
               alt=""
               className="form-control"
               style={{
-                height: "auto",
-                width: "300px",
+                height: "350px",
+                maxWidth: "350px",
                 objectFit: "scale-down"
               }}
             />
@@ -130,7 +132,7 @@ class NewPost extends Component {
 
           <button
             onClick={this.clickSubmit}
-            className="btn btn-raised btn-primary"
+            className="btn btn-outline-primary custom-Read-more"
           >
             Create Post
           </button>
@@ -149,7 +151,7 @@ class NewPost extends Component {
     return (
       <div className="container-fluid p-0">
         <div className="jumbotron p-3">
-          <h2>Create A New Post</h2>
+          <h4>Create A New Post</h4>
         </div>
         <div
           className="alert alert-danger alert-dismissible fade show"
