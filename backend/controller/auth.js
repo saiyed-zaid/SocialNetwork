@@ -103,12 +103,6 @@ exports.forgetPassword = async (req, res, next) => {
           return res.json({ error: err });
         } else {
           sendMail(emailData);
-          /* .then(result => {
-              console.log("result", result);
-            })
-            .catch(err => {
-              console.log("Error while sending mail", err);
-            }); */
           return res.status(200).json({
             message: `Email has been sent to ${email}. Follow the instructions to reset your password.`
           });
@@ -117,6 +111,7 @@ exports.forgetPassword = async (req, res, next) => {
     );
   });
 };
+
 exports.resetPassword = async (req, res) => {
   const { resetPasswordLink, newPassword } = req.body;
 

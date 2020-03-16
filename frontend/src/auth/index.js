@@ -134,7 +134,6 @@ export const isAuthenticated = () => {
   return await resetData.json({ resetInfo }); 
 };*/
 export const forgotPassword = async email => {
-  console.log("email: ", email);
   const maildata = await fetch(
     `${process.env.REACT_APP_API_URL}/api/forgot-password/`,
     {
@@ -146,7 +145,6 @@ export const forgotPassword = async email => {
       body: JSON.stringify({ email })
     }
   );
-  console.table(maildata);
   return maildata;
 };
 

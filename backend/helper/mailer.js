@@ -1,7 +1,6 @@
 var nodemailer = require("nodemailer");
 
 module.exports = function sendMail(mailData) {
-  console.table(mailData);
   var transport = nodemailer.createTransport({
     host: "smtp.1and1.com",
     port: 465,
@@ -16,13 +15,12 @@ module.exports = function sendMail(mailData) {
     to: mailData.to,
     subject: mailData.subject,
     text: mailData.text,
-    html: mailData.html,
-    
+    html: mailData.html
   };
 
   transport.sendMail(mailOptions, (error, info) => {
     if (error) {
-      return console.log(error);
+      return error;
     }
     console.log("Email sent: " + info.response);
   });

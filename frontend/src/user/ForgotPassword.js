@@ -3,7 +3,9 @@ import { forgotPassword } from "../auth";
 
 class ForgotPassword extends Component {
   state = {
-    email: "",
+    email: this.props.location.state.email
+      ? this.props.location.state.email
+      : "",
     message: "",
     error: ""
   };
@@ -12,11 +14,10 @@ class ForgotPassword extends Component {
     e.preventDefault();
     this.setState({ message: "", error: "" });
     forgotPassword(this.state.email).then(data => {
-      console.log(data);
+      console.log("data___", data);
       if (data.error) {
         this.setState({ error: data.error });
       } else {
-        console.log(data.message);
         this.setState({ message: data.message });
       }
     });

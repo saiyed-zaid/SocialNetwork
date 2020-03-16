@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Link } from "react-router-dom";
+import { Link, Redirect } from "react-router-dom";
 import { signup } from "../auth/";
 
 class Signup extends Component {
@@ -10,7 +10,8 @@ class Signup extends Component {
       email: "",
       password: "",
       error: "",
-      loading: ""
+      loading: "",
+      redirectToSignin: false
     };
   }
 
@@ -35,8 +36,6 @@ class Signup extends Component {
       email: email,
       password: password
     };
-    console.log(user);
-
     signup(user).then(data => {
       if (data.error) {
         this.setState({ error: data.error });
@@ -46,7 +45,8 @@ class Signup extends Component {
           name: "",
           email: "",
           password: "",
-          open: false
+          open: false,
+          redirectToSignin: true
         });
       }
     });
@@ -101,8 +101,18 @@ class Signup extends Component {
   };
 
   render() {
-    const { name, email, password, error, open, loading } = this.state;
-
+    const {
+      name,
+      email,
+      password,
+      error,
+      open,
+      loading,
+      redirectToSignin
+    } = this.state;
+    if (redirectToSignin) {
+      return <Redirect to="/signin" />;
+    }
     return (
       <div className="container col-lg-3">
         <div

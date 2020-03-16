@@ -62,7 +62,7 @@ class NewPost extends Component {
         if (data.msg) {
           this.setState({ error: data.msg });
         } else {
-          console.log("data", data);
+          this.setState({ redirectToProfile: true });
         }
       });
     }

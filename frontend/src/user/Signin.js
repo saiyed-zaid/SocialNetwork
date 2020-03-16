@@ -124,8 +124,15 @@ class Signin extends Component {
           )}
           {this.signinForm(email, password)}
 
-          <Link to="/forgot-password" className="text-danger">
-            {" "}
+          <Link
+            to={{
+              pathname: "/forgot-password",
+              state: {
+                email: email
+              }
+            }}
+            className="text-danger"
+          >
             Forgot Password ?
           </Link>
         </div>
