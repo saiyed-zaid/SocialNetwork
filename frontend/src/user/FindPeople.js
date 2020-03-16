@@ -51,7 +51,7 @@ class FindPeople extends Component {
    * @param {json} users  Users To Be renderd On page
    */
   renderUsers = users => (
-    <div className="row">
+    <div className="row ml-3">
       {users.map((user, i) => (
         <div className="card col-md-3 mr-5 p-0 " key={i}>
           <img

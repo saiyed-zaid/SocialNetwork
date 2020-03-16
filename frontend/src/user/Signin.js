@@ -1,8 +1,7 @@
 import React, { Component } from "react";
 import { Redirect, Link } from "react-router-dom";
-// import Spinner from "../Components/Spinner";
 import { signin, authenticate } from "../auth/";
-
+import SocialLogin from "./SocialLogin";
 class Signin extends Component {
   constructor() {
     super();
@@ -80,10 +79,8 @@ class Signin extends Component {
           className="btn btn-raised btn-primary"
         >
           Sign in
-          {/*  <span>
-            <Spinner />
-          </span> */}
         </button>
+        <SocialLogin />
       </form>
     );
   };
@@ -126,6 +123,7 @@ class Signin extends Component {
             ""
           )}
           {this.signinForm(email, password)}
+
           <Link to="/forgot-password" className="text-danger">
             {" "}
             Forgot Password ?

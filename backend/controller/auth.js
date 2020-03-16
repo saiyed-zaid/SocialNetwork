@@ -150,14 +150,12 @@ exports.socialLogin = (req, res, next) => {
       req.profile = user;
       user.save();
       // generate a token with user id and secret
-      const token = jwt.sign(
-        { _id: user._id, iss: "NODEAPI" },
-        process.env.JWT_SECRET
-      );
-      res.cookie("t", token, { expire: new Date() + 9999 });
+      const token = jwt.sign({ _id: user._id }, process.env.JWT_KEY, {
+        expiresIn: "1h"
+      });
       // return response with user and token to frontend client
       const { _id, name, email } = user;
-      return res.json({ token, user: { _id, name, email } });
+      return res.json({ user: { token, _id, name, email } });
     } else {
       // update existing user with new social info and login
       req.profile = user;
@@ -165,14 +163,12 @@ exports.socialLogin = (req, res, next) => {
       user.updated = Date.now();
       user.save();
       // generate a token with user id and secret
-      const token = jwt.sign(
-        { _id: user._id, iss: "NODEAPI" },
-        process.env.JWT_SECRET
-      );
-      res.cookie("t", token, { expire: new Date() + 9999 });
+      const token = jwt.sign({ _id: user._id }, process.env.JWT_KEY, {
+        expiresIn: "1h"
+      });
       // return response with user and token to frontend client
       const { _id, name, email } = user;
-      return res.json({ token, user: { _id, name, email } });
+      return res.json({ user: { token, _id, name, email } });
     }
   });
 };
