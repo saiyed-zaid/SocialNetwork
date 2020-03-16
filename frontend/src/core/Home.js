@@ -29,7 +29,7 @@ class Home extends Component {
       </div>
     );
   };
-  componentWillMount() {
+  componentDidMount() {
     setTimeout(() => {
       this.setState({ loaderIsLoading: false });
     }, 1000);

@@ -62,7 +62,6 @@ class ProfileTabs extends Component {
             role="tabpanel"
             aria-labelledby="following-tab"
           >
-            <h3 className="text-primary"></h3>
             <hr />
             {following.length === 0 ? (
               <div>
@@ -79,7 +78,7 @@ class ProfileTabs extends Component {
                 return (
                   <div
                     key={i}
-                    className="card p-2 m-1"
+                    className="p-2 m-0"
                     style={{ borderRadius: "0px" }}
                   >
                     <Link
@@ -118,8 +117,6 @@ class ProfileTabs extends Component {
 
             {following.length === 0 ? (
               <div>Currently No One Is Following You</div>
-            ) : followers.length === 0 ? (
-              <div></div>
             ) : (
               followers.map((person, i) => {
                 const photoUrl = person.photo
@@ -128,8 +125,7 @@ class ProfileTabs extends Component {
                 return (
                   <div
                     key={i}
-                    className="card p-2 mt-1"
-                    style={{ borderRadius: "0px" }}
+                    className="card p-2 mt-1 "
                   >
                     <Link
                       to={`/user/${person._id}`}
@@ -171,7 +167,7 @@ class ProfileTabs extends Component {
                 return (
                   <div
                     key={i}
-                    className="card p-2 mt-1"
+                    className=" p-2 mt-1"
                     style={{ borderRadius: "0px" }}
                   >
                     <Link
