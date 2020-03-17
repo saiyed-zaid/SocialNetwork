@@ -1,10 +1,13 @@
-*{
-  padding:0;
-  margin:0;
+* {
+  padding: 0;
+  margin: 0;
   box-sizing: border-box;
 }
 .navbar {
   padding: 0;
+}
+.mark{
+  background-color: #e8e7e7 !important;
 }
 .custom-card-load {
   margin: 12px;
@@ -14,7 +17,8 @@
 
 .card {
   border-radius: 2%;
-  border: 1px solid #009688;
+  border: 1px solid rgba(0,0,0,.12);
+  background-color:  rgb(245, 245, 245);
   overflow: hidden;
 
   justify-content: center;
@@ -23,7 +27,7 @@
 }
 .card:hover {
   /* border:1px solid red; */
-  transform: scale(1.02);
+  /* transform: scale(1.02); */
 }
 
 @keyframes animCard {
@@ -47,6 +51,7 @@ img {
   flex: 1;
 }
 .img-thumbnail {
+  padding: 0;
   height: 200px;
   width: auto;
   border: none;
@@ -178,10 +183,9 @@ img {
   align-items: center;
   /* border:1px solid red; */
 }
-.tab-pane{
+.tab-pane {
   background-color: rgba(172, 172, 172, 0.3);
   padding: 8px;
-
 }
 .comment-block {
   transition: background-color 0.2s ease-in-out;
@@ -193,4 +197,16 @@ img {
 .comment-block:hover .btn-delete {
   background-color: #f44336;
   color: #ffff !important;
+}
+.btn-custom:hover {
+  background-color: #6c757d !important;
+  color: #ffff !important;
+}
+
+a{
+  color:black;
+  text-decoration: none !important;
+}
+a:hover{
+  color:rgb(107, 107, 107);
 }

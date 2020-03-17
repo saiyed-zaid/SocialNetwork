@@ -97,9 +97,8 @@ class Profile extends Component {
             backgroundColor: "rgba(223, 223, 223, 0.37)"
           }}
         >
-          <h4 className="mb-5 mt-4 p-2">Profile</h4>
-          <div className="row" style={{ border: "none" }}>
-            <div className="col-md-4">
+          <div className="row">
+            <div className="col-md-2">
               <img
                 style={{ height: "200px", width: "200px",borderRadius:'50%' }}
                 className="img-thumbnail"
@@ -107,8 +106,8 @@ class Profile extends Component {
                 alt={user.name}
               />
             </div>
-            <div className="col-md-8">
-              <div className="lead mt-2">
+            <div className="col-md-10">
+              <div className="mt-2">
                 <p>Hey {user.name}</p>
                 <p>Email : {user.email}</p>
                 <p>Joined {new Date(user.created).toDateString()}</p>
@@ -118,13 +117,13 @@ class Profile extends Component {
                 <div className="d-inline-block">
                   <Link
                     to={`/post/create`}
-                    className="btn btn-raised btn-default mr-2"
+                    className="btn btn-outline-secondary mr-2 btn-custom"
                   >
                     Create Post
                   </Link>
                   <Link
                     to={`/user/edit/${user._id}`}
-                    className="btn btn-raised btn-default mr-2"
+                    className="btn btn-outline-secondary mr-2 btn-custom"
                   >
                     Edit Profile
                   </Link>
@@ -142,7 +141,7 @@ class Profile extends Component {
         <div>
           <div className="col md-12 mt-5 mb-5">
             <hr />
-            <p className="lead">{user.about}</p>
+            <p>{user.about}</p>
             <hr />
             <ProfileTabs
               followers={user.followers}

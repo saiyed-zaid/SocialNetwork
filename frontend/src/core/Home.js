@@ -29,14 +29,14 @@ class Home extends Component {
       </div>
     );
   };
-  componentDidMount() {
+/*   componentDidMount() {
     setTimeout(() => {
       this.setState({ loaderIsLoading: false });
     }, 1000);
-  }
+  } */
 
   render() {
-    if (this.state.loaderIsLoading) return this.loader();
+/*     if (this.state.loaderIsLoading) return this.loader(); */
     return (
       <div>
         <div>

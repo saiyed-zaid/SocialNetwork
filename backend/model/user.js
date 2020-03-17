@@ -7,6 +7,10 @@ const UserSchema = new Schema({
     trim: true,
     required: true
   },
+  about: {
+    type: String,
+    default: "-"
+  },
   email: {
     type: String,
     required: true
@@ -37,9 +41,9 @@ const UserSchema = new Schema({
       ref: "User"
     }
   ],
-  resetPasswordLink:{
-    type:String,
-    default:''
+  resetPasswordLink: {
+    type: String,
+    default: ""
   }
 });
 

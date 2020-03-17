@@ -36,14 +36,14 @@ class DeleteUser extends Component {
     }
   };
 
-  render() {
+ render() {
     if (this.state.redirect) {
       return <Redirect to="/" />;
     }
     return (
       <button
         onClick={this.deleteConfirmed}
-        className="btn btn-raised btn-default"
+        className="btn btn-outline-secondary btn-custom"
       >
         Delete Profile
       </button>

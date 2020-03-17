@@ -86,7 +86,7 @@ class ProfileTabs extends Component {
                       style={{
                         display: "flex",
                         justifyContent: "flex-start",
-                        textDecoration: "none"
+                        
                       }}
                     >
                       <img
