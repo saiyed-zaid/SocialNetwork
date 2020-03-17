@@ -145,7 +145,7 @@ export const forgotPassword = async email => {
       body: JSON.stringify({ email })
     }
   );
-  return maildata;
+  return await maildata.json();
 };
 
 export const resetPassword = resetInfo => {

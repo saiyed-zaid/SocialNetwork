@@ -80,16 +80,19 @@ class EditProfile extends Component {
 
   clickSubmit = event => {
     event.preventDefault();
-
     this.setState({ loading: true });
 
-    if (this.isValid) {
+    if (this.isValid()) {
       const userId = this.props.match.params.userId;
       const token = isAuthenticated().user.token;
 
       update(userId, token, this.userData).then(data => {
         if (data.msg) {
           this.setState({ error: data.msg });
+        } else if (isAuthenticated().user.role === "admin") {
+          this.setState({
+            redirectToProfile: true
+          });
         } else {
           updateUser(data, () => {
             this.setState({

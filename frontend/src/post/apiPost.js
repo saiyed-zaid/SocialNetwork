@@ -119,8 +119,6 @@ export const update = async (postId, token, post) => {
  * @param {json} postId        post data
  */
 export const like = async (userId, token, postId) => {
-  console.log("u", userId, "t", token, "p", postId);
-
   const postData = await fetch(
     `${process.env.REACT_APP_API_URL}/api/post/like`,
     {

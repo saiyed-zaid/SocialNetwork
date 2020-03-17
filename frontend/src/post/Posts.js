@@ -27,9 +27,7 @@ class Posts extends Component {
    */
   renderPosts = posts => {
     return (
-      <div
-        className="row"
-      >
+      <div className="row">
         {posts.map((post, i) => {
           const posterId = post.postedBy ? `/user/${post.postedBy._id}` : "";
           const posterName = post.postedBy ? post.postedBy.name : "Unknown";

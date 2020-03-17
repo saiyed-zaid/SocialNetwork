@@ -11,29 +11,61 @@ class ForgotPassword extends Component {
   };
 
   forgotPassword = e => {
+    var t = 0;
+    let sec = 59;
+    let m = 2;
+    var t = sec.toString();
+
+    const doc = document.querySelector("#t");
+
     e.preventDefault();
     this.setState({ message: "", error: "" });
     forgotPassword(this.state.email).then(data => {
-      console.log("data___", data);
       if (data.error) {
         this.setState({ error: data.error });
       } else {
         this.setState({ message: data.message });
       }
     });
+    let myVar = setInterval(myTimer, 1000);
+
+    function myTimer() {
+      sec--;
+      if (sec == 0) {
+        m--;
+        sec = 59;
+      }
+
+      if (m < 0) {
+        m = "0";
+        sec = "00";
+        doc.innerHTML = m + ":" + sec;
+        clearInterval(myVar);
+      }
+
+      if (t.length == 2) {
+        doc.innerHTML = "0" + m + ":" + sec;
+      } else {
+        doc.innerHTML = "0" + m + ":0" + sec;
+      }
+    }
+
+    //    console.log(doc);
   };
 
   render() {
+    const d = document.querySelector("#t");
+
     return (
       <div className="container d-flex justify-content-center">
         <div className="card col-md-4 mt-3">
           <h2 className="mt-5 ">Reset Password</h2>
-
+          <h3 id="t"></h3>
           {this.state.message && (
-            <h4 className="bg-success">{this.state.message}</h4>
+            <p className="alert-info rounded p-1">{this.state.message}</p>
           )}
           {this.state.error && (
-            <h4 className="bg-warning">{this.state.error}</h4>
+            <p className="alert-dange rounded p-1">{this.state.error}</p>
           )}
 
           <form>

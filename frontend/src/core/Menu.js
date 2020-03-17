@@ -56,6 +56,17 @@ const Menu = ({ history }) => (
             </li>
           </>
         )}
+        {isAuthenticated() && isAuthenticated().user.role === "admin" && (
+          <li className="nav-item">
+            <Link
+              to={`/admin`}
+              style={isActive(history, `/admin`)}
+              className="nav-link"
+            >
+              Admin
+            </Link>
+          </li>
+        )}
         {isAuthenticated() && (
           <>
             <li className="nav-item">
@@ -82,7 +93,7 @@ const Menu = ({ history }) => (
                 className="nav-link"
                 to="/signout"
                 style={isActive(history, "/signout")}
-                onClick={() => signout(() => history.push("/"))}
+                onClick={() => signout(() => history.go())}
               >
                 Logout
               </Link>

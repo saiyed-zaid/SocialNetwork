@@ -36,7 +36,7 @@ class DeleteUser extends Component {
     }
   };
 
- render() {
+  render() {
     if (this.state.redirect) {
       return <Redirect to="/" />;
     }
@@ -46,6 +46,7 @@ class DeleteUser extends Component {
         className="btn btn-outline-secondary btn-custom"
       >
         Delete Profile
+        <i className="fa fa-trash btn-sm"></i>
       </button>
     );
   }
