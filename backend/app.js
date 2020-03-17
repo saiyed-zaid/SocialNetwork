@@ -17,6 +17,7 @@ dotenv.config();
 const getRoutes = require("./routes/post");
 const authRoute = require("./routes/auth");
 const userRoutes = require("./routes/user");
+/* var cookieParser = require('cookie-parser'); */
 /* Importing Routes BEGIN*/
 
 /* Configes BEGIN */
@@ -30,6 +31,7 @@ const MulterStorage = multer.diskStorage({
 });
 /* Configes END */
 app.use("/upload", express.static("upload"));
+/* app.use(cookieParser); */
 app.use(cors());
 /* Registering middleware BEGIN*/
 app.use(

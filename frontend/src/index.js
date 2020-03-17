@@ -8,3 +8,16 @@ ReactDOM.render(<App />, document.getElementById("root"));
 // If you want your app to work offline and load faster, you can change
 // unregister() to register() below. Note this comes with some pitfalls.
 // Learn more about service workers: https://bit.ly/CRA-PWA
+/* const s=document.querySelectorAll('.nav-link');
+s.forEach((value,key)=>{
+value.addEventListener('click',ss);
+});
+/* console.log(s); */
+
+/* function ss(e)
+{
+console.log(e);
+e.target.style.backgroundColor='green';
+
+    //alert('asd');
+} */ 

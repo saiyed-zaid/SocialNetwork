@@ -29,7 +29,6 @@ exports.postById = async (req, res, next, id) => {
  */
 exports.getPost = async (req, res, next) => {
   console.log("POST_", req.post);
-
   return res.json(req.post);
 };
 

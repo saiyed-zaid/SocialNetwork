@@ -66,6 +66,7 @@ router.put("/api/forgot-password", authController.forgetPassword);
 router.put("/api/reset-password", authController.resetPassword);
 
 router.get("/api/signout", (req, res, next) => {
+  res.clearCookie('t');
   res.json({
     msg: "Logout Success"
   });

@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { list } from "./apiPost";
+import { list, like } from "./apiPost";
 import { Link } from "react-router-dom";
 import DefaultPost from "../images/post.jpg";
 
@@ -10,6 +10,7 @@ class Posts extends Component {
       posts: []
     };
   }
+
   componentDidMount() {
     list().then(data => {
       if (data.error) {
@@ -27,24 +28,26 @@ class Posts extends Component {
    */
   renderPosts = posts => {
     return (
-      <div
-        className="row"
-      >
+      <div className="row">
         {posts.map((post, i) => {
           const posterId = post.postedBy ? `/user/${post.postedBy._id}` : "";
           const posterName = post.postedBy ? post.postedBy.name : "Unknown";
 
           return (
             <div className="card col-md-0 custom-card-load" key={i}>
-              <img
-                className="img-thumbnail"
-                src={`${process.env.REACT_APP_API_URL}/${
-                  post.photo ? post.photo.path : DefaultPost
-                }`}
-                onError={i => (i.target.src = `${DefaultPost}`)}
-                alt={post.name}
-              />
-              <div className="card-body">
+              <div className="like-box">
+                <span class="likes">{post.likes.length} <i className='fa fa-heart text-danger'></i></span>
+                <img
+                  className="img-thumbnail"
+                  src={`${process.env.REACT_APP_API_URL}/${
+                    post.photo ? post.photo.path : DefaultPost
+                  }`}
+                  onError={i => (i.target.src = `${DefaultPost}`)}
+                  alt={post.name}
+                />
+              </div>
+
+              <div className="card-body align-items-center">
                 <h6 className="card-title">{post.title}</h6>
                 <p className="card-text">{post.body.substring(0, 10)}...</p>
 
@@ -62,11 +65,13 @@ class Posts extends Component {
             </div>
           );
         })}
+        
       </div>
     );
   };
   render() {
     const { posts } = this.state;
+ 
     return (
       <div className="container-fluid">
         {!posts.length ? (
@@ -78,7 +83,9 @@ class Posts extends Component {
         )}
       </div>
     );
+
   }
+  
 }
 
 export default Posts;

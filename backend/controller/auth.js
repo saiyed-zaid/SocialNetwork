@@ -4,6 +4,7 @@ const jwt = require("jsonwebtoken");
 const { validationResult } = require("express-validator");
 const sendMail = require("../helper/mailer");
 const _ = require("lodash");
+const cookieParser = require("cookie-parser");
 
 /**
  * @function middleware
@@ -64,7 +65,7 @@ exports.postSignin = async (req, res, next) => {
     process.env.JWT_KEY,
     { expiresIn: "1h" }
   );
-
+  /* res.cookie("t", token, { expire: new Date() + 9999 }); */
   res.json({
     message: "Logged in!",
     user: {

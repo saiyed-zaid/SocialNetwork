@@ -6,41 +6,32 @@
 .navbar {
   padding: 0;
 }
-.mark{
+.mark {
   background-color: #e8e7e7 !important;
 }
 .custom-card-load {
   margin: 12px;
-  transition: margin 0.5s ease-in-out;
+  transition: opacity 0.5s ease-in-out;
   animation: animCard 0.3s ease-in-out;
 }
 
 .card {
   border-radius: 2%;
-  border: 1px solid rgba(0,0,0,.12);
-  background-color:  rgb(245, 245, 245);
+  width:300px;
+  border: 1px solid rgba(0, 0, 0, 0.12);
+  background-color: rgb(255, 255, 255);
   overflow: hidden;
-
+  position: relative;
   justify-content: center;
   transition: transform 0.3s ease-in-out;
   box-shadow: 0.3em 0.3em 0.4em #9fa1a6;
+ 
 }
 .card:hover {
   /* border:1px solid red; */
   /* transform: scale(1.02); */
 }
 
-@keyframes animCard {
-  0% {
-    margin: 0;
-  }
-  100% {
-    margin: 12px;
-  }
-}
-img {
-  object-fit: fill;
-}
 .card-body {
   display: flex;
   flex-direction: column;
@@ -53,9 +44,50 @@ img {
 .img-thumbnail {
   padding: 0;
   height: 200px;
-  width: auto;
+  width:100%;
   border: none;
+  /* border:1px solid red; */
+  box-shadow: 0em 0.3em 13px 3px rgba(0, 0, 0, 0.5);
+  border-radius: 8px;
 }
+.like-box{
+  /* border:1px solid blue; */
+  position:relative;
+  transition: 0.3s ease-in-out;
+}
+
+.likes{
+  text-align:center;
+  line-height: 2em;
+  /* border-radius: 15px; */
+  background-color: rgba(0, 0, 0, 0.5);
+  color:#ffff;
+  position:absolute;
+  bottom:8px;
+  right:0;
+  height:30px;
+  width:50px;
+  transform: translate(100%,5%);
+  transition: 0.3s ease-in-out;
+  cursor: pointer;
+} 
+div.like-box:hover .likes{
+  transform: translateX(0%);
+  }
+
+@keyframes animCard {
+  0% {
+    margin: 0;
+    opacity: 0;
+    transform: translateY(-10%);
+  }
+  100% {
+    margin: 12px;
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
 .nav-tabs .nav-item.show .nav-link,
 .nav-tabs .nav-link.active {
   border: none;
@@ -203,10 +235,10 @@ img {
   color: #ffff !important;
 }
 
-a{
-  color:black;
+a {
+  color: black;
   text-decoration: none !important;
 }
-a:hover{
-  color:rgb(107, 107, 107);
+a:hover {
+  color: rgb(107, 107, 107);
 }

@@ -37,6 +37,7 @@ class Home extends Component {
 
   render() {
 /*     if (this.state.loaderIsLoading) return this.loader(); */
+
     return (
       <div>
         <div>
