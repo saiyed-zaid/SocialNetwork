@@ -115,7 +115,7 @@ class ProfileTabs extends Component {
           >
             <hr />
 
-            {following.length === 0 ? (
+            {followers.length === 0 ? (
               <div>Currently No One Is Following You</div>
             ) : (
               followers.map((person, i) => {

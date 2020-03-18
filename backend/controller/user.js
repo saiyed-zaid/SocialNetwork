@@ -199,7 +199,7 @@ exports.removeFollower = async (req, res, next) => {
       req.body.unfollowId,
       {
         $pull: {
-          following: req.body.userId
+          followers: req.body.userId
         }
       },
       {
