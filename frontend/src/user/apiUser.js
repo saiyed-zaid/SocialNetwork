@@ -143,6 +143,12 @@ export const unfollow = async (userId, token, unfollowId) => {
   return await userData.json();
 };
 
+/**
+ * Api For Fetching New User Except Our Following
+ *
+ * @param {string} userId
+ * @param {string} token
+ */
 export const findPeople = async (userId, token) => {
   const user = await fetch(
     `${process.env.REACT_APP_API_URL}/api/user/findpeople/${userId}`,

@@ -53,6 +53,8 @@ class Profile extends Component {
       if (data.msg) {
         this.setState({ redirectToSignin: true });
       } else {
+        console.log(this.checkFollow(data));
+
         let following = this.checkFollow(data);
         this.setState({ user: data, following });
         this.loadPosts(data._id);

@@ -111,7 +111,7 @@ export const update = async (postId, token, post) => {
   return await postData.json();
 };
 
-/**like
+/**
  * Api For like The Post Data In Database
  *
  * @param {string} userId    post Id Of The Logged In User

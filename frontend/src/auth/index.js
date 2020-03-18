@@ -95,44 +95,10 @@ export const isAuthenticated = () => {
 };
 
 /**
- * Function For Forgot Password
+ * Api For sending Mail to the email
  *
  * @param {string} email
  */
-/* export const forgotPassword = async email => {
-  const data = await fetch(
-    `${process.env.REACT_APP_API_URL}/api/forgotpassword`,
-    {
-      method: "PATCH",
-      headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json"
-      },
-      body: email
-    }
-  );
-  return await data.json({ data });
-}; */
-
-/**
- * Function For Reseting The Password
- *
- * @param {json} resetInfo
- */
-/* export const resetPassword = async resetInfo => {
-  const resetData = await fetch(
-    `${process.env.REACT_APP_API_URL}/api/forgotpassword`,
-    {
-      method: "PATCH",
-      headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json"
-      },
-      body: resetInfo
-    }
-  );
-  return await resetData.json({ resetInfo }); 
-};*/
 export const forgotPassword = async email => {
   const maildata = await fetch(
     `${process.env.REACT_APP_API_URL}/api/forgot-password/`,
@@ -148,39 +114,41 @@ export const forgotPassword = async email => {
   return await maildata.json();
 };
 
-export const resetPassword = resetInfo => {
-  return fetch(`${process.env.REACT_APP_API_URL}/api/reset-password/`, {
-    method: "PUT",
-    headers: {
-      Accept: "application/json",
-      "Content-Type": "application/json"
-    },
-    body: JSON.stringify(resetInfo)
-  })
-    .then(response => {
-      console.log("forgot password response: ", response);
-      return response.json();
-    })
-    .catch(err => console.log(err));
+/**
+ * Api For Resetting Or Updating The Password
+ *
+ * @param {json} resetInfo
+ */
+export const resetPassword = async resetInfo => {
+  const resetData = await fetch(
+    `${process.env.REACT_APP_API_URL}/api/reset-password/`,
+    {
+      method: "PUT",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(resetInfo)
+    }
+  );
+  return await resetData.json();
 };
 
 /**
  * Login With Google Api
  * @param {} user
  */
-
-export const socialLogin = user => {
-  return fetch(`${process.env.REACT_APP_API_URL}/api/social-login/`, {
-    method: "POST",
-    headers: {
-      Accept: "application/json",
-      "Content-Type": "application/json"
-    },
-    body: JSON.stringify(user)
-  })
-    .then(response => {
-      console.log("signin response: ", response);
-      return response.json();
-    })
-    .catch(err => console.log(err));
+export const socialLogin = async user => {
+  const loginData = await fetch(
+    `${process.env.REACT_APP_API_URL}/api/social-login/`,
+    {
+      method: "POST",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(user)
+    }
+  );
+  return await loginData.json();
 };

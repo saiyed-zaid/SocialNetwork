@@ -11,7 +11,6 @@ class ForgotPassword extends Component {
   };
 
   forgotPassword = e => {
-    var t = 0;
     let sec = 59;
     let m = 2;
     var t = sec.toString();
@@ -31,7 +30,7 @@ class ForgotPassword extends Component {
 
     function myTimer() {
       sec--;
-      if (sec == 0) {
+      if (sec === 0) {
         m--;
         sec = 59;
       }
@@ -43,7 +42,7 @@ class ForgotPassword extends Component {
         clearInterval(myVar);
       }
 
-      if (t.length == 2) {
+      if (t.length === 2) {
         doc.innerHTML = "0" + m + ":" + sec;
       } else {
         doc.innerHTML = "0" + m + ":0" + sec;
@@ -54,13 +53,11 @@ class ForgotPassword extends Component {
   };
 
   render() {
-    const d = document.querySelector("#t");
-
     return (
       <div className="container d-flex justify-content-center">
         <div className="card col-md-4 mt-3">
           <h2 className="mt-5 ">Reset Password</h2>
-          <h3 id="t"></h3>
+          <h3 id="t"> </h3>
           {this.state.message && (
             <p className="alert-info rounded p-1">{this.state.message}</p>
           )}
