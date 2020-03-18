@@ -45,8 +45,8 @@ class DeleteUser extends Component {
         onClick={this.deleteConfirmed}
         className="btn btn-outline-secondary btn-custom"
       >
-        Delete Profile
-        <i className="fa fa-trash btn-sm"></i>
+        Delete Profile &nbsp;
+        <i className="fa fa-trash"></i>
       </button>
     );
   }

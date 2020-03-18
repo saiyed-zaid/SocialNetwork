@@ -121,14 +121,14 @@ class Profile extends Component {
                     to={`/post/create`}
                     className="btn btn-outline-secondary mr-2 btn-custom"
                   >
-                    Create Post
-                    <i className="fa fa-plus-square btn-sm"></i>
+                    Create Post &nbsp;
+                    <i className="fa fa-plus-square"></i>
                   </Link>
                   <Link
                     to={`/user/edit/${user._id}`}
                     className="btn btn-outline-secondary mr-2 btn-custom"
                   >
-                    Edit Profile <i className="fa fa-edit btn-sm"></i>
+                    Edit Profile &nbsp;<i className="fa fa-edit "></i>
                   </Link>
                   <DeleteUser userId={user._id} />
                 </div>
@@ -140,6 +140,26 @@ class Profile extends Component {
               )}
             </div>
           </div>
+        </div>
+        <div>
+          {isAuthenticated().user && isAuthenticated().user.role === "admin" && (
+            <div class="card mt-5 w-100">
+              <div className="card-body">
+                <h5 className="card-title">Admin</h5>
+                <p className="mb-2 text-danger">Edit/Delete as an Admin</p>
+                <div>
+                  <Link
+                    className="btn btn-outline-secondary btn-custom"
+                    to={`/user/edit/${user._id}`}
+                  >
+                    Edit Profile &nbsp; <i className="fa fa-edit"></i>
+                  </Link>
+                  &nbsp;&nbsp;
+                  <DeleteUser userId={user._id} />
+                </div>
+              </div>
+            </div>
+          )}
         </div>
         <div>
           <div className="col md-12 mt-5 mb-5">

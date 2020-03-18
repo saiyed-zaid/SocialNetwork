@@ -20,9 +20,8 @@ class Admin extends Component {
     }
     return (
       <div>
-        <div className="jumbotron">
-          <h2>Admin Dashboard</h2>
-          <p className="lead">Welcome to React Frontend</p>
+        <div className="jumbotron p-3">
+          <h4>Admin Dashboard</h4>
         </div>
         <div className="container-fluid">
           <div className="row">

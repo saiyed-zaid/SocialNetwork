@@ -130,6 +130,29 @@ class SinglePost extends Component {
             </h5>
           )}
           <hr />
+          {isAuthenticated().user && isAuthenticated().user.role === "admin" && (
+            <div class="card mt-5 w-100">
+              <div className="card-body">
+                <h5 className="card-title">Admin</h5>
+                <p className="mb-2 text-danger">Edit/Delete as an Admin</p>
+                <div>
+                  <Link
+                    to={`/post/edit/${post._id}`}
+                    className="btn btn-outline-secondary btn-custom"
+                  >
+                    Update Post &nbsp; <i className="fa fa-edit"></i>
+                  </Link>{" "}
+                  &nbsp;&nbsp;
+                  <button
+                    onClick={this.deleteConfirmed}
+                    className="btn btn-outline-secondary btn-custom"
+                  >
+                    Delete Post &nbsp; <i className="fa fa-trash"></i>
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
           <div>
             <h3>{post.title}</h3>
             <h4 className="lead">
@@ -166,31 +189,6 @@ class SinglePost extends Component {
                   </button>
                 </>
               )}
-            <div>
-              {isAuthenticated().user &&
-                isAuthenticated().user.role === "admin" && (
-                  <div class="card mt-5">
-                    <div className="card-body">
-                      <h5 className="card-title">Admin</h5>
-                      <p className="mb-2 text-danger">
-                        Edit/Delete as an Admin
-                      </p>
-                      <Link
-                        to={`/post/edit/${post._id}`}
-                        className="btn btn-raised btn-warning btn-sm mr-5"
-                      >
-                        Update Post
-                      </Link>
-                      <button
-                        onClick={this.deleteConfirmed}
-                        className="btn btn-raised btn-danger"
-                      >
-                        Delete Post
-                      </button>
-                    </div>
-                  </div>
-                )}
-            </div>
           </div>
         </div>
       </div>
