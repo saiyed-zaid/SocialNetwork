@@ -122,6 +122,9 @@ class Comment extends Component {
                       width="30px"
                       src={`${process.env.REACT_APP_API_URL}/${photoUrl}`}
                       alt={comment.postedBy.name}
+                      onError={e => {
+                        e.target.src = DefaultProfile;
+                      }}
                     />
                   </Link>
                   <div>
@@ -142,7 +145,6 @@ class Comment extends Component {
                           </button>
                         )}
                       <br />
-                      
                       <br />
                       <div
                         style={{
@@ -156,7 +158,7 @@ class Comment extends Component {
                             style={{ fontSize: "12px" }}
                           >
                             Comment By : {comment.postedBy.name} {"  "}
-                            {comment.created}
+                            {new Date(comment.created).toDateString()}
                           </span>
                         </small>
                       </div>
@@ -167,7 +169,7 @@ class Comment extends Component {
             );
           })}
           <form>
-            <div className="form-group" style={{flex:2}}>
+            <div className="form-group" style={{ flex: 2 }}>
               <input
                 type="text"
                 className="form-control"
@@ -179,7 +181,7 @@ class Comment extends Component {
             <button
               onClick={this.addComment}
               className="btn btn-raised btn-primary"
-              style={{flex:1}}
+              style={{ flex: 1 }}
             >
               Add Comment <i className="fa fa-plus"></i>
             </button>

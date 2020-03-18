@@ -62,7 +62,11 @@ class FindPeople extends Component {
           />
           <div className="card-body">
             <h6 className="card-title">{user.name}</h6>
-            <p className="card-text">{user.email}</p>
+            <p>
+              <span>Following {user.following.length} </span>
+              <span>Followers {user.followers.length}</span>
+            </p>
+
             <div
               style={{
                 display: "flex",

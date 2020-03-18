@@ -36,7 +36,7 @@ class DeleteUser extends Component {
     }
   };
 
- render() {
+  render() {
     if (this.state.redirect) {
       return <Redirect to="/" />;
     }
@@ -45,7 +45,8 @@ class DeleteUser extends Component {
         onClick={this.deleteConfirmed}
         className="btn btn-outline-secondary btn-custom"
       >
-        Delete Profile
+        Delete Profile &nbsp;
+        <i className="fa fa-trash"></i>
       </button>
     );
   }

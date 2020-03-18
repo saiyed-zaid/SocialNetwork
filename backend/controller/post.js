@@ -9,8 +9,9 @@ const _ = require("lodash");
 exports.postById = async (req, res, next, id) => {
   try {
     const post = await Post.findOne({ _id: id })
+
       .populate("postedBy", "_id name role")
-      .populate("likes", "_id name")
+      .populate("likes", "_id ")
       .populate("comments.postedBy", "_id name photo")
       .select("comments title body photo created");
 

@@ -21,6 +21,8 @@ class SinglePost extends Component {
       if (data.error) {
         console.log(data.error);
       } else {
+        console.log(data.likes);
+
         this.setState({
           post: data,
           likes: data.likes.length,
@@ -57,8 +59,16 @@ class SinglePost extends Component {
 
   checkLike = likes => {
     const userId = isAuthenticated() && isAuthenticated().user._id;
-    let match = likes.indexOf(userId) !== -1;
-    return match;
+    let arr = [];
+
+    likes.forEach(e => {
+      arr.push(e._id);
+    });
+    var match = arr.indexOf(userId);
+    if (match >= 0) {
+      return true;
+    }
+    return false;
   };
 
   updateComments = comments => {
@@ -109,17 +119,40 @@ class SinglePost extends Component {
 
         <div className="card-body">
           {like ? (
-            <h4 onClick={this.likeToggle}>
+            <h5 onClick={this.likeToggle}>
               <i className="fa fa-heart text-danger"> </i>&nbsp; {likes}
-              &nbsp; Likes
-            </h4>
+              &nbsp; {likes > 1 ? "likes" : "like"}
+            </h5>
           ) : (
             <h5 onClick={this.likeToggle}>
               <i className="fa fa-heart-o"> </i>
-              &nbsp;{likes}&nbsp; Likes
+              &nbsp;{likes}&nbsp;{likes > 1 ? "likes" : "like"}
             </h5>
           )}
           <hr />
+          {isAuthenticated().user && isAuthenticated().user.role === "admin" && (
+            <div class="card mt-5 w-100">
+              <div className="card-body">
+                <h5 className="card-title">Admin</h5>
+                <p className="mb-2 text-danger">Edit/Delete as an Admin</p>
+                <div>
+                  <Link
+                    to={`/post/edit/${post._id}`}
+                    className="btn btn-outline-secondary btn-custom"
+                  >
+                    Update Post &nbsp; <i className="fa fa-edit"></i>
+                  </Link>{" "}
+                  &nbsp;&nbsp;
+                  <button
+                    onClick={this.deleteConfirmed}
+                    className="btn btn-outline-secondary btn-custom"
+                  >
+                    Delete Post &nbsp; <i className="fa fa-trash"></i>
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
           <div>
             <h3>{post.title}</h3>
             <h4 className="lead">

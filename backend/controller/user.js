@@ -228,9 +228,10 @@ exports.findPeople = async (req, res, next) => {
   let following = req.profile.following;
   following.push(req.profile._id);
   try {
-    const users = await User.find({ _id: { $nin: following } }).select(
-      "name photo"
-    );
+    const users = await User.find({ _id: { $nin: following } })
+      .select("name photo")
+      .populate("following", "_id")
+      .populate("followers", "_id");
     await res.json(users);
   } catch (error) {
     res.status(400).json({ err: error });
