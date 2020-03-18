@@ -15,6 +15,10 @@
   animation: animCard 0.3s ease-in-out;
 }
 
+.bg-primary {
+  background-color: #03a9f4!important;
+}
+
 .card {
   border-radius: 2%;
   width: 300px;
@@ -203,9 +207,17 @@ div.like-box:hover .likes {
     transform: rotate(360deg);
   }
 }
+.btn-primary{
+  background-color: #03a9f4 !important;
+  color:#ffff !important;
+}
 
+.btn-outline-primary{
+  border:1px solid #03a9f4 !important;
+  color:#03a9f4 !important;
+}
 .custom-Read-more:hover {
-  background-color: #009688 !important;
+  background-color: #03a9f4 !important;
   color: #ffff !important;
 }
 .custom-post-display {
