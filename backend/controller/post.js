@@ -4,13 +4,14 @@ const _ = require("lodash");
 
 /**
  * @function middleware
- * @description Handling get request which fetch all posts
+ * @description Handling get request which fetch all posts by postId
  */
 exports.postById = async (req, res, next, id) => {
   try {
     const post = await Post.findOne({ _id: id })
-      .populate("postedBy", "_id name")
-      .populate("likes", "_id")
+
+      .populate("postedBy", "_id name role")
+      .populate("likes", "_id ")
       .populate("comments.postedBy", "_id name photo")
       .select("comments title body photo created");
 
@@ -34,7 +35,7 @@ exports.getPost = async (req, res, next) => {
 
 /**
  * @function middleware
- * @description Handling get request which fetch all posts by userId
+ * @description Handling get request which fetch all posts
  */
 exports.getPosts = async (req, res, next) => {
   try {
@@ -43,7 +44,6 @@ exports.getPosts = async (req, res, next) => {
       .populate("comments", "text created")
       .populate("comments.postedBy", "_id name")
       .select("_id title body created likes photo")
-
       .sort({ created: -1 });
     res.json({ posts });
   } catch (error) {
@@ -59,7 +59,7 @@ exports.getPosts = async (req, res, next) => {
 exports.getPostsByUser = async (req, res, next) => {
   try {
     const posts = await Post.find({ postedBy: req.profile._id })
-      .populate("postedBy", "_id name")
+      .populate("postedBy", "_id name role")
       .select("_id title body created likes")
       .sort("_created");
     if (posts.length == 0) {
@@ -115,8 +115,12 @@ exports.deletePost = async (req, res, next) => {
   if (!post) {
     return res.json({ msg: "Post not Found" });
   }
-
-  if (req.auth._id != req.post.postedBy._id) {
+  console.table(req.auth.role);
+  if (
+    req.auth._id != req.post.postedBy._id &&
+    req.auth.role != "subscriber" &&
+    req.auth.role != "admin"
+  ) {
     return res(401).json({
       msg: "Not authorized user for deleting this post."
     });
@@ -134,22 +138,53 @@ exports.deletePost = async (req, res, next) => {
  * @description Handling patch request which update post in database
  */
 exports.updatePost = async (req, res, next) => {
-  if (req.auth._id != req.post.postedBy._id) {
-    return res.json({ msg: "Not authorized user for Updating this post." });
-  }
+  console.log("role", req.auth.role);
 
-  let post = req.post;
-  post = _.extend(post, req.body);
-  post.updated = Date.now();
-  try {
-    const result = await post.save();
-    res.json({ post });
-  } catch (error) {
-    res.json({
-      msg: "Error while updating profile"
-    });
+  switch (req.auth.role) {
+    case "admin":
+      let post = req.post;
+      post = _.extend(post, req.body);
+      post.updated = Date.now();
+      try {
+        const result = await post.save();
+        res.json({ post });
+      } catch (error) {
+        res.json({
+          msg: "Error while updating profile"
+        });
+      }
+      break;
+
+    case "subscriber":
+      if (req.auth._id == req.post.postedBy._id) {
+        let post = req.post;
+        post = _.extend(post, req.body);
+        post.updated = Date.now();
+        try {
+          const result = await post.save();
+          res.json({ post });
+        } catch (error) {
+          res.json({
+            msg: "Error while updating profile"
+          });
+        }
+      } else {
+        return res.json({ msg: "Not authorized user for Updating this post." });
+      }
+      break;
+    default:
+      return res.json({ msg: "Not authorized user for Updating this post." });
   }
 };
+
+/*  if (
+    req.auth._id != req.post.postedBy._id &&
+    req.auth.role != "subscriber" &&
+    req.auth.role != "admin"
+  ) {
+    return res.json({ msg: "Not authorized user for Updating this post." });
+  }
+}; */
 
 /**
  * @function middleware

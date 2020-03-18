@@ -44,6 +44,10 @@ const UserSchema = new Schema({
   resetPasswordLink: {
     type: String,
     default: ""
+  },
+  role: {
+    type: String,
+    default: "subscriber"
   }
 });
 

@@ -12,20 +12,26 @@ exports.userById = async (req, res, next, id) => {
       return next(new Error("User not Found."));
     }
     req.profile = user;
+    console.log("_data_", req.profile);
+    next();
   } catch (error) {
     return next(new Error("User not Found."));
   }
-  next();
 };
 
 exports.hasAuthorization = (req, res, next) => {
+  console.log("_data auth_", req.profile);
+  console.log("_data auth_", req.auth);
+
   const authorized =
-    req.profile && req.auth && req.profile._id === req.auth._id;
+    (req.profile && req.auth && req.profile._id === req.auth._id) ||
+    req.auth.role == "admin";
   if (!authorized) {
     res.status(401).json({
       msg: "Not an Auhtorized user to take this action"
     });
   }
+  next();
 };
 
 /**
@@ -104,6 +110,7 @@ exports.updateUser = async (req, res, next) => {
  * @description Handling delete request which delete single user
  */
 exports.deleteUser = async (req, res, next) => {
+  this.hasAuthorization();
   let user = req.profile;
   try {
     const result = await user.remove();
