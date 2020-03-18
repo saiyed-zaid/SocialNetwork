@@ -4,7 +4,7 @@ const _ = require("lodash");
 
 /**
  * @function middleware
- * @description Handling get request which fetch all posts
+ * @description Handling get request which fetch all posts by postId
  */
 exports.postById = async (req, res, next, id) => {
   try {
@@ -34,7 +34,7 @@ exports.getPost = async (req, res, next) => {
 
 /**
  * @function middleware
- * @description Handling get request which fetch all posts by userId
+ * @description Handling get request which fetch all posts
  */
 exports.getPosts = async (req, res, next) => {
   try {
@@ -43,7 +43,6 @@ exports.getPosts = async (req, res, next) => {
       .populate("comments", "text created")
       .populate("comments.postedBy", "_id name")
       .select("_id title body created likes photo")
-
       .sort({ created: -1 });
     res.json({ posts });
   } catch (error) {
