@@ -105,6 +105,7 @@ class Profile extends Component {
                 style={{ height: "200px", width: "200px", borderRadius: "50%" }}
                 className="img-thumbnail"
                 src={photoUrl}
+                onError={(e)=>{e.target.src= DefaultProfile}}
                 alt={user.name}
               />
             </div>

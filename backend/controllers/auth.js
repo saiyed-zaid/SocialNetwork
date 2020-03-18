@@ -1,4 +1,4 @@
-const User = require("../model/user");
+const User = require("../models/user");
 const md5 = require("md5");
 const jwt = require("jsonwebtoken");
 const { validationResult } = require("express-validator");
@@ -116,11 +116,19 @@ exports.forgetPassword = async (req, res, next) => {
 };
 
 exports.resetPassword = async (req, res) => {
+
+  const errs = validationResult(req);
+  if (!errs.isEmpty()) {
+    const err = errs.array()[0].msg;
+    return res.status(422).json({
+      msg: err
+    });
+  }
   const { resetPasswordLink, newPassword } = req.body;
+
 
   try {
     const user = await User.findOne({ resetPasswordLink });
-    console.log("data_", user);
 
     const updatedFields = {
       password: md5(newPassword),
