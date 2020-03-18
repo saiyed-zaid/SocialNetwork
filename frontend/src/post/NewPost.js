@@ -4,7 +4,6 @@ import { create } from "./apiPost";
 import { Redirect } from "react-router-dom";
 import DefaultPost from "../images/post.jpg";
 
-
 class NewPost extends Component {
   constructor() {
     super();

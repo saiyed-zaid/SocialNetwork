@@ -53,6 +53,8 @@ class Profile extends Component {
       if (data.msg) {
         this.setState({ redirectToSignin: true });
       } else {
+        console.log(this.checkFollow(data));
+
         let following = this.checkFollow(data);
         this.setState({ user: data, following });
         this.loadPosts(data._id);
@@ -100,7 +102,7 @@ class Profile extends Component {
           <div className="row">
             <div className="col-md-2">
               <img
-                style={{ height: "200px", width: "200px",borderRadius:'50%' }}
+                style={{ height: "200px", width: "200px", borderRadius: "50%" }}
                 className="img-thumbnail"
                 src={photoUrl}
                 alt={user.name}
@@ -120,12 +122,13 @@ class Profile extends Component {
                     className="btn btn-outline-secondary mr-2 btn-custom"
                   >
                     Create Post
+                    <i className="fa fa-plus-square btn-sm"></i>
                   </Link>
                   <Link
                     to={`/user/edit/${user._id}`}
                     className="btn btn-outline-secondary mr-2 btn-custom"
                   >
-                    Edit Profile
+                    Edit Profile <i className="fa fa-edit btn-sm"></i>
                   </Link>
                   <DeleteUser userId={user._id} />
                 </div>

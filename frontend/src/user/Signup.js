@@ -30,26 +30,49 @@ class Signup extends Component {
    */
   clickSubmit = event => {
     event.preventDefault();
+    if (this.isValid()) {
+      const { name, email, password } = this.state;
+      const user = {
+        name: name,
+        email: email,
+        password: password
+      };
+      signup(user).then(data => {
+        if (data.error) {
+          this.setState({ error: data.error });
+        } else {
+          this.setState({
+            error: data.msg ? data.msg : "",
+            name: "",
+            email: "",
+            password: "",
+            open: false,
+            redirectToSignin: true
+          });
+        }
+      });
+    }
+  };
+
+  isValid = () => {
     const { name, email, password } = this.state;
-    const user = {
-      name: name,
-      email: email,
-      password: password
-    };
-    signup(user).then(data => {
-      if (data.error) {
-        this.setState({ error: data.error });
-      } else {
-        this.setState({
-          error: "",
-          name: "",
-          email: "",
-          password: "",
-          open: false,
-          redirectToSignin: true
-        });
-      }
-    });
+
+    if (name.length === 0) {
+      this.setState({ error: "Name Is Required", loading: true });
+      return false;
+    }
+    if (!/^[a-zA-Z0-9]+@(?:[a-zA-Z0-9]+\.)+[A-Za-z]+$/.test(email)) {
+      this.setState({ error: "A Valid Email Is Required", loading: false });
+      return false;
+    }
+    if (password.length >= 1 && password.length <= 5) {
+      this.setState({
+        error: "password Must be 6 character Long",
+        loading: false
+      });
+      return false;
+    }
+    return true;
   };
 
   /**
@@ -129,6 +152,7 @@ class Signup extends Component {
             style={{ display: error ? "" : "none" }}
           >
             {error}
+
             <button
               type="button"
               className="close"
