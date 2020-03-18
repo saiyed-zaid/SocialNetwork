@@ -60,6 +60,7 @@ exports.postSignin = async (req, res, next) => {
       _id: userExists._id,
       name: userExists.name,
       email: userExists.email,
+      role: userExists.role,
       token: token
     },
     process.env.JWT_KEY,
@@ -72,6 +73,7 @@ exports.postSignin = async (req, res, next) => {
       _id: userExists._id,
       name: userExists.name,
       email: userExists.email,
+      role: userExists.role,
       token: token
     }
   });
