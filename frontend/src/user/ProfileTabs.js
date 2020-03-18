@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
-import { DefaultProfile } from "../images/avatar.jpg";
+import DefaultProfile from "../images/avatar.jpg";
 import { isAuthenticated } from "../auth/index";
 
 class ProfileTabs extends Component {
@@ -85,8 +85,7 @@ class ProfileTabs extends Component {
                       to={`/user/${person._id}`}
                       style={{
                         display: "flex",
-                        justifyContent: "flex-start",
-                        
+                        justifyContent: "flex-start"
                       }}
                     >
                       <img
@@ -99,6 +98,9 @@ class ProfileTabs extends Component {
                         className="float-left mr-2 "
                         src={imgPath}
                         alt={person.name}
+                        onError={e => {
+                          e.target.src = DefaultProfile;
+                        }}
                       />
                       <h4 className="lead"> {person.name}</h4>
                     </Link>
@@ -119,14 +121,11 @@ class ProfileTabs extends Component {
               <div>Currently No One Is Following You</div>
             ) : (
               followers.map((person, i) => {
-                const photoUrl = person.photo
-                  ? person.photo.path
+                const imgPath = person.photo
+                  ? process.env.REACT_APP_API_URL + "/" + person.photo.path
                   : DefaultProfile;
                 return (
-                  <div
-                    key={i}
-                    className="card p-2 mt-1 "
-                  >
+                  <div key={i} className="card p-2 mt-1 ">
                     <Link
                       to={`/user/${person._id}`}
                       style={{
@@ -143,8 +142,11 @@ class ProfileTabs extends Component {
                           width: "30px"
                         }}
                         className="float-left mr-2"
-                        src={`${process.env.REACT_APP_API_URL}/${photoUrl}`}
+                        src={imgPath}
                         alt={person.name}
+                        onError={e => {
+                          e.target.src = DefaultProfile;
+                        }}
                       />
                       <h4 className="lead"> {person.name}</h4>
                     </Link>
