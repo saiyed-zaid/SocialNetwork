@@ -50,7 +50,12 @@ router.get("/api/user/:userId", auth_check, userController.getUser);
  * @param {middleware} Checking Authorization
  * @param {middleware} updateUser
  */
-router.put("/api/user/:userId", auth_check, userController.updateUser);
+router.put(
+  "/api/user/:userId",
+  auth_check,
+  userController.hasAuthorization,
+  userController.updateUser
+);
 
 /**
  * @function delete
@@ -58,7 +63,12 @@ router.put("/api/user/:userId", auth_check, userController.updateUser);
  * @param {middleware} Checking Authorization
  * @param {middleware} deleteUser
  */
-router.delete("/api/user/:userId", auth_check, userController.deleteUser);
+router.delete(
+  "/api/user/:userId",
+  auth_check,
+  userController.hasAuthorization,
+  userController.deleteUser
+);
 
 /**
  * @function get

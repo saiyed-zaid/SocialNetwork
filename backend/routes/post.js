@@ -100,7 +100,12 @@ router.patch("/api/post/uncomment", auth_check, postController.uncommentPost);
  * @param {router} auth_check for checking authorization
  * @param {property} property deletePost
  */
-router.delete("/api/post/:postId", auth_check, postController.deletePost);
+router.delete(
+  "/api/post/:postId",
+  auth_check,
+  postController.hasAuthorization,
+  postController.deletePost
+);
 
 /**
  * @function patch
@@ -109,7 +114,12 @@ router.delete("/api/post/:postId", auth_check, postController.deletePost);
  * @param {router} auth_check for checking authorization
  * @param {property} property updatePost
  */
-router.patch("/api/post/:postId", auth_check, postController.updatePost);
+router.patch(
+  "/api/post/:postId",
+  auth_check,
+  postController.hasAuthorization,
+  postController.updatePost
+);
 
 /**
  * @function param

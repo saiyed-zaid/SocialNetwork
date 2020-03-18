@@ -12,7 +12,7 @@ exports.userById = async (req, res, next, id) => {
       return next(new Error("User not Found."));
     }
     req.profile = user;
-    console.log("_data_", req.profile);
+    console.log("data___", req.profile);
     next();
   } catch (error) {
     return next(new Error("User not Found."));
@@ -20,16 +20,24 @@ exports.userById = async (req, res, next, id) => {
 };
 
 exports.hasAuthorization = (req, res, next) => {
-  console.log("_data auth_", req.profile);
-  console.log("_data auth_", req.auth);
+  console.log('auth___');
+/*   console.log('Role_',req.auth.role);
+  console.log('Profile',req.profile);
+  console.log('Auth',req.auth); */
+  
+  
+  
+  if (req.auth.role != "admin" && req.auth.role != "subscriber") {
+    return res.json({ msg: "Not authorized user for this action." });
+  }
+  if (req.auth.role == "admin") {
+    //return res.json({ msg: "is admin" });
 
-  const authorized =
-    (req.profile && req.auth && req.profile._id === req.auth._id) ||
-    req.auth.role == "admin";
-  if (!authorized) {
-    res.status(401).json({
-      msg: "Not an Auhtorized user to take this action"
-    });
+   return next();
+  }
+
+  if (req.auth._id != req.profile._id) {
+    return res.json({ msg: "Not authorized user for this action id not matched." });
   }
   next();
 };
@@ -72,6 +80,7 @@ exports.getUser = async (req, res, next) => {
  * @description Handling put request which Update single user
  */
 exports.updateUser = async (req, res, next) => {
+
   let user = req.profile;
 
   if (user.photo) {
@@ -110,7 +119,6 @@ exports.updateUser = async (req, res, next) => {
  * @description Handling delete request which delete single user
  */
 exports.deleteUser = async (req, res, next) => {
-  this.hasAuthorization();
   let user = req.profile;
   try {
     const result = await user.remove();
