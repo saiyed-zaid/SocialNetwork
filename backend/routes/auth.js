@@ -1,8 +1,8 @@
 const express = require("express");
 const router = express.Router();
-const authController = require("../controller/auth");
+const authController = require("../controllers/auth");
 const { body } = require("express-validator");
-const userController = require("../controller/user");
+const userController = require("../controllers/user");
 
 /**
  * @function post
@@ -63,7 +63,18 @@ router.put("/api/forgot-password", authController.forgetPassword);
  * @description Handling put request which Reset user password
  * @param {middleware} resetPassword
  */
-router.put("/api/reset-password", authController.resetPassword);
+router.put(
+  "/api/reset-password",
+  [
+    body("newPassword")
+      .notEmpty()
+      .withMessage("This field is required"),
+    body("newPassword")
+      .isLength({ min: 5 })
+      .withMessage("Password must be 5 character long.")
+  ],
+  authController.resetPassword
+);
 
 router.get("/api/signout", (req, res, next) => {
   res.json({
