@@ -3,9 +3,9 @@ import { isAuthenticated } from "../auth/index";
 import { Redirect, Link } from "react-router-dom";
 import { read } from "./apiUser";
 import DefaultProfile from "../images/avatar.jpg";
-import DeleteUser from "./DeleteUser";
-import FollowProfileButton from "./FollowProfileButton";
-import ProfileTabs from "./ProfileTabs";
+import DeleteUser from "./deleteUser";
+import FollowProfileButton from "./followProfileButton";
+import ProfileTabs from "./profileTabs";
 import { listByUser } from "../post/apiPost";
 
 class Profile extends Component {
@@ -53,8 +53,6 @@ class Profile extends Component {
       if (data.msg) {
         this.setState({ redirectToSignin: true });
       } else {
-        console.log(this.checkFollow(data));
-
         let following = this.checkFollow(data);
         this.setState({ user: data, following });
         this.loadPosts(data._id);
@@ -106,6 +104,9 @@ class Profile extends Component {
                 className="img-thumbnail"
                 src={photoUrl}
                 alt={user.name}
+                onError={e => {
+                  e.target.src = DefaultProfile;
+                }}
               />
             </div>
             <div className="col-md-10">
@@ -143,7 +144,7 @@ class Profile extends Component {
         </div>
         <div>
           {isAuthenticated().user && isAuthenticated().user.role === "admin" && (
-            <div class="card mt-5 w-100">
+            <div className="card mt-5 w-100">
               <div className="card-body">
                 <h5 className="card-title">Admin</h5>
                 <p className="mb-2 text-danger">Edit/Delete as an Admin</p>

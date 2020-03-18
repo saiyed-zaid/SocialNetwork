@@ -20,24 +20,24 @@ exports.userById = async (req, res, next, id) => {
 };
 
 exports.hasAuthorization = (req, res, next) => {
-  console.log('auth___');
-/*   console.log('Role_',req.auth.role);
+  console.log("auth___");
+  /*   console.log('Role_',req.auth.role);
   console.log('Profile',req.profile);
   console.log('Auth',req.auth); */
-  
-  
-  
+
   if (req.auth.role != "admin" && req.auth.role != "subscriber") {
     return res.json({ msg: "Not authorized user for this action." });
   }
   if (req.auth.role == "admin") {
     //return res.json({ msg: "is admin" });
 
-   return next();
+    return next();
   }
 
   if (req.auth._id != req.profile._id) {
-    return res.json({ msg: "Not authorized user for this action id not matched." });
+    return res.json({
+      msg: "Not authorized user for this action id not matched."
+    });
   }
   next();
 };
@@ -80,7 +80,6 @@ exports.getUser = async (req, res, next) => {
  * @description Handling put request which Update single user
  */
 exports.updateUser = async (req, res, next) => {
-
   let user = req.profile;
 
   if (user.photo) {
@@ -122,10 +121,11 @@ exports.deleteUser = async (req, res, next) => {
   let user = req.profile;
   try {
     const result = await user.remove();
-    res.json({ msg: "User Deleted succesfully" });
+    res.json({ msg: "User Deleted succesfully", isDeleted: true });
   } catch (error) {
     res.json({
-      msg: "Error while deleting profile"
+      msg: "Error while deleting profile",
+      isDeleted: false
     });
   }
 };

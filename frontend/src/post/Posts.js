@@ -36,7 +36,10 @@ class Posts extends Component {
           return (
             <div className="card col-md-0 custom-card-load" key={i}>
               <div className="like-box">
-                <span class="likes">{post.likes.length} <i className='fa fa-heart text-danger'></i></span>
+                <span className="likes">
+                  {post.likes.length}{" "}
+                  <i className="fa fa-heart text-danger"></i>
+                </span>
                 <img
                   className="img-thumbnail"
                   src={`${process.env.REACT_APP_API_URL}/${
@@ -65,13 +68,12 @@ class Posts extends Component {
             </div>
           );
         })}
-        
       </div>
     );
   };
   render() {
     const { posts } = this.state;
- 
+
     return (
       <div className="container-fluid">
         {!posts.length ? (
@@ -83,9 +85,7 @@ class Posts extends Component {
         )}
       </div>
     );
-
   }
-  
 }
 
 export default Posts;

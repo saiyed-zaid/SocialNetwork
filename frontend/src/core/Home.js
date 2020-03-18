@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import Posts from "../post/Posts";
+import Posts from "../post/posts";
 class Home extends Component {
   constructor() {
     super();

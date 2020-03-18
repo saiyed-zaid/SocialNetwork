@@ -3,7 +3,7 @@ import { singlePost, remove, like, unlike } from "./apiPost";
 import { Link, Redirect } from "react-router-dom";
 import { isAuthenticated } from "../auth/index";
 import DefaultPost from "../images/post.jpg";
-import Comment from "./Comment";
+import Comment from "./comment";
 
 class SinglePost extends Component {
   state = {

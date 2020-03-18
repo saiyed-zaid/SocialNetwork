@@ -1,21 +1,21 @@
 import React from "react";
 import { Route, Switch } from "react-router-dom";
-import Home from "./core/Home";
-import Menu from "./core/Menu";
-import Signup from "./user/Signup";
-import Signin from "./user/Signin";
-import Profile from "./user/Profile";
-import FindPeople from "./user/FindPeople";
-import Users from "./user/Users";
-import EditProfile from "./user/EditProfile";
-import NewPost from "./post/NewPost";
-import SinglePost from "./post/SinglePost";
-import EditPost from "./post/EditPost";
-import ForgotPassword from "./user/ForgotPassword";
-import ResetPassword from "./user/ResetPassword";
-import Admin from "./admin/Admin";
+import Home from "./core/home";
+import Menu from "./core/menu";
+import Signup from "./user/signup";
+import Signin from "./user/signin";
+import Profile from "./user/profile";
+import FindPeople from "./user/findPeople";
+import Users from "./user/users";
+import EditProfile from "./user/editProfile";
+import NewPost from "./post/newPost";
+import SinglePost from "./post/singlePost";
+import EditPost from "./post/editPost";
+import ForgotPassword from "./user/forgotPassword";
+import ResetPassword from "./user/resetPassword";
+import Admin from "./admin/admin";
 
-import PrivateRoute from "./auth/PrivateRoute";
+import PrivateRoute from "./auth/privateRoute";
 
 const MainRouter = props => {
   return (
