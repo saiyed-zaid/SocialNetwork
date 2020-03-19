@@ -195,6 +195,20 @@ class EditProfile extends Component {
           <h2>Edit Profile</h2>
         </div>
         <div
+          className="alert alert-danger alert-dismissible fade show col-md-4"
+          style={{ display: error ? "" : "none" }}
+        >
+          {error}
+          <button
+            type="button"
+            className="close"
+            data-dismiss="alert"
+            aria-label="Close"
+          >
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div
           className="container-fluid p-0"
           style={{
             display: "flex",
@@ -202,20 +216,6 @@ class EditProfile extends Component {
             flexWrap: "wrap"
           }}
         >
-          <div
-            className="alert alert-danger alert-dismissible fade show"
-            style={{ display: error ? "" : "none" }}
-          >
-            {error}
-            <button
-              type="button"
-              className="close"
-              data-dismiss="alert"
-              aria-label="Close"
-            >
-              <span aria-hidden="true">&times;</span>
-            </button>
-          </div>
           {loading ? (
             <div className="spinner-border text-primary" role="status">
               <span className="sr-only">Loading...</span>
@@ -231,6 +231,7 @@ class EditProfile extends Component {
             onError={i => (i.target.src = `${DefaultProfile}`)}
             alt={name}
           />
+
           {this.editForm(name, email, password, about)}
         </div>
       </div>
