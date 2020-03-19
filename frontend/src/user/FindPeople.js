@@ -111,7 +111,7 @@ class FindPeople extends Component {
           <h4>Find Friends</h4>
         </div>
         {open && (
-          <div className="alert alert-info alert-dismissible fade show">
+          <div className="alert alert-info alert-dismissible fade show col-md-4">
             {followMessage}
             <button
               type="button"
