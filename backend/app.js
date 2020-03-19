@@ -6,6 +6,8 @@ const morgan = require("morgan");
 const dotenv = require("dotenv");
 const mongoose = require("mongoose");
 const multer = require("multer");
+const path = require("path");
+const fs = require("fs");
 
 const cors = require("cors");
 
@@ -23,7 +25,50 @@ const userRoutes = require("./routes/user");
 /* Configes BEGIN */
 const MulterStorage = multer.diskStorage({
   destination: (req, file, cb) => {
-    cb(null, "upload");
+
+    if (req.path.includes("/api/user/") && req.method === "PUT") {
+
+      if (
+        !fs.existsSync(
+          path.join(
+            __dirname,
+            "upload",
+            "users",
+            req.path.split("/")[3],
+            "profile"
+          )
+        )
+      ) {
+        fs.mkdirSync(
+          path.join(__dirname, "upload", "users") +
+            "/" +
+            req.path.split("/")[3] +
+            "/" +
+            "profile",
+          { recursive: true }
+        );
+      }
+      cb(null, path.join("upload", "users", req.path.split("/")[3], "profile"));
+
+    } else if (req.path.includes("/api/post/") && req.method === "POST") {
+
+      if (
+        !fs.existsSync(
+          path.join(__dirname, "upload", "users", req.path.split("/")[3],'posts')
+        )
+      ) {
+        fs.mkdirSync(
+          path.join(__dirname, "upload", "users") +
+            "/" +
+            req.path.split("/")[3] +
+            "/" +
+            "posts",
+          { recursive: true }
+        );
+      }
+      cb(null, path.join("upload", "users", req.path.split("/")[3], "posts"));
+
+    }
   },
   filename: (req, file, cb) => {
     cb(null, Date.now() + file.originalname);
@@ -46,17 +91,6 @@ app.use(
           false
         );
       }
-      /* if (file.size > 200000) {
-        console.log("NOT ALLOWED");
-        cb(
-          new Error(
-            "File with " +
-              req.file.size +
-              " Size is not allowed, Allowed size[<=200kb]"
-          ),
-          false
-        );
-      } */
     }
   }).single("photo")
 );

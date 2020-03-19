@@ -4,6 +4,7 @@ const jwt = require("jsonwebtoken");
 const { validationResult } = require("express-validator");
 const sendMail = require("../helper/mailer");
 const _ = require("lodash");
+const fileCreator = require("../helper/FileCreator");
 const cookieParser = require("cookie-parser");
 
 /**
