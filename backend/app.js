@@ -72,7 +72,7 @@ app.use(getRoutes);
 /* Error Handling Middleware BEGIN */
 app.use((error, req, res, next) => {
   res.status(401).json({
-    message: error.message
+    err: error.message
   });
 });
 /* Error Handling Middleware END */

@@ -38,11 +38,11 @@ class Signup extends Component {
         password: password
       };
       signup(user).then(data => {
-        if (data.error) {
-          this.setState({ error: data.error });
+        if (data.err) {
+          this.setState({ error: data.err });
         } else {
           this.setState({
-            error: data.msg ? data.msg : "",
+            error: data.err ? data.err : "",
             name: "",
             email: "",
             password: "",

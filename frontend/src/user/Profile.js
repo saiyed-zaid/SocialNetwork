@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { isAuthenticated } from "../auth/index";
+import { isAuthenticated,signout } from "../auth/index";
 import { Redirect, Link } from "react-router-dom";
 import { read } from "./apiUser";
 import DefaultProfile from "../images/avatar.jpg";
@@ -50,13 +50,19 @@ class Profile extends Component {
   init = userId => {
     const token = isAuthenticated().user.token;
     read(userId, token).then(data => {
-      if (data.msg) {
+      console.log('TEST___',data);
+      if (data.err) {
+        signout(() => {});
         this.setState({ redirectToSignin: true });
+
+        //<Redirect to="/signin" />;
       } else {
         let following = this.checkFollow(data);
         this.setState({ user: data, following });
         this.loadPosts(data._id);
       }
+    }).catch(err=>{
+      console.log('Unauthor______',err);
     });
   };
 
@@ -87,7 +93,7 @@ class Profile extends Component {
         ? `${process.env.REACT_APP_API_URL}/${user.photo.path}`
         : DefaultProfile;
 
-    if (redirectToSignin) return <Redirect to="/signin" />;
+    if (redirectToSignin) {return <Redirect to="/signin" />;} 
     return (
       <div className="container-fluid mt-1">
         <div

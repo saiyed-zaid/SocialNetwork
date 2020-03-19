@@ -12,7 +12,7 @@ exports.userById = async (req, res, next, id) => {
       return next(new Error("User not Found."));
     }
     req.profile = user;
-    console.log("data___", req.profile);
+    console.log("USER DATA___", req.profile);
     next();
   } catch (error) {
     return next(new Error("User not Found."));
@@ -20,7 +20,7 @@ exports.userById = async (req, res, next, id) => {
 };
 
 exports.hasAuthorization = (req, res, next) => {
-  console.log("auth___");
+  console.log("AUTH__");
   /*   console.log('Role_',req.auth.role);
   console.log('Profile',req.profile);
   console.log('Auth',req.auth); */
