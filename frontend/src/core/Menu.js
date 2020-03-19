@@ -91,9 +91,9 @@ const Menu = ({ history }) => (
             <li className="nav-item">
               <Link
                 className="nav-link"
-                to="/signout"
+                to="/signin"
                 style={isActive(history, "/signout")}
-                onClick={() => signout(() => history.go())}
+                onClick={() => signout(() => {})}
               >
                 Logout
               </Link>

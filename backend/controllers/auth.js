@@ -15,7 +15,7 @@ exports.postSignup = async (req, res, next) => {
   if (!errs.isEmpty()) {
     const err = errs.array()[0].msg;
     return res.status(422).json({
-      msg: err
+      err
     });
   }
   try {
@@ -116,7 +116,6 @@ exports.forgetPassword = async (req, res, next) => {
 };
 
 exports.resetPassword = async (req, res) => {
-
   const errs = validationResult(req);
   if (!errs.isEmpty()) {
     const err = errs.array()[0].msg;
@@ -125,7 +124,6 @@ exports.resetPassword = async (req, res) => {
     });
   }
   const { resetPasswordLink, newPassword } = req.body;
-
 
   try {
     const user = await User.findOne({ resetPasswordLink });
