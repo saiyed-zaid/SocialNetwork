@@ -2,11 +2,9 @@ const express = require("express");
 const router = express.Router();
 const userController = require("../controllers/user");
 const auth_check = require("../middleware/auth-check");
-const User = require("../models/user");
-const jwt = require("jsonwebtoken");
-const sendMail = require("../helper/mailer");
 const _ = require("lodash");
-const md5 = require("md5");
+const multer = require("multer");
+const path = require("path");
 
 /**
  * @function put
@@ -54,6 +52,26 @@ router.put(
   "/api/user/:userId",
   auth_check,
   userController.hasAuthorization,
+  multer({
+    storage: multer.diskStorage({
+      destination: (req, file, cb) => {
+        cb(null, path.join("upload", "users", req.auth._id, "profile"));
+      },
+      filename: (req, file, cb) => {
+        cb(null, Date.now() + file.originalname);
+      }
+    }),
+    fileFilter: (req, file, cb) => {
+      if (file.mimetype == "image/jpg" || file.mimetype == "image/jpeg") {
+        cb(null, true);
+      } else {
+        cb(
+          new Error("File type is invalid, allowed types [jpeg, jpg]."),
+          false
+        );
+      }
+    }
+  }).single("photo"),
   userController.updateUser
 );
 

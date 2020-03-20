@@ -2,9 +2,10 @@ const express = require("express");
 const router = express.Router();
 const postController = require("../controllers/post");
 const userController = require("../controllers/user");
-const Post = require("../models/posts");
 const { body } = require("express-validator");
 const auth_check = require("../middleware/auth-check");
+var multer = require("multer");
+const path = require("path");
 
 /**
  * @function get
@@ -41,6 +42,26 @@ router.get("/api/post/by/:userId", auth_check, postController.getPostsByUser);
 router.post(
   "/api/post/:userId",
   auth_check,
+  multer({
+    storage: multer.diskStorage({
+      destination: (req, file, cb) => {
+        cb(null, path.join("upload", "users", req.auth._id, "posts"));
+      },
+      filename: (req, file, cb) => {
+        cb(null, Date.now() + file.originalname);
+      }
+    }),
+    fileFilter: (req, file, cb) => {
+      if (file.mimetype == "image/jpg" || file.mimetype == "image/jpeg") {
+        cb(null, true);
+      } else {
+        cb(
+          new Error("File type is invalid, allowed types [jpeg, jpg]."),
+          false
+        );
+      }
+    }
+  }).single("photo"),
   [
     body("title")
       .notEmpty()
@@ -55,6 +76,7 @@ router.post(
       .isLength({ min: 5, max: 2000 })
       .withMessage("Body length must between 5 to 2000.")
   ],
+
   postController.createPost
 );
 
@@ -118,6 +140,26 @@ router.patch(
   "/api/post/:postId",
   auth_check,
   postController.hasAuthorization,
+  multer({
+    storage: multer.diskStorage({
+      destination: (req, file, cb) => {
+        cb(null, path.join("upload", "users", req.auth._id, "posts"));
+      },
+      filename: (req, file, cb) => {
+        cb(null, Date.now() + file.originalname);
+      }
+    }),
+    fileFilter: (req, file, cb) => {
+      if (file.mimetype == "image/jpg" || file.mimetype == "image/jpeg") {
+        cb(null, true);
+      } else {
+        cb(
+          new Error("File type is invalid, allowed types [jpeg, jpg]."),
+          false
+        );
+      }
+    }
+  }).single("photo"),
   postController.updatePost
 );
 

@@ -1,4 +1,5 @@
 const Post = require("../models/posts");
+const fs = require("fs");
 const { validationResult } = require("express-validator");
 const _ = require("lodash");
 
@@ -29,7 +30,7 @@ exports.postById = async (req, res, next, id) => {
  * @description Handling get request which fetch single post by postId
  */
 exports.getPost = async (req, res, next) => {
-  console.log("POST_", req.post);
+  //console.log("POST_", req.post);
   return res.json(req.post);
 };
 
@@ -79,17 +80,19 @@ exports.getPostsByUser = async (req, res, next) => {
 };
 
 exports.hasAuthorization = (req, res, next) => {
-  
-  if (req.auth.role != 'admin'  && req.auth.role != 'subscriber') {
-    return res.json({ msg: "Not authorized user for this action on the post." });
+  if (req.auth.role != "admin" && req.auth.role != "subscriber") {
+    return res.json({
+      msg: "Not authorized user for this action on the post."
+    });
   }
-  if(req.auth.role == 'admin')
-  {
+  if (req.auth.role == "admin") {
     return next();
   }
 
   if (req.auth._id != req.post.postedBy._id) {
-    return res.json({ msg: "Not authorized user for this action on the post." });
+    return res.json({
+      msg: "Not authorized user for this action on the post."
+    });
   }
   next();
 };
@@ -103,7 +106,7 @@ exports.createPost = async (req, res, next) => {
 
   if (!errors.isEmpty()) {
     const err = errors.array()[0].msg;
-    console.log("error handler__", err);
+    //console.log("error handler__", err);
     return res.status(422).json({
       msg: err
     });
@@ -131,7 +134,7 @@ exports.deletePost = async (req, res, next) => {
   if (!post) {
     return res.json({ msg: "Post not Found" });
   }
-  console.table(req.auth.role);
+  //console.table(req.auth.role);
   if (
     req.auth._id != req.post.postedBy._id &&
     req.auth.role != "subscriber" &&
@@ -155,10 +158,23 @@ exports.deletePost = async (req, res, next) => {
  */
 exports.updatePost = async (req, res, next) => {
   let post = req.post;
+  const prevPostPhoto = post.photo;
+  if (!req.file) {
+    req.file = post.photo;
+  }
+  post.photo = req.file;
   post = _.extend(post, req.body);
   post.updated = Date.now();
   try {
     const result = await post.save();
+    //prevPostPhoto
+    if (result) {
+      if (prevPostPhoto) {
+        fs.unlink(prevPostPhoto.path, err => {
+          console.log("Error while unlink user image", err);
+        });
+      }
+    }
     res.json({ post });
   } catch (error) {
     res.json({
@@ -172,7 +188,7 @@ exports.updatePost = async (req, res, next) => {
  * @description Handling patch request which update post like in database
  */
 exports.likePost = async (req, res, next) => {
-  console.log("uiserID__", req.body);
+  //console.log("uiserID__", req.body);
 
   try {
     const UpdatedLikePost = await Post.findByIdAndUpdate(
