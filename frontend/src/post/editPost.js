@@ -15,7 +15,8 @@ class EditPost extends Component {
       error: "",
       fileSize: 0,
       loading: false,
-      photo: ""
+      photo: "",
+      prevPhoto: ""
     };
   }
   init = postId => {
@@ -42,6 +43,10 @@ class EditPost extends Component {
 
   handleChange = name => event => {
     this.setState({ error: "" });
+    if(name === "photo")
+    {
+      this.state.prevPhoto = event.target.files[0];
+    }
     const value = name === "photo" ? event.target.files[0] : event.target.value;
     const fileSize = name === "photo" ? event.target.files[0].size : 0;
     this.postData.set(name, value);
@@ -150,7 +155,7 @@ class EditPost extends Component {
         <img
           style={{ height: "200px", width: "200px" }}
           className="img-thumbnail"
-          src={photoUrl}
+          src={ (!this.state.prevPhoto)?photoUrl:URL.createObjectURL(this.state.prevPhoto)}
           // onError={i => (i.target.src = `${DefaultProfile}`)}
           alt={title}
         />

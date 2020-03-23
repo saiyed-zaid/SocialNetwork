@@ -1,6 +1,5 @@
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
-//Add about field
 const UserSchema = new Schema({
   name: {
     type: String,

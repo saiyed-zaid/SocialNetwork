@@ -58,7 +58,7 @@ exports.postSignup = async (req, res, next) => {
             String(
               path.join(__dirname, "..", "upload", "users") +
                 "/" +
-                String(user._id + req.body.name) +
+                String(user._id) +
                 "/" +
                 "profile"
             ),
@@ -69,7 +69,7 @@ exports.postSignup = async (req, res, next) => {
             String(
               path.join(__dirname, "..", "upload", "users") +
                 "/" +
-                String(user._id + req.body.name) +
+                String(user._id) +
                 "/" +
                 "posts"
             ),
