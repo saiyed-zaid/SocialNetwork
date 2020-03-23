@@ -1,4 +1,4 @@
-import React, { Component, useEffect, useState } from "react";
+import React, { Component } from "react";
 import { list } from "../user/apiUser";
 import { isAuthenticated } from "../auth/index";
 import { remove } from "../user/apiUser";
@@ -15,8 +15,7 @@ import {
   TablePagination,
   TableRow,
   Container,
-  Button,
-  Slide
+  Button
 } from "@material-ui/core";
 
 class Users extends Component {

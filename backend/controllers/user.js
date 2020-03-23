@@ -80,7 +80,6 @@ exports.getUser = async (req, res, next) => {
  * @description Handling put request which Update single user
  */
 exports.updateUser = async (req, res, next) => {
-  
   let user = req.profile;
 
   if (user.photo) {
@@ -229,7 +228,7 @@ exports.findPeople = async (req, res, next) => {
   following.push(req.profile._id);
   try {
     const users = await User.find({ _id: { $nin: following } })
-      .select("name photo")
+      .select("name photo role")
       .populate("following", "_id")
       .populate("followers", "_id");
     await res.json(users);

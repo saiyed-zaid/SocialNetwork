@@ -28,9 +28,13 @@ class Users extends Component {
   renderUsers = users => (
     <div className="row m-0">
       {users.map((user, i) => (
-        <div className="card col-md-0 custom-card-load" key={i} style={{width:'250px'}}>
+        <div
+          className="card col-md-0 custom-card-load"
+          key={i}
+          style={{ width: "18rem" }}
+        >
           <img
-            className="img-thumbnail"
+            className="card-img-top"
             src={`${process.env.REACT_APP_API_URL}/${
               user.photo ? user.photo.path : DefaultProfile
             }`}
@@ -40,10 +44,7 @@ class Users extends Component {
           <div className="card-body">
             <h6 className="card-title">{user.name}</h6>
             <p className="card-text">{user.email}</p>
-            <Link
-              to={`/user/${user._id}`}
-              className="btn btn-outline-primary custom-Read-more"
-            >
+            <Link to={`/user/${user._id}`} className="btn btn-primary">
               View Profile
             </Link>
           </div>

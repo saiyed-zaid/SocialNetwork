@@ -52,55 +52,52 @@ class FindPeople extends Component {
    */
   renderUsers = users => (
     <div className="row m-0">
-      {users.map((user, i) => (
-        <div className="card custom-card-load" key={i}>
-          <img
-            className="img-thumbnail"
-            src={`${process.env.REACT_APP_API_URL}/user/photo/${user._id}`}
-            onError={i => (i.target.src = `${DefaultProfile}`)}
-            alt={user.name}
-          />
-          <div className="card-body">
-            <h6 className="card-title">{user.name}</h6>
-            <p>
-              <span>Following {user.following.length} </span>
-              <span>Followers {user.followers.length}</span>
-            </p>
+      {users.map((user, i) =>
+        user.role === "subscriber" ? (
+          <div className="card" key={i}>
+            <img
+              className="img-thumbnail"
+              src={`${process.env.REACT_APP_API_URL}/user/photo/${user._id}`}
+              onError={i => (i.target.src = `${DefaultProfile}`)}
+              alt={user.name}
+            />
+            <div className="card-body">
+              <h6 className="card-title">{user.name}</h6>
+              <p>
+                <span>Following {user.following.length} </span>
+                <span>Followers {user.followers.length}</span>
+              </p>
 
-            <div
-              style={{
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "center",
-                margin: "3px"
-              }}
-            >
-              <button
-                onClick={() => this.clickFollow(user, i)}
-                className="btn btn-raised btn-primary mr-0"
-                style={{
-                  flex: "1",
-                  border: "none !important",
-                  margin: "1px"
-                }}
-              >
-                Follow
-              </button>
-              <Link
-                to={`/user/${user._id}`}
-                className="btn btn-outline-primary"
-                style={{
-                  flex: "1",
-                  border: "none !important",
-                  margin: "1px"
-                }}
-              >
-                View Profile
-              </Link>
+              <div>
+                <button
+                  onClick={() => this.clickFollow(user, i)}
+                  className="btn btn-primary mr-1"
+                  style={{
+                    flex: "1",
+                    border: "none !important",
+                    margin: "1px"
+                  }}
+                >
+                  Follow
+                </button>
+                <Link
+                  to={`/user/${user._id}`}
+                  className="btn btn-outline-primary"
+                  style={{
+                    flex: "1",
+                    border: "none !important",
+                    margin: "1px"
+                  }}
+                >
+                  View Profile
+                </Link>
+              </div>
             </div>
           </div>
-        </div>
-      ))}
+        ) : (
+          ""
+        )
+      )}
     </div>
   );
   render() {

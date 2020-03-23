@@ -2,14 +2,6 @@ import React, { Component } from "react";
 import { Redirect, Link } from "react-router-dom";
 import { signin, authenticate, isAuthenticated } from "../auth/";
 import SocialLogin from "./socialLogin";
-import {
-  TextField,
-  Button,
-  IconButton,
-  Card,
-  CardContent,
-  Typography
-} from "@material-ui/core";
 
 class Signin extends Component {
   constructor() {
@@ -66,41 +58,42 @@ class Signin extends Component {
     return (
       <form method="post">
         <div className="form-group">
-          <TextField
-            id="outlined-basic"
-            label="Email"
-            size="small"
-            fullWidth
-            variant="outlined"
+          <label for="exampleInputEmail1">Email address</label>
+          <input
             onChange={this.handleChange("email")}
             type="email"
             className="form-control"
             value={email}
+            aria-describedby="emailHelp"
           />
         </div>
-
         <div className="form-group">
-          <TextField
-            id="outlined-basic"
-            label="Password"
-            size="small"
-            fullWidth
-            variant="outlined"
+          <label for="exampleInputPassword1">Password</label>
+          <input
             onChange={this.handleChange("password")}
             type="password"
             className="form-control"
             value={password}
           />
         </div>
-        <Button
-          variant="contained"
-          color="primary"
-          fullWidth
+        <div className="form-group form-check">
+          <input
+            type="checkbox"
+            className="form-check-input"
+            id="exampleCheck1"
+          />
+          <label className="form-check-label" for="exampleCheck1">
+            Check me out
+          </label>
+        </div>
+        <button
+          type="submit"
           onClick={this.clickSubmit}
-          // className="btn btn-raised btn-primary w-100"
+          className="btn btn-primary w-100"
         >
-          Sign in
-        </Button>
+          Sign In
+        </button>
+
         <div style={{ paddingTop: "5px" }}>
           <SocialLogin />
         </div>
@@ -119,17 +112,17 @@ class Signin extends Component {
     }
     return (
       <div className="container col-lg-3">
-        <Card style={{ marginTop: "30px" }}>
-          <CardContent>
-            <Typography
-              style={{ padding: "10%" }}
-              component="h4"
-              variant="h4"
-              color="textSecondary"
-              gutterBottom
-            >
-              Sign In
-            </Typography>
+        <div
+          className="card  mt-5 p-3"
+          style={{
+            borderRadius: "8px",
+            overflow: "hidden",
+            boxShadow: "0.3em 0.3em 0.4em rgba(0,0,0,0.3)"
+          }}
+        >
+          <div className="card-body p-0 " style={{ display: "block" }}>
+            <h4 className="card-title">Sign in</h4>
+
             <div
               className="alert alert-danger alert-dismissible fade show"
               style={{ display: error ? "" : "none" }}
@@ -164,8 +157,8 @@ class Signin extends Component {
             >
               Forgot Password ?
             </Link>
-          </CardContent>
-        </Card>
+          </div>
+        </div>
       </div>
     );
   }
