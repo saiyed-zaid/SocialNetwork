@@ -130,7 +130,8 @@ class SinglePost extends Component {
             </h5>
           )}
           <hr />
-          {/* {isAuthenticated().user && isAuthenticated().user.role === "admin" && (
+
+          {isAuthenticated().user && isAuthenticated().user.role === "admin" && (
             <div class="card mt-5 w-100">
               <div className="card-body">
                 <h5 className="card-title">Admin</h5>
@@ -152,7 +153,7 @@ class SinglePost extends Component {
                 </div>
               </div>
             </div>
-          )} */}
+          )}
           <div>
             <h3>{post.title}</h3>
             <h4 className="lead">

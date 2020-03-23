@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+
 import { isAuthenticated, signout } from "../auth/index";
 import { Redirect, Link } from "react-router-dom";
 import { read } from "./apiUser";
@@ -153,6 +154,20 @@ class Profile extends Component {
                       <DeleteUser userId={user._id} />
                     </>
                   )}
+                  <Link
+                    to={`/post/create`}
+                    className="btn btn-outline-secondary mr-2 btn-custom"
+                  >
+                    Create Post &nbsp;
+                    <i className="fa fa-plus-square"></i>
+                  </Link>
+                  <Link
+                    to={`/user/edit/${user._id}`}
+                    className="btn btn-outline-secondary mr-2 btn-custom"
+                  >
+                    Edit Profile &nbsp;<i className="fa fa-edit "></i>
+                  </Link>
+                  <DeleteUser userId={user._id} />
                 </div>
               ) : (
                 <FollowProfileButton
@@ -164,7 +179,7 @@ class Profile extends Component {
           </div>
         </div>
         <div>
-          {/*  {isAuthenticated().user && isAuthenticated().user.role === "admin" && (
+          {isAuthenticated().user && isAuthenticated().user.role === "admin" && (
             <div className="card mt-5 w-100">
               <div className="card-body">
                 <h5 className="card-title">Admin</h5>
@@ -181,7 +196,7 @@ class Profile extends Component {
                 </div>
               </div>
             </div>
-          )} */}
+          )}
         </div>
         <div>
           <div className="col md-12 mt-5 mb-5">

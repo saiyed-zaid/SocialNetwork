@@ -1,6 +1,8 @@
 import React, { Component } from "react";
-import Posts from "./posts";
-import Users from "./users";
+
+import Posts from "../post/posts";
+import Users from "../user/users";
+
 import { isAuthenticated } from "../auth/index";
 import { Redirect } from "react-router-dom";
 
@@ -15,18 +17,16 @@ class Admin extends Component {
     }
   }
   render() {
-    /*  if (this.state.redirectToHome) {
+    if (this.state.redirectToHome) {
       return <Redirect to="/" />;
-    } */
+    }
     return (
       <div>
         <div className="jumbotron p-3">
-          <h4>Home</h4>
+          <h4>Admin Dashboard</h4>
         </div>
         <div className="container-fluid">
-          <div className="row">
-            <div className="col-md-12"></div>
-          </div>
+          <div className="row"></div>
         </div>
       </div>
     );

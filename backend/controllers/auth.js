@@ -4,6 +4,8 @@ const jwt = require("jsonwebtoken");
 const { validationResult } = require("express-validator");
 const sendMail = require("../helper/mailer");
 const _ = require("lodash");
+const fs = require("fs");
+const path = require("path");
 const cookieParser = require("cookie-parser");
 
 /**
@@ -28,7 +30,61 @@ exports.postSignup = async (req, res, next) => {
       email: req.body.email,
       password: md5(req.body.password)
     });
-    await user.save();
+    user
+      .save()
+      .then(result => {
+        //console.log("CREATED USER", user._id);
+        //console.log("TYPE", typeof user._id);
+
+        const destPosts = path.join(
+          __dirname,
+          "..",
+          "upload",
+          String(user._id),
+          "posts"
+        );
+
+        const destProfile = path.join(
+          __dirname,
+          "..",
+          "upload",
+          String(user._id),
+          "profile"
+        );
+
+        /* Creating Directory For This User BEGIN */
+        if (!fs.existsSync(destPosts) && !fs.existsSync(destProfile)) {
+          fs.mkdirSync(
+            String(
+              path.join(__dirname, "..", "upload", "users") +
+                "/" +
+                String(user._id) +
+                "/" +
+                "profile"
+            ),
+            { recursive: true }
+          );
+
+          fs.mkdirSync(
+            String(
+              path.join(__dirname, "..", "upload", "users") +
+                "/" +
+                String(user._id) +
+                "/" +
+                "posts"
+            ),
+            { recursive: true }
+          );
+          //console.log("Directory created successfully");
+        } else {
+          console.log("Directory NOT created successfully");
+        }
+        /* Creating Directory For This User OVER */
+      })
+      .catch(err => {
+        console.log("Error While Creating user", err);
+      });
+
     res.status(200).json({ msg: "Signup successfully, proced to login!" });
   } catch (error) {
     res.status(422).json({ msg: "Error while creating User" });

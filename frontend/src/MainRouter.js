@@ -17,7 +17,6 @@ import Admin from "./admin/admin";
 import AdminUsers from "./admin/users";
 import AdminPosts from "./admin/posts";
 import AdminHome from "./admin/admin";
-
 import PrivateRoute from "./auth/privateRoute";
 
 const MainRouter = props => {

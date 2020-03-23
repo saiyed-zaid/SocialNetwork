@@ -12,7 +12,7 @@ exports.userById = async (req, res, next, id) => {
       return next(new Error("User not Found."));
     }
     req.profile = user;
-    console.log("USER DATA___", req.profile);
+    //console.log("__USER DATA___", req.profile);
     next();
   } catch (error) {
     return next(new Error("User not Found."));
@@ -20,7 +20,7 @@ exports.userById = async (req, res, next, id) => {
 };
 
 exports.hasAuthorization = (req, res, next) => {
-  console.log("AUTH__");
+  // console.log("AUTH__");
   /*   console.log('Role_',req.auth.role);
   console.log('Profile',req.profile);
   console.log('Auth',req.auth); */
@@ -80,6 +80,7 @@ exports.getUser = async (req, res, next) => {
  * @description Handling put request which Update single user
  */
 exports.updateUser = async (req, res, next) => {
+  
   let user = req.profile;
 
   if (user.photo) {
@@ -87,7 +88,6 @@ exports.updateUser = async (req, res, next) => {
       console.log("Error while unlink user image", err);
     });
   }
-
   if (!req.file) {
     req.file = user.photo;
   }

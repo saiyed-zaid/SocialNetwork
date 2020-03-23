@@ -15,8 +15,8 @@ class Signin extends Component {
   constructor() {
     super();
     this.state = {
-      email: "",
-      password: "",
+      email: "zss@narola.email",
+      password: "123456",
       error: "",
       redirectToRefferer: false,
       loading: false
