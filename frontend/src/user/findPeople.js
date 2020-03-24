@@ -117,10 +117,23 @@ class FindPeople extends Component {
               aria-label="Close"
             >
               <span aria-hidden="true">&times;</span>
-            </button>
+            </button>{" "}
           </div>
         )}
-        {this.renderUsers(users)}
+        {!users.length ? (
+          <div className="container-fluid p-0 w-100 h-100 d-flex justify-content-center ">
+            <div
+              class="spinner-border text-primary"
+              style={{ width: "5rem", height: "5rem" }}
+              role="status"
+            >
+              <span class="sr-only">Loading...</span>
+            </div>
+          </div>
+        ) : (
+          this.renderUsers(users)
+        )}
+        }
       </div>
     );
   }

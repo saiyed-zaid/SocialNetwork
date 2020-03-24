@@ -4,19 +4,19 @@ import { signout, isAuthenticated } from "../auth/index";
 
 const isActive = (history, path) => {
   if (history.location.pathname === path) {
-    return { color: "#000000" };
+    return { color: "white", borderBottom: "3px solid transparent" };
   } else return { color: "#ffffff" };
 };
 
 const Menu = ({ history }) => {
   return (
     <div>
-      <nav className="navbar navbar-expand-lg navbar-light bg-primary">
-        <Link className="navbar-brand" to="/">
-          Social Network
+      <nav className="navbar navbar-expand-lg  bg-primary">
+        <Link className="navbar-brand p-2 " style={{ color: "#03a9f4" }} to="/">
+          SOCIAL NETWORK
         </Link>
         <button
-          className="navbar-toggler"
+          className="navbar-toggler text-primary"
           type="button"
           data-toggle="collapse"
           data-target="#navbarNavAltMarkup"
@@ -24,7 +24,7 @@ const Menu = ({ history }) => {
           aria-expanded="false"
           aria-label="Toggle navigation"
         >
-          <span className="navbar-toggler-icon"></span>
+          <span className="ellipsis-v "></span>
         </button>
         <div className="collapse navbar-collapse" id="navbarNavAltMarkup">
           <div className="navbar-nav">
@@ -32,134 +32,132 @@ const Menu = ({ history }) => {
               {isAuthenticated() && isAuthenticated().user.role === "admin" ? (
                 <>
                   <Link
-                    className="nav-item nav-link active"
+                    className="nav-item nav-link menu-link active"
                     to="/admin/home"
                     style={isActive(history, `/admin/home`)}
-                  >
-                    Home
-                  </Link>
+                  ></Link>
 
                   <Link
-                    className="nav-item nav-link active"
+                    className="nav-item nav-link menu-link active"
                     to="/admin/users"
                     style={isActive(history, `/admin/users`)}
                   >
-                    Users
+                    USERS
                   </Link>
 
                   <Link
-                    className="nav-item nav-link active"
+                    className="nav-item nav-link menu-link active"
                     to="/admin/posts"
                     style={isActive(history, `/admin/posts`)}
                   >
-                    Posts
+                    POSTS
                   </Link>
 
                   <Link
-                    className="nav-item nav-link active"
+                    className="nav-item nav-link menu-link active"
                     to={`/user/${isAuthenticated().user._id}`}
                     style={isActive(
                       history,
                       `/user/${isAuthenticated().user._id}`
                     )}
                   >
-                    {`${isAuthenticated().user.name}'s Profile`}{" "}
+                    {`${isAuthenticated().user.name.toUpperCase()} 'S PROFILE`}{" "}
                   </Link>
 
                   <Link
-                    className="nav-item nav-link active"
+                    className="nav-item nav-link menu-link active"
                     to="/signin"
                     style={isActive(history, "/signout")}
                     onClick={() => signout(() => {})}
                   >
-                    Logout
+                    LOGOUT
                   </Link>
                 </>
               ) : (
                 <>
                   <Link
-                    className="nav-item nav-link active"
+                    className="nav-item nav-link menu-link active"
                     to="/"
                     style={isActive(history, "/")}
                   >
-                    Home{" "}
+                    HOME
                   </Link>
 
                   <Link
-                    className="nav-item nav-link active"
+                    className="nav-item nav-link menu-link active"
                     to="/users"
                     style={isActive(history, "/users")}
                   >
-                    Users
+                    USERS
                   </Link>
 
                   <Link
-                    className="nav-item nav-link active"
+                    className="nav-item nav-link menu-link active"
                     to={`/post/create`}
                     style={isActive(history, `/post/create`)}
                   >
-                    Create Post
+                    CREATE POST
                   </Link>
 
                   {!isAuthenticated() && (
                     <>
                       <Link
-                        className="nav-item nav-link active"
+                        className="nav-item nav-link menu-link active"
                         to="/signin"
                         style={isActive(history, "/signin")}
                       >
-                        Sign In
+                        SIGN IN
                       </Link>
                       <Link
-                        className="nav-item nav-link active"
+                        className="nav-item nav-link menu-link active"
                         to="/signup"
                         style={isActive(history, "/signup")}
                       >
-                        Sign Up
+                        SIGN UP
                       </Link>
                     </>
                   )}
                   {isAuthenticated() &&
                     isAuthenticated().user.role === "admin" && (
                       <Link
-                        className="nav-item nav-link active"
+                        className="nav-item nav-link menu-link active"
                         to={`/admin`}
                         style={isActive(history, `/admin`)}
                       >
-                        Admin
+                        ADMIN
                       </Link>
                     )}
                   {isAuthenticated() && (
                     <>
                       <Link
-                        className="nav-item nav-link active"
+                        className="nav-item nav-link menu-link active"
                         to={`/findpeople/${isAuthenticated().user._id}`}
                         style={isActive(
                           history,
                           `/findpeople/${isAuthenticated().user._id}`
                         )}
                       >
-                        Find Friends
+                        FIND FRIENDS
                       </Link>
 
                       <Link
-                        className="nav-item nav-link active"
+                        className="nav-item nav-link menu-link active"
                         to={`/user/${isAuthenticated().user._id}`}
                         style={isActive(
                           history,
                           `/user/${isAuthenticated().user._id}`
                         )}
                       >
-                        {`${isAuthenticated().user.name}'s Profile`}
+                        {`${isAuthenticated().user.name.toUpperCase()}'S PROFILE`}
                       </Link>
 
                       <Link
-                        className="nav-item nav-link active"
+                        className="nav-item nav-link menu-link active"
                         to="/signin"
                         style={isActive(history, "/signout")}
                         onClick={() => signout(() => {})}
                       >
-                        Logout
+                        LOGOUT
                       </Link>
                     </>
                   )}

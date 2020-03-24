@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { list } from "./apiUser";
 import { Link } from "react-router-dom";
 import DefaultProfile from "../images/avatar.jpg";
+import Card from "../components/card";
 
 class Users extends Component {
   constructor() {
@@ -28,27 +29,27 @@ class Users extends Component {
   renderUsers = users => (
     <div className="row m-0">
       {users.map((user, i) => (
-        <div
-          className="card col-md-0 custom-card-load"
+        <Card
+          class="card col-md-0 custom-card-load"
           key={i}
           style={{ width: "18rem" }}
+          img={
+            <img
+              className="card-img-top"
+              src={`${process.env.REACT_APP_API_URL}/${
+                user.photo ? user.photo.path : DefaultProfile
+              }`}
+              onError={i => (i.target.src = `${DefaultProfile}`)}
+              alt={user.name}
+            />
+          }
+          title={user.title}
+          text={user.email}
         >
-          <img
-            className="card-img-top"
-            src={`${process.env.REACT_APP_API_URL}/${
-              user.photo ? user.photo.path : DefaultProfile
-            }`}
-            onError={i => (i.target.src = `${DefaultProfile}`)}
-            alt={user.name}
-          />
-          <div className="card-body">
-            <h6 className="card-title">{user.name}</h6>
-            <p className="card-text">{user.email}</p>
-            <Link to={`/user/${user._id}`} className="btn btn-primary">
-              View Profile
-            </Link>
-          </div>
-        </div>
+          <Link to={`/user/${user._id}`} className="btn btn-primary">
+            View Profile
+          </Link>
+        </Card>
       ))}
     </div>
   );
@@ -59,7 +60,19 @@ class Users extends Component {
         <div className="jumbotron p-3">
           <h4> Users</h4>
         </div>
-        {this.renderUsers(users)}
+        {!users.length ? (
+          <div className="container-fluid p-0 w-100 h-100 d-flex justify-content-center ">
+            <div
+              class="spinner-border text-primary"
+              style={{ width: "5rem", height: "5rem" }}
+              role="status"
+            >
+              <span class="sr-only">Loading...</span>
+            </div>
+          </div>
+        ) : (
+          this.renderUsers(users)
+        )}
       </div>
     );
   }

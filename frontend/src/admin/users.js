@@ -4,19 +4,6 @@ import { isAuthenticated } from "../auth/index";
 import { remove } from "../user/apiUser";
 import { Link } from "react-router-dom";
 import DefaultProfile from "../images/avatar.jpg";
-import { Edit, Delete } from "@material-ui/icons";
-import {
-  Paper,
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TablePagination,
-  TableRow,
-  Container,
-  Button
-} from "@material-ui/core";
 
 class Users extends Component {
   constructor() {
@@ -24,9 +11,7 @@ class Users extends Component {
     this.state = {
       users: [],
       checked: false,
-      checkBox: [],
-      page: 0,
-      rowsPerPage: 10
+      checkBox: []
     };
   }
 
@@ -118,90 +103,76 @@ class Users extends Component {
     this.setState({ rowsPerPage: +event.target.value, page: 0 });
   };
   render() {
-    const { users, checkBox, page, rowsPerPage } = this.state;
+    const { users, checkBox } = this.state;
 
     return (
-      <Container>
-        <div className="jumbotron p-3">
+      <div className="container-fluid m-0 p-0">
+        <div className="jumbotron p-3 m-0">
           <h4>Users</h4>
         </div>
-        <Paper>
-          <TableContainer>
-            <TablePagination
-              rowsPerPageOptions={[10, 25, 100]}
-              component="div"
-              count={users.length}
-              rowsPerPage={rowsPerPage}
-              page={page}
-              onChangePage={this.handleChangePage}
-              onChangeRowsPerPage={this.handleChangeRowsPerPage}
-            />
-            <Table stickyHeader aria-label="sticky table">
-              <TableHead>
-                <TableRow>
-                  <TableCell align="center">No</TableCell>
-                  <TableCell align="center">Profile Photo</TableCell>
-                  <TableCell align="center">Name</TableCell>
-                  <TableCell align="center">About</TableCell>
-                  <TableCell align="center">Role</TableCell>
-                  <TableCell align="center">Email</TableCell>
-                  <TableCell align="center">Joined Date</TableCell>
-                  <TableCell align="center">Edit</TableCell>
-                  <TableCell align="center">Delete</TableCell>
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {users
-                  .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                  .map((user, i) => {
-                    return (
-                      <TableRow hover key={user._id} id={user._id} size="small">
-                        <TableCell width="1%">{i + 1}</TableCell>
-                        <TableCell width="5%" align="center">
-                          <img
-                            src={`${process.env.REACT_APP_API_URL}/${
-                              user.photo ? user.photo.path : DefaultProfile
-                            }`}
-                            onError={i => (i.target.src = `${DefaultProfile}`)}
-                            alt={user.name}
-                            style={{
-                              height: "40px",
-                              width: "40px",
-                              boxShadow: "2px 1px 5px black",
-                              borderRadius: "50%"
-                            }}
-                          />
-                        </TableCell>
-                        <TableCell align="center">{user.name}</TableCell>
-                        <TableCell align="center">{user.about}</TableCell>
-                        <TableCell align="center">{user.role}</TableCell>
-                        <TableCell width="5%" align="center">
-                          <a href={`mailto:${user.email}`}> {user.email}</a>
-                        </TableCell>
-                        <TableCell align="center">
-                          {new Date(user.created).toDateString()}
-                        </TableCell>
-                        <TableCell width="1%" align="center">
-                          <Link to={`/user/edit/${user._id}`}>
-                            <Edit className="icon-edit" />
-                          </Link>
-                        </TableCell>
-                        <TableCell width="1%" align="center">
-                          <Button
-                            onClick={() => this.deleteConfirmed(user._id)}
-                            disabled={isAuthenticated().user._id === user._id}
-                          >
-                            <Delete className="icon-delete" />
-                          </Button>
-                        </TableCell>
-                      </TableRow>
-                    );
-                  })}
-              </TableBody>
-            </Table>
-          </TableContainer>
-        </Paper>
-      </Container>
+        <table class="table table-hover">
+          <thead>
+            <tr>
+              <th scope="col" width="1%">
+                No
+              </th>
+              <th scope="col">Profile Photo</th>
+              <th scope="col">Name</th>
+              <th scope="col">About</th>
+              <th scope="col">Role</th>
+              <th scope="col">Email</th>
+              <th scope="col">Joined Date</th>
+              <th scope="col">Edit</th>
+              <th scope="col">Delete</th>
+            </tr>
+          </thead>
+          <tbody>
+            {users.map((user, i) => {
+              return (
+                <tr key={user._id} id={user._id}>
+                  <th scope="row">{i + 1}</th>
+                  <td width="5%">
+                    <img
+                      src={`${process.env.REACT_APP_API_URL}/${
+                        user.photo ? user.photo.path : DefaultProfile
+                      }`}
+                      onError={i => (i.target.src = `${DefaultProfile}`)}
+                      alt={user.name}
+                      style={{
+                        height: "40px",
+                        width: "40px",
+                        boxShadow: "2px 1px 5px black",
+                        borderRadius: "50%"
+                      }}
+                    />
+                  </td>
+                  <td width="15%">{user.name}</td>
+                  <td width="20%">{user.about}</td>
+                  <td width="10%">{user.role}</td>
+                  <td width="15%">
+                    <a href={`mailto:${user.email}`}> {user.email}</a>
+                  </td>
+                  <td>{new Date(user.created).toDateString()}</td>
+                  <td width="1%">
+                    <Link className="btn btn-sm" to={`/user/edit/${user._id}`}>
+                      <i className="fa fa-edit"></i>
+                    </Link>
+                  </td>
+                  <td width="1%">
+                    <button
+                      className="btn btn-sm"
+                      onClick={() => this.deleteConfirmed(user._id)}
+                      disabled={isAuthenticated().user._id === user._id}
+                    >
+                      <i className="fa fa-trash"> </i>
+                    </button>
+                  </td>
+                </tr>
+              );
+            })}
+          </tbody>
+        </table>
+      </div>
     );
   }
 }

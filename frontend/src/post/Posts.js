@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { list } from "./apiPost";
 import { Link } from "react-router-dom";
 import DefaultPost from "../images/post.jpg";
+import Card from "../components/card";
 
 class Posts extends Component {
   constructor() {
@@ -38,23 +39,27 @@ class Posts extends Component {
           // const posterName = post.postedBy ? post.postedBy.name : "Unknown";
           // const imgPath = post.photo ? post.photo.path : DefaultPost;
           return (
-            <div className="card " key={i} style={{ width: "18rem" }}>
-              <img
-                className="card-img-top"
-                src={`${process.env.REACT_APP_API_URL}/${
-                  post.photo ? post.photo.path : DefaultPost
-                }`}
-                onError={i => (i.target.src = `${DefaultPost}`)}
-                alt={post.name}
-              />
-              <div className="card-body">
-                <h5 className="card-title">{post.title}</h5>
-                <p className="card-text">{post.body.substring(0, 20)}</p>
-                <Link to={`/post/${post._id}`} className="btn btn-primary">
-                  Read More
-                </Link>
-              </div>
-            </div>
+            <Card
+              class="card"
+              ckey={i}
+              style={{ width: "18rem" }}
+              img={
+                <img
+                  className="card-img-top "
+                  src={`${process.env.REACT_APP_API_URL}/${
+                    post.photo ? post.photo.path : DefaultPost
+                  }`}
+                  onError={i => (i.target.src = `${DefaultPost}`)}
+                  alt={post.name}
+                />
+              }
+              title={post.title}
+              text={post.body.substring(0, 20) + "..."}
+            >
+              <Link to={`/post/${post._id}`} className="btn btn-primary">
+                Read More
+              </Link>
+            </Card>
           );
         })}
       </div>
@@ -66,8 +71,14 @@ class Posts extends Component {
     return (
       <div className="container-fluid p-0">
         {!posts.length ? (
-          <div className="spinner-border text-primary" role="status">
-            <span className="sr-only">Loading...</span>
+          <div className="container-fluid p-0 w-100 h-100 d-flex justify-content-center ">
+            <div
+              class="spinner-border text-primary"
+              style={{ width: "5rem", height: "5rem" }}
+              role="status"
+            >
+              <span class="sr-only">Loading...</span>
+            </div>
           </div>
         ) : (
           this.renderPosts(posts)

@@ -3,27 +3,11 @@ import { isAuthenticated } from "../auth/index";
 import { list, remove } from "../post/apiPost";
 import { Link } from "react-router-dom";
 import DefaultPost from "../images/post.jpg";
-import { Edit, Delete } from "@material-ui/icons";
-import {
-  Paper,
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TablePagination,
-  TableRow,
-  Container,
-  Button
-} from "@material-ui/core";
-
 class Posts extends Component {
   constructor() {
     super();
     this.state = {
-      posts: [],
-      page: 0,
-      rowsPerPage: 10
+      posts: []
     };
   }
 
@@ -129,94 +113,72 @@ class Posts extends Component {
     });
   };
   render() {
-    const { posts, page, rowsPerPage } = this.state;
+    const { posts } = this.state;
     console.log("ost gr", posts);
 
     return (
-      <Container>
+      <div className="container-fluid m-0 p-0">
         <div className="jumbotron p-3">
           <h4>Users</h4>
         </div>
-        <Paper>
-          <TableContainer>
-            <TablePagination
-              rowsPerPageOptions={[10, 25, 100]}
-              component="div"
-              count={posts.length}
-              rowsPerPage={rowsPerPage}
-              page={page}
-              onChangePage={this.handleChangePage}
-              onChangeRowsPerPage={this.handleChangeRowsPerPage}
-            />
-            <Table stickyHeader aria-label="sticky table">
-              <TableHead>
-                <TableRow>
-                  <TableCell align="center">No</TableCell>
-                  <TableCell align="center">Photo</TableCell>
-                  <TableCell align="center">Title</TableCell>
-                  <TableCell align="center">Description</TableCell>
-                  <TableCell align="center">Likes</TableCell>
-                  <TableCell align="center">Comments</TableCell>
-                  <TableCell align="center">Posted Date</TableCell>
-                  <TableCell align="center">Edit</TableCell>
-                  <TableCell align="center">Delete</TableCell>
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {posts
-                  .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                  .map((post, i) => {
-                    return (
-                      <TableRow hover key={post._id} id={post._id} size="small">
-                        <TableCell width="1%">{i + 1}</TableCell>
-                        <TableCell width="5%" align="center">
-                          <img
-                            src={`${process.env.REACT_APP_API_URL}/${
-                              post.photo ? post.photo.path : DefaultPost
-                            }`}
-                            onError={i => (i.target.src = `${DefaultPost}`)}
-                            alt={post.title}
-                            style={{
-                              height: "40px",
-                              width: "40px",
-                              boxShadow: "2px 1px 5px black",
-                              borderRadius: "50%"
-                            }}
-                          />
-                        </TableCell>
-                        <TableCell align="center">{post.title}</TableCell>
-                        <TableCell align="center">
-                          {post.body.substring(0, 10)}...
-                        </TableCell>
-                        <TableCell align="center">
-                          {post.likes.length}
-                        </TableCell>
-                        <TableCell align="center">
-                          {post.comments.length}
-                        </TableCell>
-                        <TableCell align="center">
-                          {new Date(post.created).toDateString()}
-                        </TableCell>
-                        <TableCell width="1%" align="center">
-                          <Link to={`/post/edit/${post._id}`}>
-                            <Edit className="icon-edit" />
-                          </Link>
-                        </TableCell>
-                        <TableCell width="1%" align="center">
-                          <Button
-                            onClick={() => this.deleteConfirmed(post._id)}
-                          >
-                            <Delete className="icon-delete" />
-                          </Button>
-                        </TableCell>
-                      </TableRow>
-                    );
-                  })}
-              </TableBody>
-            </Table>
-          </TableContainer>
-        </Paper>
-      </Container>
+        <table class="table table-hover" style={{ color: "#03a9f4" }}>
+          <thead>
+            <tr>
+              <th scope="col">No</th>
+              <th scope="col">Photo</th>
+              <th scope="col">Title</th>
+              <th scope="col">Description</th>
+              <th scope="col">Likes</th>
+              <th scope="col">Comments</th>
+              <th scope="col">Posted</th>
+              <th scope="col">Edit</th>
+              <th scope="col">Delete</th>
+            </tr>
+          </thead>
+          <tbody>
+            {posts.map((post, i) => {
+              return (
+                <tr>
+                  <th scope="row">{i + 1}</th>
+                  <td>
+                    <img
+                      src={`${process.env.REACT_APP_API_URL}/${
+                        post.photo ? post.photo.path : DefaultPost
+                      }`}
+                      onError={i => (i.target.src = `${DefaultPost}`)}
+                      alt={post.title}
+                      style={{
+                        height: "40px",
+                        width: "40px",
+                        boxShadow: "2px 1px 5px black",
+                        borderRadius: "50%"
+                      }}
+                    />
+                  </td>
+                  <td>{post.title}</td>
+                  <td>{post.body.substring(0, 10)}...</td>
+                  <td>{post.likes.length}</td>
+                  <td> {post.comments.length}</td>
+                  <td> {new Date(post.created).toDateString()}</td>
+                  <td>
+                    <Link className="btn btn-sm" to={`/post/edit/${post._id}`}>
+                      <i className="fa fa-edit"></i>
+                    </Link>
+                  </td>
+                  <td>
+                    <button
+                      className="btn btn-sm"
+                      onClick={() => this.deleteConfirmed(post._id)}
+                    >
+                      <i className="fa fa-trash"></i>
+                    </button>
+                  </td>
+                </tr>
+              );
+            })}
+          </tbody>
+        </table>
+      </div>
     );
   }
 }
