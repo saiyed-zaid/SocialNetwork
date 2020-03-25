@@ -3,6 +3,7 @@ import { isAuthenticated } from "../auth/index";
 import { read, update, updateUser } from "./apiUser";
 import { Redirect } from "react-router-dom";
 import DefaultProfile from "../images/avatar.jpg";
+import PageLoader from "../components/pageLoader";
 
 class EditProfile extends Component {
   constructor() {
@@ -108,13 +109,20 @@ class EditProfile extends Component {
     return (
       <div className="col-md-6">
         <form method="post">
-          <div className="form-group">
-            <input
-              className="form-control-file"
-              accept="image/*"
-              type="file"
-              onChange={this.handleChange("photo")}
-            />
+          <div class="input-group form-group">
+            <div class="custom-file">
+              <input
+                accept="image/*"
+                className="custom-file-input"
+                type="file"
+                onChange={this.handleChange("photo")}
+                id="inputGroupFile04"
+                aria-describedby="inputGroupFileAddon04"
+              />
+              <label class="custom-file-label" for="inputGroupFile04">
+                Choose Post Photo
+              </label>
+            </div>
           </div>
 
           <div className="form-group">
@@ -212,13 +220,7 @@ class EditProfile extends Component {
             flexWrap: "wrap"
           }}
         >
-          {loading ? (
-            <div className="spinner-border text-primary" role="status">
-              <span className="sr-only">Loading...</span>
-            </div>
-          ) : (
-            ""
-          )}
+          {loading ? <PageLoader /> : ""}
 
           <img
             style={{ height: "200px", width: "200px" }}

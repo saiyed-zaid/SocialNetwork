@@ -3,6 +3,7 @@ import { isAuthenticated } from "../auth/index";
 import { create } from "./apiPost";
 import { Redirect } from "react-router-dom";
 import DefaultPost from "../images/post.jpg";
+import PageLoader from "../components/pageLoader";
 
 class NewPost extends Component {
   constructor() {
@@ -90,20 +91,26 @@ class NewPost extends Component {
               className="form-control"
               style={{
                 height: "350px",
-                maxWidth: "350px",
-                objectFit: "scale-down"
+                maxWidth: "350px"
               }}
             />
           </div>
         </div>
         <form method="post" className="col-md-6">
-          <div className="form-group">
-            <input
-              accept="image/*"
-              className="form-control-file"
-              type="file"
-              onChange={this.handleChange("photo")}
-            />
+          <div class="input-group form-group">
+            <div class="custom-file">
+              <input
+                accept="image/*"
+                className="custom-file-input"
+                type="file"
+                onChange={this.handleChange("photo")}
+                id="inputGroupFile04"
+                aria-describedby="inputGroupFileAddon04"
+              />
+              <label class="custom-file-label" for="inputGroupFile04">
+                Choose Post Photo
+              </label>
+            </div>
           </div>
 
           <div className="form-group">
@@ -161,13 +168,7 @@ class NewPost extends Component {
             <span aria-hidden="true">&times;</span>
           </button>
         </div>
-        {loading ? (
-          <div className="spinner-border text-primary" role="status">
-            <span className="sr-only">Loading...</span>
-          </div>
-        ) : (
-          ""
-        )}
+        {loading ? <PageLoader /> : ""}
 
         <div className="pl-3">{this.newPostForm(title, body)}</div>
       </div>

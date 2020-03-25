@@ -3,6 +3,7 @@ import { singlePost, update } from "./apiPost";
 import { isAuthenticated } from "../auth/index";
 import { Redirect } from "react-router-dom";
 import DefaultPost from "../images/post.jpg";
+import PageLoader from "../components/pageLoader";
 
 class EditPost extends Component {
   constructor() {
@@ -95,13 +96,20 @@ class EditPost extends Component {
     return (
       <div className="col-md-6">
         <form method="post">
-          <div className="form-group">
-            <input
-              accept="image/*"
-              className="form-control-file"
-              type="file"
-              onChange={this.handleChange("photo")}
-            />
+          <div class="input-group form-group">
+            <div class="custom-file">
+              <input
+                accept="image/*"
+                className="custom-file-input"
+                type="file"
+                onChange={this.handleChange("photo")}
+                id="inputGroupFile04"
+                aria-describedby="inputGroupFileAddon04"
+              />
+              <label class="custom-file-label" for="inputGroupFile04">
+                Choose Post Photo
+              </label>
+            </div>
           </div>
 
           <div className="form-group">
@@ -179,13 +187,7 @@ class EditPost extends Component {
                 <span aria-hidden="true">&times;</span>
               </button>
             </div>
-            {loading ? (
-              <div className="spinner-border text-primary" role="status">
-                <span className="sr-only">Loading...</span>
-              </div>
-            ) : (
-              ""
-            )}
+            {loading ? <PageLoader /> : ""}
           </div>
           {this.editPostForm(title, body)}
         </div>

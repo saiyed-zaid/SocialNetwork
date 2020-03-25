@@ -5,7 +5,7 @@ export default class card extends Component {
     return (
       <div
         className={this.props.class}
-        key={this.props.key}
+        key={this.props.ckey}
         style={this.props.style}
       >
         {this.props.img}

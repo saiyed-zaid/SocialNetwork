@@ -111,7 +111,7 @@ class Users extends Component {
           <h4>Users</h4>
         </div>
         <table class="table table-hover">
-          <thead>
+          <thead style={{ color: "#fff" }}>
             <tr>
               <th scope="col" width="1%">
                 No
@@ -126,7 +126,7 @@ class Users extends Component {
               <th scope="col">Delete</th>
             </tr>
           </thead>
-          <tbody>
+          <tbody style={{ color: "#fff" }}>
             {users.map((user, i) => {
               return (
                 <tr key={user._id} id={user._id}>
@@ -150,7 +150,10 @@ class Users extends Component {
                   <td width="20%">{user.about}</td>
                   <td width="10%">{user.role}</td>
                   <td width="15%">
-                    <a href={`mailto:${user.email}`}> {user.email}</a>
+                    <a style={{ color: "#fff" }} href={`mailto:${user.email}`}>
+                      {" "}
+                      {user.email}
+                    </a>
                   </td>
                   <td>{new Date(user.created).toDateString()}</td>
                   <td width="1%">

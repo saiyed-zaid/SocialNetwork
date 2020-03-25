@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { Redirect, Link } from "react-router-dom";
 import { signin, authenticate, isAuthenticated } from "../auth/";
 import SocialLogin from "./socialLogin";
+import PageLoader from "../components/pageLoader";
 
 class Signin extends Component {
   constructor() {
@@ -137,13 +138,7 @@ class Signin extends Component {
                 <span aria-hidden="true">&times;</span>
               </button>
             </div>
-            {loading ? (
-              <div className="spinner-border text-primary" role="status">
-                <span className="sr-only">Loading...</span>
-              </div>
-            ) : (
-              ""
-            )}
+            {loading ? <PageLoader /> : ""}
             {this.signinForm(email, password)}
 
             <Link

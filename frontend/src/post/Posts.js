@@ -3,6 +3,7 @@ import { list } from "./apiPost";
 import { Link } from "react-router-dom";
 import DefaultPost from "../images/post.jpg";
 import Card from "../components/card";
+import PageLoader from "../components/pageLoader";
 
 class Posts extends Component {
   constructor() {
@@ -56,9 +57,11 @@ class Posts extends Component {
               title={post.title}
               text={post.body.substring(0, 20) + "..."}
             >
-              <Link to={`/post/${post._id}`} className="btn btn-primary">
-                Read More
-              </Link>
+              <label className="brd-grdnt rounded" style={{ padding: "1px" }}>
+                <Link to={`/post/${post._id}`} className="btn btn-primary">
+                  Read More
+                </Link>
+              </label>
             </Card>
           );
         })}
@@ -70,19 +73,7 @@ class Posts extends Component {
 
     return (
       <div className="container-fluid p-0">
-        {!posts.length ? (
-          <div className="container-fluid p-0 w-100 h-100 d-flex justify-content-center ">
-            <div
-              class="spinner-border text-primary"
-              style={{ width: "5rem", height: "5rem" }}
-              role="status"
-            >
-              <span class="sr-only">Loading...</span>
-            </div>
-          </div>
-        ) : (
-          this.renderPosts(posts)
-        )}
+        {!posts.length ? <PageLoader /> : this.renderPosts(posts)}
       </div>
     );
   }

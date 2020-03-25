@@ -4,17 +4,31 @@ import { signout, isAuthenticated } from "../auth/index";
 
 const isActive = (history, path) => {
   if (history.location.pathname === path) {
-    return { color: "white", borderBottom: "3px solid transparent" };
+    return { color: "#a59413" };
   } else return { color: "#ffffff" };
 };
 
 const Menu = ({ history }) => {
   return (
     <div>
-      <nav className="navbar navbar-expand-lg  bg-primary">
-        <Link className="navbar-brand p-2 " style={{ color: "#03a9f4" }} to="/">
-          SOCIAL NETWORK
-        </Link>
+      <nav className="navbar navbar-expand-lg navbar-light bg-primary ">
+        {isAuthenticated() && isAuthenticated().user.role === "admin" ? (
+          <Link
+            className="navbar-brand p-2 "
+            style={{ color: "#03a9f4" }}
+            to="/admin/home"
+          >
+            SOCIAL NETWORK
+          </Link>
+        ) : (
+          <Link
+            className="navbar-brand p-2 "
+            style={{ color: "#03a9f4" }}
+            to="/"
+          >
+            SOCIAL NETWORK
+          </Link>
+        )}
         <button
           className="navbar-toggler text-primary"
           type="button"
@@ -24,19 +38,13 @@ const Menu = ({ history }) => {
           aria-expanded="false"
           aria-label="Toggle navigation"
         >
-          <span className="ellipsis-v "></span>
+          <span className="fa fa-menu "></span>
         </button>
         <div className="collapse navbar-collapse" id="navbarNavAltMarkup">
-          <div className="navbar-nav">
+          <ul className="navbar-nav ml-auto">
             <>
               {isAuthenticated() && isAuthenticated().user.role === "admin" ? (
                 <>
-                  <Link
-                    className="nav-item nav-link menu-link active"
-                    to="/admin/home"
-                    style={isActive(history, `/admin/home`)}
-                  ></Link>
-
                   <Link
                     className="nav-item nav-link menu-link active"
                     to="/admin/users"
@@ -75,13 +83,15 @@ const Menu = ({ history }) => {
                 </>
               ) : (
                 <>
-                  <Link
-                    className="nav-item nav-link menu-link active"
-                    to="/"
-                    style={isActive(history, "/")}
-                  >
-                    HOME
-                  </Link>
+                  <label className="menu-link">
+                    <Link
+                      className="nav-item nav-link"
+                      to="/"
+                      style={isActive(history, "/")}
+                    >
+                      HOME
+                    </Link>
+                  </label>
 
                   <Link
                     className="nav-item nav-link menu-link active"
@@ -164,7 +174,7 @@ const Menu = ({ history }) => {
                 </>
               )}
             </>{" "}
-          </div>
+          </ul>
         </div>
       </nav>
     </div>

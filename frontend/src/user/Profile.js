@@ -7,6 +7,7 @@ import DeleteUser from "./deleteUser";
 import FollowProfileButton from "./followProfileButton";
 import ProfileTabs from "./profileTabs";
 import { listByUser } from "../post/apiPost";
+import PageLoader from "../components/pageLoader";
 
 class Profile extends Component {
   constructor() {
@@ -99,15 +100,7 @@ class Profile extends Component {
     return (
       <div className="container-fluid mt-1">
         {!user ? (
-          <div className="container-fluid p-0 w-100 h-100 d-flex justify-content-center ">
-            <div
-              class="spinner-border text-primary"
-              style={{ width: "5rem", height: "5rem" }}
-              role="status"
-            >
-              <span class="sr-only">Loading...</span>
-            </div>
-          </div>
+          <PageLoader />
         ) : (
           <div
             className="profile p-2"

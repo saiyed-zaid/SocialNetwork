@@ -4,6 +4,7 @@ import { Link, Redirect } from "react-router-dom";
 import { isAuthenticated } from "../auth/index";
 import DefaultPost from "../images/post.jpg";
 import Comment from "./comment";
+import PageLoader from "../components/pageLoader";
 
 class SinglePost extends Component {
   state = {
@@ -129,32 +130,7 @@ class SinglePost extends Component {
               &nbsp;{likes}&nbsp;{likes > 1 ? "likes" : "like"}
             </h5>
           )}
-          <hr />
-
-          {isAuthenticated().user && isAuthenticated().user.role === "admin" && (
-            <div class="card mt-5 w-100">
-              <div className="card-body">
-                <h5 className="card-title">Admin</h5>
-                <p className="mb-2 text-danger">Edit/Delete as an Admin</p>
-                <div>
-                  <Link
-                    to={`/post/edit/${post._id}`}
-                    className="btn btn-outline-secondary btn-custom"
-                  >
-                    Update Post &nbsp; <i className="fa fa-edit"></i>
-                  </Link>{" "}
-                  &nbsp;&nbsp;
-                  <button
-                    onClick={this.deleteConfirmed}
-                    className="btn btn-outline-secondary btn-custom"
-                  >
-                    Delete Post &nbsp; <i className="fa fa-trash"></i>
-                  </button>
-                </div>
-              </div>
-            </div>
-          )}
-          <div>
+          <div style={{ color: "white" }}>
             <h3>{post.title}</h3>
             <h4 className="lead">
               <small>
@@ -166,7 +142,9 @@ class SinglePost extends Component {
               </small>
             </h4>
           </div>
-          <p className="card-text">{post.body}</p>
+          <p style={{ color: "white" }} className="card-text">
+            {post.body}
+          </p>
 
           <div className="d-inline-block">
             <Link to="/" className="btn btn-raised btn-primary mr-1">
@@ -205,13 +183,7 @@ class SinglePost extends Component {
     }
     return (
       <div className=" container-fluid col-md-11 mr-5 mb-2 mt-2 p-0 ">
-        {!post ? (
-          <div className="spinner-border text-primary" role="status">
-            <span className="sr-only">Loading...</span>
-          </div>
-        ) : (
-          this.renderPost(post)
-        )}
+        {!post ? <PageLoader /> : this.renderPost(post)}
         <Comment
           postId={post._id}
           comments={comments.reverse()}

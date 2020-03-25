@@ -121,7 +121,7 @@ class Posts extends Component {
         <div className="jumbotron p-3">
           <h4>Users</h4>
         </div>
-        <table class="table table-hover" style={{ color: "#03a9f4" }}>
+        <table class="table table-hover" style={{ color: "#fff" }}>
           <thead>
             <tr>
               <th scope="col">No</th>
