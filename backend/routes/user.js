@@ -5,6 +5,19 @@ const auth_check = require("../middleware/auth-check");
 const _ = require("lodash");
 const multer = require("multer");
 const path = require("path");
+const User = require("../models/user");
+
+/**
+ * @function put
+ * @description Handling put request which Update isNewUser status false
+ * @param {middleware} Checking Authorization
+ * @param {middleware} newFollowerStatusChagne
+ */
+router.put(
+  "/api/user/newFollowerStatusChange/:userId",
+  auth_check,
+  userController.newFollowerStatusChagne
+);
 
 /**
  * @function put
