@@ -2,6 +2,8 @@ import React, { Component } from "react";
 import { list } from "./apiUser";
 import { Link } from "react-router-dom";
 import DefaultProfile from "../images/avatar.jpg";
+import Card from "../components/card";
+import PageLoader from "../components/pageLoader";
 
 class Users extends Component {
   constructor() {
@@ -27,28 +29,33 @@ class Users extends Component {
    */
   renderUsers = users => (
     <div className="row m-0">
-      {users.map((user, i) => (
-        <div className="card col-md-0 custom-card-load" key={i} style={{width:'250px'}}>
-          <img
-            className="img-thumbnail"
-            src={`${process.env.REACT_APP_API_URL}/${
-              user.photo ? user.photo.path : DefaultProfile
-            }`}
-            onError={i => (i.target.src = `${DefaultProfile}`)}
-            alt={user.name}
-          />
-          <div className="card-body">
-            <h6 className="card-title">{user.name}</h6>
-            <p className="card-text">{user.email}</p>
-            <Link
-              to={`/user/${user._id}`}
-              className="btn btn-outline-primary custom-Read-more"
-            >
+      {users.map((user, i) =>
+        user.role === "subscriber" ? (
+          <Card
+            class="card col-md-0"
+            key={i}
+            style={{ width: "18rem" }}
+            img={
+              <img
+                className="card-img-top"
+                src={`${process.env.REACT_APP_API_URL}/${
+                  user.photo ? user.photo.path : DefaultProfile
+                }`}
+                onError={i => (i.target.src = `${DefaultProfile}`)}
+                alt={user.name}
+              />
+            }
+            title={user.title}
+            text={user.email}
+          >
+            <Link to={`/user/${user._id}`} className="btn btn-primary">
               View Profile
             </Link>
-          </div>
-        </div>
-      ))}
+          </Card>
+        ) : (
+          ""
+        )
+      )}
     </div>
   );
   render() {
@@ -58,7 +65,7 @@ class Users extends Component {
         <div className="jumbotron p-3">
           <h4> Users</h4>
         </div>
-        {this.renderUsers(users)}
+        {!users.length ? <PageLoader /> : this.renderUsers(users)}
       </div>
     );
   }

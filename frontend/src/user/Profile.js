@@ -7,6 +7,7 @@ import DeleteUser from "./deleteUser";
 import FollowProfileButton from "./followProfileButton";
 import ProfileTabs from "./profileTabs";
 import { listByUser } from "../post/apiPost";
+import PageLoader from "../components/pageLoader";
 
 class Profile extends Component {
   constructor() {
@@ -55,8 +56,6 @@ class Profile extends Component {
         if (data.err) {
           signout(() => {});
           this.setState({ redirectToSignin: true });
-
-          //<Redirect to="/signin" />;
         } else {
           let following = this.checkFollow(data);
           this.setState({ user: data, following });
@@ -99,90 +98,78 @@ class Profile extends Component {
       return <Redirect to="/signin" />;
     }
     return (
-      <div className="container-fluid mt-1">
-        <div
-          className="profile p-2"
-          style={{
-            border: "none",
-            backgroundColor: "rgba(223, 223, 223, 0.37)"
-          }}
-        >
-          <div className="row">
-            <div className="col-md-2">
-              <img
-                style={{ height: "200px", width: "200px", borderRadius: "50%" }}
-                className="img-thumbnail"
-                src={photoUrl}
-                onError={e => {
-                  e.target.src = DefaultProfile;
-                }}
-                alt={user.name}
-              />
-            </div>
-            <div className="col-md-10">
-              <div className="mt-2">
-                <p>Hey {user.name}</p>
-                <p>Email : {user.email}</p>
-                <p>Joined {new Date(user.created).toDateString()}</p>
+      <div className="container-fluid mt-1" style={{ color: "#e6cf23" }}>
+        {!user ? (
+          <PageLoader />
+        ) : (
+          <div
+            className="profile p-2"
+            style={{
+              border: "none",
+              backgroundColor: "rgba(223, 223, 223, 0.37)"
+            }}
+          >
+            <div className="row">
+              <div className="col-md-2">
+                <img
+                  style={{
+                    height: "200px",
+                    width: "200px",
+                    borderRadius: "50%"
+                  }}
+                  className="img-thumbnail"
+                  src={photoUrl}
+                  onError={e => {
+                    e.target.src = DefaultProfile;
+                  }}
+                  alt={user.name}
+                />
               </div>
-              {isAuthenticated().user &&
-              isAuthenticated().user._id === user._id ? (
-                <div className="d-inline-block">
-                  {isAuthenticated().user.role === "admin" ? (
-                    <Link
-                      to={`/user/edit/${user._id}`}
-                      className="btn btn-outline-secondary mr-2 btn-custom"
-                    >
-                      Edit Profile &nbsp;<i className="fa fa-edit "></i>
-                    </Link>
-                  ) : (
-                    <>
+              <div className="col-md-10">
+                <div className="mt-2">
+                  <p>Hey {user.name}</p>
+                  <p>Email : {user.email}</p>
+                  <p>Joined {new Date(user.created).toDateString()}</p>
+                </div>
+                {isAuthenticated().user &&
+                isAuthenticated().user._id === user._id ? (
+                  <div className="d-inline-block">
+                    {isAuthenticated().user.role === "admin" ? (
                       <Link
                         to={`/user/edit/${user._id}`}
                         className="btn btn-outline-secondary mr-2 btn-custom"
                       >
                         Edit Profile &nbsp;<i className="fa fa-edit "></i>
                       </Link>
-                      <Link
-                        to={`/post/create`}
-                        className="btn btn-outline-secondary mr-2 btn-custom"
-                      >
-                        Create Post &nbsp;
-                        <i className="fa fa-plus-square"></i>
-                      </Link>
-                      <DeleteUser userId={user._id} />
-                    </>
-                  )}
-                </div>
-              ) : (
-                <FollowProfileButton
-                  following={this.state.following}
-                  onButtonClick={this.clickFollowButton}
-                />
-              )}
-            </div>
-          </div>
-        </div>
-        <div>
-          {/*  {isAuthenticated().user && isAuthenticated().user.role === "admin" && (
-            <div className="card mt-5 w-100">
-              <div className="card-body">
-                <h5 className="card-title">Admin</h5>
-                <p className="mb-2 text-danger">Edit/Delete as an Admin</p>
-                <div>
-                  <Link
-                    className="btn btn-outline-secondary btn-custom"
-                    to={`/user/edit/${user._id}`}
-                  >
-                    Edit Profile &nbsp; <i className="fa fa-edit"></i>
-                  </Link>
-                  &nbsp;&nbsp;
-                  <DeleteUser userId={user._id} />
-                </div>
+                    ) : (
+                      <>
+                        <Link
+                          to={`/user/edit/${user._id}`}
+                          className="btn btn-outline-secondary mr-2 btn-custom"
+                        >
+                          Edit Profile &nbsp;<i className="fa fa-edit "></i>
+                        </Link>
+                        <Link
+                          to={`/post/create`}
+                          className="btn btn-outline-secondary mr-2 btn-custom"
+                        >
+                          Create Post &nbsp;
+                          <i className="fa fa-plus-square"></i>
+                        </Link>
+                        <DeleteUser userId={user._id} />
+                      </>
+                    )}
+                  </div>
+                ) : (
+                  <FollowProfileButton
+                    following={this.state.following}
+                    onButtonClick={this.clickFollowButton}
+                  />
+                )}
               </div>
             </div>
-          )} */}
-        </div>
+          </div>
+        )}
         <div>
           <div className="col md-12 mt-5 mb-5">
             <hr />

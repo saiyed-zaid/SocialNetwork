@@ -3,8 +3,7 @@ import { isAuthenticated } from "../auth/index";
 import { read, update, updateUser } from "./apiUser";
 import { Redirect } from "react-router-dom";
 import DefaultProfile from "../images/avatar.jpg";
-import { TextField, Button, IconButton } from "@material-ui/core";
-import PhotoCamera from "@material-ui/icons/PhotoCamera";
+import PageLoader from "../components/pageLoader";
 
 class EditProfile extends Component {
   constructor() {
@@ -108,99 +107,67 @@ class EditProfile extends Component {
 
   editForm = (name, email, password, about) => {
     return (
-      <div className=" col-md-6">
+      <div className="col-md-6">
         <form method="post">
-          <div
-            style={{
-              borderRadius: "5px"
-            }}
-          >
-            <input
-              style={{ display: "none" }}
-              accept="image/*"
-              id="icon-button-file"
-              type="file"
-              onChange={this.handleChange("photo")}
-            />
-
-            <label htmlFor="icon-button-file">
-              <IconButton
-                color="primary"
-                aria-label="upload picture"
-                component="span"
-              >
-                <PhotoCamera />
-              </IconButton>
-            </label>
-
-            <label className="bmd-label-floating">Select Profile Photo </label>
+          <div class="input-group form-group">
+            <div class="custom-file">
+              <input
+                accept="image/*"
+                className="custom-file-input"
+                type="file"
+                onChange={this.handleChange("photo")}
+                id="inputGroupFile04"
+                aria-describedby="inputGroupFileAddon04"
+              />
+              <label class="custom-file-label" for="inputGroupFile04">
+                Choose Post Photo
+              </label>
+            </div>
           </div>
 
           <div className="form-group">
-            <TextField
-              id="outlined-basic"
-              label="Name"
-              size="small"
-              fullWidth
-              variant="outlined"
+            <input
               onChange={this.handleChange("name")}
               type="text"
               className="form-control"
               value={name}
               name="name"
+              placeholder="Name"
             />
           </div>
 
           <div className="form-group">
-            <TextField
-              id="outlined-basic"
-              label="Email"
-              size="small"
-              fullWidth
-              variant="outlined"
+            <input
               onChange={this.handleChange("email")}
               type="email"
               className="form-control"
               value={email}
               name="email"
+              placeholder="Email"
             />
           </div>
           <div className="form-group">
-            <TextField
-              id="outlined-multiline-static"
-              label="About"
-              multiline
-              fullWidth
-              rows="4"
-              variant="outlined"
+            <textarea
               onChange={this.handleChange("about")}
               className="form-control"
               value={about}
               name="about"
+              placeholder="About "
             />
           </div>
           <div className="form-group">
-            <TextField
-              id="outlined-basic"
-              label="Password"
-              size="small"
-              fullWidth
-              variant="outlined"
+            <input
               onChange={this.handleChange("password")}
               type="password"
               className="form-control"
               value={password}
               name="password"
+              placeholder="Password"
             />
           </div>
-          <Button
-            class="primary"
-            variant="outlined"
-            color="primary"
-            onClick={this.clickSubmit}
-          >
+          <button className="btn btn-primary" onClick={this.clickSubmit}>
             Update Profile
-          </Button>
+          </button>
         </form>
       </div>
     );
@@ -253,13 +220,7 @@ class EditProfile extends Component {
             flexWrap: "wrap"
           }}
         >
-          {loading ? (
-            <div className="spinner-border text-primary" role="status">
-              <span className="sr-only">Loading...</span>
-            </div>
-          ) : (
-            ""
-          )}
+          {loading ? <PageLoader /> : ""}
 
           <img
             style={{ height: "200px", width: "200px" }}

@@ -1,25 +1,9 @@
 import React, { Component } from "react";
-import { list, like } from "./apiPost";
+import { list } from "./apiPost";
 import { Link } from "react-router-dom";
 import DefaultPost from "../images/post.jpg";
-import Box from "@material-ui/core/Box";
-import clsx from "clsx";
-import {
-  Card,
-  CardHeader,
-  CardMedia,
-  CardContent,
-  CardActions,
-  Avatar,
-  IconButton,
-  Typography,
-  Button,
-  Icon
-} from "@material-ui/core";
-import FavoriteIcon from "@material-ui/icons/Favorite";
-import ShareIcon from "@material-ui/icons/Share";
-import ArrowForwardIcon from "@material-ui/icons/ArrowForward";
-import MoreVertIcon from "@material-ui/icons/MoreVert";
+import Card from "../components/card";
+import PageLoader from "../components/pageLoader";
 
 class Posts extends Component {
   constructor() {
@@ -50,74 +34,35 @@ class Posts extends Component {
    */
   renderPosts = posts => {
     return (
-      <div className="row">
+      <div className="row m-0">
         {posts.map((post, i) => {
-          const posterId = post.postedBy ? `/user/${post.postedBy._id}` : "";
-          const posterName = post.postedBy ? post.postedBy.name : "Unknown";
-          const imgPath = post.photo ? post.photo.path : DefaultPost;
+          // const posterId = post.postedBy ? `/user/${post.postedBy._id}` : "";
+          // const posterName = post.postedBy ? post.postedBy.name : "Unknown";
+          // const imgPath = post.photo ? post.photo.path : DefaultPost;
           return (
-            <div style={{ margin: "15px" }}>
-              <Box boxShadow={5} bgcolor="background.paper">
-                <Card
-                  key={post._id}
-                  style={{ Width: "300px" }}
-                  variant="outlined"
-                >
-                  <CardHeader
-                    avatar={
-                      <Avatar aria-label="recipe">
-                        <img
-                          className="img-thumbnail"
-                          src={`${process.env.REACT_APP_API_URL}/${
-                            post.photo ? post.photo.path : DefaultPost
-                          }`}
-                          onError={i => (i.target.src = `${DefaultPost}`)}
-                          alt={post.name}
-                        />
-                      </Avatar>
-                    }
-                    //title={post.title}
-                    title={posterName}
-                    subheader={`${new Date(post.created).toDateString()}`}
-                  />
-                  <div style={{ width: "300px" }}>
-                    <img
-                      className="img-thumbnail"
-                      src={`${process.env.REACT_APP_API_URL}/${
-                        post.photo ? post.photo.path : DefaultPost
-                      }`}
-                      onError={i => (i.target.src = `${DefaultPost}`)}
-                      alt={post.name}
-                    />
-                  </div>
-                  <CardActions disableSpacing>
-                    <IconButton aria-label="add to favorites">
-                      <FavoriteIcon />
-                    </IconButton>
-                    <IconButton aria-label="share">
-                      <ShareIcon />
-                    </IconButton>
-                  </CardActions>
-                  <CardContent>
-                    <Typography variant=" " color="textPrimary" component="b">
-                      {post.title}
-                    </Typography>
-                    <Typography
-                      variant="body2"
-                      color="textSecondary"
-                      component="p"
-                    >
-                      {post.body.substring(0, 20)}
-                    </Typography>
-                  </CardContent>
-                  <Button variant="outlined" fullWidth>
-                    <Link style={{ color: "inherit" }} to={`/post/${post._id}`}>
-                      Read More
-                    </Link>
-                  </Button>
-                </Card>
-              </Box>
-            </div>
+            <Card
+              class="card"
+              ckey={i}
+              style={{ width: "18rem" }}
+              img={
+                <img
+                  className="card-img-top "
+                  src={`${process.env.REACT_APP_API_URL}/${
+                    post.photo ? post.photo.path : DefaultPost
+                  }`}
+                  onError={i => (i.target.src = `${DefaultPost}`)}
+                  alt={post.name}
+                />
+              }
+              title={post.title}
+              text={post.body.substring(0, 20) + "..."}
+            >
+              <label className="brd-grdnt rounded" style={{ padding: "1px" }}>
+                <Link to={`/post/${post._id}`} className="btn btn-primary">
+                  Read More
+                </Link>
+              </label>
+            </Card>
           );
         })}
       </div>
@@ -127,14 +72,8 @@ class Posts extends Component {
     const { posts } = this.state;
 
     return (
-      <div className="container-fluid">
-        {!posts.length ? (
-          <div className="spinner-border text-primary" role="status">
-            <span className="sr-only">Loading...</span>
-          </div>
-        ) : (
-          this.renderPosts(posts)
-        )}
+      <div className="container-fluid p-0">
+        {!posts.length ? <PageLoader /> : this.renderPosts(posts)}
       </div>
     );
   }

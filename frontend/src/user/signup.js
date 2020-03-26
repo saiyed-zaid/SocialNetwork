@@ -86,7 +86,7 @@ class Signup extends Component {
     return (
       <form method="post">
         <div className="form-group">
-          <label className="bmd-label-floating">Name</label>
+          <label for="name">Name </label>
           <input
             onChange={this.handleChange("name")}
             type="text"
@@ -96,7 +96,7 @@ class Signup extends Component {
         </div>
 
         <div className="form-group">
-          <label className="bmd-label-floating">Email</label>
+          <label for="exampleInputEmail1">Email address</label>
           <input
             onChange={this.handleChange("email")}
             type="email"
@@ -104,8 +104,9 @@ class Signup extends Component {
             value={email}
           />
         </div>
+
         <div className="form-group">
-          <label className="bmd-label-floating">Password</label>
+          <label for="exampleInputPassword1">Password</label>
           <input
             onChange={this.handleChange("password")}
             type="password"
@@ -115,7 +116,7 @@ class Signup extends Component {
         </div>
         <button
           onClick={this.clickSubmit}
-          className="btn btn-raised btn-primary"
+          className="btn btn-raised btn-primary w-100"
         >
           Sign Up
         </button>
@@ -139,20 +140,19 @@ class Signup extends Component {
     return (
       <div className="container col-lg-3">
         <div
-          className="card mt-5 p-3 "
+          className="card mt-5 p-3"
           style={{
             borderRadius: "8px",
             overflow: "hidden",
             boxShadow: "0.3em 0.3em 0.4em rgba(0,0,0,0.3)"
           }}
         >
-          <h2 className="mb-5 mt-4">Signup</h2>
+          <h4 className="card-title">Sign Up</h4>
           <div
             className="alert alert-danger alert-dismissible fade show"
             style={{ display: error ? "" : "none" }}
           >
             {error}
-
             <button
               type="button"
               className="close"

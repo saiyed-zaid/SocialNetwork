@@ -1,193 +1,182 @@
 import React from "react";
-import { makeStyles } from "@material-ui/core/styles";
-import AppBar from "@material-ui/core/AppBar";
-import Toolbar from "@material-ui/core/Toolbar";
-import Typography from "@material-ui/core/Typography";
-import Button from "@material-ui/core/Button";
-import IconButton from "@material-ui/core/IconButton";
-import MenuIcon from "@material-ui/icons/Menu";
+import ReactDOM from "react-dom";
+
 import { Link, withRouter } from "react-router-dom";
 import { signout, isAuthenticated } from "../auth/index";
 
-const useStyles = makeStyles(theme => ({
-  root: {
-    flexGrow: 1
-  },
-  menuButton: {
-    marginRight: theme.spacing(2)
-  },
-  title: {
-    flexGrow: 1
-  }
-}));
-
 const isActive = (history, path) => {
   if (history.location.pathname === path) {
-    return { color: "#000000" };
+    return { color: "#e6cf23" };
   } else return { color: "#ffffff" };
 };
 
 const Menu = ({ history }) => {
-  const classes = useStyles();
-
   return (
-    <div className={classes.root}>
-      <AppBar position="static">
-        <Toolbar>
-          {/*  <IconButton
-            edge="start"
-            className={classes.menuButton}
-            color="inherit"
-            aria-label="menu"
+    <div>
+      <nav className="navbar navbar-expand-lg navbar-light bg-primary ">
+        {isAuthenticated() && isAuthenticated().user.role === "admin" ? (
+          <Link
+            className="navbar-brand p-2 "
+            style={{ color: "#03a9f4" }}
+            to="/admin/home"
           >
-            <MenuIcon />
-          </IconButton> */}
-          <Typography variant="h6" className={classes.title}>
-            Social Network
-          </Typography>
-          <>
-            {isAuthenticated() && isAuthenticated().user.role === "admin" ? (
-              <>
-                <Link
-                  style={{ color: "inherit" }}
-                  to="/admin/home"
-                  style={isActive(history, `/admin/home`)}
-                >
-                  <Button color="inherit">Home </Button>
-                </Link>
-
-                <Link
-                  style={{ color: "inherit" }}
-                  to="/admin/users"
-                  style={isActive(history, `/admin/users`)}
-                >
-                  <Button color="inherit">Users </Button>
-                </Link>
-
-                <Link
-                  style={{ color: "inherit" }}
-                  to="/admin/posts"
-                  style={isActive(history, `/admin/posts`)}
-                >
-                  <Button color="inherit">Posts </Button>
-                </Link>
-
-                <Link
-                  style={{ color: "inherit" }}
-                  to={`/user/${isAuthenticated().user._id}`}
-                  style={isActive(
-                    history,
-                    `/user/${isAuthenticated().user._id}`
-                  )}
-                >
-                  <Button color="inherit">
-                    {`${isAuthenticated().user.name}'s Profile`}{" "}
-                  </Button>
-                </Link>
-
-                <Link
-                  style={{ color: "inherit" }}
-                  to="/signin"
-                  style={isActive(history, "/signout")}
-                  onClick={() => signout(() => {})}
-                >
-                  <Button color="inherit">Logout</Button>
-                </Link>
-              </>
-            ) : (
-              <>
-                <Link
-                  style={{ color: "inherit" }}
-                  to="/"
-                  style={isActive(history, "/")}
-                >
-                  <Button color="inherit">Home</Button>
-                </Link>
-
-                <Link
-                  style={{ color: "inherit" }}
-                  to="/users"
-                  style={isActive(history, "/users")}
-                >
-                  <Button color="inherit">Users</Button>
-                </Link>
-
-                <Link
-                  style={{ color: "inherit" }}
-                  to={`/post/create`}
-                  style={isActive(history, `/post/create`)}
-                >
-                  <Button color="inherit">Create Post</Button>
-                </Link>
-
-                {!isAuthenticated() && (
-                  <>
-                    <Link
-                      style={{ color: "inherit" }}
-                      to="/signin"
-                      style={isActive(history, "/signin")}
-                    >
-                      <Button color="inherit">Sign In </Button>
-                    </Link>
-                    <Link
-                      style={{ color: "inherit" }}
-                      to="/signup"
-                      style={isActive(history, "/signup")}
-                    >
-                      <Button color="inherit">Sign Up</Button>
-                    </Link>
-                  </>
-                )}
-                {isAuthenticated() && isAuthenticated().user.role === "admin" && (
+            SOCIAL NETWORK
+          </Link>
+        ) : (
+          <Link
+            className="navbar-brand p-2 "
+            style={{ color: "#03a9f4" }}
+            to="/"
+          >
+            SOCIAL NETWORK
+          </Link>
+        )}
+        <button
+          className="navbar-toggler text-primary"
+          type="button"
+          data-toggle="collapse"
+          data-target="#navbarNavAltMarkup"
+          aria-controls="navbarNavAltMarkup"
+          aria-expanded="false"
+          aria-label="Toggle navigation"
+        >
+          <span className="fa fa-menu "></span>
+        </button>
+        <div className="collapse navbar-collapse" id="navbarNavAltMarkup">
+          <ul className="navbar-nav ml-auto">
+            <>
+              {isAuthenticated() && isAuthenticated().user.role === "admin" ? (
+                <>
                   <Link
-                    style={{ color: "inherit" }}
-                    to={`/admin`}
-                    style={isActive(history, `/admin`)}
+                    className="nav-item nav-link menu-link active"
+                    to="/admin/users"
+                    style={isActive(history, `/admin/users`)}
                   >
-                    <Button color="inherit">Admin</Button>
+                    USERS
                   </Link>
-                )}
-                {isAuthenticated() && (
-                  <>
-                    <Link
-                      style={{ color: "inherit" }}
-                      to={`/findpeople/${isAuthenticated().user._id}`}
-                      style={isActive(
-                        history,
-                        `/findpeople/${isAuthenticated().user._id}`
-                      )}
-                    >
-                      <Button color="inherit">Find Friends</Button>
-                    </Link>
 
-                    <Link
-                      style={{ color: "inherit" }}
-                      to={`/user/${isAuthenticated().user._id}`}
-                      style={isActive(
-                        history,
-                        `/user/${isAuthenticated().user._id}`
-                      )}
-                    >
-                      <Button color="inherit">{`${
-                        isAuthenticated().user.name
-                      }'s Profile`}</Button>
-                    </Link>
+                  <Link
+                    className="nav-item nav-link menu-link active"
+                    to="/admin/posts"
+                    style={isActive(history, `/admin/posts`)}
+                  >
+                    POSTS
+                  </Link>
 
-                    <Link
-                      style={{ color: "inherit" }}
-                      to="/signin"
-                      style={isActive(history, "/signout")}
-                      onClick={() => signout(() => {})}
-                    >
-                      <Button color="inherit">Logout</Button>
-                    </Link>
-                  </>
-                )}
-              </>
-            )}
-          </>
-        </Toolbar>
-      </AppBar>
+                  <Link
+                    className="nav-item nav-link menu-link active"
+                    to={`/user/${isAuthenticated().user._id}`}
+                    style={isActive(
+                      history,
+                      `/user/${isAuthenticated().user._id}`
+                    )}
+                  >
+                    {`${isAuthenticated().user.name.toUpperCase()} 'S PROFILE`}{" "}
+                  </Link>
+
+                  <Link
+                    className="nav-item nav-link menu-link active"
+                    to="/signin"
+                    style={isActive(history, "/signout")}
+                    onClick={() => signout(() => {})}
+                  >
+                    LOGOUT
+                  </Link>
+                </>
+              ) : (
+                <>
+                  <Link
+                    className="menu-link nav-item nav-link"
+                    to="/"
+                    style={isActive(history, "/")}
+                  >
+                    HOME
+                  </Link>
+
+                  <Link
+                    className="nav-item nav-link menu-link active"
+                    to="/users"
+                    style={isActive(history, "/users")}
+                  >
+                    USERS
+                  </Link>
+
+                  <Link
+                    className="nav-item nav-link menu-link active"
+                    to={`/post/create`}
+                    style={isActive(history, `/post/create`)}
+                  >
+                    CREATE POST
+                  </Link>
+
+                  {!isAuthenticated() && (
+                    <>
+                      <Link
+                        className="nav-item nav-link menu-link active"
+                        to="/signin"
+                        style={isActive(history, "/signin")}
+                      >
+                        SIGN IN
+                      </Link>
+                      <Link
+                        className="nav-item nav-link menu-link active"
+                        to="/signup"
+                        style={isActive(history, "/signup")}
+                      >
+                        SIGN UP
+                      </Link>
+                    </>
+                  )}
+                  {isAuthenticated() &&
+                    isAuthenticated().user.role === "admin" && (
+                      <Link
+                        className="nav-item nav-link menu-link active"
+                        to={`/admin`}
+                        style={isActive(history, `/admin`)}
+                      >
+                        ADMIN
+                      </Link>
+                    )}
+                  {isAuthenticated() && (
+                    <>
+                      <Link
+                        className="nav-item nav-link menu-link active"
+                        to={`/findpeople/${isAuthenticated().user._id}`}
+                        style={isActive(
+                          history,
+                          `/findpeople/${isAuthenticated().user._id}`
+                        )}
+                      >
+                        FIND FRIENDS
+                      </Link>
+
+                      <Link
+                        className="nav-item nav-link menu-link active"
+                        to={`/user/${isAuthenticated().user._id}`}
+                        style={isActive(
+                          history,
+                          `/user/${isAuthenticated().user._id}`
+                        )}
+                      >
+                        {`${isAuthenticated().user.name.toUpperCase()}'S PROFILE`}
+                      </Link>
+
+                      <Link
+                        className="nav-item nav-link menu-link active"
+                        to="/signin"
+                        style={isActive(history, "/signout")}
+                        onClick={() => signout(() => {})}
+                      >
+                        LOGOUT
+                      </Link>
+                    </>
+                  )}
+                </>
+              )}
+            </>
+          </ul>
+        </div>
+      </nav>
     </div>
   );
 };

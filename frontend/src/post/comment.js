@@ -109,7 +109,7 @@ class Comment extends Component {
               ? comment.postedBy.photo.path
               : DefaultProfile;
             return (
-              <div key={i} className="p-0 mt-0">
+              <div key={i} className="p-0 mt-0" style={{ color: "white" }}>
                 <div className="comment-block">
                   <Link to={`/user/${comment.postedBy._id}`}>
                     <img
@@ -141,7 +141,10 @@ class Comment extends Component {
                             onClick={() => this.deleteConfirmed(comment)}
                             className="btn text-danger float-right btn-delete"
                           >
-                            <i className="fa fa-trash"></i>
+                            <i
+                              className="fa fa-trash"
+                              style={{ color: "none" }}
+                            ></i>
                           </button>
                         )}
                       <br />

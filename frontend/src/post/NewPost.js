@@ -3,8 +3,7 @@ import { isAuthenticated } from "../auth/index";
 import { create } from "./apiPost";
 import { Redirect } from "react-router-dom";
 import DefaultPost from "../images/post.jpg";
-import { TextField, Button, IconButton } from "@material-ui/core";
-import PhotoCamera from "@material-ui/icons/PhotoCamera";
+import PageLoader from "../components/pageLoader";
 
 class NewPost extends Component {
   constructor() {
@@ -82,7 +81,6 @@ class NewPost extends Component {
       >
         <div>
           <div className="form-group">
-            <label className="bmd-label-floating">Preview Post Photo</label>
             <img
               src={
                 this.state.prevPhoto
@@ -93,70 +91,52 @@ class NewPost extends Component {
               className="form-control"
               style={{
                 height: "350px",
-                maxWidth: "350px",
-                objectFit: "scale-down"
+                maxWidth: "350px"
               }}
             />
           </div>
         </div>
         <form method="post" className="col-md-6">
-          <div
-            style={{
-              borderRadius: "5px"
-            }}
-          >
-            <input
-              style={{ display: "none" }}
-              accept="image/*"
-              id="icon-button-file"
-              type="file"
-              onChange={this.handleChange("photo")}
-            />
-
-            <label htmlFor="icon-button-file">
-              <IconButton
-                color="primary"
-                aria-label="upload picture"
-                component="span"
-              >
-                <PhotoCamera />
-              </IconButton>
-            </label>
-
-            <label className="bmd-label-floating">Select Post Photo </label>
+          <div class="input-group form-group">
+            <div class="custom-file">
+              <input
+                accept="image/*"
+                className="custom-file-input"
+                type="file"
+                onChange={this.handleChange("photo")}
+                id="inputGroupFile04"
+                aria-describedby="inputGroupFileAddon04"
+              />
+              <label class="custom-file-label" for="inputGroupFile04">
+                Choose Post Photo
+              </label>
+            </div>
           </div>
 
           <div className="form-group">
-            <TextField
-              id="outlined-basic"
-              label="Title"
-              size="small"
-              fullWidth
-              variant="outlined"
+            <input
               onChange={this.handleChange("title")}
+              className="form-control"
               type="text"
               value={title}
               name="title"
+              placeholder="Post Title"
             />
           </div>
 
           <div className="form-group">
-            <TextField
-              id="outlined-multiline-static"
-              label="Description"
-              multiline
-              fullWidth
-              rows="4"
-              variant="outlined"
+            <textarea
               onChange={this.handleChange("body")}
+              className="form-control"
               value={body}
               name="body"
+              placeholder="Post Description"
             />
           </div>
 
-          <Button variant="outlined" color="primary" onClick={this.clickSubmit}>
+          <button className="btn btn-primary" onClick={this.clickSubmit}>
             Create Post
-          </Button>
+          </button>
         </form>
       </div>
     );
@@ -188,13 +168,7 @@ class NewPost extends Component {
             <span aria-hidden="true">&times;</span>
           </button>
         </div>
-        {loading ? (
-          <div className="spinner-border text-primary" role="status">
-            <span className="sr-only">Loading...</span>
-          </div>
-        ) : (
-          ""
-        )}
+        {loading ? <PageLoader /> : ""}
 
         <div className="pl-3">{this.newPostForm(title, body)}</div>
       </div>

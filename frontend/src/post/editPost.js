@@ -3,8 +3,7 @@ import { singlePost, update } from "./apiPost";
 import { isAuthenticated } from "../auth/index";
 import { Redirect } from "react-router-dom";
 import DefaultPost from "../images/post.jpg";
-import { TextField, Button, IconButton } from "@material-ui/core";
-import PhotoCamera from "@material-ui/icons/PhotoCamera";
+import PageLoader from "../components/pageLoader";
 
 class EditPost extends Component {
   constructor() {
@@ -95,66 +94,48 @@ class EditPost extends Component {
 
   editPostForm = (title, body) => {
     return (
-      <form method="post">
-        <div
-          style={{
-            borderRadius: "5px"
-          }}
-        >
-          <input
-            style={{ display: "none" }}
-            accept="image/*"
-            id="icon-button-file"
-            type="file"
-            onChange={this.handleChange("photo")}
-          />
+      <div className="col-md-6">
+        <form method="post">
+          <div class="input-group form-group">
+            <div class="custom-file">
+              <input
+                accept="image/*"
+                className="custom-file-input"
+                type="file"
+                onChange={this.handleChange("photo")}
+                id="inputGroupFile04"
+                aria-describedby="inputGroupFileAddon04"
+              />
+              <label class="custom-file-label" for="inputGroupFile04">
+                Choose Post Photo
+              </label>
+            </div>
+          </div>
 
-          <label htmlFor="icon-button-file">
-            <IconButton
-              color="primary"
-              aria-label="upload picture"
-              component="span"
-            >
-              <PhotoCamera />
-            </IconButton>
-          </label>
-          <label className="bmd-label-floating">Select Post Photo </label>
-        </div>
+          <div className="form-group">
+            <input
+              onChange={this.handleChange("title")}
+              type="text"
+              className="form-control"
+              value={title}
+              name="title"
+            />
+          </div>
 
-        <div className="form-group">
-          <TextField
-            id="outlined-basic"
-            label="Title"
-            size="small"
-            fullWidth
-            variant="outlined"
-            onChange={this.handleChange("title")}
-            type="text"
-            className="form-control"
-            value={title}
-            name="title"
-          />
-        </div>
+          <div className="form-group">
+            <textarea
+              onChange={this.handleChange("body")}
+              className="form-control"
+              value={body}
+              name="body"
+            />
+          </div>
 
-        <div className="form-group">
-          <TextField
-            id="outlined-multiline-static"
-            label="Description"
-            multiline
-            fullWidth
-            rows="4"
-            variant="outlined"
-            onChange={this.handleChange("body")}
-            className="form-control"
-            value={body}
-            name="body"
-          />
-        </div>
-
-        <Button variant="outlined" color="primary" onClick={this.clickSubmit}>
-          Update Post
-        </Button>
-      </form>
+          <button className="btn btn-primary" onClick={this.clickSubmit}>
+            Update Post
+          </button>
+        </form>
+      </div>
     );
   };
   render() {
@@ -174,41 +155,42 @@ class EditPost extends Component {
       ? `${process.env.REACT_APP_API_URL}/${photo}`
       : DefaultPost;
     return (
-      <div className="container">
-        <h2>{title}</h2>
-        <img
-          style={{ height: "200px", width: "200px" }}
-          className="img-thumbnail"
-          src={
-            !this.state.prevPhoto
-              ? photoUrl
-              : URL.createObjectURL(this.state.prevPhoto)
-          }
-          // onError={i => (i.target.src = `${DefaultProfile}`)}
-          alt={title}
-        />
-        <div
-          className="alert alert-danger alert-dismissible fade show"
-          style={{ display: error ? "" : "none" }}
-        >
-          {error}
-          <button
-            type="button"
-            className="close"
-            data-dismiss="alert"
-            aria-label="Close"
-          >
-            <span aria-hidden="true">&times;</span>
-          </button>
+      <div>
+        <div className="jumbotron p-3">
+          <h2>EditPost</h2>
         </div>
-        {loading ? (
-          <div className="spinner-border text-primary" role="status">
-            <span className="sr-only">Loading...</span>
+        <div className="container d-flex align-items-center">
+          <div className="col-md-6">
+            <h2>{title}</h2>
+            <img
+              style={{ height: "300px", width: "300px" }}
+              className="img-thumbnail"
+              src={
+                !this.state.prevPhoto
+                  ? photoUrl
+                  : URL.createObjectURL(this.state.prevPhoto)
+              }
+              //    onError={i => (i.target.src = `${DefaultProfile}`)}
+              alt={title}
+            />
+            <div
+              className="alert alert-danger alert-dismissible fade show"
+              style={{ display: error ? "" : "none" }}
+            >
+              {error}
+              <button
+                type="button"
+                className="close"
+                data-dismiss="alert"
+                aria-label="Close"
+              >
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            {loading ? <PageLoader /> : ""}
           </div>
-        ) : (
-          ""
-        )}
-        {this.editPostForm(title, body)}
+          {this.editPostForm(title, body)}
+        </div>
       </div>
     );
   }

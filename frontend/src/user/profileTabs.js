@@ -12,8 +12,8 @@ class ProfileTabs extends Component {
         <ul
           className="nav nav-tabs"
           style={{ backgroundColor: "#f0f0f0" }}
-          id="myTab"
-          role="tablist"
+          /* id="myTab"
+          role="tablist" */
         >
           <li className="nav-item col-md-4 pl-0 pr-0">
             <a
