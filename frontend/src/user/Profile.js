@@ -52,7 +52,6 @@ class Profile extends Component {
     const token = isAuthenticated().user.token;
     read(userId, token)
       .then(data => {
-        console.log("TEST___", data);
         if (data.err) {
           signout(() => {});
           this.setState({ redirectToSignin: true });
@@ -63,7 +62,9 @@ class Profile extends Component {
         }
       })
       .catch(err => {
-        console.log("Unauthor______", err);
+        if (err) {
+          console.log(err);
+        }
       });
   };
 

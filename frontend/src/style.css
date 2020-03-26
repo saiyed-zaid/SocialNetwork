@@ -118,11 +118,43 @@ div.like-box:hover .likes {
   color: #a59413 !important;
 }
 .brd-grdnt {
-  background: linear-gradient(to right, rgb(55, 59, 68), rgb(66, 134, 244));
+ /*  background:linear-gradient(
+    90deg,
+    rgb(170, 167, 214) ,
+    Yellow ,
+    rgba(0, 212, 255, 1)
+  ); */
 }
+
+.brd-grdnt:hover {
+  
+  animation: border-change infinite ease-in-out
+}
+
+@keyframes border-change{
+  0%{
+    background:linear-gradient(
+    0deg,
+    rgb(170, 167, 214) ,
+    Yellow ,
+    rgba(0, 212, 255, 1)
+  );
+  }
+  
+  100%{
+    background:linear-gradient(
+      90,
+      rgb(170, 167, 214) ,
+      red ,
+      rgba(0, 212, 255, 1)
+    );
+  }
+}
+
 .btn-primary:hover {
   background-color: #022027 !important;
   color: white !important;
+
 }
 
 .btn-outline-primary {

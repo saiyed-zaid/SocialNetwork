@@ -5,11 +5,9 @@ const handler = e => {
 };
 
 function Follow(props) {
-  if(props.test)
-  {
-    if(props.test.length === 0)
-    {
-      return(<span></span>);
+  if (props.test) {
+    if (props.test.length === 0) {
+      return <span></span>;
     }
   }
   return (
@@ -38,7 +36,9 @@ function Follow(props) {
                   alt="..."
                 />
                 <strong className="mr-auto">New Follower</strong>
-                <small>&nbsp;{`${new Date(element.followedFrom).toDateString()}`}</small>
+                <small>
+                  &nbsp;{`${new Date(element.followedFrom).toDateString()}`}
+                </small>
                 <button
                   type="button"
                   className="ml-2 mb-1 close"
