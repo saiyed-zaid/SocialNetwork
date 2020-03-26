@@ -37,8 +37,19 @@ const UserSchema = new Schema({
   ],
   followers: [
     {
-      type: Schema.Types.ObjectId,
-      ref: "User"
+      user: {
+        type: Schema.Types.ObjectId,
+        ref: "User"
+      },
+      isNewUser: {
+        type: Boolean,
+        required: true,
+        default: true
+      },
+      followedFrom: {
+        type: Date,
+        default: Date.now
+      }
     }
   ],
   resetPasswordLink: {

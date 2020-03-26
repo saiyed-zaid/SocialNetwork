@@ -7,12 +7,12 @@ exports.userById = async (req, res, next, id) => {
   try {
     const user = await User.findById(id)
       .populate("following", "_id name photo")
-      .populate("followers", "_id name photo");
+      .populate("followers.user", "_id name photo");
     if (!user) {
       return next(new Error("User not Found."));
     }
     req.profile = user;
-    //console.log("__USER DATA___", req.profile);
+    console.log("__USER DATA___", req.profile);
     next();
   } catch (error) {
     return next(new Error("User not Found."));
@@ -159,7 +159,10 @@ exports.addFollower = async (req, res, next) => {
       req.body.followId,
       {
         $push: {
-          followers: req.body.userId
+          followers: {
+            user: req.body.userId,
+            isNewUser: true
+          }
         }
       },
       {
@@ -235,4 +238,22 @@ exports.findPeople = async (req, res, next) => {
   } catch (error) {
     res.status(400).json({ err: error });
   }
+};
+
+exports.newFollowerStatusChagne = (req, res, next) => {
+  User.findByIdAndUpdate(
+    req.auth._id,
+    {
+      $set: {
+        "followers.$[].isNewUser": false
+      }
+    },
+    { multi: true }
+  )
+    .then(result => {})
+    .catch(err => {
+      if (err) {
+        console.error(err);
+      }
+    });
 };

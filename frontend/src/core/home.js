@@ -1,9 +1,12 @@
 import React, { Component } from "react";
 import Posts from "../post/posts";
+import  Notification  from "./components/Notification";
 class Home extends Component {
   constructor() {
     super();
-    this.state = { loaderIsLoading: true };
+    this.state = {
+      loaderIsLoading: true
+    };
   }
 
   loader = () => {
@@ -35,11 +38,15 @@ class Home extends Component {
     }, 1000);
   }
  */
+ 
   render() {
-    /*     if (this.state.loaderIsLoading) return this.loader(); */
 
     return (
-      <div>
+      <div className="m-3">
+        {/* <Notification /> */}
+        <Notification />
+        
+        {/* Loding Post Begin */}
         <div>
           <div className="jumbotron p-3">
             <h4>Recent Posts</h4>
@@ -48,6 +55,7 @@ class Home extends Component {
             <Posts />
           </div>
         </div>
+        {/* Loding Post Over */}
       </div>
     );
   }
