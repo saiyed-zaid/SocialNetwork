@@ -13,7 +13,7 @@ const isActive = (history, path) => {
 const Menu = ({ history }) => {
   return (
     <div>
-      <nav className="navbar navbar-expand-lg navbar-light bg-primary ">
+      <nav className="navbar navbar-expand-sm navbar-light bg-primary ">
         {isAuthenticated() && isAuthenticated().user.role === "admin" ? (
           <Link
             className="navbar-brand p-2 "
@@ -40,9 +40,9 @@ const Menu = ({ history }) => {
           aria-expanded="false"
           aria-label="Toggle navigation"
         >
-          <span className="fa fa-menu "></span>
+          <span className="fa fa-bars text-primary"></span>
         </button>
-        <div className="collapse navbar-collapse" id="navbarNavAltMarkup">
+        <div className="navbar-collapse collapse" id="navbarNavAltMarkup">
           <ul className="navbar-nav ml-auto">
             <>
               {isAuthenticated() && isAuthenticated().user.role === "admin" ? (

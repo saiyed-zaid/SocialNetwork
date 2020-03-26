@@ -2,7 +2,6 @@
   padding: 0;
   margin: 0;
   box-sizing: border-box;
-  color: #e6cf23;
 }
 .navbar {
   padding: 0;
@@ -16,12 +15,11 @@
   animation: animCard 0.3s ease-in-out;
 }
  */
-.bg-primary {
-  background-color: #03a9f4 !important;
-}
+
 
 .card {
   margin: 10px;
+  color: #e6cf23 !important;
 
   border-radius: 2%;
   width: 300px;
@@ -34,6 +32,7 @@
   transition: transform 0.3s ease-in-out;
   box-shadow: 0.2em 0.2em 0.5em #000304;
 }
+
 .card:hover {
   transform: translateY(-5px);
 }
@@ -371,5 +370,22 @@ a:hover {
   100% {
     width: 100%;
     background-position: 0% 50%;
+  }
+}
+.navbar-collapse{
+  text-align: center;
+  transition: ease-in-out;
+}
+
+.toast{
+  animation: notification ease 1s;
+}
+
+@keyframes notification {
+  0%{
+    transform:translateX(100%)
+  }
+  100%{
+    transform:translateX(0%)
   }
 }

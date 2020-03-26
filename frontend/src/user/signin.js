@@ -95,7 +95,7 @@ class Signin extends Component {
           Sign In
         </button>
 
-        <div style={{ paddingTop: "5px" }}>
+        <div style={{ paddingTop: "5px", color: "black" }}>
           <SocialLogin />
         </div>
       </form>
@@ -119,6 +119,8 @@ class Signin extends Component {
             borderRadius: "8px",
             overflow: "hidden",
             boxShadow: "0.3em 0.3em 0.4em rgba(0,0,0,0.3)"
+            /* transition: "none",
+            transform: "none" */
           }}
         >
           <div className="card-body p-0 " style={{ display: "block" }}>

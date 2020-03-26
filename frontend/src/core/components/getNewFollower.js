@@ -22,7 +22,7 @@ function Follow(props) {
               className="toast fade show m-2"
               data-autohide="false"
             >
-              <div className="toast-header">
+              <div className="toast-header text-primary">
                 <img
                   style={{ width: "30px" }}
                   src={

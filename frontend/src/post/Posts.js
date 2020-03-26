@@ -43,7 +43,7 @@ class Posts extends Component {
             <Card
               class="card"
               ckey={i}
-              style={{ width: "18rem" }}
+              style={{ width: "18rem", color: "#e6cf23" }}
               img={
                 <img
                   className="card-img-top "

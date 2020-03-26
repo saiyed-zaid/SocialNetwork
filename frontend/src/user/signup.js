@@ -144,7 +144,9 @@ class Signup extends Component {
           style={{
             borderRadius: "8px",
             overflow: "hidden",
-            boxShadow: "0.3em 0.3em 0.4em rgba(0,0,0,0.3)"
+            boxShadow: "0.3em 0.3em 0.4em rgba(0,0,0,0.3)",
+            transition: "none",
+            transform: "none"
           }}
         >
           <h4 className="card-title">Sign Up</h4>
