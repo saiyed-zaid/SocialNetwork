@@ -2,6 +2,7 @@
   padding: 0;
   margin: 0;
   box-sizing: border-box;
+  color: #e6cf23;
 }
 .navbar {
   padding: 0;
@@ -257,9 +258,9 @@ a:hover {
   align-items: center; */
   position: relative;
 }
-.nav-item::after{
+.nav-item::after {
   transition: all 0.5s ease-in-out;
-  height:0px;
+  height: 0px;
 }
 .nav-item:hover::after {
   content: "";
@@ -274,6 +275,15 @@ a:hover {
   left: 0;
   bottom: 0;
   width: 100%;
+  animation: anim 0.3s ease-in-out;
+}
+@keyframes anim {
+  0% {
+    width: 0%;
+  }
+  100% {
+    width: 100%;
+  }
 }
 .menu-link:hover {
   /* border-bottom: 3px solid #2aa198; */
@@ -294,7 +304,7 @@ a:hover {
 }
 
 .btn-outline-secondary {
-  color: #a59413;
+  color: #e6cf23;
   border-color: inherit;
 }
 .table-hover tbody tr:hover {
@@ -303,15 +313,16 @@ a:hover {
 }
 
 .loader-top {
-  background: rgb(2, 0, 36);
   background: linear-gradient(
-    90deg,
+    -45deg,
     rgb(170, 167, 214) 0%,
     Yellow 35%,
     rgba(0, 212, 255, 1) 100%
   );
+  background-size: 400% 400%;
+
   height: 3px;
-  animation: loader ease-in-out 1s;
+  animation: loader ease-in-out 0.1s infinite;
   padding: 0;
   margin: 0;
 }
@@ -319,11 +330,14 @@ a:hover {
 @keyframes loader {
   0% {
     width: 1%;
+    background-position: 0% 50%;
   }
   50% {
     width: 30%;
+    background-position: 100% 50%;
   }
   100% {
     width: 100%;
+    background-position: 0% 50%;
   }
 }

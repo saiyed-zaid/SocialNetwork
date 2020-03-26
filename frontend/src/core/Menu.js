@@ -1,10 +1,12 @@
 import React from "react";
+import ReactDOM from "react-dom";
+
 import { Link, withRouter } from "react-router-dom";
 import { signout, isAuthenticated } from "../auth/index";
 
 const isActive = (history, path) => {
   if (history.location.pathname === path) {
-    return { color: "#a59413" };
+    return { color: "#e6cf23" };
   } else return { color: "#ffffff" };
 };
 
@@ -83,15 +85,13 @@ const Menu = ({ history }) => {
                 </>
               ) : (
                 <>
-                  <label className="menu-link">
-                    <Link
-                      className="nav-item nav-link"
-                      to="/"
-                      style={isActive(history, "/")}
-                    >
-                      HOME
-                    </Link>
-                  </label>
+                  <Link
+                    className="menu-link nav-item nav-link"
+                    to="/"
+                    style={isActive(history, "/")}
+                  >
+                    HOME
+                  </Link>
 
                   <Link
                     className="nav-item nav-link menu-link active"
@@ -173,7 +173,7 @@ const Menu = ({ history }) => {
                   )}
                 </>
               )}
-            </>{" "}
+            </>
           </ul>
         </div>
       </nav>

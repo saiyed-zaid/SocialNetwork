@@ -98,7 +98,7 @@ class Profile extends Component {
       return <Redirect to="/signin" />;
     }
     return (
-      <div className="container-fluid mt-1">
+      <div className="container-fluid mt-1" style={{ color: "#e6cf23" }}>
         {!user ? (
           <PageLoader />
         ) : (
