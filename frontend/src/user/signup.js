@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { Link, Redirect } from "react-router-dom";
 import { signup } from "../auth/";
+import PageLoader from "../components/pageLoader";
 
 class Signup extends Component {
   constructor() {
@@ -38,17 +39,21 @@ class Signup extends Component {
         password: password
       };
       signup(user).then(data => {
-        if (data.err) {
-          this.setState({ error: data.err });
+        if (data) {
+          if (data.err) {
+            this.setState({ error: data.err });
+          } else {
+            this.setState({
+              error: data.err ? data.err : "",
+              name: "",
+              email: "",
+              password: "",
+              open: false,
+              redirectToSignin: true
+            });
+          }
         } else {
-          this.setState({
-            error: data.err ? data.err : "",
-            name: "",
-            email: "",
-            password: "",
-            open: false,
-            redirectToSignin: true
-          });
+          return <PageLoader />;
         }
       });
     }
@@ -179,13 +184,7 @@ class Signup extends Component {
               <span aria-hidden="true">&times;</span>
             </button>
           </div>
-          {loading ? (
-            <div className="spinner-border text-primary" role="status">
-              <span className="sr-only">Loading...</span>
-            </div>
-          ) : (
-            ""
-          )}
+          {loading ? <PageLoader /> : ""}
           {this.signupForm(name, email, password)}
         </div>
       </div>

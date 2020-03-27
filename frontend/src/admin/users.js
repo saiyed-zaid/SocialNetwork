@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { list } from "../user/apiUser";
 import { isAuthenticated } from "../auth/index";
-import { remove } from "../user/apiUser";
+import { remove, update, updateUser } from "../user/apiUser";
 import { Link } from "react-router-dom";
 import DefaultProfile from "../images/avatar.jpg";
 
@@ -10,6 +10,7 @@ class Users extends Component {
     super();
     this.state = {
       users: [],
+      status: false,
       checked: false,
       checkBox: []
     };
@@ -95,6 +96,28 @@ class Users extends Component {
       }
     });
   };
+
+  onToggleSwitch = (event, user) => {
+    const userId = user._id;
+    const token = isAuthenticated().user.token;
+
+    user.status = !user.status;
+    console.log(user);
+    update(userId, token, user).then(data => {
+      if (data.msg) {
+        this.setState({ error: data.msg });
+      } else {
+        updateUser(data, () => {
+          console.log(data);
+
+          this.setState({
+            redirectToProfile: false
+          });
+        });
+      }
+    });
+  };
+
   handleChangePage = (event, newPage) => {
     this.setState({ page: newPage });
   };
@@ -103,25 +126,24 @@ class Users extends Component {
     this.setState({ rowsPerPage: +event.target.value, page: 0 });
   };
   render() {
-    const { users, checkBox } = this.state;
+    const { users, checkBox, status } = this.state;
 
     return (
       <div className="container-fluid m-0 p-0">
         <div className="jumbotron p-3 m-0">
           <h4>Users</h4>
         </div>
-        <table class="table table-hover">
+        <table class="table table-hover" style={{ textAlign: "center" }}>
           <thead style={{ color: "#fff" }}>
             <tr>
               <th scope="col" width="1%">
                 No
               </th>
-              <th scope="col">Profile Photo</th>
               <th scope="col">Name</th>
-              <th scope="col">About</th>
               <th scope="col">Role</th>
               <th scope="col">Email</th>
               <th scope="col">Joined Date</th>
+              <th scope="col">Status</th>
               <th scope="col">Edit</th>
               <th scope="col">Delete</th>
             </tr>
@@ -130,32 +152,34 @@ class Users extends Component {
             {users.map((user, i) => {
               return (
                 <tr key={user._id} id={user._id}>
-                  <th scope="row">{i + 1}</th>
-                  <td width="5%">
-                    <img
-                      src={`${process.env.REACT_APP_API_URL}/${
-                        user.photo ? user.photo.path : DefaultProfile
-                      }`}
-                      onError={i => (i.target.src = `${DefaultProfile}`)}
-                      alt={user.name}
-                      style={{
-                        height: "40px",
-                        width: "40px",
-                        boxShadow: "2px 1px 5px black",
-                        borderRadius: "50%"
-                      }}
-                    />
-                  </td>
-                  <td width="15%">{user.name}</td>
-                  <td width="20%">{user.about}</td>
-                  <td width="10%">{user.role}</td>
-                  <td width="15%">
+                  <th scope="row" width="1%">
+                    {i + 1}
+                  </th>
+                  <td width="10%">{user.name}</td>
+                  <td width="5%%">{user.role}</td>
+                  <td width="10%">
                     <a style={{ color: "#fff" }} href={`mailto:${user.email}`}>
-                      {" "}
                       {user.email}
                     </a>
                   </td>
-                  <td>{new Date(user.created).toDateString()}</td>
+
+                  <td width="5%">{new Date(user.created).toDateString()}</td>
+                  <td width="1%">
+                    <div class="custom-control custom-switch">
+                      <input
+                        type="checkbox"
+                        class="custom-control-input"
+                        id="customSwitch1"
+                        name={user._id}
+                        onChange={e => this.onToggleSwitch(e, user)}
+                        checked={user.status}
+                      />
+                      <label
+                        class="custom-control-label"
+                        for="customSwitch1"
+                      ></label>
+                    </div>
+                  </td>
                   <td width="1%">
                     <Link className="btn btn-sm" to={`/user/edit/${user._id}`}>
                       <i className="fa fa-edit"></i>

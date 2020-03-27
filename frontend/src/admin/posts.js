@@ -131,6 +131,7 @@ class Posts extends Component {
               <th scope="col">Likes</th>
               <th scope="col">Comments</th>
               <th scope="col">Posted</th>
+              <th scope="col">Status</th>
               <th scope="col">Edit</th>
               <th scope="col">Delete</th>
             </tr>
@@ -160,6 +161,19 @@ class Posts extends Component {
                   <td>{post.likes.length}</td>
                   <td> {post.comments.length}</td>
                   <td> {new Date(post.created).toDateString()}</td>
+                  <td>
+                    <div class="custom-control custom-switch">
+                      <input
+                        type="checkbox"
+                        class="custom-control-input"
+                        id="customSwitch1"
+                      />
+                      <label
+                        class="custom-control-label"
+                        for="customSwitch1"
+                      ></label>
+                    </div>
+                  </td>
                   <td>
                     <Link className="btn btn-sm" to={`/post/edit/${post._id}`}>
                       <i className="fa fa-edit"></i>

@@ -3,6 +3,7 @@ import { Redirect, Link } from "react-router-dom";
 import { signin, authenticate, isAuthenticated } from "../auth/";
 import SocialLogin from "./socialLogin";
 import PageLoader from "../components/pageLoader";
+import Modal from "../components/modal/Modal";
 
 class Signin extends Component {
   constructor() {
@@ -12,7 +13,8 @@ class Signin extends Component {
       password: "123456",
       error: "",
       redirectToRefferer: false,
-      loading: false
+      loading: false,
+      connectionIssue: false
     };
   }
 
@@ -39,12 +41,26 @@ class Signin extends Component {
     };
 
     signin(user).then(data => {
-      if (data.msg) {
-        this.setState({ error: data.msg, loading: false });
+      if (!data) {
+        this.setState({ connectionIssue: true });
+        /*  return (
+          <div id="id01" className="modal" style={{ border: "1px solid red" }}>
+            <div className="modal-content">
+              <div className="container">
+                <p>Some text. Some text. Some text.</p>
+                <p>Some text. Some text. Some text.</p>
+              </div>
+            </div>
+          </div>
+        ); */
       } else {
-        authenticate(data, () => {
-          this.setState({ redirectToRefferer: true });
-        });
+        if (data.msg) {
+          this.setState({ error: data.msg, loading: false });
+        } else {
+          authenticate(data, () => {
+            this.setState({ redirectToRefferer: true });
+          });
+        }
       }
     });
   };
@@ -103,13 +119,29 @@ class Signin extends Component {
   };
 
   render() {
-    const { email, password, error, redirectToRefferer, loading } = this.state;
+    const {
+      email,
+      password,
+      error,
+      redirectToRefferer,
+      loading,
+      connectionIssue
+    } = this.state;
     if (redirectToRefferer) {
       if (isAuthenticated().user.role === "admin") {
         return <Redirect to="/admin/home" />;
       } else {
         return <Redirect to="/" />;
       }
+    }
+    if (connectionIssue) {
+      return (
+        <div id="id01" className="modal">
+          <div className="modal-content">
+            <p>There Is SOme Network Issue Please Try After Some Time</p>
+          </div>
+        </div>
+      );
     }
     return (
       <div className="container col-lg-3">
@@ -118,9 +150,9 @@ class Signin extends Component {
           style={{
             borderRadius: "8px",
             overflow: "hidden",
-            boxShadow: "0.3em 0.3em 0.4em rgba(0,0,0,0.3)"
-            /* transition: "none",
-            transform: "none" */
+            boxShadow: "0.3em 0.3em 0.4em rgba(0,0,0,0.3)",
+            transition: "none",
+            transform: "none"
           }}
         >
           <div className="card-body p-0 " style={{ display: "block" }}>
@@ -140,7 +172,7 @@ class Signin extends Component {
                 <span aria-hidden="true">&times;</span>
               </button>
             </div>
-            {loading ? <PageLoader /> : ""}
+            {/* {loading ? <PageLoader /> : ""} */}
             {this.signinForm(email, password)}
 
             <Link

@@ -16,7 +16,6 @@
 }
  */
 
-
 .card {
   margin: 10px;
   color: #e6cf23 !important;
@@ -117,7 +116,7 @@ div.like-box:hover .likes {
   color: #a59413 !important;
 }
 .brd-grdnt {
- /*  background:linear-gradient(
+  /*  background:linear-gradient(
     90deg,
     rgb(170, 167, 214) ,
     Yellow ,
@@ -126,25 +125,24 @@ div.like-box:hover .likes {
 }
 
 .brd-grdnt:hover {
-  
-  animation: border-change infinite ease-in-out
+  animation: border-change infinite ease-in-out;
 }
 
-@keyframes border-change{
-  0%{
-    background:linear-gradient(
-    0deg,
-    rgb(170, 167, 214) ,
-    Yellow ,
-    rgba(0, 212, 255, 1)
-  );
+@keyframes border-change {
+  0% {
+    background: linear-gradient(
+      0deg,
+      rgb(170, 167, 214),
+      Yellow,
+      rgba(0, 212, 255, 1)
+    );
   }
-  
-  100%{
-    background:linear-gradient(
+
+  100% {
+    background: linear-gradient(
       90,
-      rgb(170, 167, 214) ,
-      red ,
+      rgb(170, 167, 214),
+      red,
       rgba(0, 212, 255, 1)
     );
   }
@@ -153,7 +151,6 @@ div.like-box:hover .likes {
 .btn-primary:hover {
   background-color: #022027 !important;
   color: white !important;
-
 }
 
 .btn-outline-primary {
@@ -353,7 +350,7 @@ a:hover {
   background-size: 400% 400%;
 
   height: 3px;
-  animation: loader ease-in-out 0.1s infinite;
+  animation: loader ease-in-out 3s infinite;
   padding: 0;
   margin: 0;
 }
@@ -372,20 +369,41 @@ a:hover {
     background-position: 0% 50%;
   }
 }
-.navbar-collapse{
+.navbar-collapse {
   text-align: center;
   transition: ease-in-out;
 }
 
-.toast{
+.toast {
   animation: notification ease 1s;
 }
 
 @keyframes notification {
-  0%{
-    transform:translateX(100%)
+  0% {
+    transform: translateX(100%);
   }
-  100%{
-    transform:translateX(0%)
+  100% {
+    transform: translateX(0%);
   }
+}
+.modal {
+  z-index: 9999;
+  display: block;
+  padding-top: 100px;
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background-color: rgb(0, 0, 0);
+  background-color: rgba(0, 0, 0, 0.4);
+}
+.modal-content {
+  margin: auto;
+  background-color: #fff;
+  position: relative;
+  padding: 0;
+  outline: 0;
+  width: 600px;
 }

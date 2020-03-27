@@ -21,6 +21,8 @@ class SocialLogin extends Component {
     };
 
     socialLogin(user).then(data => {
+      console.log(data);
+
       if (data.error) {
         console.log("Error Login. Please try again..");
       } else {

@@ -49,7 +49,7 @@ exports.hasAuthorization = (req, res, next) => {
 exports.getUsers = async (req, res, next) => {
   try {
     const users = await User.find().select(
-      "_id name email created about role updated photo"
+      "_id name email created about role updated photo status"
     );
     if (!users) {
       return res.json({
@@ -198,6 +198,7 @@ exports.removeFollowing = async (req, res, next) => {
     });
   }
 };
+
 /**
  * @function middleware
  * @description Handling put request which remove followers

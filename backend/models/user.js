@@ -59,6 +59,10 @@ const UserSchema = new Schema({
   role: {
     type: String,
     default: "subscriber"
+  },
+  status: {
+    type: Boolean,
+    default: false
   }
 });
 
