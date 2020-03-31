@@ -1,8 +1,8 @@
 import React, { Component } from "react";
 import { Redirect, Link } from "react-router-dom";
-import { signin, authenticate, isAuthenticated } from "../auth/";
+import { signin, authenticate, isAuthenticated } from "../index";
 import SocialLogin from "./socialLogin";
-import PageLoader from "../components/pageLoader";
+import PageLoader from "../../components/pageLoader";
 
 class Signin extends Component {
   constructor() {
@@ -15,6 +15,20 @@ class Signin extends Component {
       loading: false
     };
   }
+
+  /* Custom Card Style  */
+  customCard = {
+    transform: "unset",
+    animation: "unset"
+  };
+  customContainer = {
+    maxWidth: "350px",
+    position: "absolute",
+    top: "50%",
+    left: "50%",
+    transform: "translate(-50%,-50%)"
+  };
+  /* /.Custom Card Style  */
 
   /**
    * Fuction For Handling Onchange Events On Controls
@@ -87,15 +101,17 @@ class Signin extends Component {
             Check me out
           </label>
         </div>
-        <button
-          type="submit"
-          onClick={this.clickSubmit}
-          className="btn btn-primary w-100"
-        >
-          Sign In
-        </button>
+        <div className="form-group">
+          <button
+            type="submit"
+            onClick={this.clickSubmit}
+            className="btn btn-primary w-100"
+          >
+            Sign In
+          </button>
+        </div>
 
-        <div style={{ paddingTop: "5px" }}>
+        <div className="form-group">
           <SocialLogin />
         </div>
       </form>
@@ -112,16 +128,9 @@ class Signin extends Component {
       }
     }
     return (
-      <div className="container col-lg-3">
-        <div
-          className="card  mt-5 p-3"
-          style={{
-            borderRadius: "8px",
-            overflow: "hidden",
-            boxShadow: "0.3em 0.3em 0.4em rgba(0,0,0,0.3)"
-          }}
-        >
-          <div className="card-body p-0 " style={{ display: "block" }}>
+      <div className="container col-lg-3" style={this.customContainer}>
+        <div className="card" style={this.customCard}>
+          <div className="card-body p-3">
             <h4 className="card-title">Sign in</h4>
 
             <div
@@ -148,7 +157,7 @@ class Signin extends Component {
                   email: email
                 }
               }}
-              className="text-danger"
+              className="text-default"
             >
               Forgot Password ?
             </Link>

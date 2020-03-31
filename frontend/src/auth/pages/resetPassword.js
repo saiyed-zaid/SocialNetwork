@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { resetPassword } from "../auth";
+import { resetPassword } from "../index";
 
 class ResetPassword extends Component {
   constructor(props) {

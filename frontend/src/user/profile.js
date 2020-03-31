@@ -106,8 +106,8 @@ class Profile extends Component {
           <div
             className="profile p-2"
             style={{
-              border: "none",
-              backgroundColor: "rgba(223, 223, 223, 0.37)"
+              border: "none"
+              /* backgroundColor: "rgba(223, 223, 223, 0.37)" */
             }}
           >
             <div className="row">
@@ -131,6 +131,8 @@ class Profile extends Component {
                   <p>Hey {user.name}</p>
                   <p>Email : {user.email}</p>
                   <p>Joined {new Date(user.created).toDateString()}</p>
+                  <hr />
+                  <p>{user.about}</p>
                 </div>
                 {isAuthenticated().user &&
                 isAuthenticated().user._id === user._id ? (
@@ -173,8 +175,6 @@ class Profile extends Component {
         )}
         <div>
           <div className="col md-12 mt-5 mb-5">
-            <hr />
-            <p>{user.about}</p>
             <hr />
             <ProfileTabs
               followers={user.followers}

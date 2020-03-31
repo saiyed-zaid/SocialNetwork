@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { Link, Redirect } from "react-router-dom";
-import { signup } from "../auth/";
+import { signup } from "../index";
 
 class Signup extends Component {
   constructor() {
@@ -14,6 +14,19 @@ class Signup extends Component {
       redirectToSignin: false
     };
   }
+  /* Custom Card Style  */
+  customCard = {
+    transform: "unset",
+    animation: "unset"
+  };
+  customContainer = {
+    maxWidth: "350px",
+    position: "absolute",
+    top: "50%",
+    left: "50%",
+    transform: "translate(-50%,-50%)"
+  };
+  /* /.Custom Card Style  */
 
   /**
    * Fuction For Handling Onchange Events On Controls
@@ -138,53 +151,48 @@ class Signup extends Component {
       return <Redirect to="/signin" />;
     }
     return (
-      <div className="container col-lg-3">
-        <div
-          className="card mt-5 p-3"
-          style={{
-            borderRadius: "8px",
-            overflow: "hidden",
-            boxShadow: "0.3em 0.3em 0.4em rgba(0,0,0,0.3)"
-          }}
-        >
-          <h4 className="card-title">Sign Up</h4>
-          <div
-            className="alert alert-danger alert-dismissible fade show"
-            style={{ display: error ? "" : "none" }}
-          >
-            {error}
-            <button
-              type="button"
-              className="close"
-              data-dismiss="alert"
-              aria-label="Close"
+      <div className="container col-lg-3" style={this.customContainer}>
+        <div className="card" style={this.customCard}>
+          <div className="card-body p-3">
+            <h4 className="card-title">Sign Up</h4>
+            <div
+              className="alert alert-danger alert-dismissible fade show"
+              style={{ display: error ? "" : "none" }}
             >
-              <span aria-hidden="true">&times;</span>
-            </button>
-          </div>
-          <div
-            className="alert alert-success alert-dismissible fade show"
-            style={{ display: open ? "" : "none" }}
-          >
-            New Account Is Successfully Created. Please
-            <Link to="/signin">Sign In</Link>.
-            <button
-              type="button"
-              className="close"
-              data-dismiss="alert"
-              aria-label="Close"
-            >
-              <span aria-hidden="true">&times;</span>
-            </button>
-          </div>
-          {loading ? (
-            <div className="spinner-border text-primary" role="status">
-              <span className="sr-only">Loading...</span>
+              {error}
+              <button
+                type="button"
+                className="close"
+                data-dismiss="alert"
+                aria-label="Close"
+              >
+                <span aria-hidden="true">&times;</span>
+              </button>
             </div>
-          ) : (
-            ""
-          )}
-          {this.signupForm(name, email, password)}
+            <div
+              className="alert alert-success alert-dismissible fade show"
+              style={{ display: open ? "" : "none" }}
+            >
+              New Account Is Successfully Created. Please
+              <Link to="/signin">Sign In</Link>.
+              <button
+                type="button"
+                className="close"
+                data-dismiss="alert"
+                aria-label="Close"
+              >
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            {loading ? (
+              <div className="spinner-border text-primary" role="status">
+                <span className="sr-only">Loading...</span>
+              </div>
+            ) : (
+              ""
+            )}
+            {this.signupForm(name, email, password)}
+          </div>
         </div>
       </div>
     );

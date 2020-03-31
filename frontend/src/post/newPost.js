@@ -79,7 +79,7 @@ class NewPost extends Component {
           flexWrap: "wrap"
         }}
       >
-        <div>
+        <div className="test">
           <div className="form-group">
             <img
               src={
@@ -97,8 +97,8 @@ class NewPost extends Component {
           </div>
         </div>
         <form method="post" className="col-md-6">
-          <div class="input-group form-group">
-            <div class="custom-file">
+          <div className="input-group form-group">
+            <div className="custom-file">
               <input
                 accept="image/*"
                 className="custom-file-input"
@@ -107,7 +107,7 @@ class NewPost extends Component {
                 id="inputGroupFile04"
                 aria-describedby="inputGroupFileAddon04"
               />
-              <label class="custom-file-label" for="inputGroupFile04">
+              <label className="custom-file-label" for="inputGroupFile04">
                 Choose Post Photo
               </label>
             </div>
