@@ -4,6 +4,7 @@ import { create } from "./apiPost";
 import { Redirect } from "react-router-dom";
 import DefaultPost from "../images/post.jpg";
 import PageLoader from "../components/pageLoader";
+import Toast from "../components/Toast";
 
 class NewPost extends Component {
   constructor() {
@@ -39,12 +40,22 @@ class NewPost extends Component {
 
   isValid = () => {
     const { title, body, fileSize } = this.state;
+    if (title.length === 0) {
+      this.setState({ error: "Title field is required", loading: false });
+      return false;
+    } else if (title.length < 5 || title.length > 120) {
+      this.setState({ error: "Title length must between 5 to 1200.", loading: false });
+    }
+    if (body.length === 0) {
+      this.setState({ error: "Body field is required", loading: false });
+      return false;
+    }else if(title.length < 5 || title.length > 2000)
+    {
+      this.setState({ error: "Body length must between 5 to 2000.", loading: false });
+    }
+
     if (fileSize > 1000000000) {
       this.setState({ error: "Photo Must Be Smaller then 100kb" });
-      return false;
-    }
-    if (title.length === 0 || body.length === 0) {
-      this.setState({ error: "All Fields Are Required", loading: false });
       return false;
     }
 
@@ -56,7 +67,7 @@ class NewPost extends Component {
 
     this.setState({ loading: true });
 
-    if (this.isValid) {
+    if (this.isValid()) {
       const userId = isAuthenticated().user._id;
       const token = isAuthenticated().user.token;
 
@@ -91,12 +102,30 @@ class NewPost extends Component {
               className="form-control"
               style={{
                 height: "350px",
-                maxWidth: "350px"
+                maxWidth: "350px",
+                padding: 0,
+                border: "none"
               }}
             />
           </div>
         </div>
         <form method="post" className="col-md-6">
+          <div
+            className="alert alert-danger alert-dismissible fade show"
+            style={
+              this.state.error ? { display: "block" } : { display: "none" }
+            }
+          >
+            {this.state.error}
+            <button
+              type="button"
+              className="close"
+              data-dismiss="alert"
+              aria-label="Close"
+            >
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
           <div className="input-group form-group">
             <div className="custom-file">
               <input
@@ -154,21 +183,9 @@ class NewPost extends Component {
         <div className="jumbotron p-3">
           <h4>Create A New Post</h4>
         </div>
-        <div
-          className="alert alert-danger alert-dismissible fade show"
-          style={{ display: error ? "" : "none" }}
-        >
-          {error}
-          <button
-            type="button"
-            className="close"
-            data-dismiss="alert"
-            aria-label="Close"
-          >
-            <span aria-hidden="true">&times;</span>
-          </button>
-        </div>
-        {loading ? <PageLoader /> : ""}
+
+        {/* <Toast type="Alert" msg={error} status={(error)?"toast fade show":"toast fade hide"} /> */}
+        {/* {loading ? <PageLoader /> : ""} */}
 
         <div className="p-0">{this.newPostForm(title, body)}</div>
       </div>

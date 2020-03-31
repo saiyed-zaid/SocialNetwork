@@ -4,13 +4,17 @@ import { list, remove, update } from "../post/apiPost";
 import { Link } from "react-router-dom";
 import DefaultPost from "../images/post.jpg";
 import Avatar from "../components/Avatar";
+import Toast from "../components/Toast";
 import "../../node_modules/react-toggle-switch/dist/css/switch.min.css";
 
 class Posts extends Component {
   constructor() {
     super();
     this.state = {
-      posts: []
+      posts: [],
+      toastPopup: false,
+      toastType: "",
+      toastMsg: ""
     };
   }
 
@@ -31,7 +35,13 @@ class Posts extends Component {
       if (data.error) {
         console.log(data.error);
       } else {
-        this.setState({ redirectToHome: true });
+        this.setState({
+          redirectToHome: true,
+          toastPopup: true,
+          toastType: "Success",
+          toastMsg: "Record deleted successfully."
+        });
+        setTimeout(this.toastPopupEnable, 8000);
       }
     });
   };
@@ -46,11 +56,15 @@ class Posts extends Component {
     if (answer) {
       this.deletePost(postId);
       let getRow = document.getElementById(postId);
-      getRow.addEventListener("animationend", () => {
-        getRow.parentNode.removeChild(getRow);
-        getRow.classList.remove("row-remove");
-      });
-      getRow.classList.toggle("row-remove");
+      console.log('row',getRow,postId);
+      
+      if (getRow) {
+        getRow.addEventListener("animationend", () => {
+          getRow.parentNode.removeChild(getRow);
+          getRow.classList.remove("row-remove");
+        });
+        getRow.classList.toggle("row-remove");
+      }
     }
   };
 
@@ -85,7 +99,13 @@ class Posts extends Component {
         if (result.err) {
           console.log("Error=> ", result.err);
         } else {
-          this.setState({ posts: dataToUpdate });
+          this.setState({
+            posts: dataToUpdate,
+            toastPopup: true,
+            toastType: "success",
+            toastMsg: "Record updated successfully."
+          });
+          setTimeout(this.toastPopupEnable, 8000);
           console.log("RECORD UPDATED", result);
         }
       })
@@ -95,7 +115,9 @@ class Posts extends Component {
         }
       });
   };
-
+  toastPopupEnable = () => {
+    this.setState({ toastPopup: false });
+  };
   /**
    * Function For Creating Controls For  Users Page
    *
@@ -157,6 +179,17 @@ class Posts extends Component {
         <div className="jumbotron p-3 m-0">
           <h4>Posts</h4>
         </div>
+        {/* Toast */}
+        <Toast
+          status={this.state.toastPopup ? "toast fade show" : "toast fade hide"}
+          type={
+            this.state.toastPopup ? this.state.toastType : this.state.toastType
+          }
+          msg={
+            this.state.toastPopup ? this.state.toastMsg : this.state.toastMsg
+          }
+        />
+        {/* Toast / */}
         <table class="table table-hover" style={{ color: "#fff" }}>
           <thead>
             <tr>
@@ -181,7 +214,7 @@ class Posts extends Component {
           <tbody>
             {posts.map((post, i) => {
               return (
-                <tr>
+                <tr id={post._id}>
                   <th scope="row">{i + 1}</th>
                   <td>
                     <Avatar

@@ -7,6 +7,7 @@ import DefaultProfile from "../images/avatar.jpg";
 import Card from "../components/card";
 import "../../node_modules/react-toggle-switch/dist/css/switch.min.css";
 import Avatar from "../components/Avatar";
+import Toast from "../components/Toast";
 class Users extends Component {
   constructor() {
     super();
@@ -15,7 +16,10 @@ class Users extends Component {
       checked: false,
       checkBox: [],
       isProfileViewed: false,
-      recordIndex: undefined
+      recordIndex: undefined,
+      toastPopup: false,
+      toastType: "",
+      toastMsg: ""
     };
     this.index = undefined;
   }
@@ -150,7 +154,13 @@ class Users extends Component {
         if (result.err) {
           console.log("Error=> ", result.err);
         } else {
-          this.setState({ users: dataToUpdate });
+          this.setState({
+            users: dataToUpdate,
+            toastPopup: true,
+            toastType: "success",
+            toastMsg: "Record updated successfully."
+          });
+          setTimeout(this.toastPopupEnable, 8000);
           console.log("RECORD UPDATED", result);
         }
       })
@@ -159,6 +169,9 @@ class Users extends Component {
           console.log("ERR IN UPDATING", err);
         }
       });
+  };
+  toastPopupEnable = () => {
+    this.setState({ toastPopup: false });
   };
 
   render() {
@@ -217,10 +230,23 @@ class Users extends Component {
         <div className="jumbotron p-3 m-0">
           <h4>Users</h4>
         </div>
+        {/* Toast */}
+        <Toast
+          status={this.state.toastPopup ? "toast fade show" : "toast fade hide"}
+          type={
+            this.state.toastPopup ? this.state.toastType : this.state.toastType
+          }
+          msg={
+            this.state.toastPopup ? this.state.toastMsg : this.state.toastMsg
+          }
+        />
+        {/* Toast / */}
         <table class="table table-hover text-light" id="usersTable">
           <thead>
             <tr>
-              <th scope="col" style={{widht:'10px'}}>No</th>
+              <th scope="col" style={{ widht: "10px" }}>
+                No
+              </th>
               <th scope="col">Image</th>
               <th scope="col">Name</th>
               <th scope="col">About</th>
@@ -228,8 +254,12 @@ class Users extends Component {
               <th scope="col">Email</th>
               <th scope="col">Joined Date</th>
               <th scope="col">Status</th>
-              <th scope="col" style={{width:'10px'}}>Edit</th>
-              <th scope="col" style={{width:'10px'}}>Delete</th>
+              <th scope="col" style={{ width: "10px" }}>
+                Edit
+              </th>
+              <th scope="col" style={{ width: "10px" }}>
+                Delete
+              </th>
             </tr>
           </thead>
           <tbody style={{ color: "#fff" }}>
@@ -274,7 +304,11 @@ class Users extends Component {
                   </td>
 
                   <td width="1%">
-                    <Link className="btn btn-sm" to={`/user/edit/${user._id}`} style={{boxShadow:'unset'}}>
+                    <Link
+                      className="btn btn-sm"
+                      to={`/user/edit/${user._id}`}
+                      style={{ boxShadow: "unset" }}
+                    >
                       <i className="fa fa-edit"></i>
                     </Link>
                   </td>
@@ -283,7 +317,7 @@ class Users extends Component {
                       className="btn btn-sm"
                       onClick={() => this.deleteConfirmed(user._id)}
                       disabled={isAuthenticated().user._id === user._id}
-                      style={{boxShadow:'unset'}}
+                      style={{ boxShadow: "unset" }}
                     >
                       <i className="fa fa-trash"> </i>
                     </button>
