@@ -99,16 +99,17 @@ class Profile extends Component {
       return <Redirect to="/signin" />;
     }
     return (
-      <div className="container-fluid mt-1" style={{ color: "#e6cf23" }}>
+      <div className="container-fluid mt-0" style={{ color: "#e6cf23" }}>
         {!user ? (
           <PageLoader />
         ) : (
           <div
-            className="profile p-2"
-            style={{
-              border: "none"
-              /* backgroundColor: "rgba(223, 223, 223, 0.37)" */
-            }}
+            className="profile p-3"
+            style={
+              {
+                /* backgroundColor: "rgba(223, 223, 223, 0.37)" */
+              }
+            }
           >
             <div className="row">
               <div className="col-md-2">
@@ -127,7 +128,7 @@ class Profile extends Component {
                 />
               </div>
               <div className="col-md-10">
-                <div className="mt-2">
+                <div>
                   <p>Hey {user.name}</p>
                   <p>Email : {user.email}</p>
                   <p>Joined {new Date(user.created).toDateString()}</p>
@@ -136,7 +137,14 @@ class Profile extends Component {
                 </div>
                 {isAuthenticated().user &&
                 isAuthenticated().user._id === user._id ? (
-                  <div className="d-inline-block">
+                  <div
+                    className={this.actionButton}
+                    style={{
+                      display: "flex",
+                      flexWrap: "wrap",
+                      minHeight: "20px"
+                    }}
+                  >
                     {isAuthenticated().user.role === "admin" ? (
                       <Link
                         to={`/user/edit/${user._id}`}

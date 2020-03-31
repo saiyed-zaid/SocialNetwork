@@ -79,7 +79,7 @@ class Comment extends Component {
     const { comments } = this.props;
     const { error } = this.state;
     return (
-      <div className="ml-3 mr-5">
+      <div className="ml-0 mr-5">
         <div
           className="alert alert-danger alert-dismissible fade show"
           style={{ display: error ? "" : "none" }}
@@ -96,7 +96,7 @@ class Comment extends Component {
         </div>
         <hr />
         <div className="col-md-12">
-          <h5 className="text-primary">
+          <h5 className="text-light">
             {" "}
             {comments.length === 1
               ? `${comments.length} Comment`

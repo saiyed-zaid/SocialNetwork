@@ -5,7 +5,6 @@ import { remove, update } from "../user/apiUser";
 import { Link } from "react-router-dom";
 import DefaultProfile from "../images/avatar.jpg";
 import Card from "../components/card";
-import Switch from "react-toggle-switch";
 import "../../node_modules/react-toggle-switch/dist/css/switch.min.css";
 import Avatar from "../components/Avatar";
 class Users extends Component {
@@ -275,7 +274,7 @@ class Users extends Component {
                   </td>
 
                   <td width="1%">
-                    <Link className="btn btn-sm" to={`/user/edit/${user._id}`}>
+                    <Link className="btn btn-sm" to={`/user/edit/${user._id}`} style={{boxShadow:'unset'}}>
                       <i className="fa fa-edit"></i>
                     </Link>
                   </td>
@@ -284,6 +283,7 @@ class Users extends Component {
                       className="btn btn-sm"
                       onClick={() => this.deleteConfirmed(user._id)}
                       disabled={isAuthenticated().user._id === user._id}
+                      style={{boxShadow:'unset'}}
                     >
                       <i className="fa fa-trash"> </i>
                     </button>

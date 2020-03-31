@@ -170,7 +170,7 @@ class NewPost extends Component {
         </div>
         {loading ? <PageLoader /> : ""}
 
-        <div className="pl-3">{this.newPostForm(title, body)}</div>
+        <div className="p-0">{this.newPostForm(title, body)}</div>
       </div>
     );
   }

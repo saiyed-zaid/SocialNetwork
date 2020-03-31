@@ -10,6 +10,9 @@ body {
   min-height: 100vh;
   position: relative;
 }
+p {
+  color: #d9d9d9;
+}
 .navbar {
   padding: 0;
 }
@@ -156,6 +159,11 @@ div.like-box:hover .likes {
   }
 } */
 
+.btn{
+  box-shadow: 0.1em 0.1em 0.3em rgba(0, 0, 0, 0.7);
+  transition: all 0.3s ease-in-out;
+
+}
 .btn-primary {
   /*  border-image: linear-gradient(
     90deg,
@@ -165,13 +173,11 @@ div.like-box:hover .likes {
   ); */
   background-color: #1a1d24 !important;
   color: #a59413 !important;
-  box-shadow: 0.1em 0.1em 0.3em rgba(0,0,0,0.7);
-  transition: all 0.3s ease-in-out;
 }
 
 .btn-primary:hover {
   background-color: #232731 !important;
-  box-shadow: 0.2em 0.2em 0.3em rgba(0,0,0,0.7);
+  box-shadow: 0.2em 0.2em 0.3em rgba(0, 0, 0, 0.7);
   color: white !important;
 }
 
@@ -248,16 +254,18 @@ a:hover {
 .fa-edit {
   color: #fff !important;
   font-size: 15px;
+  transition: 0.2s ease-in;
 }
 .fa-trash {
   color: #fff !important;
   font-size: 15px;
+  transition: 0.2s ease-in;
 }
-.fa-edit:hover {
+.btn-primary:hover .fa-edit {
   color: #0073ff !important;
 }
-.fa-trash:hover {
-  color: red !important;
+.btn-primary:hover .fa-trash {
+  color: rgb(231, 39, 39) !important;
 }
 
 .rows {
@@ -336,19 +344,10 @@ a:hover {
     width: 100%;
   }
 }
-.menu-link:hover {
-  /* border-bottom: 3px solid #2aa198; */
-  /* background:  linear-gradient(
-    90deg,
-    rgb(170, 167, 214) 0%,
-    Yellow 35%,
-    rgba(0, 212, 255, 1) 100%
-  );
-  line-height: 1.5 !important; */
+
+.navbar {
+  box-shadow: 0em 0.2em 0.2em rgba(0, 0, 0, 0.4) !important;
 }
-/* .navbar-toggler{
-  background-color:  #03a9f4 !important;
-} */
 .navbar-toggler-icon {
   color: white;
   border: 1px solid red;

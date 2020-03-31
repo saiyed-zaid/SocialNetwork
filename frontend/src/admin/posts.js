@@ -1,9 +1,11 @@
 import React, { Component } from "react";
 import { isAuthenticated } from "../auth/index";
-import { list, remove } from "../post/apiPost";
+import { list, remove,update } from "../post/apiPost";
 import { Link } from "react-router-dom";
 import DefaultPost from "../images/post.jpg";
 import Avatar from "../components/Avatar";
+import "../../node_modules/react-toggle-switch/dist/css/switch.min.css";
+
 class Posts extends Component {
   constructor() {
     super();
@@ -57,6 +59,40 @@ class Posts extends Component {
 
   handleChangeRowsPerPage = event => {
     this.setState({ rowsPerPage: +event.target.value, page: 0 });
+  };
+
+  handlePostStatusChange = event => {
+    const index = event.target.getAttribute("data-index");
+    const postId = this.state.posts[index]._id;
+    if (!postId) {
+      return false;
+    }
+
+    var dataToUpdate = this.state.posts;
+
+    if (dataToUpdate[index].status) {
+      dataToUpdate[index].status = false;
+    } else {
+      dataToUpdate[index].status = true;
+    }
+
+    const data = new FormData();
+    data.append("status", dataToUpdate[index].status);
+
+    update(postId, isAuthenticated().user.token, data)
+      .then(result => {
+        if (result.err) {
+          console.log("Error=> ", result.err);
+        } else {
+          this.setState({ posts: dataToUpdate });
+          console.log("RECORD UPDATED", result);
+        }
+      })
+      .catch(err => {
+        if (err) {
+          console.log("ERR IN UPDATING", err);
+        }
+      });
   };
 
   /**
@@ -118,7 +154,7 @@ class Posts extends Component {
     return (
       <div className="container-fluid m-0 p-0">
         <div className="jumbotron p-3 m-0">
-          <h4>Users</h4>
+          <h4>Posts</h4>
         </div>
         <table class="table table-hover" style={{ color: "#fff" }}>
           <thead>
@@ -130,6 +166,7 @@ class Posts extends Component {
               <th scope="col">Likes</th>
               <th scope="col">Comments</th>
               <th scope="col">Posted</th>
+              <th scope="col">Status</th>
               <th scope="col" style={{width:'10px'}}>Edit</th>
               <th scope="col" style={{width:'10px'}}>Delete</th>
             </tr>
@@ -152,7 +189,19 @@ class Posts extends Component {
                   <td> {post.comments.length}</td>
                   <td> {new Date(post.created).toDateString()}</td>
                   <td>
-                    <Link className="btn btn-sm" to={`/post/edit/${post._id}`}>
+                    <div
+                      className={post.status ? "switch on" : "switch off"}
+                      onClick={this.handlePostStatusChange}
+                      data-index={i}
+                    >
+                      <div
+                        className="switch-toggle"
+                        style={{ pointerEvents: "none" }}
+                      ></div>
+                    </div>
+                  </td>
+                  <td>
+                    <Link className="btn btn-sm" style={{boxShadow:'unset'}} to={`/post/edit/${post._id}`}>
                       <i className="fa fa-edit"></i>
                     </Link>
                   </td>
@@ -160,6 +209,7 @@ class Posts extends Component {
                     <button
                       className="btn btn-sm"
                       onClick={() => this.deleteConfirmed(post._id)}
+                      style={{boxShadow:'unset'}}
                     >
                       <i className="fa fa-trash"></i>
                     </button>

@@ -120,12 +120,12 @@ class SinglePost extends Component {
 
         <div className="card-body">
           {like ? (
-            <h5 onClick={this.likeToggle}>
+            <h5 onClick={this.likeToggle} className="text-light">
               <i className="fa fa-heart text-danger"> </i>&nbsp; {likes}
               &nbsp; {likes > 1 ? "likes" : "like"}
             </h5>
           ) : (
-            <h5 onClick={this.likeToggle}>
+            <h5 onClick={this.likeToggle} style={{color:'#ffff'}}>
               <i className="fa fa-heart-o"> </i>
               &nbsp;{likes}&nbsp;{likes > 1 ? "likes" : "like"}
             </h5>
@@ -136,13 +136,13 @@ class SinglePost extends Component {
               <small>
                 {" "}
                 <span className=" font-italic" style={{ fontSize: "12px" }}>
-                  Posted By <Link to={`${posterId}`}>{posterName}</Link> on{" "}
+                  Posted By <Link style={{color:'#a59413'}} to={`${posterId}`}>{posterName}</Link> on{" "}
                   {new Date(post.created).toDateString()}
                 </span>
               </small>
             </h4>
           </div>
-          <p style={{ color: "white" }} className="card-text">
+          <p className="card-text">
             {post.body}
           </p>
 
@@ -156,13 +156,13 @@ class SinglePost extends Component {
                 <>
                   <Link
                     to={`/post/edit/${post._id}`}
-                    className="btn btn-raised btn-info mr-1"
+                    className="btn btn-raised btn-primary mr-1"
                   >
                     <i className="fa fa-edit"></i>
                   </Link>
                   <button
                     onClick={this.deleteConfirmed}
-                    className="btn btn-raised btn-danger mr-1"
+                    className="btn btn-raised btn-primary mr-1"
                   >
                     <i className="fa fa-trash"></i>
                   </button>
@@ -182,7 +182,7 @@ class SinglePost extends Component {
       return <Redirect to="/signin" />;
     }
     return (
-      <div className=" container-fluid col-md-11 mr-5 mb-2 mt-2 p-0 ">
+      <div className=" container-fluid col-md-12 mb-2 p-0">
         {!post ? <PageLoader /> : this.renderPost(post)}
         <Comment
           postId={post._id}

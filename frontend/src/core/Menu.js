@@ -40,7 +40,7 @@ const Menu = ({ history }) => {
           aria-expanded="false"
           aria-label="Toggle navigation"
         >
-          <span className="fa fa-menu "></span>
+          <span className="fa fa-bars"></span>
         </button>
         <div className="collapse navbar-collapse" id="navbarNavAltMarkup">
           <ul className="navbar-nav ml-auto">
