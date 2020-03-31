@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { isAuthenticated } from "../auth/index";
-import { list, remove,update } from "../post/apiPost";
+import { list, remove, update } from "../post/apiPost";
 import { Link } from "react-router-dom";
 import DefaultPost from "../images/post.jpg";
 import Avatar from "../components/Avatar";
@@ -15,7 +15,8 @@ class Posts extends Component {
   }
 
   componentDidMount() {
-    list().then(data => {
+    const token = isAuthenticated().user.token;
+    list(true, token).then(data => {
       if (data.error) {
         console.log(data.error);
       } else {
@@ -159,7 +160,9 @@ class Posts extends Component {
         <table class="table table-hover" style={{ color: "#fff" }}>
           <thead>
             <tr>
-              <th scope="col" style={{widht:'10px'}}>No</th>
+              <th scope="col" style={{ widht: "10px" }}>
+                No
+              </th>
               <th scope="col">Image</th>
               <th scope="col">Title</th>
               <th scope="col">Description</th>
@@ -167,8 +170,12 @@ class Posts extends Component {
               <th scope="col">Comments</th>
               <th scope="col">Posted</th>
               <th scope="col">Status</th>
-              <th scope="col" style={{width:'10px'}}>Edit</th>
-              <th scope="col" style={{width:'10px'}}>Delete</th>
+              <th scope="col" style={{ width: "10px" }}>
+                Edit
+              </th>
+              <th scope="col" style={{ width: "10px" }}>
+                Delete
+              </th>
             </tr>
           </thead>
           <tbody>
@@ -201,7 +208,11 @@ class Posts extends Component {
                     </div>
                   </td>
                   <td>
-                    <Link className="btn btn-sm" style={{boxShadow:'unset'}} to={`/post/edit/${post._id}`}>
+                    <Link
+                      className="btn btn-sm"
+                      style={{ boxShadow: "unset" }}
+                      to={`/post/edit/${post._id}`}
+                    >
                       <i className="fa fa-edit"></i>
                     </Link>
                   </td>
@@ -209,7 +220,7 @@ class Posts extends Component {
                     <button
                       className="btn btn-sm"
                       onClick={() => this.deleteConfirmed(post._id)}
-                      style={{boxShadow:'unset'}}
+                      style={{ boxShadow: "unset" }}
                     >
                       <i className="fa fa-trash"></i>
                     </button>

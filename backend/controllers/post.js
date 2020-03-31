@@ -30,7 +30,6 @@ exports.postById = async (req, res, next, id) => {
  * @description Handling get request which fetch single post by postId
  */
 exports.getPost = async (req, res, next) => {
-  //console.log("POST_", req.post);
   return res.json(req.post);
 };
 
@@ -41,6 +40,25 @@ exports.getPost = async (req, res, next) => {
 exports.getPosts = async (req, res, next) => {
   try {
     const posts = await Post.find({ status: true })
+      .populate("postedBy", "_id name")
+      .populate("comments", "text created")
+      .populate("comments.postedBy", "_id name")
+      .select("_id title body created likes photo status")
+      .sort({ created: -1 });
+    res.json({ posts });
+  } catch (error) {
+    console.log("Error while fetching posts", error);
+    res.status(422).json({ msg: "Error while fetching posts" });
+  }
+};
+
+/**
+ * @function middleware
+ * @description Handling get request which fetch all posts FOR ADMIN  
+ */
+exports.getPostsForAdmin = async (req, res, next) => {
+  try {
+    const posts = await Post.find()
       .populate("postedBy", "_id name")
       .populate("comments", "text created")
       .populate("comments.postedBy", "_id name")

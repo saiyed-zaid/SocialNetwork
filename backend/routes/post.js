@@ -25,6 +25,24 @@ router.get("/api/posts", postController.getPosts);
 
 /**
  * @function get
+ * @description Handling get request which fetch all posts FOR ADMIN
+ * @param {String} path of router
+ * @param {property} property getPosts
+ */
+router.get(
+  "/api/admin/posts",
+  auth_check,
+  (req, res, next) => {
+    if (req.auth.role != "admin") {
+      return res.json("Route access DENIED.");
+    }
+    next();
+  },
+  postController.getPostsForAdmin
+);
+
+/**
+ * @function get
  * @description Handling get request which fetch all posts by userId
  * @param {String} path of router
  * @param {property} property getPostsByUser

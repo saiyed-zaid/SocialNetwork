@@ -24,9 +24,19 @@ export const create = async (userId, token, post) => {
 /**
  * For Listing All the Posts
  */
-export const list = async () => {
-  const posts = await fetch(`${process.env.REACT_APP_API_URL}/api/posts`, {
-    method: "GET"
+export const list = async (isAdmin = false, token = null) => {
+  var url = `${process.env.REACT_APP_API_URL}/api/posts`;
+  if (isAdmin && token) {
+    url = `${process.env.REACT_APP_API_URL}/api/admin/posts`;
+  }
+
+  const posts = await fetch(url, {
+    method: "GET",
+    headers: {
+      Accept: "application/json",
+      "Content-Type": "Application/json",
+      Authorization: `Bearer ${token}`
+    }
   });
   return await posts.json({ posts });
 };
