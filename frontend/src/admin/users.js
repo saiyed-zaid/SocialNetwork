@@ -244,10 +244,10 @@ class Users extends Component {
         <table class="table table-hover text-light" id="usersTable">
           <thead>
             <tr>
-              <th scope="col" style={{ widht: "10px" }}>
+              <th scope="col" style={{ width: "10px" }}>
                 No
               </th>
-              <th scope="col">Image</th>
+              <th scope="col" style={{ width: "15px" }}>Image</th>
               <th scope="col">Name</th>
               <th scope="col">About</th>
               <th scope="col">Role</th>

@@ -106,7 +106,7 @@ class SinglePost extends Component {
       <div>
         <div>
           <img
-            className="img-thumbnail p-0"
+            className="img-thumbnail p-0 rounded-0"
             src={`${process.env.REACT_APP_API_URL}/${
               post.photo ? post.photo.path : DefaultPost
             }`}
@@ -125,26 +125,27 @@ class SinglePost extends Component {
               &nbsp; {likes > 1 ? "likes" : "like"}
             </h5>
           ) : (
-            <h5 onClick={this.likeToggle} style={{color:'#ffff'}}>
+            <h5 onClick={this.likeToggle} style={{ color: "#ffff" }}>
               <i className="fa fa-heart-o"> </i>
               &nbsp;{likes}&nbsp;{likes > 1 ? "likes" : "like"}
             </h5>
           )}
-          <div style={{ color: "white" }}>
+          <div className="text-light">
             <h3>{post.title}</h3>
-            <h4 className="lead">
+            <h4 className="lead pt-2 pb-2">
               <small>
                 {" "}
                 <span className=" font-italic" style={{ fontSize: "12px" }}>
-                  Posted By <Link style={{color:'#a59413'}} to={`${posterId}`}>{posterName}</Link> on{" "}
-                  {new Date(post.created).toDateString()}
+                  Posted By{" "}
+                  <Link style={{ color: "#a59413" }} to={`${posterId}`}>
+                    {posterName}
+                  </Link>{" "}
+                  on {new Date(post.created).toDateString()}
                 </span>
               </small>
             </h4>
           </div>
-          <p className="card-text">
-            {post.body}
-          </p>
+          <p className="card-text">{post.body}</p>
 
           <div className="d-inline-block">
             <Link to="/" className="btn btn-raised btn-primary mr-1">

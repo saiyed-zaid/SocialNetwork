@@ -51,6 +51,10 @@ const PostSchema = new Schema({
   status: {
     type: Boolean,
     default: true
+  },
+  disabledBy: {
+    type: String,
+    default: ""
   }
 });
 

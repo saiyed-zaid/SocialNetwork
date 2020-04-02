@@ -34,7 +34,7 @@ class Posts extends Component {
    */
   renderPosts = posts => {
     return (
-      <div className="row m-0">
+      <div className="row">
         {posts.map((post, i) => {
           // const posterId = post.postedBy ? `/user/${post.postedBy._id}` : "";
           // const posterName = post.postedBy ? post.postedBy.name : "Unknown";
@@ -72,7 +72,7 @@ class Posts extends Component {
     const { posts } = this.state;
 
     return (
-      <div className="container-fluid p-0">
+      <div className="container-fluid p-0 m-0">
         {!posts.length ? <PageLoader /> : this.renderPosts(posts)}
       </div>
     );

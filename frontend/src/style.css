@@ -159,10 +159,9 @@ div.like-box:hover .likes {
   }
 } */
 
-.btn{
+.btn {
   box-shadow: 0.1em 0.1em 0.3em rgba(0, 0, 0, 0.7);
   transition: all 0.3s ease-in-out;
-
 }
 .btn-primary {
   /*  border-image: linear-gradient(
@@ -199,6 +198,14 @@ div.like-box:hover .likes {
   background-color: #03a9f4 !important;
   color: #ffff !important;
 }
+.btn-custom {
+  color: #ffff !important;
+}
+.btn-custom:hover {
+  background-color: #6c757d !important;
+  color: #ffff !important;
+}
+
 .custom-post-display {
   display: flex;
   justify-content: center;
@@ -218,10 +225,6 @@ div.like-box:hover .likes {
 }
 .comment-block:hover .btn-delete {
   background-color: #f44336;
-  color: #ffff !important;
-}
-.btn-custom:hover {
-  background-color: #6c757d !important;
   color: #ffff !important;
 }
 
@@ -390,4 +393,23 @@ a:hover {
     width: 100%;
     background-position: 0% 50%;
   }
+}
+.close-notification{
+  animation-name:  anim-close;
+  animation-duration: 0.3s;
+  animation-delay: 15s;
+  animation-fill-mode: forwards;
+}
+@keyframes anim-close{
+  from{
+    transform: translateX(0%);
+  }
+  to{
+    transform: translateX(100%);
+  }
+}
+
+.fa::before{
+  height:20px;
+  width:20px;
 }

@@ -56,8 +56,8 @@ class Posts extends Component {
     if (answer) {
       this.deletePost(postId);
       let getRow = document.getElementById(postId);
-      console.log('row',getRow,postId);
-      
+      console.log("row", getRow, postId);
+
       if (getRow) {
         getRow.addEventListener("animationend", () => {
           getRow.parentNode.removeChild(getRow);
@@ -77,6 +77,8 @@ class Posts extends Component {
   };
 
   handlePostStatusChange = event => {
+    const data = new FormData();
+
     const index = event.target.getAttribute("data-index");
     const postId = this.state.posts[index]._id;
     if (!postId) {
@@ -87,11 +89,12 @@ class Posts extends Component {
 
     if (dataToUpdate[index].status) {
       dataToUpdate[index].status = false;
+      data.append("disabledBy", isAuthenticated().user._id);
     } else {
       dataToUpdate[index].status = true;
+      data.append("disabledBy", null);
     }
 
-    const data = new FormData();
     data.append("status", dataToUpdate[index].status);
 
     update(postId, isAuthenticated().user.token, data)
@@ -180,23 +183,40 @@ class Posts extends Component {
           <h4>Posts</h4>
         </div>
         {/* Toast */}
-        <Toast
-          status={this.state.toastPopup ? "toast fade show" : "toast fade hide"}
-          type={
-            this.state.toastPopup ? this.state.toastType : this.state.toastType
-          }
-          msg={
-            this.state.toastPopup ? this.state.toastMsg : this.state.toastMsg
-          }
-        />
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            position: "fixed",
+            bottom: "0",
+            right: "0",
+            zIndex: "111"
+          }}
+        >
+          <Toast
+            status={
+              this.state.toastPopup ? "toast fade show" : "toast fade hide"
+            }
+            type={
+              this.state.toastPopup
+                ? this.state.toastType
+                : this.state.toastType
+            }
+            msg={
+              this.state.toastPopup ? this.state.toastMsg : this.state.toastMsg
+            }
+          />
+        </div>
         {/* Toast / */}
-        <table class="table table-hover" style={{ color: "#fff" }}>
+        <table class="table table-hover text-light">
           <thead>
             <tr>
-              <th scope="col" style={{ widht: "10px" }}>
+              <th scope="col" style={{ width: "10px" }}>
                 No
               </th>
-              <th scope="col">Image</th>
+              <th scope="col" style={{ width: "15px" }}>
+                Image
+              </th>
               <th scope="col">Title</th>
               <th scope="col">Description</th>
               <th scope="col">Likes</th>
@@ -224,7 +244,14 @@ class Posts extends Component {
                     />
                   </td>
                   <td>{post.title}</td>
-                  <td>{post.body.substring(0, 10)}...</td>
+                  <td
+                    data-toggle="tooltip"
+                    data-html="true"
+                    data-placement="right"
+                    title={post.body}
+                  >
+                    {post.body.substring(0, 10)}...
+                  </td>
                   <td>{post.likes.length}</td>
                   <td> {post.comments.length}</td>
                   <td> {new Date(post.created).toDateString()}</td>

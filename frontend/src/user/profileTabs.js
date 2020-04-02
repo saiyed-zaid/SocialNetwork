@@ -1,18 +1,67 @@
 import React, { Component } from "react";
-import { Link } from "react-router-dom";
+import { Link, withRouter } from "react-router-dom";
 import DefaultProfile from "../images/avatar.jpg";
 import { isAuthenticated } from "../auth/index";
+import { update } from "../post/apiPost";
+import { unfollow } from "../user/apiUser";
 
 class ProfileTabs extends Component {
+  constructor(props) {
+    super(props);
+    console.log(this.props.match.params.userId);
+  }
+
+  handleUserUnfollow = e => {
+    const unfollowId = e.target.getAttribute("data-userId");
+    if (unfollowId) {
+      unfollow(
+        isAuthenticated().user._id,
+        isAuthenticated().user.token,
+        unfollowId
+      )
+        .then(result => {
+          console.log(result);
+          if (result) {
+            this.props.hasPostStatusUpdated(isAuthenticated().user._id);
+          }
+        })
+        .catch(err => {
+          if (err) {
+            console.log(err);
+          }
+        });
+    }
+  };
+
+  handlePostStatus = e => {
+    const formData = new FormData();
+    const postId = e.target.getAttribute("data-post-id");
+    const postStatus = e.target.getAttribute("data-post-status");
+    if (postStatus == "true") {
+      formData.set("status", false);
+      formData.append("disabledBy", isAuthenticated().user._id);
+    } else {
+      formData.set("status", true);
+      formData.append("disabledBy", "");
+    }
+
+    update(postId, isAuthenticated().user.token, formData)
+      .then(result => {
+        console.log(result);
+        this.props.hasPostStatusUpdated(isAuthenticated().user._id);
+      })
+      .catch(err => {
+        if (err) {
+          alert(err);
+        }
+      });
+  };
   render() {
     const { following, followers, posts } = this.props;
 
     return (
       <div>
-        <ul
-          className="nav nav-tabs"
-          style={{ backgroundColor: "#bdbdbd" }}
-        >
+        <ul className="nav nav-tabs" style={{ backgroundColor: "#bdbdbd" }}>
           <li className="nav-item col-md-4 pl-0 pr-0">
             <a
               className="nav-link active"
@@ -55,7 +104,7 @@ class ProfileTabs extends Component {
         </ul>
         <div className="tab-content" id="myTabContent">
           <div
-            className="tab-pane fade show active"
+            className="tab-pane fade show bg-dark active"
             id="following"
             role="tabpanel"
             aria-labelledby="following-tab"
@@ -76,8 +125,15 @@ class ProfileTabs extends Component {
                 return (
                   <div
                     key={i}
-                    className="p-2 m-0"
-                    style={{ borderRadius: "0px" }}
+                    className="p-2 mt-1"
+                    style={{
+                      borderRadius: "0px",
+                      display: "flex",
+                      justifyContent: "space-between",
+                      alignItems: "center",
+                      width: "300px",
+                      backgroundColor: "#2b3035"
+                    }}
                   >
                     <Link
                       to={`/user/${person._id}`}
@@ -100,32 +156,56 @@ class ProfileTabs extends Component {
                           e.target.src = DefaultProfile;
                         }}
                       />
-                      <h4 className="lead"> {person.name}</h4>
+                      <h4 className="lead text-light"> {person.name}</h4>
                     </Link>
+                    {this.props.match.params.userId ===
+                    isAuthenticated().user._id ? (
+                      <button
+                        className="btn btn-primary"
+                        data-userId={person._id}
+                        onClick={this.handleUserUnfollow}
+                      >
+                        Unfollow
+                      </button>
+                    ) : (
+                      ""
+                    )}
                   </div>
                 );
               })
             )}
           </div>
           <div
-            className="tab-pane fade"
+            className="tab-pane fade  bg-dark"
             id="followers"
             role="tabpanel"
             aria-labelledby="followers-tab"
           >
             <hr />
-
+            {console.log(followers)}
             {followers.length === 0 ? (
               <div>Currently No One Is Following You</div>
             ) : (
-              followers.map((person, i) => {
-                const imgPath = person.photo
-                  ? process.env.REACT_APP_API_URL + "/" + person.photo.path
+              followers.map((follower, i) => {
+                const imgPath = follower.user.photo
+                  ? process.env.REACT_APP_API_URL +
+                    "/" +
+                    follower.user.photo.path
                   : DefaultProfile;
                 return (
-                  <div key={i} className="card p-2 mt-1 ">
+                  <div
+                    key={i}
+                    className="p-2 mt-1"
+                    style={{
+                      borderRadius: "0px",
+                      display: "flex",
+                      justifyContent: "space-between",
+                      alignItems: "center",
+                      width: "300px"
+                    }}
+                  >
                     <Link
-                      to={`/user/${person._id}`}
+                      to={`/user/${follower.user._id}`}
                       style={{
                         display: "flex",
                         justifyContent: "flex-start",
@@ -141,12 +221,12 @@ class ProfileTabs extends Component {
                         }}
                         className="float-left mr-2"
                         src={imgPath}
-                        alt={person.name}
+                        alt={follower.user.name}
                         onError={e => {
                           e.target.src = DefaultProfile;
                         }}
                       />
-                      <h4 className="lead"> {person.name}</h4>
+                      <h4 className="lead text-light"> {follower.user.name}</h4>
                     </Link>
                   </div>
                 );
@@ -154,7 +234,7 @@ class ProfileTabs extends Component {
             )}
           </div>
           <div
-            className="tab-pane fade"
+            className="tab-pane fade bg-dark"
             id="posts"
             role="tabpanel"
             aria-labelledby="posts-tab"
@@ -167,19 +247,40 @@ class ProfileTabs extends Component {
                 return (
                   <div
                     key={i}
-                    className=" p-2 mt-1"
-                    style={{ borderRadius: "0px" }}
+                    className="p-2 mt-1"
+                    style={{
+                      borderRadius: "0px",
+                      display: "flex",
+                      justifyContent: "space-between",
+                      alignItems: "center",
+                      width: "300px",
+                      backgroundColor: "#2b3035"
+                    }}
                   >
                     <Link
                       to={`/post/${post._id}`}
                       style={{
-                        display: "flex",
-                        justifyContent: "flex-start",
                         textDecoration: "none"
                       }}
                     >
-                      <h4 className="lead"> {post.title}</h4>
+                      <h4 className="lead text-light"> {post.title}</h4>
                     </Link>
+                    {this.props.match.params.userId ===
+                    isAuthenticated().user._id ? (
+                      <i
+                        className={
+                          post.status
+                            ? "fa fa-eye text-light btn btn-primary"
+                            : "fa fa-eye-slash text-light btn btn-primary"
+                        }
+                        style={{ cursor: "pointer",width:'95px' }}
+                        data-post-id={post._id}
+                        data-post-status={post.status}
+                        onClick={this.handlePostStatus}
+                      ></i>
+                    ) : (
+                      ""
+                    )}
                   </div>
                 );
               })
@@ -191,4 +292,4 @@ class ProfileTabs extends Component {
   }
 }
 
-export default ProfileTabs;
+export default withRouter(ProfileTabs);

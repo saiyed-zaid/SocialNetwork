@@ -50,11 +50,12 @@ exports.getPosts = async (req, res, next) => {
     console.log("Error while fetching posts", error);
     res.status(422).json({ msg: "Error while fetching posts" });
   }
+  4;
 };
 
 /**
  * @function middleware
- * @description Handling get request which fetch all posts FOR ADMIN  
+ * @description Handling get request which fetch all posts FOR ADMIN
  */
 exports.getPostsForAdmin = async (req, res, next) => {
   try {
@@ -77,9 +78,30 @@ exports.getPostsForAdmin = async (req, res, next) => {
  */
 exports.getPostsByUser = async (req, res, next) => {
   try {
-    const posts = await Post.find({ postedBy: req.profile._id })
+    const posts = await Post.find({
+      $or: [
+        {
+          $and: [
+            { postedBy: req.profile._id },
+            { disabledBy: String(req.profile._id) },
+            { status: false }
+          ]
+        },
+        {
+          $and: [
+            { postedBy: req.profile._id },
+            {
+              disabledBy: ""
+            },
+            {
+              status: true
+            }
+          ]
+        }
+      ]
+    })
       .populate("postedBy", "_id name role")
-      .select("_id title body created likes")
+      .select("_id title body created likes status")
       .sort("_created");
     if (posts.length == 0) {
       return res.json({
@@ -176,6 +198,7 @@ exports.deletePost = async (req, res, next) => {
  */
 exports.updatePost = async (req, res, next) => {
   let post = req.post;
+
   const prevPostPhoto = post.photo;
   if (!req.file) {
     req.file = post.photo;
@@ -196,7 +219,7 @@ exports.updatePost = async (req, res, next) => {
     res.json({ post });
   } catch (error) {
     res.json({
-      msg: "Error while updating profile"
+      msg: "Error while updating profile " + error
     });
   }
 };

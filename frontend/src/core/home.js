@@ -43,7 +43,6 @@ class Home extends Component {
 
     return (
       <div className="m-3">
-        {/* <Notification /> */}
         <Notification />
         
         {/* Loding Post Begin */}

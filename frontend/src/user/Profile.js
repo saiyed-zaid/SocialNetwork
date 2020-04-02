@@ -17,10 +17,11 @@ class Profile extends Component {
       redirectToSignin: false,
       following: false,
       error: "",
-      posts: []
+      posts: [],
+      hasPostStatusUpdated: false 
     };
   }
-
+ 
   checkFollow = user => {
     const jwt = isAuthenticated();
     const match = user.followers.find(follower => {
@@ -82,7 +83,7 @@ class Profile extends Component {
     const userId = this.props.match.params.userId;
     this.init(userId);
   }
-
+ 
   componentWillReceiveProps(props) {
     const userId = this.props.match.params.userId;
     this.init(userId);
@@ -150,7 +151,7 @@ class Profile extends Component {
                         to={`/user/edit/${user._id}`}
                         className="btn btn-outline-secondary mr-2 btn-custom"
                       >
-                        Edit Profile &nbsp;<i className="fa fa-edit "></i>
+                        Edit Profile &nbsp;<i className="fa fa-edit"></i>
                       </Link>
                     ) : (
                       <>
@@ -158,14 +159,14 @@ class Profile extends Component {
                           to={`/user/edit/${user._id}`}
                           className="btn btn-outline-secondary mr-2 btn-custom"
                         >
-                          Edit Profile &nbsp;<i className="fa fa-edit "></i>
+                          Edit Profile &nbsp;<i className="fa fa-edit"></i>
                         </Link>
                         <Link
                           to={`/post/create`}
                           className="btn btn-outline-secondary mr-2 btn-custom"
                         >
                           Create Post &nbsp;
-                          <i className="fa fa-plus-square"></i>
+                          <i className="fa fa-plus"></i>
                         </Link>
                         <DeleteUser userId={user._id} />
                       </>
@@ -189,6 +190,7 @@ class Profile extends Component {
               following={user.following}
               posts={posts}
               error={error}
+              hasPostStatusUpdated = {this.init}
             />
           </div>
         </div>

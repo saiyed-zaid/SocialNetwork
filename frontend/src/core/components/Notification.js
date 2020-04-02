@@ -20,7 +20,7 @@ class Notification extends React.Component {
             }
           });
           if (this.state.hasNewFollow) {
-            setTimeout(this.followStatusChange, 30000);
+            setTimeout(this.followStatusChange, 16000);
           }
         }
       })
