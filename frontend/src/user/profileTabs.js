@@ -4,11 +4,11 @@ import DefaultProfile from "../images/avatar.jpg";
 import { isAuthenticated } from "../auth/index";
 import { update } from "../post/apiPost";
 import { unfollow } from "../user/apiUser";
+import Toast from "../components/Toast";
 
 class ProfileTabs extends Component {
   constructor(props) {
     super(props);
-    console.log(this.props.match.params.userId);
   }
 
   handleUserUnfollow = e => {
@@ -156,7 +156,7 @@ class ProfileTabs extends Component {
                           e.target.src = DefaultProfile;
                         }}
                       />
-                      <h4 className="lead text-light"> {person.name}</h4>
+                      <h5 style={{color:'rgb(230, 207, 35)'}}> {person.name}</h5>
                     </Link>
                     {this.props.match.params.userId ===
                     isAuthenticated().user._id ? (
@@ -270,10 +270,10 @@ class ProfileTabs extends Component {
                       <i
                         className={
                           post.status
-                            ? "fa fa-eye text-light btn btn-primary"
-                            : "fa fa-eye-slash text-light btn btn-primary"
+                            ? "fa fa-eye text-light"
+                            : "fa fa-eye-slash text-light"
                         }
-                        style={{ cursor: "pointer",width:'95px' }}
+                        style={{ cursor: "pointer"}}
                         data-post-id={post._id}
                         data-post-status={post.status}
                         onClick={this.handlePostStatus}

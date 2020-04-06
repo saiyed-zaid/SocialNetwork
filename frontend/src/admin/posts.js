@@ -92,7 +92,7 @@ class Posts extends Component {
       data.append("disabledBy", isAuthenticated().user._id);
     } else {
       dataToUpdate[index].status = true;
-      data.append("disabledBy", null);
+      data.append("disabledBy", "");
     }
 
     data.append("status", dataToUpdate[index].status);
@@ -219,6 +219,7 @@ class Posts extends Component {
               </th>
               <th scope="col">Title</th>
               <th scope="col">Description</th>
+              <th scope="col">Author</th>
               <th scope="col">Likes</th>
               <th scope="col">Comments</th>
               <th scope="col">Posted</th>
@@ -252,6 +253,7 @@ class Posts extends Component {
                   >
                     {post.body.substring(0, 10)}...
                   </td>
+                  <td>{post.postedBy.name}</td>
                   <td>{post.likes.length}</td>
                   <td> {post.comments.length}</td>
                   <td> {new Date(post.created).toDateString()}</td>

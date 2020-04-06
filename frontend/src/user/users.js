@@ -32,7 +32,7 @@ class Users extends Component {
       {users.map((user, i) =>
         user.role === "subscriber" ? (
           <Card
-            class="card col-md-0"
+            className="card col-md-0"
             key={i}
             style={{ width: "18rem" }}
             img={

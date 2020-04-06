@@ -18,10 +18,10 @@ class Profile extends Component {
       following: false,
       error: "",
       posts: [],
-      hasPostStatusUpdated: false 
+      hasPostStatusUpdated: false
     };
   }
- 
+
   checkFollow = user => {
     const jwt = isAuthenticated();
     const match = user.followers.find(follower => {
@@ -83,7 +83,7 @@ class Profile extends Component {
     const userId = this.props.match.params.userId;
     this.init(userId);
   }
- 
+
   componentWillReceiveProps(props) {
     const userId = this.props.match.params.userId;
     this.init(userId);
@@ -139,33 +139,30 @@ class Profile extends Component {
                 {isAuthenticated().user &&
                 isAuthenticated().user._id === user._id ? (
                   <div
-                    className={this.actionButton}
-                    style={{
-                      display: "flex",
-                      flexWrap: "wrap",
-                      minHeight: "20px"
-                    }}
+                    className="btn-group"
+                    role="group"
+                    aria-label="Basic example"
                   >
                     {isAuthenticated().user.role === "admin" ? (
                       <Link
                         to={`/user/edit/${user._id}`}
-                        className="btn btn-outline-secondary mr-2 btn-custom"
+                        className="btn btn-secondary btn-custom"
                       >
-                        Edit Profile &nbsp;<i className="fa fa-edit"></i>
+                        Edit Profile&nbsp;<i className="fa fa-edit"></i>
                       </Link>
                     ) : (
                       <>
                         <Link
                           to={`/user/edit/${user._id}`}
-                          className="btn btn-outline-secondary mr-2 btn-custom"
+                          className="btn btn-outline-secondary btn-custom"
                         >
-                          Edit Profile &nbsp;<i className="fa fa-edit"></i>
+                          Edit Profile&nbsp;<i className="fa fa-edit"></i>
                         </Link>
                         <Link
                           to={`/post/create`}
-                          className="btn btn-outline-secondary mr-2 btn-custom"
+                          className="btn btn-outline-secondary btn-custom"
                         >
-                          Create Post &nbsp;
+                          Create Post&nbsp;
                           <i className="fa fa-plus"></i>
                         </Link>
                         <DeleteUser userId={user._id} />
@@ -183,14 +180,14 @@ class Profile extends Component {
           </div>
         )}
         <div>
-          <div className="col md-12 mt-5 mb-5">
+          <div className="col-md-12 mb-2">
             <hr />
             <ProfileTabs
               followers={user.followers}
               following={user.following}
               posts={posts}
               error={error}
-              hasPostStatusUpdated = {this.init}
+              hasPostStatusUpdated={this.init}
             />
           </div>
         </div>

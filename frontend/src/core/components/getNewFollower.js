@@ -1,9 +1,15 @@
 import React from "react";
 import Toast from "../../components/Toast";
 
-const handler = e => {
-  e.target.parentNode.parentNode.parentNode.classList.replace("show", "hide");
-};
+
+const customStyle = {
+  display: "flex",
+  flexDirection: "column",
+  position: "fixed",
+  bottom: "0",
+  right: "0",
+  zIndex: "111",
+  };
 
 function Follow(props) {
   if (props.test) {
@@ -12,16 +18,7 @@ function Follow(props) {
     }
   }
   return (
-    <div
-      style={{
-        display: "flex",
-        flexDirection: "column",
-        position: "fixed",
-        bottom: "0",
-        right: "0",
-        zIndex: "111"
-      }}
-    >
+    <div style={customStyle}  className="close-notification">
       {props.test.map(element => {
         return (
           <div>

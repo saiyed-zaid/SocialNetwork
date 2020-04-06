@@ -202,7 +202,7 @@ div.like-box:hover .likes {
   color: #ffff !important;
 }
 .btn-custom:hover {
-  background-color: #6c757d !important;
+  background-color: #003340 !important;
   color: #ffff !important;
 }
 
@@ -394,22 +394,33 @@ a:hover {
     background-position: 0% 50%;
   }
 }
-.close-notification{
-  animation-name:  anim-close;
+.close-notification {
+  animation-name: anim-close;
   animation-duration: 0.3s;
   animation-delay: 15s;
   animation-fill-mode: forwards;
 }
-@keyframes anim-close{
-  from{
+@keyframes anim-close {
+  from {
     transform: translateX(0%);
   }
-  to{
+  to {
     transform: translateX(100%);
   }
 }
 
-.fa::before{
-  height:20px;
-  width:20px;
+.fa::before {
+  height: 20px;
+  width: 20px;
+}
+.switch {
+  height: 18px;
+  width: 40px;
+}
+.switch-toggle {
+  height: 15px;
+  width: 14px;
+}
+.off{
+  background-color: #ac5b5b  !important;
 }

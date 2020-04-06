@@ -231,15 +231,30 @@ class Users extends Component {
           <h4>Users</h4>
         </div>
         {/* Toast */}
-        <Toast
-          status={this.state.toastPopup ? "toast fade show" : "toast fade hide"}
-          type={
-            this.state.toastPopup ? this.state.toastType : this.state.toastType
-          }
-          msg={
-            this.state.toastPopup ? this.state.toastMsg : this.state.toastMsg
-          }
-        />
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            position: "fixed",
+            bottom: "0",
+            right: "0",
+            zIndex: "111"
+          }}
+        >
+          <Toast
+            status={
+              this.state.toastPopup ? "toast fade show" : "toast fade hide"
+            }
+            type={
+              this.state.toastPopup
+                ? this.state.toastType
+                : this.state.toastType
+            }
+            msg={
+              this.state.toastPopup ? this.state.toastMsg : this.state.toastMsg
+            }
+          />
+        </div>
         {/* Toast / */}
         <table class="table table-hover text-light" id="usersTable">
           <thead>
@@ -247,7 +262,9 @@ class Users extends Component {
               <th scope="col" style={{ width: "10px" }}>
                 No
               </th>
-              <th scope="col" style={{ width: "15px" }}>Image</th>
+              <th scope="col" style={{ width: "15px" }}>
+                Image
+              </th>
               <th scope="col">Name</th>
               <th scope="col">About</th>
               <th scope="col">Role</th>

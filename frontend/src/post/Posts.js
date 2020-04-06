@@ -36,17 +36,17 @@ class Posts extends Component {
     return (
       <div className="row">
         {posts.map((post, i) => {
-          // const posterId = post.postedBy ? `/user/${post.postedBy._id}` : "";
-          // const posterName = post.postedBy ? post.postedBy.name : "Unknown";
+          //const posterId = post.postedBy ? `/user/${post.postedBy._id}` : "";
+          const posterName = post.postedBy ? post.postedBy.name : "Unknown";
           // const imgPath = post.photo ? post.photo.path : DefaultPost;
           return (
             <Card
-              class="card"
+              className="card"
               ckey={i}
-              style={{ width: "18rem" }}
+              style={{ width: "20rem" }}
               img={
                 <img
-                  className="card-img-top "
+                  className="card-img-top"
                   src={`${process.env.REACT_APP_API_URL}/${
                     post.photo ? post.photo.path : DefaultPost
                   }`}
@@ -54,8 +54,9 @@ class Posts extends Component {
                   alt={post.name}
                 />
               }
+              postedBy={posterName}
               title={post.title}
-              text={post.body.substring(0, 20) + "..."}
+              text={post.body.substring(0, 50) + "..."}
             >
               <label className="brd-grdnt rounded" style={{ padding: "1px" }}>
                 <Link to={`/post/${post._id}`} className="btn btn-primary">
