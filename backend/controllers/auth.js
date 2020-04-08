@@ -17,7 +17,7 @@ exports.postSignup = async (req, res, next) => {
   if (!errs.isEmpty()) {
     const err = errs.array()[0].msg;
     return res.status(422).json({
-      err
+      err,
     });
   }
   try {
@@ -28,11 +28,11 @@ exports.postSignup = async (req, res, next) => {
     const user = new User({
       name: req.body.name,
       email: req.body.email,
-      password: md5(req.body.password)
+      password: md5(req.body.password),
     });
     user
       .save()
-      .then(result => {
+      .then((result) => {
         //console.log("CREATED USER", user._id);
         //console.log("TYPE", typeof user._id);
 
@@ -81,7 +81,7 @@ exports.postSignup = async (req, res, next) => {
         }
         /* Creating Directory For This User OVER */
       })
-      .catch(err => {
+      .catch((err) => {
         console.log("Error While Creating user", err);
       });
 
@@ -99,21 +99,20 @@ exports.postSignin = async (req, res, next) => {
   const userExists = await User.findOne({ email: req.body.email });
   if (!userExists) {
     return res.status(422).json({
-      msg: "User with this email does not exists",
-      user: {}
+      err: "User with this email does not exists",
+      user: {},
     });
   }
   if (userExists.password !== md5(req.body.password)) {
     return res.status(422).json({
-      msg: "Incorrect password.",
-      user: {}
+      err: "Incorrect password.",
+      user: {},
     });
   }
-
   if (!userExists.status) {
     return res.status(422).json({
-      msg: "Your account is deactiveted, Please contact admin.",
-      user: {}
+      err: "Your account is deactiveted, Please contact admin.",
+      user: {},
     });
   }
 
@@ -124,21 +123,21 @@ exports.postSignin = async (req, res, next) => {
       name: userExists.name,
       email: userExists.email,
       role: userExists.role,
-      token: token
+      token: token,
     },
     process.env.JWT_KEY,
     { expiresIn: "1h" }
   );
   /* res.cookie("t", token, { expire: new Date() + 9999 }); */
   res.json({
-    message: "Logged in!",
+    msg: "Logged in!",
     user: {
       _id: userExists._id,
       name: userExists.name,
       email: userExists.email,
       role: userExists.role,
-      token: token
-    }
+      token: token,
+    },
   });
 };
 exports.forgetPassword = async (req, res, next) => {
@@ -149,7 +148,7 @@ exports.forgetPassword = async (req, res, next) => {
     }
     //sign token
     const token = jwt.sign({ _id: user._id }, process.env.JWT_KEY, {
-      expiresIn: 300
+      expiresIn: 300,
     });
 
     const emailData = {
@@ -157,12 +156,12 @@ exports.forgetPassword = async (req, res, next) => {
       to: email,
       subject: "Password Reset Instructions",
       text: `Please use the following link to reset your password: ${process.env.CLIENT_URL}/reset-password/${token}`,
-      html: `<p>Please use the following link to reset your password:</p> <a href='${process.env.CLIENT_URL}/reset-password/${token}'>click here.</a>`
+      html: `<p>Please use the following link to reset your password:</p> <a href='${process.env.CLIENT_URL}/reset-password/${token}'>click here.</a>`,
     };
 
     user.updateOne(
       {
-        resetPasswordLink: token
+        resetPasswordLink: token,
       },
       (err, data) => {
         if (err) {
@@ -170,7 +169,7 @@ exports.forgetPassword = async (req, res, next) => {
         } else {
           sendMail(emailData);
           return res.status(200).json({
-            message: `Email has been sent to ${email}. Follow the instructions to reset your password.`
+            message: `Email has been sent to ${email}. Follow the instructions to reset your password.`,
           });
         }
       }
@@ -183,7 +182,7 @@ exports.resetPassword = async (req, res) => {
   if (!errs.isEmpty()) {
     const err = errs.array()[0].msg;
     return res.status(422).json({
-      msg: err
+      msg: err,
     });
   }
   const { resetPasswordLink, newPassword } = req.body;
@@ -193,7 +192,7 @@ exports.resetPassword = async (req, res) => {
 
     const updatedFields = {
       password: md5(newPassword),
-      resetPasswordLink: ""
+      resetPasswordLink: "",
     };
     user.updated = Date.now();
 
@@ -201,7 +200,7 @@ exports.resetPassword = async (req, res) => {
 
     await userData.save();
     res.json({
-      message: `Great! Now you can login with your new password.`
+      message: `Great! Now you can login with your new password.`,
     });
   } catch (error) {
     return res.status("401").json(error);
@@ -218,7 +217,7 @@ exports.socialLogin = (req, res, next) => {
       user.save();
       // generate a token with user id and secret
       const token = jwt.sign({ _id: user._id }, process.env.JWT_KEY, {
-        expiresIn: "1h"
+        expiresIn: "1h",
       });
       // return response with user and token to frontend client
       const { _id, name, email } = user;
@@ -231,7 +230,7 @@ exports.socialLogin = (req, res, next) => {
       user.save();
       // generate a token with user id and secret
       const token = jwt.sign({ _id: user._id }, process.env.JWT_KEY, {
-        expiresIn: "1h"
+        expiresIn: "1h",
       });
       // return response with user and token to frontend client
       const { _id, name, email } = user;

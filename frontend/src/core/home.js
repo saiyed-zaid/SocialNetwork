@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import Posts from "../post/posts";
 import  Notification  from "./components/Notification";
+import Chattab from "../components/chatTab";
 class Home extends Component {
   constructor() {
     super();
@@ -44,7 +45,10 @@ class Home extends Component {
     return (
       <div className="m-3">
         <Notification />
-        
+        <div id="chat-tab" className="d-flex justify-content-end align-items-end chat-box">
+
+        {/* <Chattab username="zaid"/> */}
+        </div>
         {/* Loding Post Begin */}
         <div>
           <div className="jumbotron p-0">

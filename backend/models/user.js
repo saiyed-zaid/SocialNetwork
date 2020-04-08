@@ -4,66 +4,87 @@ const UserSchema = new Schema({
   name: {
     type: String,
     trim: true,
-    required: true
+    required: true,
   },
   about: {
     type: String,
-    default: "-"
+    default: "-",
   },
   email: {
     type: String,
     lowercase: true,
-    required: true
+    required: true,
   },
   password: {
     type: String,
-    required: true
+    required: true,
   },
   created: {
     type: Date,
-    default: Date.now
+    default: Date.now,
   },
   updated: {
-    type: Date
+    type: Date,
   },
   photo: {
-    type: Object
+    type: Object,
   },
   following: [
     {
       type: Schema.Types.ObjectId,
-      ref: "User"
-    }
+      ref: "User",
+    },
   ],
   followers: [
     {
       user: {
         type: Schema.Types.ObjectId,
-        ref: "User"
+        ref: "User",
       },
       isNewUser: {
         type: Boolean,
         required: true,
-        default: true
+        default: true,
       },
       followedFrom: {
         type: Date,
-        default: Date.now
-      }
-    }
+        default: Date.now,
+      },
+    },
+  ],
+  messages: [
+    {
+      message: {
+        type: String,
+        required: true,
+        trim: true,
+      },
+      from: {
+        type: Schema.Types.ObjectId,
+        required: true,
+      },
+      date: {
+        type: Date,
+        default: Date.now,
+      },
+      isNewMsg: {
+        type: Boolean,
+        default: true,
+      },
+    },
   ],
   resetPasswordLink: {
     type: String,
-    default: ""
+    default: "",
   },
   role: {
     type: String,
-    default: "subscriber"
+    default: "subscriber",
   },
   status: {
     type: Boolean,
-    default: true
-  }
+    default: true,
+  },
 });
 
 module.exports = mongoose.model("User", UserSchema);

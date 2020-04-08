@@ -11,7 +11,7 @@ class ProfileTabs extends Component {
     super(props);
   }
 
-  handleUserUnfollow = e => {
+  handleUserUnfollow = (e) => {
     const unfollowId = e.target.getAttribute("data-userId");
     if (unfollowId) {
       unfollow(
@@ -19,13 +19,12 @@ class ProfileTabs extends Component {
         isAuthenticated().user.token,
         unfollowId
       )
-        .then(result => {
-          console.log(result);
+        .then((result) => {
           if (result) {
             this.props.hasPostStatusUpdated(isAuthenticated().user._id);
           }
         })
-        .catch(err => {
+        .catch((err) => {
           if (err) {
             console.log(err);
           }
@@ -33,7 +32,7 @@ class ProfileTabs extends Component {
     }
   };
 
-  handlePostStatus = e => {
+  handlePostStatus = (e) => {
     const formData = new FormData();
     const postId = e.target.getAttribute("data-post-id");
     const postStatus = e.target.getAttribute("data-post-status");
@@ -46,16 +45,16 @@ class ProfileTabs extends Component {
     }
 
     update(postId, isAuthenticated().user.token, formData)
-      .then(result => {
-        console.log(result);
+      .then((result) => {
         this.props.hasPostStatusUpdated(isAuthenticated().user._id);
       })
-      .catch(err => {
+      .catch((err) => {
         if (err) {
           alert(err);
         }
       });
   };
+
   render() {
     const { following, followers, posts } = this.props;
 
@@ -131,15 +130,14 @@ class ProfileTabs extends Component {
                       display: "flex",
                       justifyContent: "space-between",
                       alignItems: "center",
-                      width: "300px",
-                      backgroundColor: "#2b3035"
+                      backgroundColor: "#2b3035",
                     }}
                   >
                     <Link
                       to={`/user/${person._id}`}
                       style={{
                         display: "flex",
-                        justifyContent: "flex-start"
+                        flex: "1",
                       }}
                     >
                       <img
@@ -147,26 +145,39 @@ class ProfileTabs extends Component {
                           borderRadius: "50%",
                           border: "none",
                           height: "30px",
-                          width: "30px"
+                          width: "30px",
                         }}
                         className="float-left mr-2 "
                         src={imgPath}
                         alt={person.name}
-                        onError={e => {
+                        onError={(e) => {
                           e.target.src = DefaultProfile;
                         }}
                       />
-                      <h5 style={{color:'rgb(230, 207, 35)'}}> {person.name}</h5>
+                      <h5 style={{ color: "rgb(230, 207, 35)" }}>
+                        {" "}
+                        {person.name}
+                      </h5>
                     </Link>
                     {this.props.match.params.userId ===
                     isAuthenticated().user._id ? (
-                      <button
-                        className="btn btn-primary"
-                        data-userId={person._id}
-                        onClick={this.handleUserUnfollow}
-                      >
-                        Unfollow
-                      </button>
+                      <>
+                        <button
+                          className="btn btn-primary"
+                          data-userId={person._id}
+                          onClick={this.handleUserUnfollow}
+                        >
+                          Unfollow
+                        </button>
+                        <button
+                          className="btn btn-primary"
+                          data-userId={person._id}
+                          data-name={person.name}
+                          onClick = {this.props.hasChatBoxDisplay}
+                        >
+                          Msg
+                        </button>
+                      </>
                     ) : (
                       ""
                     )}
@@ -182,7 +193,6 @@ class ProfileTabs extends Component {
             aria-labelledby="followers-tab"
           >
             <hr />
-            {console.log(followers)}
             {followers.length === 0 ? (
               <div>Currently No One Is Following You</div>
             ) : (
@@ -201,7 +211,7 @@ class ProfileTabs extends Component {
                       display: "flex",
                       justifyContent: "space-between",
                       alignItems: "center",
-                      width: "300px"
+                      width: "300px",
                     }}
                   >
                     <Link
@@ -209,7 +219,7 @@ class ProfileTabs extends Component {
                       style={{
                         display: "flex",
                         justifyContent: "flex-start",
-                        textDecoration: "none"
+                        textDecoration: "none",
                       }}
                     >
                       <img
@@ -217,12 +227,12 @@ class ProfileTabs extends Component {
                           borderRadius: "50%",
                           border: "none",
                           height: "30px",
-                          width: "30px"
+                          width: "30px",
                         }}
                         className="float-left mr-2"
                         src={imgPath}
                         alt={follower.user.name}
-                        onError={e => {
+                        onError={(e) => {
                           e.target.src = DefaultProfile;
                         }}
                       />
@@ -254,13 +264,13 @@ class ProfileTabs extends Component {
                       justifyContent: "space-between",
                       alignItems: "center",
                       width: "300px",
-                      backgroundColor: "#2b3035"
+                      backgroundColor: "#2b3035",
                     }}
                   >
                     <Link
                       to={`/post/${post._id}`}
                       style={{
-                        textDecoration: "none"
+                        textDecoration: "none",
                       }}
                     >
                       <h4 className="lead text-light"> {post.title}</h4>
@@ -273,7 +283,7 @@ class ProfileTabs extends Component {
                             ? "fa fa-eye text-light"
                             : "fa fa-eye-slash text-light"
                         }
-                        style={{ cursor: "pointer"}}
+                        style={{ cursor: "pointer" }}
                         data-post-id={post._id}
                         data-post-status={post.status}
                         onClick={this.handlePostStatus}

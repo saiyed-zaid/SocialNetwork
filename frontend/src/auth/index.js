@@ -4,19 +4,19 @@
  * @param {json} user
  *
  */
-export const signup = user => {
+export const signup = (user) => {
   return fetch(`${process.env.REACT_APP_API_URL}/api/signup`, {
     method: "POST",
     headers: {
       Accept: "application/json",
-      "Content-Type": "application/json"
+      "Content-Type": "application/json",
     },
-    body: JSON.stringify(user)
+    body: JSON.stringify(user),
   })
-    .then(response => {
+    .then((response) => {
       return response.json();
     })
-    .catch(err => console.log(err));
+    .catch((err) => console.log(err));
 };
 
 /**
@@ -24,19 +24,21 @@ export const signup = user => {
  *
  * @param {json} user
  */
-export const signin = user => {
+export const signin = (user) => {
   return fetch(`${process.env.REACT_APP_API_URL}/api/signin`, {
     method: "POST",
     headers: {
       Accept: "application/json",
-      "Content-Type": "application/json"
+      "Content-Type": "application/json",
     },
-    body: JSON.stringify(user)
+    body: JSON.stringify(user),
   })
-    .then(response => {
+    .then((response) => {
       return response.json();
     })
-    .catch(err => console.log(err));
+    .catch((err) => {
+      return err;
+    });
 };
 
 /**
@@ -64,20 +66,20 @@ export const authenticate = (jwt, next) => {
  *
  * @param {function} next
  */
-export const signout = next => {
+export const signout = (next) => {
   if (typeof window !== "undefined") {
     localStorage.removeItem("jwt");
   }
   next();
   return fetch(`${process.env.REACT_APP_API_URL}/api/signout`, {
-    method: "GET"
+    method: "GET",
   })
-    .then(response => {
+    .then((response) => {
       console.log("signout", response);
 
       return response.json();
     })
-    .catch(err => console.log(err));
+    .catch((err) => console.log(err));
 };
 
 /**
@@ -99,16 +101,16 @@ export const isAuthenticated = () => {
  *
  * @param {string} email
  */
-export const forgotPassword = async email => {
+export const forgotPassword = async (email) => {
   const maildata = await fetch(
     `${process.env.REACT_APP_API_URL}/api/forgot-password/`,
     {
       method: "PUT",
       headers: {
         Accept: "application/json",
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
       },
-      body: JSON.stringify({ email })
+      body: JSON.stringify({ email }),
     }
   );
   return await maildata.json();
@@ -119,16 +121,16 @@ export const forgotPassword = async email => {
  *
  * @param {json} resetInfo
  */
-export const resetPassword = async resetInfo => {
+export const resetPassword = async (resetInfo) => {
   const resetData = await fetch(
     `${process.env.REACT_APP_API_URL}/api/reset-password/`,
     {
       method: "PUT",
       headers: {
         Accept: "application/json",
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
       },
-      body: JSON.stringify(resetInfo)
+      body: JSON.stringify(resetInfo),
     }
   );
   return await resetData.json();
@@ -138,16 +140,16 @@ export const resetPassword = async resetInfo => {
  * Login With Google Api
  * @param {} user
  */
-export const socialLogin = async user => {
+export const socialLogin = async (user) => {
   const loginData = await fetch(
     `${process.env.REACT_APP_API_URL}/api/social-login/`,
     {
       method: "POST",
       headers: {
         Accept: "application/json",
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
       },
-      body: JSON.stringify(user)
+      body: JSON.stringify(user),
     }
   );
   return await loginData.json();

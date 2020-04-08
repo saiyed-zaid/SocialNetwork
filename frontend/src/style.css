@@ -424,3 +424,11 @@ a:hover {
 .off{
   background-color: #ac5b5b  !important;
 }
+.chat-box {
+  width: 100%;
+  z-index: 9999;
+  height: 100px;
+  position: absolute;
+  bottom: 0;
+  right: 0;
+}

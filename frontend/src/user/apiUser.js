@@ -14,8 +14,8 @@ export const read = async (userId, token) => {
       headers: {
         Accept: "application/json",
         "Content-Type": "Application/json",
-        Authorization: `Bearer ${token}`
-      }
+        Authorization: `Bearer ${token}`,
+      },
     }
   );
 
@@ -29,7 +29,7 @@ export const read = async (userId, token) => {
  */
 export const list = async () => {
   const users = await fetch(`${process.env.REACT_APP_API_URL}/api/users`, {
-    method: "GET"
+    method: "GET",
   });
   return await users.json({ users });
 };
@@ -48,8 +48,8 @@ export const remove = async (userId, token) => {
       headers: {
         Accept: "application/json",
         "Content-Type": "Application/json",
-        Authorization: `Bearer ${token}`
-      }
+        Authorization: `Bearer ${token}`,
+      },
     }
   );
   return await deleteUser.json();
@@ -69,9 +69,9 @@ export const update = async (userId, token, user) => {
       method: "PUT",
       headers: {
         Accept: "application/json",
-        Authorization: `Bearer ${token}`
+        Authorization: `Bearer ${token}`,
       },
-      body: user
+      body: user,
     }
   );
 
@@ -110,9 +110,9 @@ export const follow = async (userId, token, followId) => {
       headers: {
         Accept: "application/json",
         "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`
+        Authorization: `Bearer ${token}`,
       },
-      body: JSON.stringify({ userId, followId })
+      body: JSON.stringify({ userId, followId }),
     }
   );
 
@@ -134,9 +134,9 @@ export const unfollow = async (userId, token, unfollowId) => {
       headers: {
         Accept: "application/json",
         "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`
+        Authorization: `Bearer ${token}`,
       },
-      body: JSON.stringify({ userId, unfollowId })
+      body: JSON.stringify({ userId, unfollowId }),
     }
   );
 
@@ -157,10 +157,38 @@ export const findPeople = async (userId, token) => {
       headers: {
         Accept: "application/json",
         "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`
-      }
+        Authorization: `Bearer ${token}`,
+      },
     }
   );
 
   return await user.json();
+};
+
+/**
+ * Api For Fetching messages for user
+ *
+ * @param {string} userId   User Id Of The Logged In User
+ * @param {string} token    token Of The Logged In User
+ *
+ * @returns {json}
+ */
+export const fetchMessage = async (senderId, receiverId, token) => {
+  const messages = await fetch(
+    `${process.env.REACT_APP_API_URL}/api/user/messages`,
+    {
+      method: "POST",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "Application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({
+        sender: senderId,
+        receiver: receiverId,
+      }),
+    }
+  );
+
+  return await messages.json({ messages });
 };
