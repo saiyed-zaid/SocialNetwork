@@ -116,6 +116,20 @@ exports.postSignin = async (req, res, next) => {
     });
   }
 
+  /* Updatting isLoggedIn and lastLoggedIn fields */
+  User.updateOne(
+    { email: req.body.email },
+    { isLoggedIn: true, lastLoggedIn: Date.now() }
+  )
+    .then((result) => {
+      console.log("Logged in Flag updated");
+    })
+    .catch((err) => {
+      if (err) {
+        console.log("Loggedin flag not updated");
+      }
+    });
+
   let token;
   token = jwt.sign(
     {
@@ -128,7 +142,7 @@ exports.postSignin = async (req, res, next) => {
     process.env.JWT_KEY,
     { expiresIn: "1h" }
   );
-  /* res.cookie("t", token, { expire: new Date() + 9999 }); */
+
   res.json({
     msg: "Logged in!",
     user: {

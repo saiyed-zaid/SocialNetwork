@@ -157,6 +157,9 @@ class ProfileTabs extends Component {
                       <h5 style={{ color: "rgb(230, 207, 35)" }}>
                         {" "}
                         {person.name}
+                        {" "}
+                        {(person.isLoggedIn)?<span class="badge badge-success" >online</span>:<span class="badge badge-secondary" >offline</span>}
+                        
                       </h5>
                     </Link>
                     {this.props.match.params.userId ===

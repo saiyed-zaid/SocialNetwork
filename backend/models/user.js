@@ -52,27 +52,6 @@ const UserSchema = new Schema({
       },
     },
   ],
-  messages: [
-    {
-      message: {
-        type: String,
-        required: true,
-        trim: true,
-      },
-      from: {
-        type: Schema.Types.ObjectId,
-        required: true,
-      },
-      date: {
-        type: Date,
-        default: Date.now,
-      },
-      isNewMsg: {
-        type: Boolean,
-        default: true,
-      },
-    },
-  ],
   resetPasswordLink: {
     type: String,
     default: "",
@@ -84,6 +63,13 @@ const UserSchema = new Schema({
   status: {
     type: Boolean,
     default: true,
+  },
+  isLoggedIn: {
+    type: Boolean,
+    default: false,
+  },
+  lastLoggedIn: {
+    type: Date,
   },
 });
 

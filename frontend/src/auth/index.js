@@ -67,15 +67,21 @@ export const authenticate = (jwt, next) => {
  * @param {function} next
  */
 export const signout = (next) => {
-  if (typeof window !== "undefined") {
-    localStorage.removeItem("jwt");
-  }
-  next();
+  const token = isAuthenticated().user.token;
   return fetch(`${process.env.REACT_APP_API_URL}/api/signout`, {
     method: "GET",
+    headers: {
+      Accept: "application/json",
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
   })
     .then((response) => {
       console.log("signout", response);
+      if (typeof window !== "undefined") {
+        localStorage.removeItem("jwt");
+      }
+      next();
 
       return response.json();
     })

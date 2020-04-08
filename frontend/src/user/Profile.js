@@ -104,8 +104,6 @@ class Profile extends Component {
         token
       )
         .then((result) => {
-          //this.messages = result;
-          //console.log("result", result);
           this.setState({
             hasChatBoxDisplay: true,
             receiverId: e.target.getAttribute("data-userId"),
@@ -118,8 +116,6 @@ class Profile extends Component {
             console.log("Error while fetching record");
           }
         });
-      /* console.log("TYPE", typeof this.messages);
-      console.log("MSGEs=> ", this.messages); */
     } else {
       this.setState({
         hasChatBoxDisplay: false,
