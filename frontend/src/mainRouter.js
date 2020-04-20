@@ -19,16 +19,16 @@ import AdminPosts from "./admin/posts";
 import AdminHome from "./admin/admin";
 import PrivateRoute from "./auth/privateRoute";
 
-const MainRouter = props => {
+const MainRouter = (props) => {
   return (
     <div>
       <Menu />
       <Switch>
         <Route path="/" exact component={Home} />
-        <Route exact path="/admin/posts" component={AdminPosts} />
-        <Route exact path="/admin/users" component={AdminUsers} />
-        <Route exact path="/admin/home" component={AdminHome} />
-        <Route exact path="/admin" component={Admin} />
+        <PrivateRoute exact path="/admin/posts" component={AdminPosts} />
+        <PrivateRoute exact path="/admin/users" component={AdminUsers} />
+        <PrivateRoute exact path="/admin/home" component={AdminHome} />
+        <PrivateRoute exact path="/admin" component={Admin} />
         <Route exact path="/forgot-password" component={ForgotPassword} />
         <Route
           exact
@@ -38,7 +38,7 @@ const MainRouter = props => {
         <PrivateRoute path="/post/create" exact component={NewPost} />
         <Route path="/post/:postId" exact component={SinglePost} />
         <PrivateRoute path="/post/edit/:postId" exact component={EditPost} />
-        <Route path="/users" exact component={Users} />
+        <PrivateRoute path="/users" exact component={Users} />
         <Route path="/signup" exact component={Signup} />
         <Route path="/signin" exact component={Signin} />
         <PrivateRoute path="/user/edit/:userId" exact component={EditProfile} />

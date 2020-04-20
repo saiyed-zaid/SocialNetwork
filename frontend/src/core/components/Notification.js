@@ -1,4 +1,4 @@
-import React, { useEffect, useState, ReactDOM } from "react";
+import React from "react";
 import { read, isFollowStatusChange } from "../api/getNotification";
 
 import Follow from "./getNewFollower";
@@ -10,13 +10,13 @@ class Notification extends React.Component {
   }
   componentDidMount() {
     read()
-      .then(data => {
+      .then((data) => {
         if (data.followers.length > 0) {
-          this.state.newFollower = new Array(data.followers.length);
+          this.setState({ newFollower: new Array(data.followers.length) });
           data.followers.forEach((follower, i) => {
             if (follower.isNewUser) {
-              this.state.hasNewFollow = true;
-              this.setState(state => this.state.newFollower.push(follower));
+              this.setState({ hasNewFollow: true });
+              this.setState((state) => this.state.newFollower.push(follower));
             }
           });
           if (this.state.hasNewFollow) {
@@ -24,7 +24,7 @@ class Notification extends React.Component {
           }
         }
       })
-      .catch(err => {
+      .catch((err) => {
         if (err) {
           console.log("Error while fetching new Followers", err);
         }
@@ -33,13 +33,12 @@ class Notification extends React.Component {
   followStatusChange = () => {
     if (this.state.hasNewFollow) {
       isFollowStatusChange();
-      const toast = document.querySelectorAll(".toast");
-      toast.forEach(t => {
+      const toast = document.querySelectorAll(".noti");
+      toast.forEach((t) => {
         t.classList.replace("show", "hide");
       });
       clearTimeout(this.state.timer);
-
-      this.state.hasNewFollow = false;
+      this.setState({ hasNewFollow: false });
     }
   };
   render() {

@@ -6,13 +6,13 @@ const md5 = require("md5");
 exports.userById = async (req, res, next, id) => {
   try {
     const user = await User.findById(id)
-      .populate("following", "_id name photo")
+      .populate("following", "_id name photo isLoggedIn lastLoggedIn")
       .populate("followers.user", "_id name photo");
     if (!user) {
       return next(new Error("User not Found."));
     }
     req.profile = user;
-    console.log("__USER DATA___", req.profile);
+    //console.log("__USER DATA___", req.profile);
     next();
   } catch (error) {
     return next(new Error("User not Found."));
@@ -36,7 +36,7 @@ exports.hasAuthorization = (req, res, next) => {
 
   if (req.auth._id != req.profile._id) {
     return res.json({
-      msg: "Not authorized user for this action id not matched."
+      msg: "Not authorized user for this action id not matched.",
     });
   }
   next();
@@ -53,14 +53,14 @@ exports.getUsers = async (req, res, next) => {
     );
     if (!users) {
       return res.json({
-        msg: "No User Found"
+        msg: "No User Found",
       });
     }
 
     return res.json({ users });
   } catch (error) {
     return res.status(404).json({
-      msg: "No User Found"
+      msg: "No User Found",
     });
   }
 };
@@ -83,7 +83,7 @@ exports.updateUser = async (req, res, next) => {
   let user = req.profile;
 
   if (user.photo) {
-    fs.unlink(user.photo.path, err => {
+    fs.unlink(user.photo.path, (err) => {
       console.log("Error while unlink user image", err);
     });
   }
@@ -103,7 +103,7 @@ exports.updateUser = async (req, res, next) => {
   user.save(req.body, async (err, result) => {
     if (err) {
       return res.status(400).json({
-        error: err
+        error: err,
       });
     } else {
       user.password = undefined;
@@ -124,7 +124,7 @@ exports.deleteUser = async (req, res, next) => {
   } catch (error) {
     res.json({
       msg: "Error while deleting profile",
-      isDeleted: false
+      isDeleted: false,
     });
   }
 };
@@ -138,13 +138,13 @@ exports.addFollowing = async (req, res, next) => {
     //req.body.userId
     const result = await User.findByIdAndUpdate(req.body.userId, {
       $push: {
-        following: req.body.followId
-      }
+        following: req.body.followId,
+      },
     });
     next();
   } catch (error) {
     return res.status(400).json({
-      err: error
+      err: error,
     });
   }
 };
@@ -161,12 +161,12 @@ exports.addFollower = async (req, res, next) => {
         $push: {
           followers: {
             user: req.body.userId,
-            isNewUser: true
-          }
-        }
+            isNewUser: true,
+          },
+        },
       },
       {
-        $new: true
+        $new: true,
       }
     )
       .populate("following", "_id name")
@@ -174,7 +174,7 @@ exports.addFollower = async (req, res, next) => {
     res.json(result);
   } catch (error) {
     return res.status(400).json({
-      err: error
+      err: error,
     });
   }
 };
@@ -188,13 +188,13 @@ exports.removeFollowing = async (req, res, next) => {
     //req.body.userId
     const result = await User.findByIdAndUpdate(req.body.userId, {
       $pull: {
-        following: req.body.unfollowId
-      }
+        following: req.body.unfollowId,
+      },
     });
     next();
   } catch (error) {
     return res.status(400).json({
-      err: error
+      err: error,
     });
   }
 };
@@ -209,11 +209,11 @@ exports.removeFollower = async (req, res, next) => {
       req.body.unfollowId,
       {
         $pull: {
-          followers: req.body.userId
-        }
+          followers: { user: req.body.userId },
+        },
       },
       {
-        $new: true
+        $new: true,
       }
     )
       .populate("following", "_id name")
@@ -221,7 +221,7 @@ exports.removeFollower = async (req, res, next) => {
     res.json(result);
   } catch (error) {
     return res.status(400).json({
-      err: error
+      err: error,
     });
   }
 };
@@ -245,15 +245,32 @@ exports.newFollowerStatusChagne = (req, res, next) => {
     req.auth._id,
     {
       $set: {
-        "followers.$[].isNewUser": false
-      }
+        "followers.$[].isNewUser": false,
+      },
     },
     { multi: true }
   )
-    .then(result => {})
-    .catch(err => {
+    .then((result) => {})
+    .catch((err) => {
       if (err) {
         console.error(err);
       }
     });
+};
+
+exports.getOnlinePeople = async (req, res, next) => {
+  let following = req.profile.following;
+  // following.push(req.profile._id);
+  try {
+    const users = await User.find(
+      {
+        _id: req.profile._id,
+      },
+      { following }
+    ).populate("following", "_id name isLoggedIn photo");
+
+    await res.json(users);
+  } catch (error) {
+    res.status(400).json({ err: error });
+  }
 };

@@ -10,7 +10,7 @@ class Posts extends Component {
     super();
     this.state = {
       posts: [],
-      expanded: false
+      expanded: false,
     };
   }
 
@@ -18,7 +18,7 @@ class Posts extends Component {
     this.setState({ expanded: !this.state.expanded });
   };
   componentDidMount() {
-    list().then(data => {
+    list().then((data) => {
       if (data.error) {
         console.log(data.error);
       } else {
@@ -32,7 +32,7 @@ class Posts extends Component {
    *
    * @param {json} posts  Posts To Be renderd On page
    */
-  renderPosts = posts => {
+  renderPosts = (posts) => {
     return (
       <div className="row">
         {posts.map((post, i) => {
@@ -42,17 +42,33 @@ class Posts extends Component {
           return (
             <Card
               className="card"
-              ckey={i}
+              key={i}
               style={{ width: "20rem" }}
               img={
-                <img
-                  className="card-img-top"
-                  src={`${process.env.REACT_APP_API_URL}/${
-                    post.photo ? post.photo.path : DefaultPost
-                  }`}
-                  onError={i => (i.target.src = `${DefaultPost}`)}
-                  alt={post.name}
-                />
+                post.photo && post.photo.mimetype === "video/mp4" ? (
+                  <div className="embed-responsive embed-responsive-1by1 p-0 m-0">
+                    <video className="embed-responsive-item">
+                      <source
+                        src={`${process.env.REACT_APP_API_URL}/${
+                          post.photo ? post.photo.path : DefaultPost
+                        }`}
+                        type="video/mp4"
+                        alt="No Video Found"
+                        // onError={e=>e.target.alt="No Video"}
+                      />
+                      Your browser does not support the video tag.
+                    </video>
+                  </div>
+                ) : (
+                  <img
+                    className="card-img-top"
+                    src={`${process.env.REACT_APP_API_URL}/${
+                      post.photo ? post.photo.path : DefaultPost
+                    }`}
+                    onError={(i) => (i.target.src = `${DefaultPost}`)}
+                    alt={post.name}
+                  />
+                )
               }
               postedBy={posterName}
               title={post.title}
@@ -64,6 +80,41 @@ class Posts extends Component {
                 </Link>
               </label>
             </Card>
+            /*    <div className="d-flex justify-content-center w-100">
+                <div className="col-md-4 "></div>
+                <div className="col-md-4  post-box p-0 rounded">
+                  <div style={{ backgroundColor: "rgb(32, 32, 32);" }}>
+                    <p className="text-dark">Mahesh</p>
+                  </div>
+                  <img
+                    className="w-100"
+                    src={`${process.env.REACT_APP_API_URL}/${
+                      post.photo ? post.photo.path : DefaultPost
+                    }`}
+                    onError={(i) => (i.target.src = `${DefaultPost}`)}
+                    alt={post.name}
+                  />
+
+                  {posterName}
+                  {post.title}
+                  {post.body.substring(0, 50) + "..."}
+                  <div>
+                    <label
+                      className="brd-grdnt rounded"
+                      style={{ padding: "1px" }}
+                    >
+                      <Link
+                        to={`/post/${post._id}`}
+                        className="btn btn-primary"
+                      >
+                        Read More
+                      </Link>
+                    </label>
+                  </div>
+                </div>
+                <div className="col-md-4"></div>
+              </div>
+            */
           );
         })}
       </div>

@@ -84,21 +84,21 @@ exports.getPostsByUser = async (req, res, next) => {
           $and: [
             { postedBy: req.profile._id },
             { disabledBy: String(req.profile._id) },
-            { status: false }
-          ]
+            { status: false },
+          ],
         },
         {
           $and: [
             { postedBy: req.profile._id },
             {
-              disabledBy: ""
+              disabledBy: "",
             },
             {
-              status: true
-            }
-          ]
-        }
-      ]
+              status: true,
+            },
+          ],
+        },
+      ],
     })
       .populate("postedBy", "_id name role")
       .select("_id title body created likes status")
@@ -106,15 +106,15 @@ exports.getPostsByUser = async (req, res, next) => {
     if (posts.length == 0) {
       return res.json({
         msg: "There is no posts by this user",
-        posts: []
+        posts: [],
       });
     }
     return res.json({
-      posts
+      posts,
     });
   } catch (error) {
     return res.json({
-      msg: "Error while fetching Posts"
+      msg: "Error while fetching Posts",
     });
   }
 };
@@ -122,7 +122,7 @@ exports.getPostsByUser = async (req, res, next) => {
 exports.hasAuthorization = (req, res, next) => {
   if (req.auth.role != "admin" && req.auth.role != "subscriber") {
     return res.json({
-      msg: "Not authorized user for this action on the post."
+      msg: "Not authorized user for this action on the post.",
     });
   }
   if (req.auth.role == "admin") {
@@ -131,7 +131,7 @@ exports.hasAuthorization = (req, res, next) => {
 
   if (req.auth._id != req.post.postedBy._id) {
     return res.json({
-      msg: "Not authorized user for this action on the post."
+      msg: "Not authorized user for this action on the post.",
     });
   }
   next();
@@ -148,14 +148,14 @@ exports.createPost = async (req, res, next) => {
     const err = errors.array()[0].msg;
     //console.log("error handler__", err);
     return res.status(422).json({
-      msg: err
+      msg: err,
     });
   }
   const post = new Post({
     title: req.body.title,
     body: req.body.body,
     postedBy: req.auth._id,
-    photo: req.file
+    photo: req.file,
   });
   try {
     const result = await post.save();
@@ -181,7 +181,7 @@ exports.deletePost = async (req, res, next) => {
     req.auth.role != "admin"
   ) {
     return res(401).json({
-      msg: "Not authorized user for deleting this post."
+      msg: "Not authorized user for deleting this post.",
     });
   }
   try {
@@ -211,7 +211,7 @@ exports.updatePost = async (req, res, next) => {
     //prevPostPhoto
     if (result) {
       if (prevPostPhoto) {
-        fs.unlink(prevPostPhoto.path, err => {
+        fs.unlink(prevPostPhoto.path, (err) => {
           console.log("Error while unlink user image", err);
         });
       }
@@ -219,7 +219,7 @@ exports.updatePost = async (req, res, next) => {
     res.json({ post });
   } catch (error) {
     res.json({
-      msg: "Error while updating profile " + error
+      msg: "Error while updating profile " + error,
     });
   }
 };
@@ -235,7 +235,7 @@ exports.likePost = async (req, res, next) => {
     const UpdatedLikePost = await Post.findByIdAndUpdate(
       req.body.postId,
       {
-        $push: { likes: req.body.userId }
+        $push: { likes: req.body.userId },
       },
       { new: true }
     );
@@ -254,7 +254,7 @@ exports.unlikePost = async (req, res, next) => {
     const UpdatedLikePost = await Post.findByIdAndUpdate(
       req.body.postId,
       {
-        $pull: { likes: req.body.userId }
+        $pull: { likes: req.body.userId },
       },
       { new: true }
     );
@@ -276,7 +276,7 @@ exports.commentPost = async (req, res, next) => {
     const UpdatedCommentPost = await Post.findByIdAndUpdate(
       req.body.postId,
       {
-        $push: { comments: comment }
+        $push: { comments: comment },
       },
       { new: true }
     )
@@ -299,7 +299,7 @@ exports.uncommentPost = async (req, res, next) => {
     const UpdatedCommentPost = await Post.findByIdAndUpdate(
       req.body.postId,
       {
-        $pull: { comments: { _id: comment._id } }
+        $pull: { comments: { _id: comment._id } },
       },
       { new: true }
     )

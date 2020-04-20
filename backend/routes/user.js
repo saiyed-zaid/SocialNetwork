@@ -6,6 +6,36 @@ const _ = require("lodash");
 const multer = require("multer");
 const path = require("path");
 const User = require("../models/user");
+const Message = require("../models/messages");
+
+/**
+ * @function get
+ * @description Handling get request which fetch messages
+ * @param {middleware} Checking Authorization
+ * @param {middleware} findPeople
+ */
+router.post("/api/user/messages", auth_check, (req, res, next) => {
+  console.log("+___api invoked___+", req.body);
+  Message.find({
+    $or: [{ sender: req.body.sender }, { sender: req.body.receiver }],
+    $and: [
+      {
+        $or: [{ receiver: req.body.sender }, { receiver: req.body.receiver }],
+      },
+    ],
+  })
+    .sort({ created: 1 })
+    .then((result) => {
+      console.log("FRESHED DATA__+", result);
+      res.json(result);
+      //io.emit(data.receiver, data);
+    })
+    .catch((err) => {
+      if (err) {
+        console.log("error while fetching messages", err);
+      }
+    });
+});
 
 /**
  * @function put
@@ -72,7 +102,7 @@ router.put(
       },
       filename: (req, file, cb) => {
         cb(null, Date.now() + file.originalname);
-      }
+      },
     }),
     fileFilter: (req, file, cb) => {
       if (file.mimetype == "image/jpg" || file.mimetype == "image/jpeg") {
@@ -83,7 +113,7 @@ router.put(
           false
         );
       }
-    }
+    },
   }).single("photo"),
   userController.updateUser
 );
@@ -112,6 +142,8 @@ router.get(
   auth_check,
   userController.findPeople
 );
+
+router.get("/api/user/getonline/:userId", auth_check, userController.getOnlinePeople);
 
 /**
  * @function router.param("userId", userController.userById);

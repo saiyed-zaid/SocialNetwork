@@ -5,7 +5,7 @@ import { Redirect } from "react-router-dom";
 
 class DeleteUser extends Component {
   state = {
-    redirect: false
+    redirect: false,
   };
 
   /**
@@ -16,7 +16,7 @@ class DeleteUser extends Component {
     const userId = this.props.userId;
 
     if (isAuthenticated().user.role === "admin") {
-      remove(userId, token).then(data => {
+      remove(userId, token).then((data) => {
         if (data.isDeleted) {
           this.setState({ redirect: true });
         } else {
@@ -24,7 +24,7 @@ class DeleteUser extends Component {
         }
       });
     } else {
-      remove(userId, token).then(data => {
+      remove(userId, token).then((data) => {
         if (data.error) {
           console.log(data.error);
         } else {
@@ -57,7 +57,7 @@ class DeleteUser extends Component {
         className="btn btn-outline-secondary btn-custom"
       >
         Delete Profile &nbsp;
-        <i className="fa fa-trash"></i>
+        <i className="fas fa-trash"></i>
       </button>
     );
   }

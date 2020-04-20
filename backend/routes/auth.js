@@ -3,6 +3,8 @@ const router = express.Router();
 const authController = require("../controllers/auth");
 const { body } = require("express-validator");
 const userController = require("../controllers/user");
+const auth_check = require("../middleware/auth-check");
+const User = require("../models/user");
 
 /**
  * @function post
@@ -14,22 +16,13 @@ const userController = require("../controllers/user");
 router.post(
   "/api/signup",
   [
-    body("name")
-      .notEmpty()
-      .withMessage("Name feild is required."),
-    body("email")
-      .notEmpty()
-      .withMessage("Email feild is required."),
-    body("email")
-      .isEmail()
-      .normalizeEmail()
-      .withMessage("Not a valid email."),
-    body("password")
-      .notEmpty()
-      .withMessage("Password feild is required."),
+    body("name").notEmpty().withMessage("Name field is required."),
+    body("email").notEmpty().withMessage("Email field is required."),
+    body("email").isEmail().normalizeEmail().withMessage("Not a valid email."),
+    body("password").notEmpty().withMessage("Password field is required."),
     body("password")
       .isLength({ min: 5 })
-      .withMessage("Password must be 5 character long.")
+      .withMessage("Password must be 5 character long."),
   ],
   authController.postSignup
 );
@@ -66,19 +59,28 @@ router.put("/api/forgot-password", authController.forgetPassword);
 router.put(
   "/api/reset-password",
   [
-    body("newPassword")
-      .notEmpty()
-      .withMessage("This field is required"),
+    body("newPassword").notEmpty().withMessage("This field is required"),
     body("newPassword")
       .isLength({ min: 5 })
-      .withMessage("Password must be 5 character long.")
+      .withMessage("Password must be 5 character long."),
   ],
   authController.resetPassword
 );
 
-router.get("/api/signout", (req, res, next) => {
-  res.json({
-    msg: "Logout Success"
+router.get("/api/signout", auth_check, (req, res, next) => {
+  User.updateOne(
+    { _id: req.auth._id },
+    { isLoggedIn: false, lastLoggedIn: Date.now() }
+  ).then((result) => {
+    res
+      .json({
+        msg: "Logout Success",
+      })
+      .catch((err) => {
+        if (err) {
+          console.log("error while updating flag");
+        }
+      });
   });
 });
 

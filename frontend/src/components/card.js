@@ -17,9 +17,7 @@ export default class Card extends Component {
               <footer className="blockquote-footer">
                 <cite title="Source Title">{this.props.postedBy} </cite>
               </footer>
-            ) : (
-              ""
-            )}
+            ) : null}
           </blockquote>
           {this.props.children}
         </div>

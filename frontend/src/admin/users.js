@@ -8,6 +8,9 @@ import Card from "../components/card";
 import "../../node_modules/react-toggle-switch/dist/css/switch.min.css";
 import Avatar from "../components/Avatar";
 import Toast from "../components/Toast";
+import Modal from "../components/modal/modal";
+// import EditProfile from "../user/editProfile";
+
 class Users extends Component {
   constructor() {
     super();
@@ -19,13 +22,16 @@ class Users extends Component {
       recordIndex: undefined,
       toastPopup: false,
       toastType: "",
-      toastMsg: ""
+      toastMsg: "",
+      deleteId: "",
+      search: "",
+      editId: "",
     };
     this.index = undefined;
   }
 
   componentDidMount() {
-    list().then(data => {
+    list().then((data) => {
       if (data.error) {
         console.log(data.error);
       } else {
@@ -34,13 +40,15 @@ class Users extends Component {
     });
   }
 
-  deleteAccount = userId => {
+  deleteAccount = (userId) => {
     const token = isAuthenticated().user.token;
 
     if (isAuthenticated().user.role === "admin") {
-      remove(userId, token).then(data => {
+      remove(userId, token).then((data) => {
         if (data.isDeleted) {
           this.setState({ redirect: true });
+          document.getElementById("deleteprofile").style.display = "none";
+          document.getElementById("deleteprofile").classList.remove("show");
         } else {
           console.log(data.msg);
         }
@@ -48,14 +56,15 @@ class Users extends Component {
     }
   };
 
+  editProfile = (userId) => {
+    this.setState({ editId: userId });
+  };
+
   /**
    * Function For Confirming The Account Deletion
    */
-  deleteConfirmed = userId => {
-    let answer = window.confirm(
-      "Are Youe Sure. You Want To Delete your Acccount?"
-    );
-    if (answer) {
+  deleteConfirmed = (userId) => {
+    if (userId) {
       this.deleteAccount(userId);
       let getRow = document.getElementById(userId);
       getRow.addEventListener("animationend", () => {
@@ -63,56 +72,89 @@ class Users extends Component {
         getRow.classList.remove("row-remove");
       });
       getRow.classList.toggle("row-remove");
+    } else {
+      alert("Please Select Record First");
     }
   };
 
-  handleCheckBoxChange = event => {
-    /* let selectAllCheckbox = document.getElementsByName("selectall")[0];
-    let Checkboxes = document.querySelectorAll(".childchk");
+  handleCheckBoxChange = (event) => {
+    let selectAllCheckbox = document.getElementsByName("selectall")[0];
+    let Checkboxes = document.getElementsByName("childchk");
     let arr = [];
 
     if (selectAllCheckbox.checked) {
-      Checkboxes.forEach(checkbox => {
+      Checkboxes.forEach((checkbox) => {
         checkbox.checked = true;
         arr.push(checkbox.id);
       });
     } else {
-      Checkboxes.forEach(checkbox => {
+      Checkboxes.forEach((checkbox) => {
         checkbox.checked = false;
-        arr.push(checkbox.id);
+        arr = [];
       });
     }
-    this.setState({ checkBox: arr }); */
+
+    this.setState({ checkBox: arr });
   };
 
-  handleSingleCheckBox = event => {
-    const { checkbox } = this.state;
-
+  handleSingleCheckBox = (event) => {
     let selectAllCheckbox = document.getElementsByName("selectall")[0];
-    let Checkboxes = document.querySelectorAll(".childchk");
-    let arr = this.state.checkBox;
+    let Checkboxes = document.getElementsByName("childchk");
 
-    Checkboxes.forEach(checkBox => {
-      let index = arr.indexOf(event.target.id);
-      if (!event.target.checked) {
+    let arr = [];
+
+    Checkboxes.forEach((checkBox) => {
+      let index = arr.indexOf(checkBox.id);
+
+      if (!checkBox.checked) {
         if (index > -1) {
           arr.splice(index, 1);
         }
       } else {
         selectAllCheckbox.checked = false;
-        arr.push(event.target.id);
+        arr.push(checkBox.id);
       }
     });
-  };
-  handleChangePage = (event, newPage) => {
-    this.setState({ page: newPage });
+    this.setState({ checkBox: arr });
   };
 
-  handleChangeRowsPerPage = event => {
-    this.setState({ rowsPerPage: +event.target.value, page: 0 });
+  handleDeleteModal = (userId) => {
+    this.setState({ deleteId: userId });
+    document.getElementById("deleteprofile").style.display = "block";
+    document.getElementById("deleteprofile").classList.add("show");
   };
 
-  showCard = event => {
+  deleteMultiple = () => {
+    const { checkBox } = this.state;
+    const token = isAuthenticated().user.token;
+    document.getElementById("deleteprofile").style.display = "block";
+    document.getElementById("deleteprofile").classList.add("show");
+    if (checkBox.length === 0) {
+      alert("Please Select Records To Delete.");
+    } else {
+      checkBox.forEach((id) => {
+        remove(id, token).then((data) => {
+          if (data.isDeleted) {
+            this.setState({ redirect: true });
+            let getRow = document.getElementById(id);
+            getRow.addEventListener("animationend", () => {
+              getRow.parentNode.removeChild(getRow);
+              getRow.classList.remove("row-remove");
+            });
+            getRow.classList.toggle("row-remove");
+          } else {
+            console.log(data.msg);
+          }
+        });
+      });
+    }
+  };
+
+  updateSearch = (event) => {
+    this.setState({ search: event.target.value.substr(0, 20) });
+  };
+
+  showCard = (event) => {
     /* const profileCard = document.querySelector(".card");
     profileCard.style.opacity = "0"; */
     this.setState({ isProfileViewed: false });
@@ -120,7 +162,7 @@ class Users extends Component {
     table.style.opacity = "1"; */
   };
 
-  rowHandler = event => {
+  rowHandler = (event) => {
     console.log("evt", event.target.parentNode.nodeName);
     //nodeName: "TR"
     if (event.target.parentNode.nodeName === "TR") {
@@ -131,7 +173,7 @@ class Users extends Component {
     }
   };
 
-  handleUserStatusChange = event => {
+  handleUserStatusChange = (event) => {
     const index = event.target.getAttribute("data-index");
     const userId = this.state.users[index]._id;
     if (!userId) {
@@ -150,7 +192,7 @@ class Users extends Component {
     data.append("status", dataToUpdate[index].status);
 
     update(userId, isAuthenticated().user.token, data)
-      .then(result => {
+      .then((result) => {
         if (result.err) {
           console.log("Error=> ", result.err);
         } else {
@@ -158,13 +200,13 @@ class Users extends Component {
             users: dataToUpdate,
             toastPopup: true,
             toastType: "success",
-            toastMsg: "Record updated successfully."
+            toastMsg: "Record updated successfully.",
           });
           setTimeout(this.toastPopupEnable, 8000);
           console.log("RECORD UPDATED", result);
         }
       })
-      .catch(err => {
+      .catch((err) => {
         if (err) {
           console.log("ERR IN UPDATING", err);
         }
@@ -175,7 +217,9 @@ class Users extends Component {
   };
 
   render() {
-    const { users, checkBox } = this.state;
+    const users = this.state.users.filter((user) => {
+      return user.name.indexOf(this.state.search) !== -1;
+    });
     if (this.state.isProfileViewed) {
       return (
         <div style={{ postion: "relative" }}>
@@ -188,13 +232,13 @@ class Users extends Component {
               left: "50%",
               transform: "translate(-50%,-50%)",
               transition: "unset",
-              animation: "unset"
+              animation: "unset",
             }}
             img={
               <img
                 className="card-img-top "
                 src={DefaultProfile}
-                onError={i => (i.target.src = `${DefaultProfile}`)}
+                onError={(i) => (i.target.src = `${DefaultProfile}`)}
                 alt="zaid"
               />
             }
@@ -215,7 +259,7 @@ class Users extends Component {
                 padding: "3px",
                 color: "#ffff",
                 borderRadius: "0 0 5px 5px",
-                backgroundColor: "#1a1d24"
+                backgroundColor: "#1a1d24",
               }}
               onClick={this.showCard}
             >
@@ -229,6 +273,26 @@ class Users extends Component {
       <div className="container-fluid m-0 p-0">
         <div className="jumbotron p-3 m-0">
           <h4>Users</h4>
+          Total Users: {users.length}
+        </div>
+        <div className="d-flex m-1">
+          <button
+            className="btn btn-danger m-2 "
+            onClick={this.deleteMultiple}
+            data-toggle="modal"
+            // data-target="#exampleModalCenter"
+          >
+            <i className="fas fa-trash"></i> Delete Selected
+          </button>
+
+          <input
+            type="text"
+            value={this.state.search}
+            onChange={this.updateSearch}
+            style={{ border: "1px solid black" }}
+            className="form-control col-md-2 ml-auto m-2 "
+            placeholder="Search Here"
+          />
         </div>
         {/* Toast */}
         <div
@@ -238,7 +302,7 @@ class Users extends Component {
             position: "fixed",
             bottom: "0",
             right: "0",
-            zIndex: "111"
+            zIndex: "111",
           }}
         >
           <Toast
@@ -259,6 +323,13 @@ class Users extends Component {
         <table class="table table-hover text-light" id="usersTable">
           <thead>
             <tr>
+              <th>
+                <input
+                  name="selectall"
+                  type="checkbox"
+                  onChange={(e) => this.handleCheckBoxChange(e)}
+                />
+              </th>
               <th scope="col" style={{ width: "10px" }}>
                 No
               </th>
@@ -289,6 +360,15 @@ class Users extends Component {
                   style={{ cursor: "pointer" }}
                   data-index={i}
                 >
+                  <th>
+                    {" "}
+                    <input
+                      name="childchk"
+                      type="checkbox"
+                      id={user._id}
+                      onChange={(e) => this.handleSingleCheckBox(e)}
+                    />
+                  </th>
                   <th scope="row">{i + 1}</th>
                   <td width="5%">
                     <Avatar
@@ -326,17 +406,18 @@ class Users extends Component {
                       to={`/user/edit/${user._id}`}
                       style={{ boxShadow: "unset" }}
                     >
-                      <i className="fa fa-edit"></i>
+                      <i className="fas fa-edit"></i>
                     </Link>
                   </td>
                   <td width="1%">
                     <button
                       className="btn btn-sm"
-                      onClick={() => this.deleteConfirmed(user._id)}
                       disabled={isAuthenticated().user._id === user._id}
-                      style={{ boxShadow: "unset" }}
+                      // data-toggle="modal"
+                      // data-target="#exampleModalCenter"
+                      onClick={() => this.handleDeleteModal(user._id)}
                     >
-                      <i className="fa fa-trash"> </i>
+                      <i className="fas fa-trash"> </i>
                     </button>
                   </td>
                 </tr>
@@ -344,6 +425,23 @@ class Users extends Component {
             })}
           </tbody>
         </table>
+        <Modal
+          id="deleteprofile"
+          title="Delete Record"
+          body="Are Your Sure You Want To Delete ?"
+          buttonText="Delete"
+          buttonClick={
+            this.state.checkBox.length >= 1
+              ? () => this.deleteMultiple()
+              : () => this.deleteConfirmed(this.state.deleteId)
+          }
+        />
+
+        {/* <Modal
+          id="editprofile"
+          title="Edit Profile"
+          body={<EditProfile userId={this.state.editId} />}
+        /> */}
       </div>
     );
   }

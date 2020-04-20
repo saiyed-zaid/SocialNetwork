@@ -3,8 +3,8 @@ import { isAuthenticated } from "../auth/index";
 import { create } from "./apiPost";
 import { Redirect } from "react-router-dom";
 import DefaultPost from "../images/post.jpg";
-import PageLoader from "../components/pageLoader";
-import Toast from "../components/Toast";
+// import PageLoader from "../components/pageLoader";
+// import Toast from "../components/Toast";
 
 class NewPost extends Component {
   constructor() {
@@ -18,7 +18,7 @@ class NewPost extends Component {
       fileSize: 0,
       prevPhoto: "",
       loading: false,
-      redirectToProfile: false
+      redirectToProfile: false,
     };
   }
 
@@ -27,7 +27,7 @@ class NewPost extends Component {
     this.setState({ user: isAuthenticated().user });
   }
 
-  handleChange = name => event => {
+  handleChange = (name) => (event) => {
     this.setState({ error: "" });
     if (name === "photo") {
       this.setState({ prevPhoto: event.target.files[0] });
@@ -44,14 +44,19 @@ class NewPost extends Component {
       this.setState({ error: "Title field is required", loading: false });
       return false;
     } else if (title.length < 5 || title.length > 120) {
-      this.setState({ error: "Title length must between 5 to 1200.", loading: false });
+      this.setState({
+        error: "Title length must between 5 to 1200.",
+        loading: false,
+      });
     }
     if (body.length === 0) {
       this.setState({ error: "Body field is required", loading: false });
       return false;
-    }else if(title.length < 5 || title.length > 2000)
-    {
-      this.setState({ error: "Body length must between 5 to 2000.", loading: false });
+    } else if (title.length < 5 || title.length > 2000) {
+      this.setState({
+        error: "Body length must between 5 to 2000.",
+        loading: false,
+      });
     }
 
     if (fileSize > 1000000000) {
@@ -62,7 +67,7 @@ class NewPost extends Component {
     return true;
   };
 
-  clickSubmit = event => {
+  clickSubmit = (event) => {
     event.preventDefault();
 
     this.setState({ loading: true });
@@ -71,7 +76,7 @@ class NewPost extends Component {
       const userId = isAuthenticated().user._id;
       const token = isAuthenticated().user.token;
 
-      create(userId, token, this.postData).then(data => {
+      create(userId, token, this.postData).then((data) => {
         if (data.msg) {
           this.setState({ error: data.msg });
         } else {
@@ -87,7 +92,7 @@ class NewPost extends Component {
         style={{
           display: "flex",
           justifyContent: "space-around",
-          flexWrap: "wrap"
+          flexWrap: "wrap",
         }}
       >
         <div className="test">
@@ -104,7 +109,7 @@ class NewPost extends Component {
                 height: "350px",
                 maxWidth: "350px",
                 padding: 0,
-                border: "none"
+                border: "none",
               }}
             />
           </div>
@@ -129,7 +134,7 @@ class NewPost extends Component {
           <div className="input-group form-group">
             <div className="custom-file">
               <input
-                accept="image/*"
+                accept="image/*,video/*"
                 className="custom-file-input"
                 type="file"
                 onChange={this.handleChange("photo")}
