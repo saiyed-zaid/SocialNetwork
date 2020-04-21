@@ -1,9 +1,11 @@
 import React, { Component } from "react";
 import { isAuthenticated } from "../auth/index";
 import { create } from "./apiPost";
+import { read } from "../user/apiUser";
 import { Redirect } from "react-router-dom";
 import DefaultPost from "../images/post.jpg";
-// import PageLoader from "../components/pageLoader";
+import { Multiselect } from "multiselect-react-dropdown";
+import PageLoader from "../components/pageLoader";
 // import Toast from "../components/Toast";
 
 class NewPost extends Component {
@@ -13,18 +15,39 @@ class NewPost extends Component {
       title: "",
       body: "",
       photo: "",
+      tags: [],
       error: "",
       user: {},
       fileSize: 0,
       prevPhoto: "",
       loading: false,
       redirectToProfile: false,
+      options: [],
+      selectedValue: [],
     };
   }
 
   componentDidMount() {
+    const userId = isAuthenticated().user._id;
+    const token = isAuthenticated().user.token;
+    document.getElementById("tags").setAttribute("name", "tags");
+
     this.postData = new FormData();
     this.setState({ user: isAuthenticated().user });
+
+    read(userId, token)
+      .then((data) => {
+        if (data.err) {
+          this.setState({ options: [] });
+        } else {
+          this.setState({ options: data.following });
+        }
+      })
+      .catch((err) => {
+        if (err) {
+          console.log(err);
+        }
+      });
   }
 
   handleChange = (name) => (event) => {
@@ -67,6 +90,14 @@ class NewPost extends Component {
     return true;
   };
 
+  onSelect(selectedList, selectedItem) {
+    this.setState({ tags: selectedList });
+    this.postData.set("tags", selectedList);
+  }
+
+  onRemove(selectedList, removedItem) {
+    this.setState({ tags: selectedList });
+  }
   clickSubmit = (event) => {
     event.preventDefault();
 
@@ -87,6 +118,7 @@ class NewPost extends Component {
   };
 
   newPostForm = (title, body) => {
+    const searchBox = { border: "none", borderBottom: "1px solid blue" };
     return (
       <div
         style={{
@@ -146,7 +178,6 @@ class NewPost extends Component {
               </label>
             </div>
           </div>
-
           <div className="form-group">
             <input
               onChange={this.handleChange("title")}
@@ -165,6 +196,25 @@ class NewPost extends Component {
               value={body}
               name="body"
               placeholder="Post Description"
+            />
+          </div>
+
+          <div className="form-group bg-light rounded">
+            <Multiselect
+              id="tags"
+              className="form-control"
+              options={this.state.options} // Options to display in the dropdown
+              selectedValues={this.state.selectedValue} // Preselected value to persist in dropdown
+              onSelect={(selectedList, removedItem) =>
+                this.onSelect(selectedList, removedItem)
+              } // Function will trigger on select event
+              onRemove={(selectedList, removedItem) =>
+                this.onRemove(selectedList, removedItem)
+              } // Function will trigger on remove event
+              displayValue="name" // Property name to display in the dropdown options
+              placeholder="Select Peoples To Tag"
+              emptyRecordMsg="No People Found"
+              disablePreSelectedValues
             />
           </div>
 
@@ -190,7 +240,7 @@ class NewPost extends Component {
         </div>
 
         {/* <Toast type="Alert" msg={error} status={(error)?"toast fade show":"toast fade hide"} /> */}
-        {/* {loading ? <PageLoader /> : ""} */}
+        {loading ? <PageLoader /> : null}
 
         <div className="p-0">{this.newPostForm(title, body)}</div>
       </div>

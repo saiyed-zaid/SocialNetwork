@@ -145,7 +145,7 @@ class FindPeople extends Component {
               aria-label="Close"
             >
               <span aria-hidden="true">&times;</span>
-            </button>{" "}
+            </button>
           </div>
         )}
         {!users.length ? <PageLoader /> : this.renderUsers(users)}}

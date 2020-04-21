@@ -97,7 +97,6 @@ class Comment extends Component {
         <hr />
         <div className="col-md-12">
           <h5 className="text-light">
-            {" "}
             {comments.length === 1
               ? `${comments.length} Comment`
               : `${comments.length} Comments`}
@@ -130,7 +129,7 @@ class Comment extends Component {
                   <div>
                     <h6 className="lead">
                       {comment.text}
-                      &nbsp;{" "}
+                      &nbsp;
                       {isAuthenticated().user &&
                         isAuthenticated().user._id === comment.postedBy._id && (
                           <button

@@ -156,6 +156,7 @@ exports.createPost = async (req, res, next) => {
     body: req.body.body,
     postedBy: req.auth._id,
     photo: req.file,
+    tags: req.tags,
   });
   try {
     const result = await post.save();

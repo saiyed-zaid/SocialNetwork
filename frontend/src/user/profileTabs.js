@@ -155,16 +155,11 @@ class ProfileTabs extends Component {
                         }}
                       />
                       <h5 style={{ color: "rgb(230, 207, 35)" }}>
-                        {" "}
-                        {person.name}{" "}
+                        {person.name}
                         {person.isLoggedIn ? (
-                          // <span class="badge badge-success">
-                          <i class="fas fa-circle text-success"></i>
+                          <span class="badge badge-success">Online </span>
                         ) : (
-                          // </span>
-                          // <span class="badge badge-secondary">
-                          <i class="fas fa-circle text-danger"></i>
-                          // </span>
+                          <span class="badge badge-secondary">Offline</span>
                         )}
                       </h5>
                     </Link>

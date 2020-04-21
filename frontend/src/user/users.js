@@ -1,11 +1,12 @@
 import React, { Component } from "react";
-import { list, getOnlineUsers } from "./apiUser";
+import { list, getOnlineUsers, fetchMessage } from "./apiUser";
 import { Link } from "react-router-dom";
 import DefaultProfile from "../images/avatar.jpg";
 import Card from "../components/card";
 import PageLoader from "../components/pageLoader";
 import { isAuthenticated } from "../auth";
 import ChatBar from "../components/chatBar/chatbar";
+import Chattab from "../components/chatTab";
 
 class Users extends Component {
   constructor() {
@@ -13,10 +14,16 @@ class Users extends Component {
     this.state = {
       users: [],
       onlineUsers: [],
+      hasChatBoxDisplay: false,
+      receiverId: undefined,
+      receiverName: undefined,
+      messages: null,
     };
   }
   componentDidMount() {
     list().then((data) => {
+      console.log(data);
+
       if (data.error) {
         console.log(data.error);
       } else {
@@ -78,10 +85,49 @@ class Users extends Component {
       )}
     </>
   );
+
+  handleChatBoxDisplay = (e) => {
+    e.persist();
+    if (!this.state.hasChatBoxDisplay) {
+      const token = isAuthenticated().user.token;
+      fetchMessage(
+        isAuthenticated().user._id,
+        e.target.getAttribute("data-userId"),
+        token
+      )
+        .then((result) => {
+          this.setState({
+            hasChatBoxDisplay: true,
+            receiverId: e.target.getAttribute("data-userId"),
+            receiverName: e.target.getAttribute("data-name"),
+            messages: result,
+          });
+        })
+        .catch((err) => {
+          if (err) {
+            console.log("Error while fetching record");
+          }
+        });
+    } else {
+      this.setState({
+        hasChatBoxDisplay: false,
+      });
+    }
+  };
+
   render() {
     const { users, onlineUsers } = this.state;
     return (
       <div className="row container-fluid p-0 m-0">
+        <div
+          id="chat-tab"
+          className="justify-content-end align-items-end chat-box"
+          style={
+            this.state.hasChatBoxDisplay
+              ? { display: "flex" }
+              : { display: "none" }
+          }
+        ></div>
         <div className="col-md-10">
           <div className="jumbotron p-3">
             <h4> Users</h4>
@@ -99,8 +145,20 @@ class Users extends Component {
           }}
         ></div>
         <ChatBar data={onlineUsers} />
+        {this.state.hasChatBoxDisplay ? (
+          <Chattab
+            senderId={isAuthenticated().user._id}
+            senderName={isAuthenticated().user.name}
+            receiverId={this.state.receiverId}
+            receiverName={this.state.receiverName}
+            handleChatBoxDisplay={this.handleChatBoxDisplay}
+            messages={this.state.messages}
+          />
+        ) : (
+          ""
+        )}
         <button id="floating-btn" className="floating-btn" onClick={this.onMsg}>
-          <i className="fas fa-comment"></i>
+          <i className="fas fa-paper-plane anim-icon"></i>
         </button>
       </div>
     );

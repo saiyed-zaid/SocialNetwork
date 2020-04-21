@@ -13,8 +13,8 @@ const isActive = (history, path) => {
 
 const Menu = ({ history }) => {
   let date = new Date();
-  return (
-    /* ReactDOM.createPortal */ <nav
+  return ReactDOM.createPortal(
+    <nav
       className="navbar navbar-expand-lg navbar-light bg-primary  "
       style={{ zIndex: 9999 }}
     >
@@ -31,46 +31,48 @@ const Menu = ({ history }) => {
           SOCIAL NETWORK
         </Link>
       )}
-      <ul className="nav nav-pills mr-auto justify-content-end">
-        <li className="nav-item  dropdown     ">
-          <a
-            className="nav-link text-light"
-            href="/"
-            id="navbarDropdown"
-            role="button"
-            data-toggle="dropdown"
-            aria-haspopup="true"
-            aria-expanded="false"
-          >
-            <i className="fas fa-bell"></i>
-            <span className="badge badge-light">4</span>
-          </a>
-          <ul className="dropdown-menu">
-            <li className="head text-light bg-dark">
-              <div className="row">
-                <div className="col-lg-12 col-sm-12 col-12">
-                  <span>Notifications (3)</span>
-                  <a href="" className="float-right text-light">
-                    Mark all as read
-                  </a>
+      {isAuthenticated() && isAuthenticated().user.roll !== "admin" ? (
+        <ul className="nav nav-pills mr-auto justify-content-end">
+          <li className="nav-item  dropdown">
+            <a
+              className="nav-link text-light"
+              href="/"
+              id="navbarDropdown"
+              role="button"
+              data-toggle="dropdown"
+              aria-haspopup="true"
+              aria-expanded="false"
+            >
+              <i className="fas fa-bell"></i>
+              <span className="badge badge-light">0</span>
+            </a>
+            <ul className="dropdown-menu">
+              <li className="head text-light bg-dark">
+                <div className="row">
+                  <div className="col-lg-12 col-sm-12 col-12">
+                    <span>Notifications (3)</span>
+                    <a href="" className="float-right text-light">
+                      Mark all as read
+                    </a>
+                  </div>
                 </div>
-              </div>
-            </li>
-            <li /* className="notification-box p-2" */>
-              {/* <div className="row">
+              </li>
+              <li /* className="notification-box p-2" */>
+                {/* <div className="row">
                 <div className="col-lg-8 col-sm-8 col-8"> */}
-              <Notification />
-              {/*  </div>
+                <Notification />
+                {/*  </div>
               </div> */}
-            </li>
-            <li className="footer bg-dark text-center">
-              <a href="/" className="text-light">
-                View All
-              </a>
-            </li>
-          </ul>
-        </li>
-      </ul>
+              </li>
+              <li className="footer bg-dark text-center">
+                <a href="/" className="text-light">
+                  View All
+                </a>
+              </li>
+            </ul>
+          </li>
+        </ul>
+      ) : null}
       <button
         className="navbar-toggler text-primary"
         type="button"
@@ -113,7 +115,7 @@ const Menu = ({ history }) => {
                     `/user/${isAuthenticated().user._id}`
                   )}
                 >
-                  {`${isAuthenticated().user.name.toUpperCase()} 'S PROFILE`}{" "}
+                  {`${isAuthenticated().user.name.toUpperCase()} 'S PROFILE`}
                 </Link>
 
                 <Link
@@ -217,8 +219,8 @@ const Menu = ({ history }) => {
           </>
         </ul>
       </div>
-    </nav> /* ,
-    document.getElementById("navbar-div") */
+    </nav>,
+    document.getElementById("navbar-div")
   );
 };
 

@@ -1,3 +1,5 @@
+import axios from "axios";
+
 /**
  * For  Creating Post
  *
@@ -12,14 +14,28 @@ export const create = async (userId, token, post) => {
       method: "POST",
       headers: {
         Accept: "application/json",
-        Authorization: `Bearer ${token}`
+        Authorization: `Bearer ${token}`,
       },
-      body: post
+      body: post,
     }
   );
 
   return await postData.json();
 };
+
+/* export const create = async (userId, token, post) => {
+  const postData = await axios.post(
+    `${process.env.REACT_APP_API_URL}/api/post/${userId}`,
+    {
+      headers: {
+        "Content-type": "application/json",
+        authorization: `Bearer ${token}`,
+      },
+      body: post,
+    }
+  );
+  return await postData;
+}; */
 
 /**
  * For Listing All the Posts
@@ -35,8 +51,8 @@ export const list = async (isAdmin = false, token = null) => {
     headers: {
       Accept: "application/json",
       "Content-Type": "Application/json",
-      Authorization: `Bearer ${token}`
-    }
+      Authorization: `Bearer ${token}`,
+    },
   });
   return await posts.json({ posts });
 };
@@ -46,11 +62,11 @@ export const list = async (isAdmin = false, token = null) => {
  *
  * @param {string} postId  Post Id of The Post
  */
-export const singlePost = async postId => {
+export const singlePost = async (postId) => {
   const posts = await fetch(
     `${process.env.REACT_APP_API_URL}/api/post/${postId}`,
     {
-      method: "GET"
+      method: "GET",
     }
   );
   return await posts.json({ posts });
@@ -70,8 +86,8 @@ export const listByUser = async (userId, token) => {
       headers: {
         Accept: "application/json",
         "Content-Type": "Application/json",
-        Authorization: `Bearer ${token}`
-      }
+        Authorization: `Bearer ${token}`,
+      },
     }
   );
   return await posts.json({ posts });
@@ -91,8 +107,8 @@ export const remove = async (postId, token) => {
       headers: {
         Accept: "application/json",
         "Content-Type": "Application/json",
-        Authorization: `Bearer ${token}`
-      }
+        Authorization: `Bearer ${token}`,
+      },
     }
   );
   return await deletePost.json();
@@ -112,9 +128,9 @@ export const update = async (postId, token, post) => {
       method: "PATCH",
       headers: {
         Accept: "application/json",
-        Authorization: `Bearer ${token}`
+        Authorization: `Bearer ${token}`,
       },
-      body: post
+      body: post,
     }
   );
 
@@ -136,9 +152,9 @@ export const like = async (userId, token, postId) => {
       headers: {
         Accept: "application/json",
         "Content-Type": "Application/json",
-        Authorization: `Bearer ${token}`
+        Authorization: `Bearer ${token}`,
       },
-      body: JSON.stringify({ userId, postId })
+      body: JSON.stringify({ userId, postId }),
     }
   );
 
@@ -160,9 +176,9 @@ export const unlike = async (userId, token, postId) => {
       headers: {
         Accept: "application/json",
         "Content-Type": "Application/json",
-        Authorization: `Bearer ${token}`
+        Authorization: `Bearer ${token}`,
       },
-      body: JSON.stringify({ userId, postId })
+      body: JSON.stringify({ userId, postId }),
     }
   );
 
@@ -185,9 +201,9 @@ export const comment = async (userId, token, postId, comment) => {
       headers: {
         Accept: "application/json",
         "Content-Type": "Application/json",
-        Authorization: `Bearer ${token}`
+        Authorization: `Bearer ${token}`,
       },
-      body: JSON.stringify({ userId, postId, comment })
+      body: JSON.stringify({ userId, postId, comment }),
     }
   );
 
@@ -210,9 +226,9 @@ export const uncomment = async (userId, token, postId, comment) => {
       headers: {
         Accept: "application/json",
         "Content-Type": "Application/json",
-        Authorization: `Bearer ${token}`
+        Authorization: `Bearer ${token}`,
       },
-      body: JSON.stringify({ userId, postId, comment })
+      body: JSON.stringify({ userId, postId, comment }),
     }
   );
 

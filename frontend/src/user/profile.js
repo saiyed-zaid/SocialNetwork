@@ -267,7 +267,7 @@ class Profile extends Component {
                           className="btn btn-outline-secondary btn-custom "
                           onClick={this.handleDeactivateModal}
                         >
-                          Deactivate Account &nbsp;{" "}
+                          Deactivate Account &nbsp;
                           <i className="fas fa-times-circle"></i>
                         </button>
                       </>

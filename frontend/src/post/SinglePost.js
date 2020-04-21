@@ -50,9 +50,7 @@ class SinglePost extends Component {
    * Function For Confirming The Account Deletion
    */
   deleteConfirmed = () => {
-    let answer = window.confirm(
-      "Are Youe Sure. You Want To Delete your Acccount?"
-    );
+    let answer = window.confirm("Are Youe Sure. You Want To Delete your Post?");
     if (answer) {
       this.deletePost();
     }
@@ -86,6 +84,8 @@ class SinglePost extends Component {
     const postId = this.state.post._id;
     const token = isAuthenticated().user.token;
     callApi(userId, token, postId).then((data) => {
+      console.log(data);
+
       if (data.error) {
         console.log(data.error);
       } else {
@@ -106,7 +106,10 @@ class SinglePost extends Component {
       <div>
         <div>
           {post.photo && post.photo.mimetype === "video/mp4" ? (
-            <div className="embed-responsive embed-responsive-21by9">
+            <div
+              className="embed-responsive embed-responsive-21by9"
+              style={{ height: "500px" }}
+            >
               <video controls className="embed-responsive-item">
                 <source
                   src={`${process.env.REACT_APP_API_URL}/${
@@ -114,7 +117,7 @@ class SinglePost extends Component {
                   }`}
                   type="video/mp4"
                 />
-                Your browser does not support the video tag.
+                Unsupported Browser.
               </video>
             </div>
           ) : (
@@ -127,7 +130,7 @@ class SinglePost extends Component {
               style={{
                 height: "400px",
                 width: "100vw",
-                objectFit: "scale-down",
+                objectFit: "contain",
               }}
               onError={(e) => {
                 e.target.src = DefaultPost;
@@ -152,12 +155,11 @@ class SinglePost extends Component {
             <h3>{post.title}</h3>
             <h4 className="lead pt-2 pb-2">
               <small>
-                {" "}
                 <span className=" font-italic" style={{ fontSize: "12px" }}>
-                  Posted By{" "}
+                  Posted By
                   <Link style={{ color: "#a59413" }} to={`${posterId}`}>
                     {posterName}
-                  </Link>{" "}
+                  </Link>
                   on {new Date(post.created).toDateString()}
                 </span>
               </small>

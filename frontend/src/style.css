@@ -621,10 +621,11 @@ div.content {
 
 .floating-btn {
   position: fixed;
+  font-size: larger;
   background-color: #029cf4;
   border-color: transparent;
   color: #f1f5f1;
-  right: 0%;
+  right: -0.5%;
   top: 45%;
   height: 50px;
   width: 50px;
@@ -638,9 +639,9 @@ div.content {
 }
 
 .floating-btn:hover {
-  font-size: x-large;
   background-color: #41ae2b;
   color: #f1f5f1;
+  right: 0%;
 }
 
 .chat-list:hover::after {
@@ -649,4 +650,11 @@ div.content {
   color: #0073ff;
   padding-left: 10px;
   font-style: normal;
+}
+
+.anim-icon {
+  transition: ease-in 0.4s;
+}
+.anim-icon:hover {
+  transform: rotateZ(45deg);
 }

@@ -130,7 +130,6 @@ class EditProfile extends Component {
               </label>
             </div>
           </div>
-
           <div className="form-group">
             <input
               onChange={this.handleChange("name")}

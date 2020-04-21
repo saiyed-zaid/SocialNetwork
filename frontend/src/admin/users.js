@@ -119,19 +119,20 @@ class Users extends Component {
   };
 
   handleDeleteModal = (userId) => {
-    this.setState({ deleteId: userId });
     document.getElementById("deleteprofile").style.display = "block";
     document.getElementById("deleteprofile").classList.add("show");
+    this.setState({ deleteId: userId });
   };
 
   deleteMultiple = () => {
     const { checkBox } = this.state;
     const token = isAuthenticated().user.token;
-    document.getElementById("deleteprofile").style.display = "block";
-    document.getElementById("deleteprofile").classList.add("show");
+
     if (checkBox.length === 0) {
       alert("Please Select Records To Delete.");
     } else {
+      document.getElementById("deleteprofile").style.display = "block";
+      document.getElementById("deleteprofile").classList.add("show");
       checkBox.forEach((id) => {
         remove(id, token).then((data) => {
           if (data.isDeleted) {
@@ -361,7 +362,6 @@ class Users extends Component {
                   data-index={i}
                 >
                   <th>
-                    {" "}
                     <input
                       name="childchk"
                       type="checkbox"
@@ -382,7 +382,6 @@ class Users extends Component {
                   <td width="10%">{user.role}</td>
                   <td width="15%">
                     <a style={{ color: "#fff" }} href={`mailto:${user.email}`}>
-                      {" "}
                       {user.email}
                     </a>
                   </td>

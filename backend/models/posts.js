@@ -7,55 +7,61 @@ const PostSchema = new Schema({
     type: String,
     required: true,
     minlength: 5,
-    maxlength: 120
+    maxlength: 120,
   },
   body: {
     type: String,
     required: true,
     minlength: 5,
-    maxlength: 2000
+    maxlength: 2000,
   },
   photo: {
-    type: Object
+    type: Object,
   },
   postedBy: {
     type: ObjectId,
-    ref: "User"
+    ref: "User",
   },
   created: {
     type: Date,
-    default: Date.now
+    default: Date.now,
   },
   updated: {
-    type: Date
+    type: Date,
   },
   likes: [
     {
       type: ObjectId,
-      ref: "User"
-    }
+      ref: "User",
+    },
+  ],
+  tags: [
+    {
+      type: ObjectId,
+      ref: "User",
+    },
   ],
   comments: [
     {
       text: String,
       created: {
         type: Date,
-        default: Date.now
+        default: Date.now,
       },
       postedBy: {
         type: ObjectId,
-        ref: "User"
-      }
-    }
+        ref: "User",
+      },
+    },
   ],
   status: {
     type: Boolean,
-    default: true
+    default: true,
   },
   disabledBy: {
     type: String,
-    default: ""
-  }
+    default: "",
+  },
 });
 
 module.exports = mongoose.model("Post", PostSchema);

@@ -36,7 +36,7 @@ const MainRouter = (props) => {
           component={ResetPassword}
         />
         <PrivateRoute path="/post/create" exact component={NewPost} />
-        <Route path="/post/:postId" exact component={SinglePost} />
+        <PrivateRoute path="/post/:postId" exact component={SinglePost} />
         <PrivateRoute path="/post/edit/:postId" exact component={EditPost} />
         <PrivateRoute path="/users" exact component={Users} />
         <Route path="/signup" exact component={Signup} />

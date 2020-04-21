@@ -1,3 +1,5 @@
+import axios from "axios";
+
 /**
  * Api For Reading Data From Database
  *
@@ -34,6 +36,11 @@ export const list = async () => {
   return await users.json({ users });
 };
 
+/* export const list = async () => {
+  const users = await axios.get(`${process.env.REACT_APP_API_URL}/api/users`);
+  return await users.data;
+};
+ */
 /**
  * Api For Deleting The User Profile
  *
