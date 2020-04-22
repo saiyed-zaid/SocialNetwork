@@ -182,9 +182,7 @@ class ProfileTabs extends Component {
                           <i class="fas fa-paper-plane"></i>
                         </button>
                       </>
-                    ) : (
-                      ""
-                    )}
+                    ) : null}
                   </div>
                 );
               })

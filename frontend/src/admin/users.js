@@ -134,19 +134,21 @@ class Users extends Component {
       document.getElementById("deleteprofile").style.display = "block";
       document.getElementById("deleteprofile").classList.add("show");
       checkBox.forEach((id) => {
-        remove(id, token).then((data) => {
-          if (data.isDeleted) {
-            this.setState({ redirect: true });
-            let getRow = document.getElementById(id);
-            getRow.addEventListener("animationend", () => {
-              getRow.parentNode.removeChild(getRow);
-              getRow.classList.remove("row-remove");
-            });
-            getRow.classList.toggle("row-remove");
-          } else {
-            console.log(data.msg);
-          }
-        });
+        remove(id, token)
+          .then((data) => {
+            if (data.isDeleted) {
+              this.setState({ redirect: true });
+              let getRow = document.getElementById(id);
+              getRow.addEventListener("animationend", () => {
+                getRow.parentNode.removeChild(getRow);
+                getRow.classList.remove("row-remove");
+              });
+              getRow.classList.toggle("row-remove");
+            } else {
+              console.log(data.msg);
+            }
+          })
+          .catch();
       });
     }
   };
@@ -429,6 +431,7 @@ class Users extends Component {
           title="Delete Record"
           body="Are Your Sure You Want To Delete ?"
           buttonText="Delete"
+          show
           buttonClick={
             this.state.checkBox.length >= 1
               ? () => this.deleteMultiple()

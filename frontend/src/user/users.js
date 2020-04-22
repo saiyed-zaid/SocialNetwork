@@ -46,7 +46,7 @@ class Users extends Component {
     let chatbar = document.getElementById("chatbar");
     chatbar.style.display = "block";
     chatbar.classList.remove("close-chatbar");
-    // document.getElementById("floating-btn").style.display = "none";
+    document.getElementById("floating-btn").style.display = "none";
   };
 
   /**

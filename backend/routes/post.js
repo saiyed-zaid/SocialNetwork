@@ -184,6 +184,11 @@ router.patch(
   }).single("photo"),
   postController.updatePost
 );
+router.get(
+  "/api/post/newpost/:userId",
+  auth_check,
+  postController.dailyNewPosts
+);
 
 /**
  * @function param

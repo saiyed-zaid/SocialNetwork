@@ -306,6 +306,7 @@ class Profile extends Component {
           body="Are You Sure You Want To Deactivate Your Account ? "
           buttonText="Deactivate"
           buttonClick={() => this.handleUserStatusChange(user)}
+          show
         />
       </div>
     );

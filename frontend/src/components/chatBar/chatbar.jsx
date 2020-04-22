@@ -10,8 +10,8 @@ export default class chatbar extends Component {
 
     // chatbar.addEventListener("animationend", () => {
     chatbar.style.display = "none";
-    // document.getElementById("floating-btn").style.display = "block";
     // });
+    document.getElementById("floating-btn").style.display = "block";
   };
 
   render() {

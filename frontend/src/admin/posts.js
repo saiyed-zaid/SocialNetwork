@@ -18,13 +18,13 @@ class Posts extends Component {
       toastMsg: "",
       checkBox: [],
       deleteId: "",
-      search: ""
+      search: "",
     };
   }
 
   componentDidMount() {
     const token = isAuthenticated().user.token;
-    list(true, token).then(data => {
+    list(true, token).then((data) => {
       if (data.error) {
         console.log(data.error);
       } else {
@@ -35,9 +35,9 @@ class Posts extends Component {
     });
   }
 
-  deletePost = postId => {
+  deletePost = (postId) => {
     const token = isAuthenticated().user.token;
-    remove(postId, token).then(data => {
+    remove(postId, token).then((data) => {
       if (data.error) {
         console.log(data.error);
       } else {
@@ -45,7 +45,7 @@ class Posts extends Component {
           redirectToHome: true,
           toastPopup: true,
           toastType: "Success",
-          toastMsg: "Record deleted successfully."
+          toastMsg: "Record deleted successfully.",
         });
         setTimeout(this.toastPopupEnable, 8000);
         document.getElementById("deleteprofile").style.display = "none";
@@ -57,7 +57,7 @@ class Posts extends Component {
   /**
    * Function For Confirming The Account Deletion
    */
-  deleteConfirmed = postId => {
+  deleteConfirmed = (postId) => {
     this.deletePost(postId);
     let getRow = document.getElementById(postId);
     getRow.addEventListener("animationend", () => {
@@ -67,18 +67,18 @@ class Posts extends Component {
     getRow.classList.toggle("row-remove");
   };
 
-  handleCheckBoxChange = event => {
+  handleCheckBoxChange = (event) => {
     let selectAllCheckbox = document.getElementsByName("selectall")[0];
     let Checkboxes = document.getElementsByName("childchk");
     let arr = [];
 
     if (selectAllCheckbox.checked) {
-      Checkboxes.forEach(checkbox => {
+      Checkboxes.forEach((checkbox) => {
         checkbox.checked = true;
         arr.push(checkbox.id);
       });
     } else {
-      Checkboxes.forEach(checkbox => {
+      Checkboxes.forEach((checkbox) => {
         checkbox.checked = false;
         arr = [];
       });
@@ -87,13 +87,13 @@ class Posts extends Component {
     this.setState({ checkBox: arr });
   };
 
-  handleSingleCheckBox = event => {
+  handleSingleCheckBox = (event) => {
     let selectAllCheckbox = document.getElementsByName("selectall")[0];
     let Checkboxes = document.getElementsByName("childchk");
 
     let arr = [];
 
-    Checkboxes.forEach(checkBox => {
+    Checkboxes.forEach((checkBox) => {
       let index = arr.indexOf(checkBox.id);
 
       if (!checkBox.checked) {
@@ -117,10 +117,10 @@ class Posts extends Component {
     } else {
       document.getElementById("deleteprofile").style.display = "block";
       document.getElementById("deleteprofile").classList.add("show");
-      checkBox.forEach(id => {
-        remove(id, token).then(data => {
+      checkBox.forEach((id) => {
+        remove(id, token).then((data) => {
           if (data.isDeleted) {
-            // this.setState({ redirect: true });
+            this.setState({ redirect: true });
             let getRow = document.getElementById(id);
             getRow.addEventListener("animationend", () => {
               getRow.parentNode.removeChild(getRow);
@@ -135,7 +135,7 @@ class Posts extends Component {
     }
   };
 
-  handlePostStatusChange = event => {
+  handlePostStatusChange = (event) => {
     const data = new FormData();
 
     const index = event.target.getAttribute("data-index");
@@ -157,7 +157,7 @@ class Posts extends Component {
     data.append("status", dataToUpdate[index].status);
 
     update(postId, isAuthenticated().user.token, data)
-      .then(result => {
+      .then((result) => {
         if (result.err) {
           console.log("Error=> ", result.err);
         } else {
@@ -165,13 +165,13 @@ class Posts extends Component {
             posts: dataToUpdate,
             toastPopup: true,
             toastType: "success",
-            toastMsg: "Record updated successfully."
+            toastMsg: "Record updated successfully.",
           });
           setTimeout(this.toastPopupEnable, 8000);
           console.log("RECORD UPDATED", result);
         }
       })
-      .catch(err => {
+      .catch((err) => {
         if (err) {
           console.log("ERR IN UPDATING", err);
         }
@@ -181,13 +181,13 @@ class Posts extends Component {
     this.setState({ toastPopup: false });
   };
 
-  handleModalValue = postId => {
+  handleModalValue = (postId) => {
     this.setState({ deleteId: postId });
   };
-  updateSearch = event => {
+  updateSearch = (event) => {
     this.setState({ search: event.target.value.substr(0, 20) });
   };
-  handleDeleteModal = postId => {
+  handleDeleteModal = (postId) => {
     this.setState({ deleteId: postId });
 
     document.getElementById("deleteprofile").style.display = "block";
@@ -195,7 +195,7 @@ class Posts extends Component {
   };
 
   render() {
-    const posts = this.state.posts.filter(post => {
+    const posts = this.state.posts.filter((post) => {
       return post.title.indexOf(this.state.search) !== -1;
     });
     return (
@@ -228,7 +228,7 @@ class Posts extends Component {
             position: "fixed",
             bottom: "0",
             right: "0",
-            zIndex: "111"
+            zIndex: "111",
           }}
         >
           <Toast
@@ -253,7 +253,7 @@ class Posts extends Component {
                 <input
                   name="selectall"
                   type="checkbox"
-                  onChange={e => this.handleCheckBoxChange(e)}
+                  onChange={(e) => this.handleCheckBoxChange(e)}
                 />
               </th>
               <th scope="col" style={{ width: "10px" }}>
@@ -286,7 +286,7 @@ class Posts extends Component {
                       name="childchk"
                       type="checkbox"
                       id={post._id}
-                      onChange={e => this.handleSingleCheckBox(e)}
+                      onChange={(e) => this.handleSingleCheckBox(e)}
                       width="1%"
                     />
                   </th>

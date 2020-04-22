@@ -51,25 +51,27 @@ export default class modal extends Component {
             >
               {this.props.body}
             </div>
-            <div className="modal-footer bg-primary" id="modal-footer">
-              <button
-                type="button"
-                className="btn btn-secondary"
-                data-dismiss="modal"
-                onClick={this.modalClose}
-              >
-                Close
-              </button>
-              <button
-                type="button"
-                className="btn btn-danger"
-                id="modalbtn"
-                data-dismiss="modal"
-                onClick={this.props.buttonClick}
-              >
-                {this.props.buttonText}
-              </button>
-            </div>
+            {this.props.show ? (
+              <div className="modal-footer bg-primary" id="modal-footer">
+                <button
+                  type="button"
+                  className="btn btn-secondary"
+                  data-dismiss="modal"
+                  onClick={this.modalClose}
+                >
+                  Close
+                </button>
+                <button
+                  type="button"
+                  className="btn btn-danger"
+                  id="modalbtn"
+                  data-dismiss="modal"
+                  onClick={this.props.buttonClick}
+                >
+                  {this.props.buttonText}
+                </button>
+              </div>
+            ) : null}
           </div>
         </div>
       </div>

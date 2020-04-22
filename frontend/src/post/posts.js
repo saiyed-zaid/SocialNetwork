@@ -41,13 +41,13 @@ class Posts extends Component {
           // const imgPath = post.photo ? post.photo.path : DefaultPost;
           return (
             <Card
-              className="card"
+              className="card like-box"
               key={i}
               style={{ width: "20rem" }}
               img={
                 post.photo && post.photo.mimetype === "video/mp4" ? (
                   <div className="embed-responsive embed-responsive-1by1 p-0 m-0">
-                    <video className="embed-responsive-item">
+                    <video controls className="embed-responsive-item">
                       <source
                         src={`${process.env.REACT_APP_API_URL}/${
                           post.photo ? post.photo.path : DefaultPost
