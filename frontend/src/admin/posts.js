@@ -24,15 +24,15 @@ class Posts extends Component {
 
   componentDidMount() {
     const token = isAuthenticated().user.token;
-    list(true, token).then((data) => {
-      if (data.error) {
-        console.log(data.error);
-      } else {
-        console.log("ststst", data.posts);
-
-        this.setState({ posts: data.posts });
-      }
-    });
+    list(true, token)
+      .then((data) => {
+        if (data.error) {
+          console.log(data.error);
+        } else {
+          this.setState({ posts: data.posts });
+        }
+      })
+      .catch();
   }
 
   deletePost = (postId) => {
@@ -356,6 +356,7 @@ class Posts extends Component {
               ? () => this.deleteMultiple()
               : () => this.deleteConfirmed(this.state.deleteId)
           }
+          show
         />
       </div>
     );

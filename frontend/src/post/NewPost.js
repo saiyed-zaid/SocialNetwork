@@ -173,7 +173,7 @@ class NewPost extends Component {
                 id="inputGroupFile04"
                 aria-describedby="inputGroupFileAddon04"
               />
-              <label className="custom-file-label" for="inputGroupFile04">
+              <label className="custom-file-label" htmlFor="inputGroupFile04">
                 Choose Post Photo
               </label>
             </div>

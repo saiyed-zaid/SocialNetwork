@@ -21,26 +21,27 @@ class Users extends Component {
     };
   }
   componentDidMount() {
-    list().then((data) => {
-      console.log(data);
+    list()
+      .then((data) => {
+        console.log(data);
 
-      if (data.error) {
-        console.log(data.error);
-      } else {
-        this.setState({ users: data.users });
-      }
-    });
+        if (data.error) {
+          console.log(data.error);
+        } else {
+          this.setState({ users: data.users });
+        }
+      })
+      .catch();
 
-    getOnlineUsers(
-      isAuthenticated().user._id,
-      isAuthenticated().user.token
-    ).then((data) => {
-      if (data.error) {
-        console.log(data.error);
-      } else {
-        this.setState({ onlineUsers: data[0].following });
-      }
-    });
+    getOnlineUsers(isAuthenticated().user._id, isAuthenticated().user.token)
+      .then((data) => {
+        if (data.error) {
+          console.log(data.error);
+        } else {
+          this.setState({ onlineUsers: data[0].following });
+        }
+      })
+      .catch();
   }
   onMsg = () => {
     let chatbar = document.getElementById("chatbar");

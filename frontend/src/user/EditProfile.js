@@ -115,8 +115,8 @@ class EditProfile extends Component {
     return (
       <div className="col-md-6">
         <form method="post">
-          <div class="input-group form-group">
-            <div class="custom-file">
+          <div className="input-group form-group">
+            <div className="custom-file">
               <input
                 accept="image/*"
                 className="custom-file-input"
@@ -125,7 +125,7 @@ class EditProfile extends Component {
                 id="inputGroupFile04"
                 aria-describedby="inputGroupFileAddon04"
               />
-              <label class="custom-file-label" for="inputGroupFile04">
+              <label className="custom-file-label" htmlFor="inputGroupFile04">
                 Choose Post Photo
               </label>
             </div>

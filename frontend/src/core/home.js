@@ -11,7 +11,9 @@ class Home extends Component {
     };
   }
 
-  componentDidMount() {}
+  componentDidMount() {
+    document.title = "Social Network | HOME";
+  }
 
   render() {
     return (

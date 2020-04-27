@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { isAuthenticated } from "../auth/index";
-import { Redirect, Link } from "react-router-dom";
+import { Redirect } from "react-router-dom";
 import {
   getNewUsers,
   getNewPosts,

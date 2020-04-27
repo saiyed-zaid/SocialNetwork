@@ -16,7 +16,7 @@ class FollowProfileButton extends Component {
             onClick={this.followClick}
             className="btn btn-raised btn-success mr-5"
           >
-            <i class="fas fa-user-plus"></i>
+            <i className="fas fa-user-plus"></i>
           </button>
         ) : (
           <button
