@@ -4,7 +4,6 @@ import { isAuthenticated } from "../auth/index";
 import { remove, update } from "../user/apiUser";
 import { Link } from "react-router-dom";
 import DefaultProfile from "../images/avatar.jpg";
-import Card from "../components/card";
 import "../../node_modules/react-toggle-switch/dist/css/switch.min.css";
 import Avatar from "../components/Avatar";
 import Toast from "../components/Toast";
@@ -14,6 +13,7 @@ import Modal from "../components/modal/modal";
 class Users extends Component {
   constructor() {
     super();
+
     this.state = {
       users: [],
       checked: false,
@@ -36,6 +36,10 @@ class Users extends Component {
         console.log(data.error);
       } else {
         this.setState({ users: data.users });
+
+        const script = document.createElement("script");
+        script.src = "/js/dataTables.js";
+        document.body.appendChild(script);
       }
     });
   }
@@ -124,6 +128,11 @@ class Users extends Component {
     this.setState({ deleteId: userId });
   };
 
+  hanldeMultipleDeleteModal = () => {
+    document.getElementById("deleteprofile").style.display = "block";
+    document.getElementById("deleteprofile").classList.add("show");
+  };
+
   deleteMultiple = () => {
     const { checkBox } = this.state;
     const token = isAuthenticated().user.token;
@@ -131,8 +140,6 @@ class Users extends Component {
     if (checkBox.length === 0) {
       alert("Please Select Records To Delete.");
     } else {
-      document.getElementById("deleteprofile").style.display = "block";
-      document.getElementById("deleteprofile").classList.add("show");
       checkBox.forEach((id) => {
         remove(id, token)
           .then((data) => {
@@ -150,30 +157,13 @@ class Users extends Component {
           })
           .catch();
       });
+      document.getElementById("deleteprofile").style.display = "none";
+      document.getElementById("deleteprofile").classList.remove("show");
     }
   };
 
   updateSearch = (event) => {
     this.setState({ search: event.target.value.substr(0, 20) });
-  };
-
-  showCard = (event) => {
-    /* const profileCard = document.querySelector(".card");
-    profileCard.style.opacity = "0"; */
-    this.setState({ isProfileViewed: false });
-    /*  var table = document.querySelector("#usersTable");
-    table.style.opacity = "1"; */
-  };
-
-  rowHandler = (event) => {
-    console.log("evt", event.target.parentNode.nodeName);
-    //nodeName: "TR"
-    if (event.target.parentNode.nodeName === "TR") {
-      this.index = event.target.parentNode.getAttribute("data-index");
-      this.setState({ isProfileViewed: true });
-    } else {
-      alert("Something went wrong while fetching row");
-    }
   };
 
   handleUserStatusChange = (event) => {
@@ -220,58 +210,9 @@ class Users extends Component {
   };
 
   render() {
-    const users = this.state.users.filter((user) => {
-      return user.name.indexOf(this.state.search) !== -1;
-    });
-    if (this.state.isProfileViewed) {
-      return (
-        <div style={{ postion: "relative" }}>
-          <Card
-            class="card"
-            style={{
-              width: "18rem",
-              position: "absolute",
-              top: "50%",
-              left: "50%",
-              transform: "translate(-50%,-50%)",
-              transition: "unset",
-              animation: "unset",
-            }}
-            img={
-              <img
-                className="card-img-top "
-                src={DefaultProfile}
-                onError={(i) => (i.target.src = `${DefaultProfile}`)}
-                alt="zaid"
-              />
-            }
-            title={this.state.users[this.index].name}
-            text={this.state.users[this.index].about}
-          >
-            <label className="brd-grdnt rounded" style={{ padding: "1px" }}>
-              <Link to="1" className="btn btn-primary">
-                Active
-              </Link>
-            </label>
-            <span
-              style={{
-                position: "absolute",
-                top: "0",
-                right: "5px",
-                cursor: "pointer",
-                padding: "3px",
-                color: "#ffff",
-                borderRadius: "0 0 5px 5px",
-                backgroundColor: "#1a1d24",
-              }}
-              onClick={this.showCard}
-            >
-              X
-            </span>
-          </Card>
-        </div>
-      );
-    }
+    const { users } = this.state;
+    // return 0;
+
     return (
       <div className="container-fluid m-0 p-0">
         <div className="jumbotron p-3 m-0">
@@ -287,17 +228,7 @@ class Users extends Component {
           >
             <i className="fas fa-trash"></i> Delete Selected
           </button>
-
-          <input
-            type="text"
-            value={this.state.search}
-            onChange={this.updateSearch}
-            style={{ border: "1px solid black" }}
-            className="form-control col-md-2 ml-auto m-2 "
-            placeholder="Search Here"
-          />
         </div>
-        {/* Toast */}
         <div
           style={{
             display: "flex",
@@ -322,110 +253,114 @@ class Users extends Component {
             }
           />
         </div>
-        {/* Toast / */}
-        <table class="table table-hover text-light" id="usersTable">
-          <thead>
-            <tr>
-              <th>
-                <input
-                  name="selectall"
-                  type="checkbox"
-                  onChange={(e) => this.handleCheckBoxChange(e)}
-                />
-              </th>
-              <th scope="col" style={{ width: "10px" }}>
-                No
-              </th>
-              <th scope="col" style={{ width: "15px" }}>
-                Image
-              </th>
-              <th scope="col">Name</th>
-              <th scope="col">About</th>
-              <th scope="col">Role</th>
-              <th scope="col">Email</th>
-              <th scope="col">Joined Date</th>
-              <th scope="col">Status</th>
-              <th scope="col" style={{ width: "10px" }}>
-                Edit
-              </th>
-              <th scope="col" style={{ width: "10px" }}>
-                Delete
-              </th>
-            </tr>
-          </thead>
-          <tbody style={{ color: "#fff" }}>
-            {users.map((user, i) => {
-              return (
-                <tr
-                  key={user._id}
-                  id={user._id}
-                  /* onClick={this.rowHandler} */
-                  style={{ cursor: "pointer" }}
-                  data-index={i}
-                >
-                  <th>
-                    <input
-                      name="childchk"
-                      type="checkbox"
-                      id={user._id}
-                      onChange={(e) => this.handleSingleCheckBox(e)}
-                    />
-                  </th>
-                  <th scope="row">{i + 1}</th>
-                  <td width="5%">
-                    <Avatar
-                      src={`${process.env.REACT_APP_API_URL}/${
-                        user.photo ? user.photo.path : DefaultProfile
-                      }`}
-                    />
-                  </td>
-                  <td width="15%">{user.name}</td>
-                  <td width="20%">{user.about}</td>
-                  <td width="10%">{user.role}</td>
-                  <td width="15%">
-                    <a style={{ color: "#fff" }} href={`mailto:${user.email}`}>
-                      {user.email}
-                    </a>
-                  </td>
-                  <td>{new Date(user.created).toDateString()}</td>
-                  <td>
-                    <div
-                      className={user.status ? "switch on" : "switch off"}
-                      onClick={this.handleUserStatusChange}
-                      data-index={i}
-                    >
+        {users.length > 0 ? (
+          <table className="table table-hover text-light" id="userstable">
+            <thead>
+              <tr>
+                <th>
+                  <input
+                    name="selectall"
+                    type="checkbox"
+                    onChange={(e) => this.handleCheckBoxChange(e)}
+                  />
+                </th>
+                <th scope="col" style={{ width: "10px" }}>
+                  No
+                </th>
+                <th scope="col" style={{ width: "15px" }}>
+                  Image
+                </th>
+                <th scope="col">Name</th>
+                <th scope="col">About</th>
+                <th scope="col">Role</th>
+                <th scope="col">Email</th>
+                <th scope="col">Joined Date</th>
+                <th scope="col">Status</th>
+                <th scope="col" style={{ width: "10px" }}>
+                  Edit
+                </th>
+                <th scope="col" style={{ width: "10px" }}>
+                  Delete
+                </th>
+              </tr>
+            </thead>
+            <tbody style={{ color: "#fff" }}>
+              {users.map((user, i) => {
+                return (
+                  <tr
+                    key={user._id}
+                    id={user._id}
+                    style={{ cursor: "pointer" }}
+                    data-index={i}
+                  >
+                    <th>
+                      <input
+                        name="childchk"
+                        type="checkbox"
+                        id={user._id}
+                        onChange={(e) => this.handleSingleCheckBox(e)}
+                      />
+                    </th>
+                    <th scope="row">{i + 1}</th>
+                    <td width="5%">
+                      <Avatar
+                        src={`${process.env.REACT_APP_API_URL}/${
+                          user.photo ? user.photo.path : DefaultProfile
+                        }`}
+                      />
+                    </td>
+                    <td width="15%">{user.name}</td>
+                    <td width="20%">{user.about}</td>
+                    <td width="10%">{user.role}</td>
+                    <td width="15%">
+                      <a
+                        style={{ color: "#fff" }}
+                        href={`mailto:${user.email}`}
+                      >
+                        {user.email}
+                      </a>
+                    </td>
+                    <td>{new Date(user.created).toDateString()}</td>
+                    <td>
                       <div
-                        className="switch-toggle"
-                        style={{ pointerEvents: "none" }}
-                      ></div>
-                    </div>
-                  </td>
+                        className={user.status ? "switch on" : "switch off"}
+                        onClick={this.handleUserStatusChange}
+                        data-index={i}
+                      >
+                        <div
+                          className="switch-toggle"
+                          style={{ pointerEvents: "none" }}
+                        ></div>
+                      </div>
+                    </td>
 
-                  <td width="1%">
-                    <Link
-                      className="btn btn-sm"
-                      to={`/user/edit/${user._id}`}
-                      style={{ boxShadow: "unset" }}
-                    >
-                      <i className="fas fa-edit"></i>
-                    </Link>
-                  </td>
-                  <td width="1%">
-                    <button
-                      className="btn btn-sm"
-                      disabled={isAuthenticated().user._id === user._id}
-                      // data-toggle="modal"
-                      // data-target="#exampleModalCenter"
-                      onClick={() => this.handleDeleteModal(user._id)}
-                    >
-                      <i className="fas fa-trash"> </i>
-                    </button>
-                  </td>
-                </tr>
-              );
-            })}
-          </tbody>
-        </table>
+                    <td width="1%">
+                      <Link
+                        className="btn btn-sm"
+                        to={`/user/edit/${user._id}`}
+                        style={{ boxShadow: "unset" }}
+                      >
+                        <i className="fas fa-edit"></i>
+                      </Link>
+                    </td>
+                    <td width="1%">
+                      <button
+                        className="btn btn-sm"
+                        disabled={isAuthenticated().user._id === user._id}
+                        // data-toggle="modal"
+                        // data-target="#exampleModalCenter"
+                        onClick={() => this.handleDeleteModal(user._id)}
+                      >
+                        <i className="fas fa-trash"> </i>
+                      </button>
+                    </td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
+        ) : null}
+
         <Modal
           id="deleteprofile"
           title="Delete Record"
@@ -439,11 +374,11 @@ class Users extends Component {
           }
         />
 
-        {/* <Modal
-          id="editprofile"
-          title="Edit Profile"
-          body={<EditProfile userId={this.state.editId} />}
-        /> */}
+        {/* // {<Modal
+        //   id="editprofile"
+        //   title="Edit Profile"
+        //   body={<EditProfile userId={this.state.editId} />}
+        // />} */}
       </div>
     );
   }

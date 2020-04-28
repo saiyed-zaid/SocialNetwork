@@ -29,14 +29,18 @@
       rel="stylesheet"
       href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"
     />
+    <link
+      rel="stylesheet"
+      href="https://cdn.datatables.net/1.10.20/css/dataTables.bootstrap4.min.css"
+    />
 
     <title>Social Network</title>
   </head>
   <body style="background-color: #002b36 !important;">
     <noscript>You need to enable JavaScript to run this app.</noscript>
-      <div id="navbar-div"></div>
-      <div id="loader"></div>
-      <div id="root"></div>
+    <div id="navbar-div"></div>
+    <div id="loader"></div>
+    <div id="root"></div>
     <script
       src="https://kit.fontawesome.com/ab87d46dcb.js"
       crossorigin="anonymous"
@@ -68,8 +72,15 @@
       integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
       crossorigin="anonymous"
     ></script>
+    <script src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.10.20/js/dataTables.bootstrap4.min.js"></script>
     <script>
       $(document).ready(function () {
+       /*  const userTable = document.getElementById("userstable");
+          $("#userstable").DataTable({
+            responsive: true,
+            autoWidth: false,
+          }); */
         $("body").tooltip({ selector: "[data-toggle=tooltip]" });
       });
     </script>

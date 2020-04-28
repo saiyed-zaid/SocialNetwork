@@ -11,6 +11,7 @@ import Modal from "../components/modal/modal";
 class Posts extends Component {
   constructor() {
     super();
+
     this.state = {
       posts: [],
       toastPopup: false,
@@ -24,12 +25,16 @@ class Posts extends Component {
 
   componentDidMount() {
     const token = isAuthenticated().user.token;
+
     list(true, token)
       .then((data) => {
         if (data.error) {
           console.log(data.error);
         } else {
           this.setState({ posts: data.posts });
+          const script = document.createElement("script");
+          script.src = "/js/dataTables.js";
+          document.body.appendChild(script);
         }
       })
       .catch();
@@ -107,7 +112,10 @@ class Posts extends Component {
     });
     this.setState({ checkBox: arr });
   };
-
+  handleMulltipleDeleteModal = () => {
+    document.getElementById("deleteprofile").style.display = "block";
+    document.getElementById("deleteprofile").classList.add("show");
+  };
   deleteMultiple = () => {
     const { checkBox } = this.state;
     const token = isAuthenticated().user.token;
@@ -115,8 +123,6 @@ class Posts extends Component {
     if (checkBox.length === 0) {
       alert("Please Select Records To Delete.");
     } else {
-      document.getElementById("deleteprofile").style.display = "block";
-      document.getElementById("deleteprofile").classList.add("show");
       checkBox.forEach((id) => {
         remove(id, token).then((data) => {
           if (data.isDeleted) {
@@ -131,6 +137,8 @@ class Posts extends Component {
             console.log(data.msg);
           }
         });
+        document.getElementById("deleteprofile").style.display = "none";
+        document.getElementById("deleteprofile").classList.remove("show");
       });
     }
   };
@@ -195,31 +203,23 @@ class Posts extends Component {
   };
 
   render() {
-    const posts = this.state.posts.filter((post) => {
-      return post.title.indexOf(this.state.search) !== -1;
-    });
+    const { posts } = this.state;
     return (
       <div className="container-fluid m-0 p-0">
         <div className="jumbotron p-3 m-0">
           <h4>Posts</h4>
           Total Posts: {posts.length}
         </div>
+
         {/* Toast */}
         <div className="d-flex">
-          <button className="btn btn-danger m-2" onClick={this.deleteMultiple}>
+          <button
+            className="btn btn-danger m-2"
+            onClick={this.handleMulltipleDeleteModal}
+          >
             <i className="fas fa-trash"></i> Delete Selected
             {/*  */}
           </button>
-
-          <div className="m-2 align-items-center"></div>
-          <input
-            type="text"
-            value={this.state.search}
-            onChange={this.updateSearch}
-            style={{ border: "1px solid black" }}
-            className="form-control col-md-2 ml-auto m-2 "
-            placeholder="Search Here"
-          />
         </div>
         <div
           style={{
@@ -246,106 +246,108 @@ class Posts extends Component {
           />
         </div>
         {/* Toast / */}
-        <table class="table table-hover text-light">
-          <thead>
-            <tr>
-              <th scope="col" width="5%">
-                <input
-                  name="selectall"
-                  type="checkbox"
-                  onChange={(e) => this.handleCheckBoxChange(e)}
-                />
-              </th>
-              <th scope="col" style={{ width: "10px" }}>
-                No
-              </th>
-              <th scope="col" style={{ width: "15px" }}>
-                Image
-              </th>
-              <th scope="col">Title</th>
-              <th scope="col">Description</th>
-              <th scope="col">Author</th>
-              <th scope="col">Likes</th>
-              <th scope="col">Comments</th>
-              <th scope="col">Posted</th>
-              <th scope="col">Status</th>
-              <th scope="col" style={{ width: "10px" }}>
-                Edit
-              </th>
-              <th scope="col" style={{ width: "10px" }}>
-                Delete
-              </th>
-            </tr>
-          </thead>
-          <tbody>
-            {posts.map((post, i) => {
-              return (
-                <tr id={post._id}>
-                  <th>
-                    <input
-                      name="childchk"
-                      type="checkbox"
-                      id={post._id}
-                      onChange={(e) => this.handleSingleCheckBox(e)}
-                      width="1%"
-                    />
-                  </th>
-                  <th scope="row">{i + 1}</th>
-                  <td>
-                    <Avatar
-                      src={`${process.env.REACT_APP_API_URL}/${
-                        post.photo ? post.photo.path : DefaultPost
-                      }`}
-                    />
-                  </td>
-                  <td>{post.title}</td>
-                  <td
-                    data-toggle="tooltip"
-                    data-html="true"
-                    data-placement="right"
-                    title={post.body}
-                  >
-                    {post.body.substring(0, 10)}...
-                  </td>
-                  <td>{post.postedBy.name}</td>
-                  <td>{post.likes.length}</td>
-                  <td> {post.comments.length}</td>
-                  <td> {new Date(post.created).toDateString()}</td>
-                  <td>
-                    <div
-                      className={post.status ? "switch on" : "switch off"}
-                      onClick={this.handlePostStatusChange}
-                      data-index={i}
+        {this.state.posts.length > 0 ? (
+          <table id="poststable" class="table table-hover text-light">
+            <thead>
+              <tr>
+                <th scope="col" width="5%">
+                  <input
+                    name="selectall"
+                    type="checkbox"
+                    onChange={(e) => this.handleCheckBoxChange(e)}
+                  />
+                </th>
+                <th scope="col" style={{ width: "10px" }}>
+                  No
+                </th>
+                <th scope="col" style={{ width: "15px" }}>
+                  Image
+                </th>
+                <th scope="col">Title</th>
+                <th scope="col">Description</th>
+                <th scope="col">Author</th>
+                <th scope="col">Likes</th>
+                <th scope="col">Comments</th>
+                <th scope="col">Posted</th>
+                <th scope="col">Status</th>
+                <th scope="col" style={{ width: "10px" }}>
+                  Edit
+                </th>
+                <th scope="col" style={{ width: "10px" }}>
+                  Delete
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              {posts.map((post, i) => {
+                return (
+                  <tr id={post._id}>
+                    <th>
+                      <input
+                        name="childchk"
+                        type="checkbox"
+                        id={post._id}
+                        onChange={(e) => this.handleSingleCheckBox(e)}
+                        width="1%"
+                      />
+                    </th>
+                    <th scope="row">{i + 1}</th>
+                    <td>
+                      <Avatar
+                        src={`${process.env.REACT_APP_API_URL}/${
+                          post.photo ? post.photo.path : DefaultPost
+                        }`}
+                      />
+                    </td>
+                    <td>{post.title}</td>
+                    <td
+                      data-toggle="tooltip"
+                      data-html="true"
+                      data-placement="right"
+                      title={post.body}
                     >
+                      {post.body.substring(0, 10)}...
+                    </td>
+                    <td>{post.postedBy.name}</td>
+                    <td>{post.likes.length}</td>
+                    <td> {post.comments.length}</td>
+                    <td> {new Date(post.created).toDateString()}</td>
+                    <td>
                       <div
-                        className="switch-toggle"
-                        style={{ pointerEvents: "none" }}
-                      ></div>
-                    </div>
-                  </td>
-                  <td>
-                    <Link
-                      className="btn btn-sm"
-                      style={{ boxShadow: "unset" }}
-                      to={`/post/edit/${post._id}`}
-                    >
-                      <i className="fas fa-edit"></i>
-                    </Link>
-                  </td>
-                  <td>
-                    <button
-                      className="btn btn-sm"
-                      onClick={() => this.handleDeleteModal(post._id)}
-                      style={{ boxShadow: "unset" }}
-                    >
-                      <i className="fas fa-trash"></i>
-                    </button>
-                  </td>
-                </tr>
-              );
-            })}
-          </tbody>
-        </table>
+                        className={post.status ? "switch on" : "switch off"}
+                        onClick={this.handlePostStatusChange}
+                        data-index={i}
+                      >
+                        <div
+                          className="switch-toggle"
+                          style={{ pointerEvents: "none" }}
+                        ></div>
+                      </div>
+                    </td>
+                    <td>
+                      <Link
+                        className="btn btn-sm"
+                        style={{ boxShadow: "unset" }}
+                        to={`/post/edit/${post._id}`}
+                      >
+                        <i className="fas fa-edit"></i>
+                      </Link>
+                    </td>
+                    <td>
+                      <button
+                        className="btn btn-sm"
+                        onClick={() => this.handleDeleteModal(post._id)}
+                        style={{ boxShadow: "unset" }}
+                      >
+                        <i className="fas fa-trash"></i>
+                      </button>
+                    </td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
+        ) : null}
         <Modal
           id="deleteprofile"
           title="Delete Record"

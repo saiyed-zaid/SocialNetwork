@@ -77,12 +77,12 @@ class Admin extends Component {
     return (
       <div>
         <div className="jumbotron p-3">
-          <h4>Admin Dashboard</h4>
+          <h4> Dashboard</h4>
         </div>
         <div className="container-fluid ">
           <div className="row justify-content-md-center">
             <div className="dash-card bg-success p-3">
-              <h3>New Users</h3>
+              <h3>New Registrations</h3>
               <h1>
                 {newUsers.length}
                 &nbsp;

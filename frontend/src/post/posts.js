@@ -18,13 +18,15 @@ class Posts extends Component {
     this.setState({ expanded: !this.state.expanded });
   };
   componentDidMount() {
-    list().then((data) => {
-      if (data.error) {
-        console.log(data.error);
-      } else {
-        this.setState({ posts: data.posts });
-      }
-    });
+    list()
+      .then((data) => {
+        if (data.error) {
+          console.log(data.error);
+        } else {
+          this.setState({ posts: data.posts });
+        }
+      })
+      .catch();
   }
 
   /**
