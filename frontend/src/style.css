@@ -437,6 +437,21 @@ a:hover {
   bottom: 0;
   right: 0;
 }
+.emoji-mart-preview {
+  display: none;
+}
+.emoji-mart {
+  border: none;
+  border-radius: 0px;
+  background-color: #191c23;
+}
+.emoji-mart-scroll {
+  height: 100px !important;
+}
+
+.emoji-mart-anchor-icon {
+  color: whitesmoke;
+}
 
 .modal {
   display: none; /* Hidden by default */
@@ -815,3 +830,26 @@ img {
   color: white !important;
   padding: 10px;
 }
+
+.user-block img {
+  float: left;
+  height: 40px;
+  width: 40px;
+}
+.img-circle {
+  border-radius: 50%;
+}
+.img-bordered-sm {
+  border: 2px solid #adb5bd;
+  padding: 2px;
+}
+.user-block .description {
+  color: #6c757d;
+  font-size: 13px;
+  margin-top: -3px;
+}
+.user-block .comment, .user-block .description, .user-block .username {
+  display: block;
+  margin-left: 50px;
+}
+

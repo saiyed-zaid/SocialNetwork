@@ -42,81 +42,121 @@ class Posts extends Component {
           const posterName = post.postedBy ? post.postedBy.name : "Unknown";
           // const imgPath = post.photo ? post.photo.path : DefaultPost;
           return (
-            <Card
-              className="card like-box"
-              key={i}
-              style={{ width: "20rem" }}
-              img={
-                post.photo && post.photo.mimetype === "video/mp4" ? (
-                  <div className="embed-responsive embed-responsive-1by1 p-0 m-0">
-                    <video controls className="embed-responsive-item">
-                      <source
-                        src={`${process.env.REACT_APP_API_URL}/${
-                          post.photo ? post.photo.path : DefaultPost
-                        }`}
-                        type="video/mp4"
-                        alt="No Video Found"
-                        // onError={e=>e.target.alt="No Video"}
-                      />
-                      Your browser does not support the video tag.
-                    </video>
+            <>
+              {/* <Card
+                className="card like-box"
+                key={i}
+                style={{ width: "20rem" }}
+                img={
+                  post.photo && post.photo.mimetype === "video/mp4" ? (
+                    <div className="embed-responsive embed-responsive-1by1 p-0 m-0">
+                      <video controls className="embed-responsive-item">
+                        <source
+                          src={`${process.env.REACT_APP_API_URL}/${
+                            post.photo ? post.photo.path : DefaultPost
+                          }`}
+                          type="video/mp4"
+                          alt="No Video Found"
+                          // onError={e=>e.target.alt="No Video"}
+                        />
+                        Your browser does not support the video tag.
+                      </video>
+                    </div>
+                  ) : (
+                    <img
+                      className="card-img-top"
+                      src={`${process.env.REACT_APP_API_URL}/${
+                        post.photo ? post.photo.path : DefaultPost
+                      }`}
+                      onError={(i) => (i.target.src = `${DefaultPost}`)}
+                      alt={post.name}
+                    />
+                  )
+                }
+                postedBy={posterName}
+                title={post.title}
+                text={post.body.substring(0, 50) + "..."}
+              >
+                <label className="brd-grdnt rounded" style={{ padding: "1px" }}>
+                  <Link to={`/post/${post._id}`} className="btn btn-primary">
+                    Read More
+                  </Link>
+                </label>
+              </Card> */}
+              <div
+                className="card-body m-2"
+                style={{ backgroundColor: "white" }}
+              >
+                {/* Post */}
+                <div className="post">
+                  <div className="user-block">
+                    <img
+                      className="img-circle img-bordered-sm"
+                      src={
+                        post.postedBy.path
+                          ? post.postedBy.photo.path
+                          : DefaultPost
+                      }
+                      alt="user image"
+                    />
+                    <span className="username">
+                      <a href="#">{posterName}</a>
+                      {/*  <a href="#" className="float-right btn-tool">
+                    <i className="fas fa-times" />
+                  </a> */}
+                    </span>
+                    <span className="description pb-3">
+                      Shared Publicly -{new Date(post.created).toDateString()}
+                    </span>
                   </div>
-                ) : (
-                  <img
-                    className="card-img-top"
-                    src={`${process.env.REACT_APP_API_URL}/${
-                      post.photo ? post.photo.path : DefaultPost
-                    }`}
-                    onError={(i) => (i.target.src = `${DefaultPost}`)}
-                    alt={post.name}
-                  />
-                )
-              }
-              postedBy={posterName}
-              title={post.title}
-              text={post.body.substring(0, 50) + "..."}
-            >
-              <label className="brd-grdnt rounded" style={{ padding: "1px" }}>
-                <Link to={`/post/${post._id}`} className="btn btn-primary">
-                  Read More
-                </Link>
-              </label>
-            </Card>
-            /*    <div className="d-flex justify-content-center w-100">
-                <div className="col-md-4 "></div>
-                <div className="col-md-4  post-box p-0 rounded">
-                  <div style={{ backgroundColor: "rgb(32, 32, 32);" }}>
-                    <p className="text-dark">Mahesh</p>
-                  </div>
-                  <img
-                    className="w-100"
-                    src={`${process.env.REACT_APP_API_URL}/${
-                      post.photo ? post.photo.path : DefaultPost
-                    }`}
-                    onError={(i) => (i.target.src = `${DefaultPost}`)}
-                    alt={post.name}
-                  />
+                  {/* /.user-block */}
+                  {post.photo && post.photo.mimetype === "video/mp4" ? (
+                    <div className="embed-responsive embed-responsive-1by1 p-0 m-0">
+                      <video controls className="embed-responsive-item">
+                        <source
+                          src={`${process.env.REACT_APP_API_URL}/${
+                            post.photo ? post.photo.path : DefaultPost
+                          }`}
+                          type="video/mp4"
+                          alt="No Video Found"
+                          // onError={e=>e.target.alt="No Video"}
+                        />
+                        Your browser does not support the video tag.
+                      </video>
+                    </div>
+                  ) : (
+                    <img
+                      className="card-img-top"
+                      src={`${process.env.REACT_APP_API_URL}/${
+                        post.photo ? post.photo.path : DefaultPost
+                      }`}
+                      onError={(i) => (i.target.src = `${DefaultPost}`)}
+                      alt={post.name}
+                    />
+                  )}
 
-                  {posterName}
-                  {post.title}
-                  {post.body.substring(0, 50) + "..."}
-                  <div>
-                    <label
-                      className="brd-grdnt rounded"
-                      style={{ padding: "1px" }}
-                    >
-                      <Link
-                        to={`/post/${post._id}`}
-                        className="btn btn-primary"
-                      >
-                        Read More
-                      </Link>
-                    </label>
-                  </div>
+                  <p className="pt-2 text-dark">{post.body}</p>
+                  <p>
+                    <a href="#" className="link-black text-sm mr-2">
+                      <i className="fas fa-share mr-1" /> Share
+                    </a>
+                    <a href="#" className="link-black text-sm">
+                      <i className="far fa-thumbs-up mr-1" /> Like
+                    </a>
+                    <span className="float-right">
+                      <a href="#" className="link-black text-sm">
+                        <i className="far fa-comments mr-1" /> Comments (5)
+                      </a>
+                    </span>
+                  </p>
+                  <input
+                    className="form-control form-control-sm"
+                    type="text"
+                    placeholder="Type a comment"
+                  />
                 </div>
-                <div className="col-md-4"></div>
               </div>
-            */
+            </>
           );
         })}
       </div>
