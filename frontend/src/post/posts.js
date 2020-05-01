@@ -40,9 +40,7 @@ class Posts extends Component {
     return (
       <div className="row">
         {posts.map((post, i) => {
-          //const posterId = post.postedBy ? `/user/${post.postedBy._id}` : "";
           const posterName = post.postedBy ? post.postedBy.name : "Unknown";
-          // const imgPath = post.photo ? post.photo.path : DefaultPost;
           return (
             <Card
               className="card"
@@ -76,11 +74,7 @@ class Posts extends Component {
   render() {
     const { posts } = this.state;
     if (posts.length < 0 || this.state.isLoading) {
-      return (
-        this.state.isLoading && (
-          <img src={LoadingRing} />
-        )
-      );
+      return this.state.isLoading && <img src={LoadingRing} />;
     }
     return (
       <div className="container-fluid p-0 m-0">{this.renderPosts(posts)}</div>
