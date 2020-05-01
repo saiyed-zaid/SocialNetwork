@@ -143,6 +143,29 @@ router.get(
   userController.findPeople
 );
 
+router.get(
+  "/api/user/getonline/:userId",
+  auth_check,
+  userController.getOnlinePeople
+);
+
+router.get(
+  "/api/user/newusers/:userId",
+  auth_check,
+  userController.dailyNewUsers
+);
+
+router.get(
+  "/api/user/onlinetoday/:userId",
+  auth_check,
+  userController.userOnlineToday
+);
+router.get(
+  "/api/user/onlinenow/:userId",
+  auth_check,
+  userController.userOnlineNow
+);
+
 /**
  * @function router.param("userId", userController.userById);
  * @description Invoked callback function whenever userId appended in URL which fetch user data and stored in req object

@@ -1,16 +1,24 @@
 import React, { Component } from "react";
-import { list } from "./apiUser";
+import { list, getOnlineUsers, fetchMessage } from "./apiUser";
 import { Link } from "react-router-dom";
 import DefaultProfile from "../images/avatar.jpg";
 import Card from "../components/card";
 import PageLoader from "../components/pageLoader";
 import LoadingGif from "../l1.gif";
+import { isAuthenticated } from "../auth";
+import ChatBar from "../components/chatBar/chatbar";
+import Chattab from "../components/chatTab";
 
 class Users extends Component {
   constructor() {
     super();
     this.state = {
       users: [],
+      onlineUsers: [],
+      hasChatBoxDisplay: false,
+      receiverId: undefined,
+      receiverName: undefined,
+      messages: null,
       isLoading: true,
     };
   }
@@ -24,7 +32,26 @@ class Users extends Component {
         }
       });
     }, 2000);
+
+    /**
+     * Function For Getting Online Users
+     */
+    getOnlineUsers(isAuthenticated().user._id, isAuthenticated().user.token)
+      .then((data) => {
+        if (data.error) {
+          console.log(data.error);
+        } else {
+          this.setState({ onlineUsers: data[0].following });
+        }
+      })
+      .catch();
   }
+  onMsg = () => {
+    let chatbar = document.getElementById("chatbar");
+    chatbar.style.display = "block";
+    chatbar.classList.remove("close-chatbar");
+    document.getElementById("floating-btn").style.display = "none";
+  };
 
   /**
    * Function For Creating Controls For  Users Page
@@ -32,9 +59,11 @@ class Users extends Component {
    * @param {json} users  Users To Be renderd On page
    */
   renderUsers = (users) => (
-    <div className="row m-0">
+    // <div className="row ">
+    <>
       {users.map((user, i) =>
-        user.role === "subscriber" ? (
+        user.role === "subscriber" &&
+        user.name !== isAuthenticated().user.name ? (
           <Card
             className="card col-md-0"
             key={i}
@@ -56,26 +85,89 @@ class Users extends Component {
               View Profile
             </Link>
           </Card>
+        ) : null
+      )}
+    </>
+  );
+
+  handleChatBoxDisplay = (e) => {
+    e.persist();
+    if (!this.state.hasChatBoxDisplay) {
+      const token = isAuthenticated().user.token;
+      fetchMessage(
+        isAuthenticated().user._id,
+        e.target.getAttribute("data-userId"),
+        token
+      )
+        .then((result) => {
+          this.setState({
+            hasChatBoxDisplay: true,
+            receiverId: e.target.getAttribute("data-userId"),
+            receiverName: e.target.getAttribute("data-name"),
+            messages: result,
+          });
+        })
+        .catch((err) => {
+          if (err) {
+            console.log("Error while fetching record");
+          }
+        });
+    } else {
+      this.setState({
+        hasChatBoxDisplay: false,
+      });
+    }
+  };
+
+  render() {
+    const { users, onlineUsers } = this.state;
+    return (
+      <div className="row container-fluid p-0 m-0">
+        <div
+          id="chat-tab"
+          className="justify-content-end align-items-end chat-box"
+          style={
+            this.state.hasChatBoxDisplay
+              ? { display: "flex" }
+              : { display: "none" }
+          }
+        ></div>
+        <div className="col-md-10">
+          <div className="jumbotron p-3">
+            <h4> Users</h4>
+            <div className="row">
+              {!users.length ? <PageLoader /> : this.renderUsers(users)}
+            </div>
+          </div>
+        </div>
+        {this.state.isLoading && <img src={LoadingGif} />}
+        {this.renderUsers(users)}
+        <div
+          className="col-md-2 p-0 m-0"
+          style={{
+            height: "400px",
+            position: "fixed !important",
+            overflowY: "auto",
+          }}
+        ></div>
+        <ChatBar data={onlineUsers} />
+        {this.state.hasChatBoxDisplay ? (
+          <Chattab
+            senderId={isAuthenticated().user._id}
+            senderName={isAuthenticated().user.name}
+            receiverId={this.state.receiverId}
+            receiverName={this.state.receiverName}
+            handleChatBoxDisplay={this.handleChatBoxDisplay}
+            messages={this.state.messages}
+          />
         ) : (
           ""
-        )
-      )}
-    </div>
-  );
-  render() {
-    const { users } = this.state;
-    return (
-      <div className="container-fluid p-0">
-        <div className="jumbotron p-3">
-          <h4> Users</h4>
-        </div>
-        {this.state.isLoading && (
-          <img src={LoadingGif} />
         )}
-        {this.renderUsers(users)}
+        <button id="floating-btn" className="floating-btn" onClick={this.onMsg}>
+          <i className="fas fa-paper-plane anim-icon"></i>
+        </button>
       </div>
     );
   }
 }
-
 export default Users;

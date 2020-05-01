@@ -54,13 +54,6 @@ export const authenticate = (jwt, next) => {
   }
 };
 
-/* export const setName = (name, next) => {
-  if (typeof window !== "undefined") {
-    localStorage.setItem("username", JSON.stringify(name));
-    next();
-  }
-}; */
-
 /**
  * Function For Signin Out User
  *
@@ -77,7 +70,6 @@ export const signout = (next) => {
     },
   })
     .then((response) => {
-      console.log("signout", response);
       if (typeof window !== "undefined") {
         localStorage.removeItem("jwt");
       }

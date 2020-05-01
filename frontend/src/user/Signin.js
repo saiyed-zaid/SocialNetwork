@@ -1,9 +1,9 @@
 import React, { Component } from "react";
 import { Redirect, Link } from "react-router-dom";
-import { signin, authenticate, isAuthenticated } from "../index";
+import { signin, authenticate, isAuthenticated } from "../auth/";
 import SocialLogin from "./socialLogin";
-import PageLoader from "../../components/pageLoader";
-// import reactLogo from "../../images/react.svg";
+import PageLoader from "../components/pageLoader";
+import Modal from "../components/modal/Modal";
 
 class Signin extends Component {
   constructor() {
@@ -14,29 +14,16 @@ class Signin extends Component {
       error: "",
       redirectToRefferer: false,
       loading: false,
+      connectionIssue: false
     };
   }
-
-  /* Custom Card Style  */
-  customCard = {
-    transform: "unset",
-    animation: "unset",
-  };
-  customContainer = {
-    maxWidth: "350px",
-    position: "absolute",
-    top: "50%",
-    left: "50%",
-    transform: "translate(-50%,-50%)",
-  };
-  /* /.Custom Card Style  */
 
   /**
    * Fuction For Handling Onchange Events On Controls
    *
    *  @param {string} name   Name Of The Control
    */
-  handleChange = (name) => (event) => {
+  handleChange = name => event => {
     this.setState({ error: "" });
     this.setState({ [name]: event.target.value });
   };
@@ -44,28 +31,38 @@ class Signin extends Component {
   /**
    *Function For Handling Submition Of Form
    */
-  clickSubmit = (event) => {
+  clickSubmit = event => {
     event.preventDefault();
     this.setState({ loading: true });
     const { email, password } = this.state;
     const user = {
       email,
-      password,
+      password
     };
 
-    signin(user)
-      .then((data) => {
-        if (data.err) {
-          this.setState({ error: data.err, loading: false });
+    signin(user).then(data => {
+      if (!data) {
+        this.setState({ connectionIssue: true });
+        /*  return (
+          <div id="id01" className="modal" style={{ border: "1px solid red" }}>
+            <div className="modal-content">
+              <div className="container">
+                <p>Some text. Some text. Some text.</p>
+                <p>Some text. Some text. Some text.</p>
+              </div>
+            </div>
+          </div>
+        ); */
+      } else {
+        if (data.msg) {
+          this.setState({ error: data.msg, loading: false });
         } else {
           authenticate(data, () => {
             this.setState({ redirectToRefferer: true });
           });
         }
-      })
-      .catch((err) => {
-        alert(err);
-      });
+      }
+    });
   };
 
   /**
@@ -103,20 +100,18 @@ class Signin extends Component {
             id="exampleCheck1"
           />
           <label className="form-check-label" for="exampleCheck1">
-            Remember Me
+            Check me out
           </label>
         </div>
-        <div className="form-group">
-          <button
-            type="submit"
-            onClick={this.clickSubmit}
-            className="btn btn-primary w-100"
-          >
-            Sign In
-          </button>
-        </div>
+        <button
+          type="submit"
+          onClick={this.clickSubmit}
+          className="btn btn-primary w-100"
+        >
+          Sign In
+        </button>
 
-        <div className="form-group">
+        <div style={{ paddingTop: "5px", color: "black" }}>
           <SocialLogin />
         </div>
       </form>
@@ -124,7 +119,14 @@ class Signin extends Component {
   };
 
   render() {
-    const { email, password, error, redirectToRefferer, loading } = this.state;
+    const {
+      email,
+      password,
+      error,
+      redirectToRefferer,
+      loading,
+      connectionIssue
+    } = this.state;
     if (redirectToRefferer) {
       if (isAuthenticated().user.role === "admin") {
         return <Redirect to="/admin/home" />;
@@ -132,10 +134,28 @@ class Signin extends Component {
         return <Redirect to="/" />;
       }
     }
+    if (connectionIssue) {
+      return (
+        <div id="id01" className="modal">
+          <div className="modal-content">
+            <p>There Is SOme Network Issue Please Try After Some Time</p>
+          </div>
+        </div>
+      );
+    }
     return (
-      <div className="container col-lg-3" style={this.customContainer}>
-        <div className="card" style={this.customCard}>
-          <div className="card-body p-3">
+      <div className="container col-lg-3">
+        <div
+          className="card  mt-5 p-3"
+          style={{
+            borderRadius: "8px",
+            overflow: "hidden",
+            boxShadow: "0.3em 0.3em 0.4em rgba(0,0,0,0.3)",
+            transition: "none",
+            transform: "none"
+          }}
+        >
+          <div className="card-body p-0 " style={{ display: "block" }}>
             <h4 className="card-title">Sign in</h4>
 
             <div
@@ -152,28 +172,22 @@ class Signin extends Component {
                 <span aria-hidden="true">&times;</span>
               </button>
             </div>
-            {loading ? <PageLoader /> : ""}
+            {/* {loading ? <PageLoader /> : ""} */}
             {this.signinForm(email, password)}
 
             <Link
               to={{
                 pathname: "/forgot-password",
                 state: {
-                  email: email,
-                },
+                  email: email
+                }
               }}
               className="text-danger"
             >
               Forgot Password ?
             </Link>
           </div>
-          {/*   <small className=" text-light d-flex justify-content-center">
-            Build With &nbsp;
-            <i class="fab fa-node text-success text-sm"></i>
-            &nbsp;&nbsp;<i class="fab fa-react text-info"></i>
-          </small> */}
         </div>
-        <div></div>
       </div>
     );
   }

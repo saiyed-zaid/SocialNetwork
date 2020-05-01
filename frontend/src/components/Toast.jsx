@@ -1,11 +1,31 @@
 import React from "react";
-const handler = e => {
+import Avatar from "./Avatar";
+/* const handler = (e) => {
   e.target.parentNode.parentNode.parentNode.classList.replace("show", "hide");
-};
+}; */
 function Toast(props) {
   return (
-    <div>
-      <div aria-live="polite" aria-atomic="true">
+    <li className="noti w-100" style={{ height: "50px" }}>
+      <img
+        src={props.src ? props.src : <Avatar />}
+        style={{ width: "30px", height: "30px" }}
+        className="rounded-circle bg-dark"
+        alt=""
+      />
+
+      <strong className="mr-auto">{props.msg}</strong>
+      <small>
+        &nbsp;&nbsp;
+        {props.followedFrom
+          ? `${new Date(props.followedFrom).toDateString()}`
+          : ""}
+      </small>
+    </li>
+    /* <div
+        style={{ position: "absolute" }}
+        aria-live="polite"
+        aria-atomic="true"
+      >
         <div className={props.status}>
           <div className="toast-header bg-success text-light">
             <img
@@ -34,8 +54,7 @@ function Toast(props) {
           </div>
           <div className="toast-body">{props.msg}</div>
         </div>
-      </div>
-    </div>
+      </div> */
   );
 }
 export default Toast;

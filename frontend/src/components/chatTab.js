@@ -3,21 +3,36 @@ import DefaultProfile from "../images/avatar.jpg";
 import openSocket from "socket.io-client";
 
 export default class chatTab extends Component {
+  handleClose = () => {
+    let chattab = document.getElementById("chattab");
+    chattab.style.display = "none";
+  };
   constructor(props) {
     super(props);
 
-    this.parentUl = document.createElement("ul");
-    this.parentUl.setAttribute("id", "myMsg");
-    this.parentUl.classList.add("p-0", "m-0");
-    this.parentUl.style.listStyle = "none";
+    this.masterUl = document.createElement("ul");
+    this.masterUl.setAttribute("id", "myMsg");
+    this.masterUl.classList.add("p-0", "m-0");
+    this.masterUl.style.listStyle = "none";
 
-   
+    /* INVOKED WHENEVER SOMEONE MESSAGE YOU -BEGIN*/
+    this.socket = openSocket("http://localhost:5000");
+    this.socket.on(this.props.senderId, (data) => {
+      const li = this.appendReceivedMsg(data);
+      let myMsg = document.querySelector("#myMsg");
+      const chatBox = document.querySelector("#chatBox");
+      myMsg.appendChild(li);
+      chatBox.scrollTo(0, chatBox.scrollHeight);
+    });
+    /* INVOKED WHENEVER SOMEONE MESSAGE YOU -BEGIN*/
 
     /* APPENDING PREVIOUS MESSAGES BEGIN */
-    this.props.messages.forEach((message) => {
-      const li = this.appendReceivedMsg(message);
-      this.parentUl.appendChild(li);
-    });
+    if (this.props.messages) {
+      this.props.messages.forEach((message) => {
+        const li = this.appendReceivedMsg(message);
+        this.masterUl.appendChild(li);
+      });
+    }
     /* APPENDING PREVIOUS MESSAGES BEGIN */
 
     /* SEND MESSAGE WHEN ENTER KEY PRESS BEGIN */
@@ -29,16 +44,16 @@ export default class chatTab extends Component {
     /* SEND MESSAGE WHEN ENTER KEY PRESS OVER */
   }
   componentDidMount() {
-     /* INVOKED WHENEVER SOMEONE MESSAGE YOU -BEGIN*/
-     this.socket = openSocket("http://localhost:5000");
-     this.socket.on(this.props.senderId, (data) => {
-       const li = this.appendReceivedMsg(data);
-       let myMsg = document.querySelector("#myMsg");
-       const chatBox = document.querySelector("#chatBox");
-       myMsg.appendChild(li);
-       chatBox.scrollTo(0, chatBox.scrollHeight);
-     });
-     /* INVOKED WHENEVER SOMEONE MESSAGE YOU -BEGIN*/
+    /* INVOKED WHENEVER SOMEONE MESSAGE YOU -BEGIN*/
+    this.socket = openSocket("http://localhost:5000");
+    this.socket.on(this.props.senderId, (data) => {
+      const li = this.appendReceivedMsg(data);
+      let myMsg = document.querySelector("#myMsg");
+      const chatBox = document.querySelector("#chatBox");
+      myMsg.appendChild(li);
+      chatBox.scrollTo(0, chatBox.scrollHeight);
+    });
+    /* INVOKED WHENEVER SOMEONE MESSAGE YOU -BEGIN*/
 
     const chatBox = document.querySelector("#chatBox");
     chatBox.appendChild(this.parentUl);
@@ -48,6 +63,7 @@ export default class chatTab extends Component {
     let chattab = document.getElementById("chat-tab");
     chattab.style.display = "none";
   };
+
   appendReceivedMsg = (data) => {
     /* if (data.msg.length === 0) {
       return alert("Please enter msg");
@@ -75,7 +91,6 @@ export default class chatTab extends Component {
     appendLi.appendChild(appendMsg);
 
     //append to master ul
-
     //myMsg.appendChild(appendLi);
     return appendLi;
     //chatBox.scrollTo(0, chatBox.scrollHeight);
@@ -137,6 +152,9 @@ export default class chatTab extends Component {
       >
         <div className="card-header text-left text-light bg-dark">
           <span>{this.props.senderName}</span>
+          <span style={{ marginLeft: "10px" }}>
+            <i className="fas fa-video"></i>
+          </span>
           <span className="float-right">
             <button
               type="button"

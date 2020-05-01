@@ -6,32 +6,43 @@ import DefaultPost from "../images/post.jpg";
 import Avatar from "../components/Avatar";
 import Toast from "../components/Toast";
 import "../../node_modules/react-toggle-switch/dist/css/switch.min.css";
+import Modal from "../components/modal/modal";
 
 class Posts extends Component {
   constructor() {
     super();
+
     this.state = {
       posts: [],
       toastPopup: false,
       toastType: "",
-      toastMsg: ""
+      toastMsg: "",
+      checkBox: [],
+      deleteId: "",
+      search: "",
     };
   }
 
   componentDidMount() {
     const token = isAuthenticated().user.token;
-    list(true, token).then(data => {
-      if (data.error) {
-        console.log(data.error);
-      } else {
-        this.setState({ posts: data.posts });
-      }
-    });
+
+    list(true, token)
+      .then((data) => {
+        if (data.error) {
+          console.log(data.error);
+        } else {
+          this.setState({ posts: data.posts });
+          const script = document.createElement("script");
+          script.src = "/js/dataTables.js";
+          document.body.appendChild(script);
+        }
+      })
+      .catch();
   }
 
-  deletePost = postId => {
+  deletePost = (postId) => {
     const token = isAuthenticated().user.token;
-    remove(postId, token).then(data => {
+    remove(postId, token).then((data) => {
       if (data.error) {
         console.log(data.error);
       } else {
@@ -39,9 +50,11 @@ class Posts extends Component {
           redirectToHome: true,
           toastPopup: true,
           toastType: "Success",
-          toastMsg: "Record deleted successfully."
+          toastMsg: "Record deleted successfully.",
         });
         setTimeout(this.toastPopupEnable, 8000);
+        document.getElementById("deleteprofile").style.display = "none";
+        document.getElementById("deleteprofile").classList.remove("show");
       }
     });
   };
@@ -49,34 +62,88 @@ class Posts extends Component {
   /**
    * Function For Confirming The Account Deletion
    */
-  deleteConfirmed = postId => {
-    let answer = window.confirm(
-      "Are Youe Sure. You Want To Delete your Acccount?"
-    );
-    if (answer) {
-      this.deletePost(postId);
-      let getRow = document.getElementById(postId);
-      console.log("row", getRow, postId);
+  deleteConfirmed = (postId) => {
+    this.deletePost(postId);
+    let getRow = document.getElementById(postId);
+    getRow.addEventListener("animationend", () => {
+      getRow.parentNode.removeChild(getRow);
+      getRow.classList.remove("row-remove");
+    });
+    getRow.classList.toggle("row-remove");
+  };
 
-      if (getRow) {
-        getRow.addEventListener("animationend", () => {
-          getRow.parentNode.removeChild(getRow);
-          getRow.classList.remove("row-remove");
-        });
-        getRow.classList.toggle("row-remove");
+  handleCheckBoxChange = (event) => {
+    let selectAllCheckbox = document.getElementsByName("selectall")[0];
+    let Checkboxes = document.getElementsByName("childchk");
+    let arr = [];
+
+    if (selectAllCheckbox.checked) {
+      Checkboxes.forEach((checkbox) => {
+        checkbox.checked = true;
+        arr.push(checkbox.id);
+      });
+    } else {
+      Checkboxes.forEach((checkbox) => {
+        checkbox.checked = false;
+        arr = [];
+      });
+    }
+
+    this.setState({ checkBox: arr });
+  };
+
+  handleSingleCheckBox = (event) => {
+    let selectAllCheckbox = document.getElementsByName("selectall")[0];
+    let Checkboxes = document.getElementsByName("childchk");
+
+    let arr = [];
+
+    Checkboxes.forEach((checkBox) => {
+      let index = arr.indexOf(checkBox.id);
+
+      if (!checkBox.checked) {
+        if (index > -1) {
+          arr.splice(index, 1);
+        }
+      } else {
+        selectAllCheckbox.checked = false;
+        arr.push(checkBox.id);
       }
+    });
+    this.setState({ checkBox: arr });
+  };
+  handleMulltipleDeleteModal = () => {
+    document.getElementById("deleteprofile").style.display = "block";
+    document.getElementById("deleteprofile").classList.add("show");
+  };
+  deleteMultiple = () => {
+    const { checkBox } = this.state;
+    const token = isAuthenticated().user.token;
+
+    if (checkBox.length === 0) {
+      alert("Please Select Records To Delete.");
+    } else {
+      checkBox.forEach((id) => {
+        remove(id, token).then((data) => {
+          if (data.isDeleted) {
+            this.setState({ redirect: true });
+            let getRow = document.getElementById(id);
+            getRow.addEventListener("animationend", () => {
+              getRow.parentNode.removeChild(getRow);
+              getRow.classList.remove("row-remove");
+            });
+            getRow.classList.toggle("row-remove");
+          } else {
+            console.log(data.msg);
+          }
+        });
+        document.getElementById("deleteprofile").style.display = "none";
+        document.getElementById("deleteprofile").classList.remove("show");
+      });
     }
   };
 
-  handleChangePage = (event, newPage) => {
-    this.setState({ page: newPage });
-  };
-
-  handleChangeRowsPerPage = event => {
-    this.setState({ rowsPerPage: +event.target.value, page: 0 });
-  };
-
-  handlePostStatusChange = event => {
+  handlePostStatusChange = (event) => {
     const data = new FormData();
 
     const index = event.target.getAttribute("data-index");
@@ -98,7 +165,7 @@ class Posts extends Component {
     data.append("status", dataToUpdate[index].status);
 
     update(postId, isAuthenticated().user.token, data)
-      .then(result => {
+      .then((result) => {
         if (result.err) {
           console.log("Error=> ", result.err);
         } else {
@@ -106,13 +173,13 @@ class Posts extends Component {
             posts: dataToUpdate,
             toastPopup: true,
             toastType: "success",
-            toastMsg: "Record updated successfully."
+            toastMsg: "Record updated successfully.",
           });
           setTimeout(this.toastPopupEnable, 8000);
           console.log("RECORD UPDATED", result);
         }
       })
-      .catch(err => {
+      .catch((err) => {
         if (err) {
           console.log("ERR IN UPDATING", err);
         }
@@ -121,68 +188,39 @@ class Posts extends Component {
   toastPopupEnable = () => {
     this.setState({ toastPopup: false });
   };
-  /**
-   * Function For Creating Controls For  Users Page
-   *
-   * @param {json} posts  Posts To Be renderd On page
-   */
-  renderPosts = posts => {
-    return posts.map((post, i) => {
-      const posterId = post.postedBy ? `/user/${post.postedBy._id}` : "";
-      const posterName = post.postedBy ? post.postedBy.name : "Unknown";
-      return (
-        <tr key={post._id} id={post._id}>
-          <td>
-            <input type="checkbox" name="selectall" id="selectall" />
-          </td>
-          <td>{i + 1}</td>
 
-          <td>
-            <img
-              src={`${process.env.REACT_APP_API_URL}/${
-                post.photo ? post.photo.path : DefaultPost
-              }`}
-              onError={i => (i.target.src = `${DefaultPost}`)}
-              alt={post.name}
-              style={{ height: "40px", width: "auto" }}
-            />
-          </td>
-          <td> {post.likes.length}</td>
-          <td>{post.comments.length}</td>
-          <td>{post.title}</td>
-          <td>{post.body.substring(0, 100)}</td>
-          <td>
-            <Link to={`${posterId}`}>{posterName}</Link> on{" "}
-            {new Date(post.created).toDateString()}
-          </td>
-          <td>
-            <Link
-              className="btn btn-info text-info"
-              to={`post/edit/${post._id}`}
-            >
-              <i className="fa fa-edit"></i>
-            </Link>
-          </td>
-          <td>
-            <button
-              className="btn btn-danger"
-              onClick={() => this.deleteConfirmed(post._id)}
-            >
-              <i className="fa fa-trash"></i>
-            </button>
-          </td>
-        </tr>
-      );
-    });
+  handleModalValue = (postId) => {
+    this.setState({ deleteId: postId });
   };
+  updateSearch = (event) => {
+    this.setState({ search: event.target.value.substr(0, 20) });
+  };
+  handleDeleteModal = (postId) => {
+    this.setState({ deleteId: postId });
+
+    document.getElementById("deleteprofile").style.display = "block";
+    document.getElementById("deleteprofile").classList.add("show");
+  };
+
   render() {
     const { posts } = this.state;
     return (
       <div className="container-fluid m-0 p-0">
         <div className="jumbotron p-3 m-0">
           <h4>Posts</h4>
+          Total Posts: {posts.length}
         </div>
+
         {/* Toast */}
+        <div className="d-flex">
+          <button
+            className="btn btn-danger m-2"
+            onClick={this.handleMulltipleDeleteModal}
+          >
+            <i className="fas fa-trash"></i> Delete Selected
+            {/*  */}
+          </button>
+        </div>
         <div
           style={{
             display: "flex",
@@ -190,7 +228,7 @@ class Posts extends Component {
             position: "fixed",
             bottom: "0",
             right: "0",
-            zIndex: "111"
+            zIndex: "111",
           }}
         >
           <Toast
@@ -208,90 +246,120 @@ class Posts extends Component {
           />
         </div>
         {/* Toast / */}
-        <table class="table table-hover text-light">
-          <thead>
-            <tr>
-              <th scope="col" style={{ width: "10px" }}>
-                No
-              </th>
-              <th scope="col" style={{ width: "15px" }}>
-                Image
-              </th>
-              <th scope="col">Title</th>
-              <th scope="col">Description</th>
-              <th scope="col">Author</th>
-              <th scope="col">Likes</th>
-              <th scope="col">Comments</th>
-              <th scope="col">Posted</th>
-              <th scope="col">Status</th>
-              <th scope="col" style={{ width: "10px" }}>
-                Edit
-              </th>
-              <th scope="col" style={{ width: "10px" }}>
-                Delete
-              </th>
-            </tr>
-          </thead>
-          <tbody>
-            {posts.map((post, i) => {
-              return (
-                <tr id={post._id}>
-                  <th scope="row">{i + 1}</th>
-                  <td>
-                    <Avatar
-                      src={`${process.env.REACT_APP_API_URL}/${
-                        post.photo ? post.photo.path : DefaultPost
-                      }`}
-                    />
-                  </td>
-                  <td>{post.title}</td>
-                  <td
-                    data-toggle="tooltip"
-                    data-html="true"
-                    data-placement="right"
-                    title={post.body}
-                  >
-                    {post.body.substring(0, 10)}...
-                  </td>
-                  <td>{post.postedBy.name}</td>
-                  <td>{post.likes.length}</td>
-                  <td> {post.comments.length}</td>
-                  <td> {new Date(post.created).toDateString()}</td>
-                  <td>
-                    <div
-                      className={post.status ? "switch on" : "switch off"}
-                      onClick={this.handlePostStatusChange}
-                      data-index={i}
+        {this.state.posts.length > 0 ? (
+          <table id="poststable" class="table table-hover text-light">
+            <thead>
+              <tr>
+                <th scope="col" width="5%">
+                  <input
+                    name="selectall"
+                    type="checkbox"
+                    onChange={(e) => this.handleCheckBoxChange(e)}
+                  />
+                </th>
+                <th scope="col" style={{ width: "10px" }}>
+                  No
+                </th>
+                <th scope="col" style={{ width: "15px" }}>
+                  Image
+                </th>
+                <th scope="col">Title</th>
+                <th scope="col">Description</th>
+                <th scope="col">Author</th>
+                <th scope="col">Likes</th>
+                <th scope="col">Comments</th>
+                <th scope="col">Posted</th>
+                <th scope="col">Status</th>
+                <th scope="col" style={{ width: "10px" }}>
+                  Edit
+                </th>
+                <th scope="col" style={{ width: "10px" }}>
+                  Delete
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              {posts.map((post, i) => {
+                return (
+                  <tr id={post._id}>
+                    <th>
+                      <input
+                        name="childchk"
+                        type="checkbox"
+                        id={post._id}
+                        onChange={(e) => this.handleSingleCheckBox(e)}
+                        width="1%"
+                      />
+                    </th>
+                    <th scope="row">{i + 1}</th>
+                    <td>
+                      <Avatar
+                        src={`${process.env.REACT_APP_API_URL}/${
+                          post.photo ? post.photo.path : DefaultPost
+                        }`}
+                      />
+                    </td>
+                    <td>{post.title}</td>
+                    <td
+                      data-toggle="tooltip"
+                      data-html="true"
+                      data-placement="right"
+                      title={post.body}
                     >
+                      {post.body.substring(0, 10)}...
+                    </td>
+                    <td>{post.postedBy.name}</td>
+                    <td>{post.likes.length}</td>
+                    <td> {post.comments.length}</td>
+                    <td> {new Date(post.created).toDateString()}</td>
+                    <td>
                       <div
-                        className="switch-toggle"
-                        style={{ pointerEvents: "none" }}
-                      ></div>
-                    </div>
-                  </td>
-                  <td>
-                    <Link
-                      className="btn btn-sm"
-                      style={{ boxShadow: "unset" }}
-                      to={`/post/edit/${post._id}`}
-                    >
-                      <i className="fa fa-edit"></i>
-                    </Link>
-                  </td>
-                  <td>
-                    <button
-                      className="btn btn-sm"
-                      onClick={() => this.deleteConfirmed(post._id)}
-                      style={{ boxShadow: "unset" }}
-                    >
-                      <i className="fa fa-trash"></i>
-                    </button>
-                  </td>
-                </tr>
-              );
-            })}
-          </tbody>
-        </table>
+                        className={post.status ? "switch on" : "switch off"}
+                        onClick={this.handlePostStatusChange}
+                        data-index={i}
+                      >
+                        <div
+                          className="switch-toggle"
+                          style={{ pointerEvents: "none" }}
+                        ></div>
+                      </div>
+                    </td>
+                    <td>
+                      <Link
+                        className="btn btn-sm"
+                        style={{ boxShadow: "unset" }}
+                        to={`/post/edit/${post._id}`}
+                      >
+                        <i className="fas fa-edit"></i>
+                      </Link>
+                    </td>
+                    <td>
+                      <button
+                        className="btn btn-sm"
+                        onClick={() => this.handleDeleteModal(post._id)}
+                        style={{ boxShadow: "unset" }}
+                      >
+                        <i className="fas fa-trash"></i>
+                      </button>
+                    </td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
+        ) : null}
+        <Modal
+          id="deleteprofile"
+          title="Delete Record"
+          body="Are Your Sure You Want To Delete ?"
+          buttonText="Delete"
+          buttonClick={
+            this.state.checkBox.length >= 1
+              ? () => this.deleteMultiple()
+              : () => this.deleteConfirmed(this.state.deleteId)
+          }
+          show
+        />
       </div>
     );
   }

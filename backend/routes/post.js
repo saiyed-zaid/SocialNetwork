@@ -67,10 +67,14 @@ router.post(
       },
       filename: (req, file, cb) => {
         cb(null, Date.now() + file.originalname);
-      }
+      },
     }),
     fileFilter: (req, file, cb) => {
-      if (file.mimetype == "image/jpg" || file.mimetype == "image/jpeg") {
+      if (
+        file.mimetype == "image/jpg" ||
+        file.mimetype == "image/jpeg" ||
+        file.mimetype == "video/mp4"
+      ) {
         cb(null, true);
       } else {
         cb(
@@ -78,21 +82,17 @@ router.post(
           false
         );
       }
-    }
+    },
   }).single("photo"),
   [
-    body("title")
-      .notEmpty()
-      .withMessage("Title field is required."),
+    body("title").notEmpty().withMessage("Title field is required."),
     body("title")
       .isLength({ min: 5, max: 120 })
       .withMessage("Title length must between 5 to 120."),
-    body("body")
-      .notEmpty()
-      .withMessage("Title field is required."),
+    body("body").notEmpty().withMessage("Title field is required."),
     body("body")
       .isLength({ min: 5, max: 2000 })
-      .withMessage("Body length must between 5 to 2000.")
+      .withMessage("Body length must between 5 to 2000."),
   ],
 
   postController.createPost
@@ -165,10 +165,14 @@ router.patch(
       },
       filename: (req, file, cb) => {
         cb(null, Date.now() + file.originalname);
-      }
+      },
     }),
     fileFilter: (req, file, cb) => {
-      if (file.mimetype == "image/jpg" || file.mimetype == "image/jpeg") {
+      if (
+        file.mimetype == "image/jpg" ||
+        file.mimetype == "image/jpeg" ||
+        file.mimetype == "video/mp4"
+      ) {
         cb(null, true);
       } else {
         cb(
@@ -176,9 +180,14 @@ router.patch(
           false
         );
       }
-    }
+    },
   }).single("photo"),
   postController.updatePost
+);
+router.get(
+  "/api/post/newpost/:userId",
+  auth_check,
+  postController.dailyNewPosts
 );
 
 /**

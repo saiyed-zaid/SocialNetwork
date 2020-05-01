@@ -1,15 +1,19 @@
 import React, { Component } from "react";
 import { isAuthenticated, signout } from "../auth/index";
 import { Redirect, Link } from "react-router-dom";
-import { read, fetchMessage } from "./apiUser";
+
+import { read, fetchMessage, update } from "./apiUser";
 import DefaultProfile from "../images/avatar.jpg";
 import DeleteUser from "./deleteUser";
 import FollowProfileButton from "./followProfileButton";
 import ProfileTabs from "./profileTabs";
 import { listByUser } from "../post/apiPost";
 import PageLoader from "../components/pageLoader";
+
 import LoadingRing from "../l1.gif";
 import Chattab from "../components/chatTab";
+import Modal from "../components/modal/modal";
+import EditProfile from "../user/editProfile";
 
 class Profile extends Component {
   constructor() {
@@ -32,7 +36,7 @@ class Profile extends Component {
   checkFollow = (user) => {
     const jwt = isAuthenticated();
     const match = user.followers.find((follower) => {
-      return follower._id === jwt.user._id;
+      return follower.user._id === jwt.user._id;
     });
     return match;
   };
@@ -55,6 +59,10 @@ class Profile extends Component {
       })
       .catch();
   };
+  handleDeactivateModal = () => {
+    document.getElementById("deleteAccount").style.display = "block";
+    document.getElementById("deleteAccount").classList.add("show");
+  };
 
   init = (userId) => {
     const token = isAuthenticated().user.token;
@@ -72,6 +80,30 @@ class Profile extends Component {
       .catch((err) => {
         if (err) {
           console.log(err);
+        }
+      });
+  };
+
+  handleUserStatusChange = (user) => {
+    const userId = user._id;
+    let dataToUpdate = user;
+    const data = new FormData();
+
+    data.append("status", !dataToUpdate.status);
+
+    update(userId, isAuthenticated().user.token, data)
+      .then((result) => {
+        if (result.err) {
+          console.log("Error=> ", result.err);
+        } else {
+          this.setState({ users: dataToUpdate });
+          document.getElementById("deleteAccount").style.display = "none";
+          document.getElementById("deleteAccount").classList.remove("show");
+        }
+      })
+      .catch((err) => {
+        if (err) {
+          console.log("ERR IN UPDATING", err);
         }
       });
   };
@@ -95,6 +127,12 @@ class Profile extends Component {
     const userId = this.props.match.params.userId;
     this.init(userId);
   }
+
+  editProfile = () => {
+    let getModal = document.getElementById("editprofile");
+    getModal.style.display = "block";
+    getModal.classList.add("show");
+  };
 
   handleChatBoxDisplay = (e) => {
     e.persist();
@@ -136,11 +174,7 @@ class Profile extends Component {
       return <Redirect to="/signin" />;
     }
     if (this.state.isLoading) {
-      return (
-        this.state.isLoading && (
-          <img src={LoadingRing} />
-        )
-      );
+      return this.state.isLoading && <img src={LoadingRing} />;
     }
     return (
       <div className="container-fluid mt-0" style={{ color: "#e6cf23" }}>
@@ -198,28 +232,45 @@ class Profile extends Component {
                     aria-label="Basic example"
                   >
                     {isAuthenticated().user.role === "admin" ? (
-                      <Link
-                        to={`/user/edit/${user._id}`}
-                        className="btn btn-secondary btn-custom"
+                      <button
+                        className="btn btn-outline-secondary mr-2 btn-custom"
+                        data-toggle="modal"
+                        onClick={this.editProfile}
+                        // data-target="#exampleModalCenter"
                       >
-                        Edit Profile&nbsp;<i className="fa fa-edit"></i>
-                      </Link>
+                        Edit Profile &nbsp;<i className="fas fa-edit "></i>
+                      </button>
                     ) : (
                       <>
-                        <Link
+                        {/*  <Link
                           to={`/user/edit/${user._id}`}
                           className="btn btn-outline-secondary btn-custom"
                         >
-                          Edit Profile&nbsp;<i className="fa fa-edit"></i>
-                        </Link>
+                          Edit Profile&nbsp;<i className="fas fa-edit"></i>
+                        </Link> */}
+                        <button
+                          className="btn btn-outline-secondary btn-custom"
+                          data-toggle="modal"
+                          onClick={this.editProfile}
+                          // data-target="#exampleModalCenter"
+                        >
+                          Edit Profile &nbsp;<i className="fas fa-edit "></i>
+                        </button>
                         <Link
                           to={`/post/create`}
                           className="btn btn-outline-secondary btn-custom"
                         >
                           Create Post&nbsp;
-                          <i className="fa fa-plus"></i>
+                          <i className="fas fa-plus"></i>
                         </Link>
                         <DeleteUser userId={user._id} />
+                        <button
+                          className="btn btn-outline-secondary btn-custom "
+                          onClick={this.handleDeactivateModal}
+                        >
+                          Deactivate Account &nbsp;
+                          <i className="fas fa-times-circle"></i>
+                        </button>
                       </>
                     )}
                   </div>
@@ -246,6 +297,18 @@ class Profile extends Component {
             />
           </div>
         </div>
+        <Modal
+          id="editprofile"
+          body={<EditProfile userId={this.props.match.params.userId} />}
+          title="Edit Profile"
+        />
+        <Modal
+          id="deleteAccount"
+          body="Are You Sure You Want To Deactivate Your Account ? "
+          buttonText="Deactivate"
+          buttonClick={() => this.handleUserStatusChange(user)}
+          show
+        />
       </div>
     );
   }

@@ -5,7 +5,10 @@ import { isAuthenticated } from "../auth/index";
 import DefaultPost from "../images/post.jpg";
 import Comment from "./comment";
 import PageLoader from "../components/pageLoader";
+
 import LoadingRing from "../l1.gif";
+import Modal from "../components/modal/modal";
+import EditPost from "./editPost";
 
 class SinglePost extends Component {
   state = {
@@ -53,9 +56,7 @@ class SinglePost extends Component {
    * Function For Confirming The Account Deletion
    */
   deleteConfirmed = () => {
-    let answer = window.confirm(
-      "Are Youe Sure. You Want To Delete your Acccount?"
-    );
+    let answer = window.confirm("Are Youe Sure. You Want To Delete your Post?");
     if (answer) {
       this.deletePost();
     }
@@ -107,28 +108,49 @@ class SinglePost extends Component {
     return (
       <div>
         <div>
-          <img
-            className="img-thumbnail p-0 rounded-0"
-            src={`${process.env.REACT_APP_API_URL}/${
-              post.photo ? post.photo.path : DefaultPost
-            }`}
-            alt={post.title}
-            style={{ height: "400px", width: "100vw", objectFit: "scale-down" }}
-            onError={(e) => {
-              e.target.src = DefaultPost;
-            }}
-          />
+          {post.photo && post.photo.mimetype === "video/mp4" ? (
+            <div
+              className="embed-responsive embed-responsive-21by9"
+              style={{ height: "500px" }}
+            >
+              <video controls className="embed-responsive-item">
+                <source
+                  src={`${process.env.REACT_APP_API_URL}/${
+                    post.photo ? post.photo.path : DefaultPost
+                  }`}
+                  type="video/mp4"
+                />
+                Unsupported Browser.
+              </video>
+            </div>
+          ) : (
+            <img
+              className="img-thumbnail p-0 rounded-0"
+              src={`${process.env.REACT_APP_API_URL}/${
+                post.photo ? post.photo.path : DefaultPost
+              }`}
+              alt={post.title}
+              style={{
+                height: "400px",
+                width: "100vw",
+                objectFit: "contain",
+              }}
+              onError={(e) => {
+                e.target.src = DefaultPost;
+              }}
+            />
+          )}
         </div>
 
         <div className="card-body">
           {like ? (
             <h5 onClick={this.likeToggle} className="text-light">
-              <i className="fa fa-heart text-danger"> </i>&nbsp; {likes}
+              <i className="fas fa-heart text-danger"> </i>&nbsp; {likes}
               &nbsp; {likes > 1 ? "likes" : "like"}
             </h5>
           ) : (
             <h5 onClick={this.likeToggle} style={{ color: "#ffff" }}>
-              <i className="fa fa-heart-o"> </i>
+              <i className="far fa-heart"> </i>
               &nbsp;{likes}&nbsp;{likes > 1 ? "likes" : "like"}
             </h5>
           )}
@@ -136,12 +158,11 @@ class SinglePost extends Component {
             <h3>{post.title}</h3>
             <h4 className="lead pt-2 pb-2">
               <small>
-                {" "}
                 <span className=" font-italic" style={{ fontSize: "12px" }}>
-                  Posted By{" "}
+                  Posted By
                   <Link style={{ color: "#a59413" }} to={`${posterId}`}>
                     {posterName}
-                  </Link>{" "}
+                  </Link>
                   on {new Date(post.created).toDateString()}
                 </span>
               </small>
@@ -151,23 +172,36 @@ class SinglePost extends Component {
 
           <div className="d-inline-block">
             <Link to="/" className="btn btn-raised btn-primary mr-1">
-              <i className="fa fa-arrow-left"></i> Back
+              <i className="fas fa-arrow-left"></i> Back
             </Link>
 
             {isAuthenticated().user &&
               isAuthenticated().user._id === post.postedBy._id && (
                 <>
-                  <Link
+                  {/* <Link
                     to={`/post/edit/${post._id}`}
                     className="btn btn-raised btn-primary mr-1"
                   >
-                    <i className="fa fa-edit"></i>
+                    <i className="fas fa-edit"></i>
                   </Link>
                   <button
                     onClick={this.deleteConfirmed}
                     className="btn btn-raised btn-primary mr-1"
                   >
-                    <i className="fa fa-trash"></i>
+                    <i className="fas fa-trash"></i>
+                  </button> */}
+                  <button
+                    className="btn btn-raised btn-primary mr-1"
+                    data-toggle="modal"
+                    onClick={this.handleEditPost}
+                  >
+                    <i className="fas fa-edit"></i>
+                  </button>
+                  <button
+                    onClick={this.deleteConfirmed}
+                    className="btn btn-raised btn-primary mr-1"
+                  >
+                    <i className="fas fa-trash"></i>
                   </button>
                 </>
               )}
@@ -175,6 +209,11 @@ class SinglePost extends Component {
         </div>
       </div>
     );
+  };
+
+  handleEditPost = () => {
+    document.getElementById("editpost").style.display = "block";
+    document.getElementById("editpost").classList.add("show");
   };
   render() {
     const { post, redirectToHome, redirectToSignin, comments } = this.state;
@@ -194,6 +233,12 @@ class SinglePost extends Component {
           postId={post._id}
           comments={comments.reverse()}
           updateComments={this.updateComments}
+        />
+        <Modal
+          id="editpost"
+          body={<EditPost postId={this.props.match.params.postId} />}
+          title="Edit Post"
+          // buttonText=
         />
       </div>
     );

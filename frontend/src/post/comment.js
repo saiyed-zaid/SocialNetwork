@@ -7,7 +7,7 @@ import DefaultProfile from "../images/avatar.jpg";
 class Comment extends Component {
   state = {
     text: "",
-    error: ""
+    error: "",
   };
 
   isValid = () => {
@@ -15,18 +15,18 @@ class Comment extends Component {
 
     if (!text.length > 0 || text.length > 150) {
       this.setState({
-        error: "Comment Should Not Be Empty Or Greater Than 150 Characters"
+        error: "Comment Should Not Be Empty Or Greater Than 150 Characters",
       });
       return false;
     }
     return true;
   };
-  handleChange = event => {
+  handleChange = (event) => {
     this.setState({ error: "" });
     this.setState({ text: event.target.value });
   };
 
-  addComment = event => {
+  addComment = (event) => {
     event.preventDefault();
     if (!isAuthenticated()) {
       this.setState({ error: "Please Login To Leave The Comment" });
@@ -37,7 +37,7 @@ class Comment extends Component {
       const token = isAuthenticated().user.token;
       const postId = this.props.postId;
 
-      comment(userId, token, postId, { text: this.state.text }).then(data => {
+      comment(userId, token, postId, { text: this.state.text }).then((data) => {
         if (data.error) {
           console.log(data.error);
         } else {
@@ -49,12 +49,12 @@ class Comment extends Component {
     }
   };
 
-  deleteComment = comment => {
+  deleteComment = (comment) => {
     const userId = isAuthenticated().user._id;
     const token = isAuthenticated().user.token;
     const postId = this.props.postId;
 
-    uncomment(userId, token, postId, comment).then(data => {
+    uncomment(userId, token, postId, comment).then((data) => {
       if (data.error) {
         console.log(data.error);
       } else {
@@ -66,7 +66,7 @@ class Comment extends Component {
   /**
    * Function For Confirming The Comment Deletion
    */
-  deleteConfirmed = comment => {
+  deleteConfirmed = (comment) => {
     let answer = window.confirm(
       "Are Youe Sure. You Want To Delete your Comment?"
     );
@@ -97,7 +97,6 @@ class Comment extends Component {
         <hr />
         <div className="col-md-12">
           <h5 className="text-light">
-            {" "}
             {comments.length === 1
               ? `${comments.length} Comment`
               : `${comments.length} Comments`}
@@ -115,14 +114,14 @@ class Comment extends Component {
                     <img
                       style={{
                         borderRadius: "50%",
-                        border: "1px solid black"
+                        border: "1px solid black",
                       }}
                       className="float-left mr-2"
                       height="30px"
                       width="30px"
                       src={`${process.env.REACT_APP_API_URL}/${photoUrl}`}
                       alt={comment.postedBy.name}
-                      onError={e => {
+                      onError={(e) => {
                         e.target.src = DefaultProfile;
                       }}
                     />
@@ -130,19 +129,19 @@ class Comment extends Component {
                   <div>
                     <h6 className="lead">
                       {comment.text}
-                      &nbsp;{" "}
+                      &nbsp;
                       {isAuthenticated().user &&
                         isAuthenticated().user._id === comment.postedBy._id && (
                           <button
                             style={{
                               justifyContent: "flex-end",
-                              border: "1px solid red"
+                              border: "1px solid red",
                             }}
                             onClick={() => this.deleteConfirmed(comment)}
                             className="btn text-danger float-right btn-delete"
                           >
                             <i
-                              className="fa fa-trash"
+                              className="fas fa-trash"
                               style={{ color: "none" }}
                             ></i>
                           </button>
@@ -152,7 +151,7 @@ class Comment extends Component {
                       <div
                         style={{
                           display: "flex",
-                          justifyContent: "flex-end"
+                          justifyContent: "flex-end",
                         }}
                       >
                         <small>
@@ -186,7 +185,7 @@ class Comment extends Component {
               className="btn btn-raised btn-primary"
               style={{ flex: 1 }}
             >
-              Add Comment <i className="fa fa-plus"></i>
+              Add Comment <i className="fas fa-plus"></i>
             </button>
           </form>
         </div>

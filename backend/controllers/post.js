@@ -156,6 +156,7 @@ exports.createPost = async (req, res, next) => {
     body: req.body.body,
     postedBy: req.auth._id,
     photo: req.file,
+    tags: req.tags,
   });
   try {
     const result = await post.save();
@@ -308,5 +309,21 @@ exports.uncommentPost = async (req, res, next) => {
     res.json(UpdatedCommentPost);
   } catch (error) {
     res.status(400).json(error);
+  }
+};
+
+exports.dailyNewPosts = async (req, res, next) => {
+  let created = req.profile.created.toDateString();
+  let startDate = new Date();
+  console.log(req);
+
+  try {
+    const posts = await Post.find({
+      created: { $gte: startDate.toDateString() },
+    });
+
+    return await res.json(posts);
+  } catch (error) {
+    res.status(400).json({ err: error });
   }
 };

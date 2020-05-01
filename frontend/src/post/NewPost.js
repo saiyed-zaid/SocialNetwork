@@ -1,10 +1,12 @@
 import React, { Component } from "react";
 import { isAuthenticated } from "../auth/index";
 import { create } from "./apiPost";
+import { read } from "../user/apiUser";
 import { Redirect } from "react-router-dom";
 import DefaultPost from "../images/post.jpg";
+import { Multiselect } from "multiselect-react-dropdown";
 import PageLoader from "../components/pageLoader";
-import Toast from "../components/Toast";
+// import Toast from "../components/Toast";
 
 class NewPost extends Component {
   constructor() {
@@ -13,21 +15,42 @@ class NewPost extends Component {
       title: "",
       body: "",
       photo: "",
+      tags: [],
       error: "",
       user: {},
       fileSize: 0,
       prevPhoto: "",
       loading: false,
-      redirectToProfile: false
+      redirectToProfile: false,
+      options: [],
+      selectedValue: [],
     };
   }
 
   componentDidMount() {
+    const userId = isAuthenticated().user._id;
+    const token = isAuthenticated().user.token;
+    document.getElementById("tags").setAttribute("name", "tags");
+
     this.postData = new FormData();
     this.setState({ user: isAuthenticated().user });
+
+    read(userId, token)
+      .then((data) => {
+        if (data.err) {
+          this.setState({ options: [] });
+        } else {
+          this.setState({ options: data.following });
+        }
+      })
+      .catch((err) => {
+        if (err) {
+          console.log(err);
+        }
+      });
   }
 
-  handleChange = name => event => {
+  handleChange = (name) => (event) => {
     this.setState({ error: "" });
     if (name === "photo") {
       this.setState({ prevPhoto: event.target.files[0] });
@@ -44,14 +67,19 @@ class NewPost extends Component {
       this.setState({ error: "Title field is required", loading: false });
       return false;
     } else if (title.length < 5 || title.length > 120) {
-      this.setState({ error: "Title length must between 5 to 1200.", loading: false });
+      this.setState({
+        error: "Title length must between 5 to 1200.",
+        loading: false,
+      });
     }
     if (body.length === 0) {
       this.setState({ error: "Body field is required", loading: false });
       return false;
-    }else if(title.length < 5 || title.length > 2000)
-    {
-      this.setState({ error: "Body length must between 5 to 2000.", loading: false });
+    } else if (title.length < 5 || title.length > 2000) {
+      this.setState({
+        error: "Body length must between 5 to 2000.",
+        loading: false,
+      });
     }
 
     if (fileSize > 1000000000) {
@@ -62,7 +90,15 @@ class NewPost extends Component {
     return true;
   };
 
-  clickSubmit = event => {
+  onSelect(selectedList, selectedItem) {
+    this.setState({ tags: selectedList });
+    this.postData.set("tags", selectedList);
+  }
+
+  onRemove(selectedList, removedItem) {
+    this.setState({ tags: selectedList });
+  }
+  clickSubmit = (event) => {
     event.preventDefault();
 
     this.setState({ loading: true });
@@ -71,7 +107,7 @@ class NewPost extends Component {
       const userId = isAuthenticated().user._id;
       const token = isAuthenticated().user.token;
 
-      create(userId, token, this.postData).then(data => {
+      create(userId, token, this.postData).then((data) => {
         if (data.msg) {
           this.setState({ error: data.msg });
         } else {
@@ -82,12 +118,13 @@ class NewPost extends Component {
   };
 
   newPostForm = (title, body) => {
+    const searchBox = { border: "none", borderBottom: "1px solid blue" };
     return (
       <div
         style={{
           display: "flex",
           justifyContent: "space-around",
-          flexWrap: "wrap"
+          flexWrap: "wrap",
         }}
       >
         <div className="test">
@@ -104,7 +141,7 @@ class NewPost extends Component {
                 height: "350px",
                 maxWidth: "350px",
                 padding: 0,
-                border: "none"
+                border: "none",
               }}
             />
           </div>
@@ -129,19 +166,18 @@ class NewPost extends Component {
           <div className="input-group form-group">
             <div className="custom-file">
               <input
-                accept="image/*"
+                accept="image/*,video/*"
                 className="custom-file-input"
                 type="file"
                 onChange={this.handleChange("photo")}
                 id="inputGroupFile04"
                 aria-describedby="inputGroupFileAddon04"
               />
-              <label className="custom-file-label" for="inputGroupFile04">
+              <label className="custom-file-label" htmlFor="inputGroupFile04">
                 Choose Post Photo
               </label>
             </div>
           </div>
-
           <div className="form-group">
             <input
               onChange={this.handleChange("title")}
@@ -160,6 +196,25 @@ class NewPost extends Component {
               value={body}
               name="body"
               placeholder="Post Description"
+            />
+          </div>
+
+          <div className="form-group bg-light rounded">
+            <Multiselect
+              id="tags"
+              className="form-control"
+              options={this.state.options} // Options to display in the dropdown
+              selectedValues={this.state.selectedValue} // Preselected value to persist in dropdown
+              onSelect={(selectedList, removedItem) =>
+                this.onSelect(selectedList, removedItem)
+              } // Function will trigger on select event
+              onRemove={(selectedList, removedItem) =>
+                this.onRemove(selectedList, removedItem)
+              } // Function will trigger on remove event
+              displayValue="name" // Property name to display in the dropdown options
+              placeholder="Select Peoples To Tag"
+              emptyRecordMsg="No People Found"
+              disablePreSelectedValues
             />
           </div>
 
@@ -185,7 +240,7 @@ class NewPost extends Component {
         </div>
 
         {/* <Toast type="Alert" msg={error} status={(error)?"toast fade show":"toast fade hide"} /> */}
-        {/* {loading ? <PageLoader /> : ""} */}
+        {loading ? <PageLoader /> : null}
 
         <div className="p-0">{this.newPostForm(title, body)}</div>
       </div>

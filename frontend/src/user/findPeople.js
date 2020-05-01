@@ -13,9 +13,19 @@ class FindPeople extends Component {
       users: [],
       error: "",
       open: false,
+
       isLoading: true,
+      search: "",
+      networkError: false,
     };
   }
+
+  /*  handleErrors = (response) => {
+    if (!response.ok) {
+      throw Error(response.statusText);
+    }
+    return response;
+  }; */
   componentDidMount() {
     const userId = isAuthenticated().user._id;
     const token = isAuthenticated().user.token;
@@ -104,16 +114,33 @@ class FindPeople extends Component {
       )}
     </div>
   );
+
+  updateSearch = (event) => {
+    this.setState({ search: event.target.value.substr(0, 20) });
+  };
+
   render() {
     const { users, open, followMessage } = this.state;
 
     if (users.length < 0 || this.state.isLoading) {
       return this.state.isLoading && <img src={LoadingRing} />;
     }
+
+    const users = this.state.users.filter((user) => {
+      return user.name.indexOf(this.state.search) !== -1;
+    });
     return (
       <div className="container-fluid p-0">
         <div className="jumbotron p-3">
           <h4>Find Friends</h4>
+          <input
+            type="text"
+            value={this.state.search}
+            onChange={this.updateSearch}
+            style={{ border: "1px solid black" }}
+            className="form-control col-md-2 "
+            placeholder="Search Here"
+          />
         </div>
         {open && (
           <div className="alert alert-info alert-dismissible fade show col-md-4">
@@ -125,7 +152,7 @@ class FindPeople extends Component {
               aria-label="Close"
             >
               <span aria-hidden="true">&times;</span>
-            </button>{" "}
+            </button>
           </div>
         )}
         {this.renderUsers(users)}

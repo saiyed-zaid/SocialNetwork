@@ -209,7 +209,7 @@ exports.removeFollower = async (req, res, next) => {
       req.body.unfollowId,
       {
         $pull: {
-          followers: req.body.userId,
+          followers: { user: req.body.userId },
         },
       },
       {
@@ -256,4 +256,62 @@ exports.newFollowerStatusChagne = (req, res, next) => {
         console.error(err);
       }
     });
+};
+
+exports.getOnlinePeople = async (req, res, next) => {
+  let following = req.profile.following;
+  // following.push(req.profile._id);
+  try {
+    const users = await User.find(
+      {
+        _id: req.profile._id,
+      },
+      { following }
+    ).populate("following", "_id name isLoggedIn photo");
+
+    await res.json(users);
+  } catch (error) {
+    res.status(400).json({ err: error });
+  }
+};
+
+exports.dailyNewUsers = async (req, res, next) => {
+  let created = req.profile.created.toDateString();
+  let startDate = new Date();
+
+  try {
+    const users = await User.find({
+      created: { $gte: startDate.toDateString() },
+    });
+
+    return await res.json(users);
+  } catch (error) {
+    res.status(400).json({ err: error });
+  }
+};
+
+exports.userOnlineToday = async (req, res, next) => {
+  let lastLoggedIn = req.profile.lastLoggedIn.toDateString();
+  let startDate = new Date();
+
+  try {
+    const users = await User.find({
+      lastLoggedIn: { $gte: startDate.toDateString() },
+    });
+    return await res.json(users);
+  } catch (error) {
+    res.status(400).json({ err: error });
+  }
+};
+
+exports.userOnlineNow = async (req, res, next) => {
+  try {
+    const users = await User.find({
+      isLoggedIn: { $eq: true },
+      role: { $eq: "subscriber" },
+    });
+    return await res.json(users);
+  } catch (error) {
+    res.status(400).json({ err: error });
+  }
 };

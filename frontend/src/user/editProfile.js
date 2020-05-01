@@ -18,14 +18,14 @@ class EditProfile extends Component {
       fileSize: 0,
       loading: false,
       about: "",
-      photo: ""
+      photo: "",
     };
   }
 
-  init = userId => {
+  init = (userId) => {
     const token = isAuthenticated().user.token;
 
-    read(userId, token).then(data => {
+    read(userId, token).then((data) => {
       if (data.error) {
         this.setState({ redirectToProfile: true });
       } else {
@@ -35,7 +35,7 @@ class EditProfile extends Component {
           email: data.email,
           error: "",
           about: data.about,
-          photo: data.photo ? data.photo.path : DefaultProfile
+          photo: data.photo ? data.photo.path : DefaultProfile,
         });
       }
     });
@@ -43,11 +43,14 @@ class EditProfile extends Component {
 
   componentDidMount() {
     this.userData = new FormData();
-    const userId = this.props.match.params.userId;
+    const userId =
+      this.props.userId == null
+        ? this.props.match.params.userId
+        : this.props.userId;
     this.init(userId);
   }
 
-  handleChange = name => event => {
+  handleChange = (name) => (event) => {
     this.setState({ error: "" });
     const value = name === "photo" ? event.target.files[0] : event.target.value;
     const fileSize = name === "photo" ? event.target.files[0].size : 0;
@@ -72,32 +75,35 @@ class EditProfile extends Component {
     if (password.length >= 1 && password.length <= 5) {
       this.setState({
         error: "password Must be 6 character Long",
-        loading: false
+        loading: false,
       });
       return false;
     }
     return true;
   };
 
-  clickSubmit = event => {
+  clickSubmit = (event) => {
     event.preventDefault();
     this.setState({ loading: true });
 
     if (this.isValid()) {
-      const userId = this.props.match.params.userId;
+      const userId =
+        this.props.userId == null
+          ? this.props.match.params.userId
+          : this.props.userId;
       const token = isAuthenticated().user.token;
 
-      update(userId, token, this.userData).then(data => {
+      update(userId, token, this.userData).then((data) => {
         if (data.msg) {
           this.setState({ error: data.msg });
         } else if (isAuthenticated().user.role === "admin") {
           this.setState({
-            redirectToProfile: true
+            redirectToProfile: true,
           });
         } else {
           updateUser(data, () => {
             this.setState({
-              redirectToProfile: true
+              redirectToProfile: true,
             });
           });
         }
@@ -109,8 +115,8 @@ class EditProfile extends Component {
     return (
       <div className="col-md-6">
         <form method="post">
-          <div class="input-group form-group">
-            <div class="custom-file">
+          <div className="input-group form-group">
+            <div className="custom-file">
               <input
                 accept="image/*"
                 className="custom-file-input"
@@ -119,12 +125,11 @@ class EditProfile extends Component {
                 id="inputGroupFile04"
                 aria-describedby="inputGroupFileAddon04"
               />
-              <label class="custom-file-label" for="inputGroupFile04">
+              <label className="custom-file-label" htmlFor="inputGroupFile04">
                 Choose Post Photo
               </label>
             </div>
           </div>
-
           <div className="form-group">
             <input
               onChange={this.handleChange("name")}
@@ -183,7 +188,7 @@ class EditProfile extends Component {
       error,
       loading,
       about,
-      photo
+      photo,
     } = this.state;
 
     if (redirectToProfile) {
@@ -217,7 +222,7 @@ class EditProfile extends Component {
           style={{
             display: "flex",
             justifyContent: "space-around",
-            flexWrap: "wrap"
+            flexWrap: "wrap",
           }}
         >
           {loading ? <PageLoader /> : ""}
@@ -226,7 +231,7 @@ class EditProfile extends Component {
             style={{ height: "200px", width: "200px" }}
             className="img-thumbnail"
             src={photoUrl}
-            onError={i => (i.target.src = `${DefaultProfile}`)}
+            onError={(i) => (i.target.src = `${DefaultProfile}`)}
             alt={name}
           />
 

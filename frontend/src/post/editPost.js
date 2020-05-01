@@ -17,11 +17,11 @@ class EditPost extends Component {
       fileSize: 0,
       loading: false,
       photo: "",
-      prevPhoto: ""
+      prevPhoto: "",
     };
   }
-  init = postId => {
-    singlePost(postId).then(data => {
+  init = (postId) => {
+    singlePost(postId).then((data) => {
       if (data.error) {
         this.setState({ redirectToProfile: true });
       } else {
@@ -30,7 +30,7 @@ class EditPost extends Component {
           title: data.title,
           body: data.body,
           error: "",
-          photo: data.photo ? data.photo.path : DefaultPost
+          photo: data.photo ? data.photo.path : DefaultPost,
         });
       }
     });
@@ -38,14 +38,17 @@ class EditPost extends Component {
 
   componentDidMount() {
     this.postData = new FormData();
-    const postId = this.props.match.params.postId;
+    const postId =
+      this.props.postId == null
+        ? this.props.match.params.postId
+        : this.props.postId;
     this.init(postId);
   }
 
-  handleChange = name => event => {
+  handleChange = (name) => (event) => {
     this.setState({ error: "" });
     if (name === "photo") {
-      this.state.prevPhoto = event.target.files[0];
+      this.setState({ prevPhoto: event.target.files[0] });
     }
     const value = name === "photo" ? event.target.files[0] : event.target.value;
     const fileSize = name === "photo" ? event.target.files[0].size : 0;
@@ -69,7 +72,7 @@ class EditPost extends Component {
     return true;
   };
 
-  clickSubmit = event => {
+  clickSubmit = (event) => {
     event.preventDefault();
     this.setState({ loading: true });
 
@@ -77,7 +80,7 @@ class EditPost extends Component {
       const postId = this.state.id;
       const token = isAuthenticated().user.token;
 
-      update(postId, token, this.postData).then(data => {
+      update(postId, token, this.postData).then((data) => {
         if (data.msg) {
           this.setState({ error: data.msg });
         } else {
@@ -85,7 +88,7 @@ class EditPost extends Component {
             title: "",
             body: "",
             redirectToProfile: true,
-            loading: false
+            loading: false,
           });
         }
       });
@@ -99,7 +102,7 @@ class EditPost extends Component {
           <div class="input-group form-group">
             <div class="custom-file">
               <input
-                accept="image/*"
+                accept="image/*,video/*"
                 className="custom-file-input"
                 type="file"
                 onChange={this.handleChange("photo")}
@@ -146,7 +149,7 @@ class EditPost extends Component {
       redirectToProfile,
       error,
       loading,
-      photo
+      photo,
     } = this.state;
     if (redirectToProfile) {
       return <Redirect to={`/user/${isAuthenticated().user._id}`} />;
@@ -162,17 +165,35 @@ class EditPost extends Component {
         <div className="container d-flex align-items-center">
           <div className="col-md-6">
             <h2>{title}</h2>
-            <img
-              style={{ height: "300px", width: "300px" }}
-              className="img-thumbnail"
-              src={
-                !this.state.prevPhoto
-                  ? photoUrl
-                  : URL.createObjectURL(this.state.prevPhoto)
-              }
-              //    onError={i => (i.target.src = `${DefaultProfile}`)}
-              alt={title}
-            />
+            {this.state.prevPhoto.type === "video/mp4" ? (
+              <div className="embed-responsive embed-responsive-4by3">
+                <video controls className="embed-responsive-item">
+                  <source
+                    src={
+                      !this.state.prevPhoto
+                        ? photoUrl
+                        : URL.createObjectURL(this.state.prevPhoto)
+                    }
+                    type="video/mp4"
+                    alt="No Video Found"
+                    // onError={e=>e.target.alt="No Video"}
+                  />
+                  Your browser does not support the video tag.
+                </video>
+              </div>
+            ) : (
+              <img
+                style={{ height: "300px", width: "300px" }}
+                className="img-thumbnail"
+                src={
+                  !this.state.prevPhoto
+                    ? photoUrl
+                    : URL.createObjectURL(this.state.prevPhoto)
+                }
+                onError={(i) => (i.target.src = `${DefaultPost}`)}
+                alt={title}
+              />
+            )}
             <div
               className="alert alert-danger alert-dismissible fade show"
               style={{ display: error ? "" : "none" }}

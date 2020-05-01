@@ -155,11 +155,13 @@ class ProfileTabs extends Component {
                         }}
                       />
                       <h5 style={{ color: "rgb(230, 207, 35)" }}>
-                        {" "}
+
                         {person.name}
-                        {" "}
-                        {(person.isLoggedIn)?<span class="badge badge-success" >online</span>:<span class="badge badge-secondary" >offline</span>}
-                        
+                        {person.isLoggedIn ? (
+                          <span class="badge badge-success">Online </span>
+                        ) : (
+                          <span class="badge badge-secondary">Offline</span>
+                        )}
                       </h5>
                     </Link>
                     {this.props.match.params.userId ===
@@ -170,20 +172,20 @@ class ProfileTabs extends Component {
                           data-userId={person._id}
                           onClick={this.handleUserUnfollow}
                         >
-                          Unfollow
+
+                          <i class="fas fa-user-minus"></i>
                         </button>
                         <button
                           className="btn btn-primary"
                           data-userId={person._id}
                           data-name={person.name}
-                          onClick = {this.props.hasChatBoxDisplay}
+
+                          onClick={this.props.hasChatBoxDisplay}
                         >
-                          Msg
+                          <i class="fas fa-paper-plane"></i>
                         </button>
                       </>
-                    ) : (
-                      ""
-                    )}
+                    ) : null}
                   </div>
                 );
               })
@@ -247,7 +249,7 @@ class ProfileTabs extends Component {
             )}
           </div>
           <div
-            className="tab-pane fade bg-dark"
+            className="tab-pane fade bg-dark "
             id="posts"
             role="tabpanel"
             aria-labelledby="posts-tab"

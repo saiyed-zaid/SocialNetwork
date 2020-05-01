@@ -20,6 +20,7 @@ router.post(
     body("email").notEmpty().withMessage("Email feild is required."),
     body("email").isEmail().normalizeEmail().withMessage("Not a valid email."),
     body("password").notEmpty().withMessage("Password feild is required."),
+
     body("password")
       .isLength({ min: 5 })
       .withMessage("Password must be 5 character long."),

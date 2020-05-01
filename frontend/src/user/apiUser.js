@@ -1,3 +1,5 @@
+import axios from "axios";
+
 /**
  * Api For Reading Data From Database
  *
@@ -34,6 +36,11 @@ export const list = async () => {
   return await users.json({ users });
 };
 
+/* export const list = async () => {
+  const users = await axios.get(`${process.env.REACT_APP_API_URL}/api/users`);
+  return await users.data;
+};
+ */
 /**
  * Api For Deleting The User Profile
  *
@@ -191,4 +198,20 @@ export const fetchMessage = async (senderId, receiverId, token) => {
   );
 
   return await messages.json({ messages });
+};
+
+export const getOnlineUsers = async (userId, token) => {
+  const onlineUsers = await fetch(
+    `${process.env.REACT_APP_API_URL}/api/user/getonline/${userId}`,
+    {
+      method: "get",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "Application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    }
+  );
+
+  return await onlineUsers.json({ onlineUsers });
 };

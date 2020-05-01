@@ -29,6 +29,7 @@ class Posts extends Component {
         }
       });
     }, 500);
+
   }
 
   /**
@@ -43,18 +44,35 @@ class Posts extends Component {
           const posterName = post.postedBy ? post.postedBy.name : "Unknown";
           return (
             <Card
-              className="card"
-              ckey={i}
+              className="card like-box"
+              key={i}
               style={{ width: "20rem" }}
               img={
-                <img
-                  className="card-img-top"
-                  src={`${process.env.REACT_APP_API_URL}/${
-                    post.photo ? post.photo.path : DefaultPost
-                  }`}
-                  onError={(i) => (i.target.src = `${DefaultPost}`)}
-                  alt={post.name}
-                />
+
+                post.photo && post.photo.mimetype === "video/mp4" ? (
+                  <div className="embed-responsive embed-responsive-1by1 p-0 m-0">
+                    <video controls className="embed-responsive-item">
+                      <source
+                        src={`${process.env.REACT_APP_API_URL}/${
+                          post.photo ? post.photo.path : DefaultPost
+                        }`}
+                        type="video/mp4"
+                        alt="No Video Found"
+                        // onError={e=>e.target.alt="No Video"}
+                      />
+                      Your browser does not support the video tag.
+                    </video>
+                  </div>
+                ) : (
+                  <img
+                    className="card-img-top"
+                    src={`${process.env.REACT_APP_API_URL}/${
+                      post.photo ? post.photo.path : DefaultPost
+                    }`}
+                    onError={(i) => (i.target.src = `${DefaultPost}`)}
+                    alt={post.name}
+                  />
+                )
               }
               postedBy={posterName}
               title={post.title}
