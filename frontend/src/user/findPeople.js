@@ -120,15 +120,15 @@ class FindPeople extends Component {
   };
 
   render() {
-    const { users, open, followMessage } = this.state;
+    const {  open, followMessage } = this.state;
+    const users = this.state.users.filter((user) => {
+      return user.name.indexOf(this.state.search) !== -1;
+    });
 
     if (users.length < 0 || this.state.isLoading) {
       return this.state.isLoading && <img src={LoadingRing} />;
     }
 
-    const users = this.state.users.filter((user) => {
-      return user.name.indexOf(this.state.search) !== -1;
-    });
     return (
       <div className="container-fluid p-0">
         <div className="jumbotron p-3">

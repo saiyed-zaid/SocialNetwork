@@ -121,6 +121,9 @@ class Users extends Component {
 
   render() {
     const { users, onlineUsers } = this.state;
+    if (this.state.isLoading) {
+      return <img src={LoadingGif} />;
+    }
     return (
       <div className="row container-fluid p-0 m-0">
         <div
@@ -136,11 +139,11 @@ class Users extends Component {
           <div className="jumbotron p-3">
             <h4> Users</h4>
             <div className="row">
-              {!users.length ? <PageLoader /> : this.renderUsers(users)}
+           
+              {!users.length && this.renderUsers(users)}
             </div>
           </div>
         </div>
-        {this.state.isLoading && <img src={LoadingGif} />}
         {this.renderUsers(users)}
         <div
           className="col-md-2 p-0 m-0"

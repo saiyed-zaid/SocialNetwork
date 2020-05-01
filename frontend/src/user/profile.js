@@ -13,7 +13,7 @@ import PageLoader from "../components/pageLoader";
 import LoadingRing from "../l1.gif";
 import Chattab from "../components/chatTab";
 import Modal from "../components/modal/modal";
-import EditProfile from "../user/editProfile";
+import EditProfile from "./editProfile";
 
 class Profile extends Component {
   constructor() {

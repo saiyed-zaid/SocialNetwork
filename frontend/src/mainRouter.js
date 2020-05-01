@@ -120,4 +120,3 @@ export default class MainRouter extends React.Component {
     );
   }
 }
-export default MainRouter;
