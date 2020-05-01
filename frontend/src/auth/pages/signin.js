@@ -12,21 +12,21 @@ class Signin extends Component {
       password: "123456",
       error: "",
       redirectToRefferer: false,
-      loading: false
+      loading: false,
     };
   }
 
   /* Custom Card Style  */
   customCard = {
     transform: "unset",
-    animation: "unset"
+    animation: "unset",
   };
   customContainer = {
     maxWidth: "350px",
     position: "absolute",
     top: "50%",
     left: "50%",
-    transform: "translate(-50%,-50%)"
+    transform: "translate(-50%,-50%)",
   };
   /* /.Custom Card Style  */
 
@@ -35,7 +35,7 @@ class Signin extends Component {
    *
    *  @param {string} name   Name Of The Control
    */
-  handleChange = name => event => {
+  handleChange = (name) => (event) => {
     this.setState({ error: "" });
     this.setState({ [name]: event.target.value });
   };
@@ -43,24 +43,28 @@ class Signin extends Component {
   /**
    *Function For Handling Submition Of Form
    */
-  clickSubmit = event => {
+  clickSubmit = (event) => {
     event.preventDefault();
     this.setState({ loading: true });
     const { email, password } = this.state;
     const user = {
       email,
-      password
+      password,
     };
 
-    signin(user).then(data => {
-      if (data.msg) {
-        this.setState({ error: data.msg, loading: false });
-      } else {
-        authenticate(data, () => {
-          this.setState({ redirectToRefferer: true });
-        });
-      }
-    });
+    signin(user)
+      .then((data) => {
+        if (data.err) {
+          this.setState({ error: data.err, loading: false });
+        } else {
+          authenticate(data, () => {
+            this.setState({ redirectToRefferer: true });
+          });
+        }
+      })
+      .catch((err) => {
+        alert(err);
+      });
   };
 
   /**
@@ -154,8 +158,8 @@ class Signin extends Component {
               to={{
                 pathname: "/forgot-password",
                 state: {
-                  email: email
-                }
+                  email: email,
+                },
               }}
               className="text-default"
             >

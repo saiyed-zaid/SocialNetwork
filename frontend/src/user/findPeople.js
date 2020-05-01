@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import DefaultProfile from "../images/avatar.jpg";
 import { isAuthenticated } from "../auth/index";
 import PageLoader from "../components/pageLoader";
+import LoadingRing from "../l1.gif";
 
 class FindPeople extends Component {
   constructor() {
@@ -11,27 +12,29 @@ class FindPeople extends Component {
     this.state = {
       users: [],
       error: "",
-      open: false
+      open: false,
+      isLoading: true,
     };
   }
   componentDidMount() {
     const userId = isAuthenticated().user._id;
     const token = isAuthenticated().user.token;
-
-    findPeople(userId, token).then(data => {
-      if (data.err) {
-        console.log(data.err);
-      } else {
-        this.setState({ users: data });
-      }
-    });
+    setTimeout(() => {
+      findPeople(userId, token).then((data) => {
+        if (data.err) {
+          console.log(data.err);
+        } else {
+          this.setState({ users: data, isLoading: false });
+        }
+      });
+    }, 1000);
   }
 
   clickFollow = (user, i) => {
     const userId = isAuthenticated().user._id;
     const token = isAuthenticated().user.token;
 
-    follow(userId, token, user._id).then(data => {
+    follow(userId, token, user._id).then((data) => {
       if (data.err) {
         this.setState({ error: data.err });
       } else {
@@ -40,7 +43,7 @@ class FindPeople extends Component {
         this.setState({
           users: toFollow,
           open: true,
-          followMessage: `Following ${user.name}`
+          followMessage: `Following ${user.name}`,
         });
       }
     });
@@ -51,7 +54,7 @@ class FindPeople extends Component {
    *
    * @param {json} users  Users To Be renderd On page
    */
-  renderUsers = users => (
+  renderUsers = (users) => (
     <div className="row m-0">
       {users.map((user, i) =>
         user.role === "subscriber" ? (
@@ -59,7 +62,7 @@ class FindPeople extends Component {
             <img
               className="img-thumbnail"
               src={`${process.env.REACT_APP_API_URL}/user/photo/${user._id}`}
-              onError={i => (i.target.src = `${DefaultProfile}`)}
+              onError={(i) => (i.target.src = `${DefaultProfile}`)}
               alt={user.name}
             />
             <div className="card-body">
@@ -76,7 +79,7 @@ class FindPeople extends Component {
                   style={{
                     flex: "1",
                     border: "none !important",
-                    margin: "1px"
+                    margin: "1px",
                   }}
                 >
                   Follow
@@ -87,7 +90,7 @@ class FindPeople extends Component {
                   style={{
                     flex: "1",
                     border: "none !important",
-                    margin: "1px"
+                    margin: "1px",
                   }}
                 >
                   View Profile
@@ -103,6 +106,10 @@ class FindPeople extends Component {
   );
   render() {
     const { users, open, followMessage } = this.state;
+
+    if (users.length < 0 || this.state.isLoading) {
+      return this.state.isLoading && <img src={LoadingRing} />;
+    }
     return (
       <div className="container-fluid p-0">
         <div className="jumbotron p-3">
@@ -121,7 +128,7 @@ class FindPeople extends Component {
             </button>{" "}
           </div>
         )}
-        {!users.length ? <PageLoader /> : this.renderUsers(users)}}
+        {this.renderUsers(users)}
       </div>
     );
   }

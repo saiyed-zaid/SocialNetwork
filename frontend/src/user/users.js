@@ -4,22 +4,26 @@ import { Link } from "react-router-dom";
 import DefaultProfile from "../images/avatar.jpg";
 import Card from "../components/card";
 import PageLoader from "../components/pageLoader";
+import LoadingGif from "../l1.gif";
 
 class Users extends Component {
   constructor() {
     super();
     this.state = {
-      users: []
+      users: [],
+      isLoading: true,
     };
   }
   componentDidMount() {
-    list().then(data => {
-      if (data.error) {
-        console.log(data.error);
-      } else {
-        this.setState({ users: data.users });
-      }
-    });
+    setTimeout(() => {
+      list().then((data) => {
+        if (data.error) {
+          console.log(data.error);
+        } else {
+          this.setState({ users: data.users, isLoading: false });
+        }
+      });
+    }, 2000);
   }
 
   /**
@@ -27,7 +31,7 @@ class Users extends Component {
    *
    * @param {json} users  Users To Be renderd On page
    */
-  renderUsers = users => (
+  renderUsers = (users) => (
     <div className="row m-0">
       {users.map((user, i) =>
         user.role === "subscriber" ? (
@@ -41,7 +45,7 @@ class Users extends Component {
                 src={`${process.env.REACT_APP_API_URL}/${
                   user.photo ? user.photo.path : DefaultProfile
                 }`}
-                onError={i => (i.target.src = `${DefaultProfile}`)}
+                onError={(i) => (i.target.src = `${DefaultProfile}`)}
                 alt={user.name}
               />
             }
@@ -65,7 +69,10 @@ class Users extends Component {
         <div className="jumbotron p-3">
           <h4> Users</h4>
         </div>
-        {!users.length ? <PageLoader /> : this.renderUsers(users)}
+        {this.state.isLoading && (
+          <img src={LoadingGif} />
+        )}
+        {this.renderUsers(users)}
       </div>
     );
   }

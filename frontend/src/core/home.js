@@ -1,11 +1,12 @@
 import React, { Component } from "react";
 import Posts from "../post/posts";
-import  Notification  from "./components/Notification";
+import Notification from "./components/Notification";
+import Chattab from "../components/chatTab";
 class Home extends Component {
   constructor() {
     super();
     this.state = {
-      loaderIsLoading: true
+      loaderIsLoading: true,
     };
   }
 
@@ -38,13 +39,12 @@ class Home extends Component {
     }, 1000);
   }
  */
- 
-  render() {
 
+  render() {
     return (
       <div className="m-3">
         <Notification />
-        
+
         {/* Loding Post Begin */}
         <div>
           <div className="jumbotron p-0">
