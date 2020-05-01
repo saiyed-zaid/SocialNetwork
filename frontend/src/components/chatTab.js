@@ -51,10 +51,26 @@ export default class chatTab extends Component {
     /* SEND MESSAGE WHEN ENTER KEY PRESS OVER */
   }
   componentDidMount() {
+    /* INVOKED WHENEVER SOMEONE MESSAGE YOU -BEGIN*/
+    this.socket = openSocket("http://localhost:5000");
+    this.socket.on(this.props.senderId, (data) => {
+      const li = this.appendReceivedMsg(data);
+      let myMsg = document.querySelector("#myMsg");
+      const chatBox = document.querySelector("#chatBox");
+      myMsg.appendChild(li);
+      chatBox.scrollTo(0, chatBox.scrollHeight);
+    });
+    /* INVOKED WHENEVER SOMEONE MESSAGE YOU -BEGIN*/
+
     const chatBox = document.querySelector("#chatBox");
-    chatBox.appendChild(this.masterUl);
+    chatBox.appendChild(this.parentUl);
     chatBox.scrollTo(0, chatBox.scrollHeight);
   }
+  handleClose = () => {
+    let chattab = document.getElementById("chat-tab");
+    chattab.style.display = "none";
+  };
+
   appendReceivedMsg = (data) => {
     /* if (data.msg.length === 0) {
       return alert("Please enter msg");
@@ -65,17 +81,12 @@ export default class chatTab extends Component {
 
     //add new message
     if (data.sender === this.props.senderId) {
-      appendLi.classList.add("text-right", "p-1", "m-1");
-      appendMsg.innerHTML =
-        data.message /* + " (" + this.props.senderName + ")" */;
-      appendMsg.classList.add("bg-dark", "rounded", "layout");
+      appendLi.classList.add("text-right", "P-1");
+      appendMsg.innerHTML = data.message + " (" + this.props.senderName + ")";
     } else {
-      appendLi.classList.add("text-left", "text-dark", "p-1", "m-1");
-      appendMsg.style.backgroundColor = "royalblue";
-      appendMsg.classList.add("rounded");
-
+      appendLi.classList.add("text-left", "P-1");
       appendMsg.innerHTML =
-        /* " (" + this.props.receiverName + ") "  +*/ data.message;
+        " (" + this.props.receiverName + ") " + data.message;
     }
     appendMsg.classList.add("p-1");
 
@@ -87,7 +98,6 @@ export default class chatTab extends Component {
     appendLi.appendChild(appendMsg);
 
     //append to master ul
-
     //myMsg.appendChild(appendLi);
     return appendLi;
     //chatBox.scrollTo(0, chatBox.scrollHeight);
@@ -96,18 +106,20 @@ export default class chatTab extends Component {
   handleSend = () => {
     const msg = document.querySelector("#btn-input");
     const chatBox = document.querySelector("#chatBox");
+    let myMsg = document.querySelector("#myMsg");
 
     this.socket.emit("msg", {
       message: msg.value,
       sender: this.props.senderId,
+      senderName: this.props.senderName,
       receiver: this.props.receiverId,
     });
 
-    let myMsg = document.querySelector("#myMsg");
+    // if (msg.value.length === 0) {
 
-    if (msg.value.length === 0) {
+    /* if (data.msg.length === 0) {
       return alert("Please enter msg");
-    }
+    }*/
     const appendLi = document.createElement("li");
     const appendMsg = document.createElement("span");
     const personImg = document.createElement("img");
@@ -204,7 +216,7 @@ export default class chatTab extends Component {
                 }}
                 onClick={this.handleSend}
               >
-                <i className="fas fa-send"></i>
+                <i className="fa fa-send"></i>
               </button>
             </span>
           </div>

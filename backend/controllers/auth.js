@@ -154,6 +154,7 @@ exports.postSignin = async (req, res, next) => {
     },
   });
 };
+
 exports.forgetPassword = async (req, res, next) => {
   const { email } = req.body;
   User.findOne({ email }, (err, user) => {

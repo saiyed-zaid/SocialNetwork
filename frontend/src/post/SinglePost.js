@@ -5,33 +5,39 @@ import { isAuthenticated } from "../auth/index";
 import DefaultPost from "../images/post.jpg";
 import Comment from "./comment";
 import PageLoader from "../components/pageLoader";
+
+import LoadingRing from "../l1.gif";
 import Modal from "../components/modal/modal";
 import EditPost from "./editPost";
 
 class SinglePost extends Component {
   state = {
-    post: "",
+    post: null,
     redirectToHome: false,
     redirectToSignin: false,
+    isLoading: true,
     like: false,
     likes: 0,
     comments: [],
   };
   componentDidMount() {
     const postId = this.props.match.params.postId;
-
-    singlePost(postId).then((data) => {
-      if (data.error) {
-        console.log(data.error);
-      } else {
-        this.setState({
-          post: data,
-          likes: data.likes.length,
-          like: this.checkLike(data.likes),
-          comments: data.comments,
-        });
-      }
-    });
+    setTimeout(() => {
+      singlePost(postId).then((data) => {
+        if (data.error) {
+          console.log(data.error);
+        } else {
+          console.log(data);
+          this.setState({
+            post: data,
+            likes: data.likes.length,
+            like: this.checkLike(data.likes),
+            comments: data.comments,
+            isLoading: false,
+          });
+        }
+      });
+    }, 500);
   }
 
   deletePost = () => {
@@ -84,8 +90,6 @@ class SinglePost extends Component {
     const postId = this.state.post._id;
     const token = isAuthenticated().user.token;
     callApi(userId, token, postId).then((data) => {
-      console.log(data);
-
       if (data.error) {
         console.log(data.error);
       } else {
@@ -101,7 +105,6 @@ class SinglePost extends Component {
     const posterId = post.postedBy ? `/user/${post.postedBy._id}` : "";
     const posterName = post.postedBy ? post.postedBy.name : "Unknown";
     const { like, likes } = this.state;
-
     return (
       <div>
         <div>
@@ -214,6 +217,9 @@ class SinglePost extends Component {
   };
   render() {
     const { post, redirectToHome, redirectToSignin, comments } = this.state;
+    if (post == null || this.state.isLoading) {
+      return <img src={LoadingRing} style={{ height: "120px" }} />;
+    }
     if (redirectToHome) {
       return <Redirect to="/" />;
     }
@@ -221,8 +227,8 @@ class SinglePost extends Component {
       return <Redirect to="/signin" />;
     }
     return (
-      <div className=" container-fluid col-md-12 mb-2 p-0">
-        {!post ? <PageLoader /> : this.renderPost(post)}
+      <div className="container col-md-12 mb-2">
+        {this.state.post ? this.renderPost(post) : {}}
         <Comment
           postId={post._id}
           comments={comments.reverse()}

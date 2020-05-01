@@ -1,7 +1,8 @@
 import React, { Component } from "react";
 import Posts from "../post/posts";
 import Notification from "./components/Notification";
-// import Chattab from "../components/chatTab";
+import Chattab from "../components/chatTab";
+
 class Home extends Component {
   constructor() {
     super();

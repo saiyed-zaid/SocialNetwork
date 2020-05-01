@@ -13,7 +13,9 @@ export default class PostCard extends Component {
     const posterName = this.props.post.postedBy
       ? this.props.post.postedBy.name
       : "Unknown";
-    // const imgPath = this.props.post.photo ? this.props.post.photo.path : DefaultPost;
+    console.log(this.props.post);
+
+    // const imgPath = this.props.post.photo ? thi..props.post.photo.path : DefaultPost;
     return (
       <div
         className=" col-md-6 card-body m-2  bg-light  "

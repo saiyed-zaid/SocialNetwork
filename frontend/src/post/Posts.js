@@ -1,12 +1,8 @@
 import React, { Component } from "react";
 import { list } from "./apiPost";
-import { Link } from "react-router-dom";
-import DefaultProfile from "../images/avatar.jpg";
-import DefaultPost from "../images/post.jpg";
-import Card from "../components/card";
 import PageLoader from "../components/pageLoader";
-import { isAuthenticated } from "../auth";
 import PostCard from "../components/posts/index";
+import LoadingRing from "../l1.gif";
 
 class Posts extends Component {
   constructor() {
@@ -14,6 +10,7 @@ class Posts extends Component {
     this.state = {
       posts: [],
       expanded: false,
+      isLoading: true,
     };
   }
 
@@ -21,15 +18,15 @@ class Posts extends Component {
     this.setState({ expanded: !this.state.expanded });
   };
   componentDidMount() {
-    list()
-      .then((data) => {
+    setTimeout(() => {
+      list().then((data) => {
         if (data.error) {
           console.log(data.error);
         } else {
-          this.setState({ posts: data.posts });
+          this.setState({ posts: data.posts, isLoading: false });
         }
-      })
-      .catch();
+      });
+    }, 500);
   }
 
   /**
@@ -49,9 +46,12 @@ class Posts extends Component {
   render() {
     const { posts } = this.state;
 
+    if (posts.length < 0 || this.state.isLoading) {
+      return this.state.isLoading && <img src={LoadingRing} />;
+    }
     return (
       <div className="d-flex w-100 flex-column justify-content-center p-0 m-0">
-        {!posts.length ? <PageLoader /> : this.renderPosts(posts)}
+        {this.renderPosts(posts)}
       </div>
     );
   }

@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { isAuthenticated, signout } from "../auth/index";
 import { Redirect, Link } from "react-router-dom";
+
 import { read, fetchMessage, update } from "./apiUser";
 import DefaultProfile from "../images/avatar.jpg";
 import DefaultPost from "../images/post.jpg";
@@ -9,9 +10,11 @@ import FollowProfileButton from "./followProfileButton";
 import ProfileTabs from "./profileTabs";
 import { listByUser } from "../post/apiPost";
 import PageLoader from "../components/pageLoader";
+
+import LoadingRing from "../l1.gif";
 import Chattab from "../components/chatTab";
 import Modal from "../components/modal/modal";
-import EditProfile from "../user/editProfile";
+import EditProfile from "./editProfile";
 
 class Profile extends Component {
   constructor() {
@@ -27,6 +30,7 @@ class Profile extends Component {
       receiverId: undefined,
       receiverName: undefined,
       messages: null,
+      isLoading: true,
     };
   }
 
@@ -44,7 +48,6 @@ class Profile extends Component {
 
     callApi(userId, token, this.state.user._id)
       .then((data) => {
-        console.log("sfcsd", userId, this.state.user._id);
         if (data.error) {
           this.setState({ error: data.error });
         } else {
@@ -74,7 +77,7 @@ class Profile extends Component {
           this.setState({ redirectToSignin: true });
         } else {
           let following = this.checkFollow(data);
-          this.setState({ user: data, following });
+          this.setState({ user: data, following, isLoading: false });
           this.loadPosts(data._id);
         }
       })
@@ -134,6 +137,7 @@ class Profile extends Component {
     getModal.style.display = "block";
     getModal.classList.add("show");
   };
+
   handleChatBoxDisplay = (e) => {
     e.persist();
     if (!this.state.hasChatBoxDisplay) {
@@ -173,6 +177,9 @@ class Profile extends Component {
     if (redirectToSignin) {
       return <Redirect to="/signin" />;
     }
+    if (this.state.isLoading) {
+      return this.state.isLoading && <img src={LoadingRing} />;
+    }
     return (
       <div className="container-fluid mt-0" style={{ color: "#e6cf23" }}>
         {!user ? (
@@ -180,16 +187,11 @@ class Profile extends Component {
         ) : (
           <div className="profile p-3">
             {/* ChatBox BEGIN */}
-            <div
-              id="chat-tab"
-              className="justify-content-end align-items-end chat-box"
-              style={
-                this.state.hasChatBoxDisplay
-                  ? { display: "flex" }
-                  : { display: "none" }
-              }
-            >
-              {this.state.hasChatBoxDisplay ? (
+            {this.state.hasChatBoxDisplay && (
+              <div
+                id="chat-tab"
+                className=" d-flex justify-content-end align-items-end chat-box"
+              >
                 <Chattab
                   senderId={isAuthenticated().user._id}
                   senderName={isAuthenticated().user.name}
@@ -198,10 +200,9 @@ class Profile extends Component {
                   handleChatBoxDisplay={this.handleChatBoxDisplay}
                   messages={this.state.messages}
                 />
-              ) : (
-                ""
-              )}
-            </div>
+              </div>
+            )}
+
             {/* ChatBox End */}
             <div className="row">
               <div className="col-md-2">

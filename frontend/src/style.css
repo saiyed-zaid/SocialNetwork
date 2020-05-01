@@ -870,4 +870,11 @@ img {
   font-size: 21px;
   margin-top: 5px;
 }
-
+.chat-box {
+  width: 100%;
+  z-index: 9999;
+  height: 100px;
+  position: absolute;
+  bottom: 0;
+  right: 0;
+}

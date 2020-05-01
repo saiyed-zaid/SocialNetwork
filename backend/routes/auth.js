@@ -16,10 +16,11 @@ const User = require("../models/user");
 router.post(
   "/api/signup",
   [
-    body("name").notEmpty().withMessage("Name field is required."),
-    body("email").notEmpty().withMessage("Email field is required."),
+    body("name").notEmpty().withMessage("Name feild is required."),
+    body("email").notEmpty().withMessage("Email feild is required."),
     body("email").isEmail().normalizeEmail().withMessage("Not a valid email."),
-    body("password").notEmpty().withMessage("Password field is required."),
+    body("password").notEmpty().withMessage("Password feild is required."),
+
     body("password")
       .isLength({ min: 5 })
       .withMessage("Password must be 5 character long."),

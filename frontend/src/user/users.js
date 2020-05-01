@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import DefaultProfile from "../images/avatar.jpg";
 import Card from "../components/card";
 import PageLoader from "../components/pageLoader";
+import LoadingGif from "../l1.gif";
 import { isAuthenticated } from "../auth";
 import ChatBar from "../components/chatBar/chatbar";
 import Chattab from "../components/chatTab";
@@ -18,18 +19,19 @@ class Users extends Component {
       receiverId: undefined,
       receiverName: undefined,
       messages: null,
+      isLoading: true,
     };
   }
   componentDidMount() {
-    list()
-      .then((data) => {
+    setTimeout(() => {
+      list().then((data) => {
         if (data.error) {
           console.log(data.error);
         } else {
-          this.setState({ users: data.users });
+          this.setState({ users: data.users, isLoading: false });
         }
-      })
-      .catch();
+      });
+    }, 2000);
 
     /**
      * Function For Getting Online Users
@@ -158,6 +160,9 @@ class Users extends Component {
 
   render() {
     const { users, onlineUsers } = this.state;
+    if (this.state.isLoading) {
+      return <img src={LoadingGif} />;
+    }
     return (
       <div className="row container-fluid p-0 m-0">
         <div
@@ -173,10 +178,12 @@ class Users extends Component {
           <div className="jumbotron p-3">
             <h4> Users</h4>
             <div className="row">
-              {!users.length ? <PageLoader /> : this.renderUsers(users)}
+           
+              {!users.length && this.renderUsers(users)}
             </div>
           </div>
         </div>
+        {this.renderUsers(users)}
         <div
           className="col-md-2 p-0 m-0"
           style={{

@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import DefaultProfile from "../images/avatar.jpg";
 import { isAuthenticated } from "../auth/index";
 import PageLoader from "../components/pageLoader";
+import LoadingRing from "../l1.gif";
 
 class FindPeople extends Component {
   constructor() {
@@ -12,6 +13,8 @@ class FindPeople extends Component {
       users: [],
       error: "",
       open: false,
+
+      isLoading: true,
       search: "",
       networkError: false,
     };
@@ -26,16 +29,15 @@ class FindPeople extends Component {
   componentDidMount() {
     const userId = isAuthenticated().user._id;
     const token = isAuthenticated().user.token;
-
-    findPeople(userId, token)
-      // .then(this.handleErrors)
-      .then((data) => {
+    setTimeout(() => {
+      findPeople(userId, token).then((data) => {
         if (data.err) {
           console.log(data.err);
         } else {
-          this.setState({ users: data });
+          this.setState({ users: data, isLoading: false });
         }
       });
+    }, 1000);
   }
 
   clickFollow = (user, i) => {
@@ -118,10 +120,15 @@ class FindPeople extends Component {
   };
 
   render() {
-    const { open, followMessage } = this.state;
+    const {  open, followMessage } = this.state;
     const users = this.state.users.filter((user) => {
       return user.name.indexOf(this.state.search) !== -1;
     });
+
+    if (users.length < 0 || this.state.isLoading) {
+      return this.state.isLoading && <img src={LoadingRing} />;
+    }
+
     return (
       <div className="container-fluid p-0">
         <div className="jumbotron p-3">
@@ -148,7 +155,7 @@ class FindPeople extends Component {
             </button>
           </div>
         )}
-        {!users.length ? <PageLoader /> : this.renderUsers(users)}}
+        {this.renderUsers(users)}
       </div>
     );
   }
