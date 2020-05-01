@@ -108,8 +108,10 @@ class NewPost extends Component {
       const token = isAuthenticated().user.token;
 
       create(userId, token, this.postData).then((data) => {
-        if (data.msg) {
-          this.setState({ error: data.msg });
+        console.log(data);
+
+        if (data.msg || data.err) {
+          this.setState({ error: data.msg || data.err });
         } else {
           this.setState({ redirectToProfile: true });
         }
@@ -118,7 +120,6 @@ class NewPost extends Component {
   };
 
   newPostForm = (title, body) => {
-    const searchBox = { border: "none", borderBottom: "1px solid blue" };
     return (
       <div
         style={{
@@ -227,7 +228,7 @@ class NewPost extends Component {
   };
 
   render() {
-    const { title, body, user, error, loading, redirectToProfile } = this.state;
+    const { title, body, user, loading, redirectToProfile } = this.state;
 
     if (redirectToProfile) {
       return <Redirect to={`/user/${user._id}`} />;

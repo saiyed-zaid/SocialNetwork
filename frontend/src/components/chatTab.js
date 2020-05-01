@@ -1,6 +1,8 @@
 import React, { Component } from "react";
 import DefaultProfile from "../images/avatar.jpg";
 import openSocket from "socket.io-client";
+import "emoji-mart/css/emoji-mart.css";
+import { Picker } from "emoji-mart";
 
 export default class chatTab extends Component {
   handleClose = () => {
@@ -9,6 +11,11 @@ export default class chatTab extends Component {
   };
   constructor(props) {
     super(props);
+    this.state = {
+      emoji: "",
+      displayEmoji: false,
+      msgText: "",
+    };
 
     this.masterUl = document.createElement("ul");
     this.masterUl.setAttribute("id", "myMsg");
@@ -108,9 +115,11 @@ export default class chatTab extends Component {
       receiver: this.props.receiverId,
     });
 
+    // if (msg.value.length === 0) {
+
     /* if (data.msg.length === 0) {
       return alert("Please enter msg");
-    } */
+    }*/
     const appendLi = document.createElement("li");
     const appendMsg = document.createElement("span");
     const personImg = document.createElement("img");
@@ -119,7 +128,8 @@ export default class chatTab extends Component {
     appendLi.classList.add("text-right", "P-1");
 
     appendMsg.classList.add("p-1");
-    appendMsg.innerHTML = msg.value + " (" + this.props.senderName + ")";
+    appendMsg.innerHTML =
+      msg.value + this.state.emoji + " (" + this.props.senderName + ")";
 
     //set person photo
     personImg.src = DefaultProfile;
@@ -137,6 +147,15 @@ export default class chatTab extends Component {
 
     /* DATABASE HANDLING */
   };
+  addEmoji = (e) => {
+    const msg = document.querySelector("#btn-input");
+    let emoji = e.native;
+    msg.value += emoji;
+  };
+
+  showEmoji = () => {
+    this.setState({ displayEmoji: !this.state.displayEmoji });
+  };
 
   render() {
     return (
@@ -148,6 +167,9 @@ export default class chatTab extends Component {
           transform: "none",
           animation: "none",
           transition: "none",
+          maxWidth: "283px",
+          // maxHeight: "500px",
+          // width: "355px",
         }}
       >
         <div className="card-header text-left text-light bg-dark">
@@ -182,6 +204,9 @@ export default class chatTab extends Component {
               placeholder="Enter Message..."
             />
             <span className="input-group-btn">
+              <button className="btn" onClick={this.showEmoji}>
+                <i className="fas fa-smile text-warning"></i>
+              </button>
               <button
                 className="btn text-light"
                 style={{
@@ -196,6 +221,17 @@ export default class chatTab extends Component {
             </span>
           </div>
         </div>
+        {this.state.displayEmoji ? (
+          <span>
+            <Picker
+              onSelect={this.addEmoji}
+              perLine="7"
+              showPreview="FALSE"
+              theme="dark"
+              // native
+            />
+          </span>
+        ) : null}
       </div>
     );
   }

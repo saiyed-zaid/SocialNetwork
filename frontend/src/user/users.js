@@ -59,12 +59,51 @@ class Users extends Component {
    * @param {json} users  Users To Be renderd On page
    */
   renderUsers = (users) => (
-    // <div className="row ">
     <>
       {users.map((user, i) =>
         user.role === "subscriber" &&
         user.name !== isAuthenticated().user.name ? (
-          <Card
+          <div
+            className="card w-50"
+            style={{
+              transition: "unset",
+              transform: "unset",
+              animation: "unset",
+            }}
+          >
+            <div className="card-body box-profile">
+              <div className="text-center">
+                <img
+                  className="profile-user-img img-fluid img-circle"
+                  src={`${process.env.REACT_APP_API_URL}/${
+                    user.photo ? user.photo.path : DefaultProfile
+                  }`}
+                  onError={(i) => (i.target.src = `${DefaultProfile}`)}
+                  alt={user.name}
+                />
+              </div>
+              <h3 className="profile-username text-center">{user.name}</h3>
+              {/* <p className="text-muted text-center">Software Engineer</p> */}
+              <ul className="list-group list-group-unbordered mb-3 ">
+                <li className="list-group-item bg-dark">
+                  <b>Followers</b>{" "}
+                  <a className="float-right">{user.followers.length}</a>
+                </li>
+                <li className="list-group-item bg-dark">
+                  <b>Following</b>{" "}
+                  <a className="float-right">{user.following.length}</a>
+                </li>
+                {/* <li className="list-group-item">
+                  <b>Friends</b> <a className="float-right">13,287</a>
+                </li> */}
+              </ul>
+              <Link to={`/user/${user._id}`} className="btn btn-primary">
+                View Profile
+              </Link>
+            </div>
+            {/* /.card-body */}
+          </div>
+        ) : /*  <Card
             className="card col-md-0"
             key={i}
             style={{ width: "18rem" }}
@@ -85,7 +124,7 @@ class Users extends Component {
               View Profile
             </Link>
           </Card>
-        ) : null
+         */ null
       )}
     </>
   );

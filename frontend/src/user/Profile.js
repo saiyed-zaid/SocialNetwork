@@ -4,6 +4,7 @@ import { Redirect, Link } from "react-router-dom";
 
 import { read, fetchMessage, update } from "./apiUser";
 import DefaultProfile from "../images/avatar.jpg";
+import DefaultPost from "../images/post.jpg";
 import DeleteUser from "./deleteUser";
 import FollowProfileButton from "./followProfileButton";
 import ProfileTabs from "./profileTabs";
@@ -63,7 +64,10 @@ class Profile extends Component {
     document.getElementById("deleteAccount").style.display = "block";
     document.getElementById("deleteAccount").classList.add("show");
   };
-
+  followersModal = () => {
+    document.getElementById("followersModal").style.display = "block";
+    document.getElementById("followersModal").classList.add("show");
+  };
   init = (userId) => {
     const token = isAuthenticated().user.token;
     read(userId, token)
@@ -223,6 +227,19 @@ class Profile extends Component {
                   <p>Joined {new Date(user.created).toDateString()}</p>
                   <hr />
                   <p>{user.about}</p>
+                  <p>
+                    <button
+                      className="text-light m-1 "
+                      style={{
+                        backgroundColor: "transparent",
+                        border: "transparent",
+                      }}
+                      onClick={this.followersModal}
+                    >
+                      Followers ({user.followers.length}) &nbsp; Following (
+                      {user.following.length})
+                    </button>
+                  </p>
                 </div>
                 {isAuthenticated().user &&
                 isAuthenticated().user._id === user._id ? (
@@ -287,16 +304,80 @@ class Profile extends Component {
         <div>
           <div className="col-md-12 mb-2">
             <hr />
-            <ProfileTabs
+            {/* <ProfileTabs
               followers={user.followers}
               following={user.following}
-              posts={posts}
+               posts={posts}
               error={error}
               hasPostStatusUpdated={this.init}
               hasChatBoxDisplay={this.handleChatBoxDisplay}
-            />
+            /> */}
           </div>
         </div>
+
+        {posts.map((post, i) => (
+          <div key={i}>
+            <div className="card-body m-2 bg-light ">
+              {/* Post */}
+              <div className="post ">
+                <div className="user-block">
+                  <img
+                    className="img-circle img-bordered-sm"
+                    src={
+                      post.postedBy.path
+                        ? post.postedBy.photo.path
+                        : DefaultPost
+                    }
+                    alt="user image"
+                  />
+                  <span className="username">
+                    <Link to={`/post/${post._id}`}>{post.postedBy.name}</Link>
+                    {/*  <a href="#" className="float-right btn-tool">
+                    <i className="fas fa-times" />
+                  </a> */}
+                  </span>
+                  <span className="description pb-3">
+                    Shared Publicly -{new Date(post.created).toDateString()}
+                  </span>
+                </div>
+
+                {post.photo ? (
+                  post.photo.mimetype === "video/mp4" ? (
+                    <div className="embed-responsive embed-responsive-16by9 p-0 m-0">
+                      <video controls className="embed-responsive-item p-0 m-0">
+                        <source
+                          src={`${process.env.REACT_APP_API_URL}/${
+                            post.photo ? post.photo.path : DefaultPost
+                          }`}
+                          type="video/mp4"
+                          alt="No Video Found"
+                          // onError={e=>e.target.alt="No Video"}
+                        />
+                        Your browser does not support the video tag.
+                      </video>
+                    </div>
+                  ) : (
+                    <img
+                      className="card-img-top"
+                      src={`${process.env.REACT_APP_API_URL}/${
+                        post.photo ? post.photo.path : DefaultPost
+                      }`}
+                      onError={(i) => (i.target.src = `${DefaultPost}`)}
+                      alt={post.name}
+                    />
+                  )
+                ) : null}
+
+                <p className="pt-2 text-dark">{post.body}</p>
+                {isAuthenticated() ? (
+                  <button className="btn">
+                    <Link to={`/post/${post._id}`}>View More</Link>
+                  </button>
+                ) : null}
+              </div>
+            </div>
+          </div>
+        ))}
         <Modal
           id="editprofile"
           body={<EditProfile userId={this.props.match.params.userId} />}
@@ -309,6 +390,21 @@ class Profile extends Component {
           buttonClick={() => this.handleUserStatusChange(user)}
           show
         />
+        {isAuthenticated() ? (
+          <Modal
+            id="followersModal"
+            body={
+              <ProfileTabs
+                followers={user.followers}
+                following={user.following}
+                // posts={posts}
+                error={error}
+                hasPostStatusUpdated={this.init}
+                hasChatBoxDisplay={this.handleChatBoxDisplay}
+              />
+            }
+          />
+        ) : null}
       </div>
     );
   }

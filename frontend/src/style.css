@@ -437,6 +437,21 @@ a:hover {
   bottom: 0;
   right: 0;
 }
+.emoji-mart-preview {
+  display: none;
+}
+.emoji-mart {
+  border: none;
+  border-radius: 0px;
+  background-color: #191c23;
+}
+.emoji-mart-scroll {
+  height: 100px !important;
+}
+
+.emoji-mart-anchor-icon {
+  color: whitesmoke;
+}
 
 .modal {
   display: none; /* Hidden by default */
@@ -471,7 +486,7 @@ a:hover {
 .nav-pills .show > .nav-link {
   background-color: #17a2b8;
 }
-.dropdown-menu {
+/* .dropdown-menu {
   top: 60px;
   right: 0px;
   left: 0px;
@@ -489,7 +504,7 @@ a:hover {
   border: 10px solid #343a40;
   border-collapse: collapse;
   border-color: transparent transparent #343a40 transparent;
-}
+} */
 .head {
   padding: 5px 15px;
   border-radius: 3px 3px 0px 0px;
@@ -498,10 +513,10 @@ a:hover {
   padding: 5px 15px;
   border-radius: 0px 0px 3px 3px;
 }
-.notification-box {
+/* .notification-box {
   padding: 10px 0px;
   position: relative;
-}
+} */
 
 @keyframes noti-box {
   0% {
@@ -515,6 +530,9 @@ a:hover {
 }
 
 @media screen and (max-width: 600px) {
+  .navbar-brand{
+    display: none;
+  }
   @keyframes noti-box {
     0% {
       transform: scale(0);
@@ -814,6 +832,43 @@ img {
 .dataTables_filter {
   color: white !important;
   padding: 10px;
+}
+
+.user-block img {
+  float: left;
+  height: 40px;
+  width: 40px;
+}
+.img-circle {
+  border-radius: 50%;
+}
+.img-bordered-sm {
+  border: 2px solid #adb5bd;
+  padding: 2px;
+}
+.user-block .description {
+  color: #6c757d;
+  font-size: 13px;
+  margin-top: -3px;
+}
+.user-block .comment, .user-block .description, .user-block .username {
+  display: block;
+  margin-left: 50px;
+}
+
+.profile-user-img {
+  border: 3px solid #adb5bd;
+  margin: 0 auto;
+  padding: 3px;
+  width: 100px;
+}
+.img-fluid {
+  max-width: 100%;
+  height: auto;
+}
+.profile-username {
+  font-size: 21px;
+  margin-top: 5px;
 }
 .chat-box {
   width: 100%;

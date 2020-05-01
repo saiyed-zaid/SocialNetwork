@@ -19,7 +19,6 @@ class Home extends Component {
   render() {
     return (
       <div className="m-3">
-
         {/* <Notification /> */}
         <div
           id="chat-tab"
