@@ -49,7 +49,7 @@ exports.hasAuthorization = (req, res, next) => {
 exports.getUsers = async (req, res, next) => {
   try {
     const users = await User.find().select(
-      "_id name email created about role updated photo status"
+      "_id name email created about role updated photo status following followers"
     );
     if (!users) {
       return res.json({

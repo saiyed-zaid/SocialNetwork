@@ -35,7 +35,6 @@ class Home extends Component {
           </div>
         </div>
         {/* Loding Post Over */}
-        <div className="row justify-content-md-center"></div>
       </div>
     );
   }

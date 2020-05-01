@@ -118,7 +118,6 @@ class NewPost extends Component {
   };
 
   newPostForm = (title, body) => {
-    const searchBox = { border: "none", borderBottom: "1px solid blue" };
     return (
       <div
         style={{
@@ -227,7 +226,7 @@ class NewPost extends Component {
   };
 
   render() {
-    const { title, body, user, error, loading, redirectToProfile } = this.state;
+    const { title, body, user, loading, redirectToProfile } = this.state;
 
     if (redirectToProfile) {
       return <Redirect to={`/user/${user._id}`} />;

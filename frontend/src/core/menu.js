@@ -1,9 +1,11 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import ReactDOM from "react-dom";
 
 import { Link, withRouter } from "react-router-dom";
 import { signout, isAuthenticated } from "../auth/index";
+import { getOnlineUsers } from "../user/apiUser";
 import Notification from "./components/Notification";
+import DefaultProfile from "../images/avatar.jpg";
 
 const isActive = (history, path) => {
   if (history.location.pathname === path) {
@@ -12,7 +14,22 @@ const isActive = (history, path) => {
 };
 
 const Menu = ({ history }) => {
-  let date = new Date();
+  const [onlineUsers, setOnlineUsers] = useState([]);
+
+  useEffect(() => {
+    if (isAuthenticated()) {
+      getOnlineUsers(isAuthenticated().user._id, isAuthenticated().user.token)
+        .then((data) => {
+          if (data.error) {
+            console.log(data.error);
+          } else {
+            setOnlineUsers(data[0].following);
+          }
+        })
+        .catch();
+    }
+  }, []);
+
   return ReactDOM.createPortal(
     <nav
       className="navbar navbar-expand-lg navbar-light bg-primary  "
@@ -32,46 +49,78 @@ const Menu = ({ history }) => {
         </Link>
       )}
       {isAuthenticated() && isAuthenticated().user.roll !== "admin" ? (
-        <ul className="nav nav-pills mr-auto justify-content-end">
-          <li className="nav-item  dropdown">
+        <>
+          <li className="nav-item dropdown">
             <a
-              className="nav-link text-light"
-              href="/"
-              id="navbarDropdown"
-              role="button"
+              className="nav-link"
               data-toggle="dropdown"
-              aria-haspopup="true"
+              href="/"
               aria-expanded="false"
             >
-              <i className="fas fa-bell"></i>
-              <span className="badge badge-light">0</span>
+              <i className="far fa-bell text-light" />
+              <span className="badge badge-warning navbar-badge">0</span>
             </a>
-            <ul className="dropdown-menu">
-              <li className="head text-light bg-dark">
-                <div className="row">
-                  <div className="col-lg-12 col-sm-12 col-12">
-                    <span>Notifications (3)</span>
-                    <a href="" className="float-right text-light">
-                      Mark all as read
-                    </a>
-                  </div>
-                </div>
-              </li>
-              <li /* className="notification-box p-2" */>
-                {/* <div className="row">
-                <div className="col-lg-8 col-sm-8 col-8"> */}
-                <Notification />
-                {/*  </div>
-              </div> */}
-              </li>
-              <li className="footer bg-dark text-center">
-                <a href="/" className="text-light">
-                  View All
-                </a>
-              </li>
-            </ul>
+            <div
+              className="dropdown-menu dropdown-menu-lg dropdown-menu-left"
+              // style={{ left: "inherit", right: 0 }}
+            >
+              <span className="dropdown-item dropdown-header">
+                No Notifications
+              </span>
+              <div className="dropdown-divider" />
+              <a href="#" className="dropdown-item">
+                <span className="float-right text-muted text-sm">
+                  <Notification />
+                </span>
+              </a>
+
+              <a href="#" className="dropdown-item dropdown-footer">
+                See All Notifications
+              </a>
+            </div>
           </li>
-        </ul>
+          <li className="nav-item dropdown">
+            <a
+              className="nav-link"
+              data-toggle="dropdown"
+              href="#"
+              aria-expanded="false"
+            >
+              <i className="far fa-comments text-light" />
+              <span className="badge badge-danger navbar-badge">3</span>
+            </a>
+            <div
+              className="dropdown-menu dropdown-menu-lg dropdown-menu-right"
+              style={{ left: "inherit", right: 0 }}
+            >
+              {onlineUsers.length > 0
+                ? onlineUsers.map((user, i) => (
+                    <a href="/" className="dropdown-item" key={i}>
+                      <div className="media">
+                        <img
+                          src={user.photo ? user.photo.path : DefaultProfile}
+                          alt={user.name}
+                          className="img-size-50 img-circle mr-3 im-bordred"
+                          height="25px"
+                        />
+                        <div className="media-body">
+                          <h3 className="dropdown-item-title">{user.name}</h3>
+                          <p className="text-sm text-muted">
+                            {/* <i className="far fa-clock mr-1" /> */} Online
+                            Now
+                          </p>
+                        </div>
+                      </div>
+                    </a>
+                  ))
+                : null}
+              <div className="dropdown-divider" />
+              <a href="#" className="dropdown-item dropdown-footer">
+                See All Messages
+              </a>
+            </div>
+          </li>{" "}
+        </>
       ) : null}
       <button
         className="navbar-toggler text-primary"
@@ -171,15 +220,7 @@ const Menu = ({ history }) => {
                     </Link>
                   </>
                 )}
-                {isAuthenticated() && isAuthenticated().user.role === "admin" && (
-                  <Link
-                    className="nav-item nav-link menu-link active"
-                    to={`/admin`}
-                    style={isActive(history, `/admin`)}
-                  >
-                    ADMIN
-                  </Link>
-                )}
+
                 {isAuthenticated() && (
                   <>
                     <Link

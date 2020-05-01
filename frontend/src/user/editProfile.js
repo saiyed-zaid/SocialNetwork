@@ -88,12 +88,14 @@ class EditProfile extends Component {
 
     if (this.isValid()) {
       const userId =
-        this.props.userId == null
+        this.props.userId === null
           ? this.props.match.params.userId
           : this.props.userId;
       const token = isAuthenticated().user.token;
 
       update(userId, token, this.userData).then((data) => {
+        console.log("data", data, userId);
+
         if (data.msg) {
           this.setState({ error: data.msg });
         } else if (isAuthenticated().user.role === "admin") {

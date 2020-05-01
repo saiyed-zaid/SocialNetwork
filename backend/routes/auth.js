@@ -68,20 +68,23 @@ router.put(
 );
 
 router.get("/api/signout", auth_check, (req, res, next) => {
-  User.updateOne(
-    { _id: req.auth._id },
-    { isLoggedIn: false, lastLoggedIn: Date.now() }
-  ).then((result) => {
-    res
-      .json({
+  try {
+    User.updateOne(
+      { _id: req.auth._id },
+      { isLoggedIn: false, lastLoggedIn: Date.now() }
+    ).then((result) => {
+      res.json({
         msg: "Logout Success",
-      })
-      .catch((err) => {
-        if (err) {
-          console.log("error while updating flag");
-        }
       });
-  });
+      /*  .catch((err) => {
+          if (err) {
+            console.log("error while updating flag");
+          }
+        }); */
+    });
+  } catch (error) {
+    console.log(error);
+  }
 });
 
 /**

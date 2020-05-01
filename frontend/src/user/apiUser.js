@@ -1,5 +1,3 @@
-import axios from "axios";
-
 /**
  * Api For Reading Data From Database
  *

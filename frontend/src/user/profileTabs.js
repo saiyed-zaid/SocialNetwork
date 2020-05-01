@@ -61,7 +61,7 @@ class ProfileTabs extends Component {
     return (
       <div>
         <ul className="nav nav-tabs" style={{ backgroundColor: "#bdbdbd" }}>
-          <li className="nav-item col-md-4 pl-0 pr-0">
+          <li className="nav-item col-md-6 pl-0 pr-0">
             <a
               className="nav-link active"
               id="following-tab"
@@ -74,7 +74,7 @@ class ProfileTabs extends Component {
               Following ({following ? following.length : 0})
             </a>
           </li>
-          <li className="nav-item col-md-4 pl-0 pr-0">
+          <li className="nav-item col-md-6 pl-0 pr-0">
             <a
               className="nav-link"
               id="followers-tab"
@@ -85,19 +85,6 @@ class ProfileTabs extends Component {
               aria-selected="false"
             >
               Followers ({followers ? followers.length : 0})
-            </a>
-          </li>
-          <li className="nav-item col-md-4 pl-0 pr-0">
-            <a
-              className="nav-link"
-              id="posts-tab"
-              data-toggle="tab"
-              href="#posts"
-              role="tab"
-              aria-controls="posts"
-              aria-selected="false"
-            >
-              Posts ({posts ? posts.length : 0})
             </a>
           </li>
         </ul>
@@ -244,61 +231,6 @@ class ProfileTabs extends Component {
                 );
               })
             )}
-          </div>
-          <div
-            className="tab-pane fade bg-dark "
-            id="posts"
-            role="tabpanel"
-            aria-labelledby="posts-tab"
-          >
-            <hr />
-            <div className="row">
-              {posts.length === 0 ? (
-                <div>There Is No Post</div>
-              ) : (
-                posts.map((post, i) => {
-                  return (
-                    <div
-                      key={i}
-                      className="p-2 mt-1 m-2"
-                      style={{
-                        borderRadius: "0px",
-                        display: "flex",
-                        justifyContent: "space-between",
-                        alignItems: "center",
-                        width: "300px",
-                        backgroundColor: "#2b3035",
-                      }}
-                    >
-                      <Link
-                        to={`/post/${post._id}`}
-                        style={{
-                          textDecoration: "none",
-                        }}
-                      >
-                        <h4 className="lead text-light"> {post.title}</h4>
-                      </Link>
-                      {this.props.match.params.userId ===
-                      isAuthenticated().user._id ? (
-                        <i
-                          className={
-                            post.status
-                              ? "fas fa-eye text-light"
-                              : "fas fa-eye-slash text-light"
-                          }
-                          style={{ cursor: "pointer" }}
-                          data-post-id={post._id}
-                          data-post-status={post.status}
-                          onClick={this.handlePostStatus}
-                        ></i>
-                      ) : (
-                        ""
-                      )}
-                    </div>
-                  );
-                })
-              )}
-            </div>
           </div>
         </div>
       </div>

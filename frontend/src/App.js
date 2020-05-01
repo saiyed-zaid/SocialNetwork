@@ -9,9 +9,6 @@ export default class App extends Component {
 
     this.state = {
       logginStatus: true,
-      /* warn: "",
-      resetTimeout: null,
-      logout: "", */
     };
 
     /**  */
