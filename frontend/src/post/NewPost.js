@@ -108,8 +108,10 @@ class NewPost extends Component {
       const token = isAuthenticated().user.token;
 
       create(userId, token, this.postData).then((data) => {
-        if (data.msg) {
-          this.setState({ error: data.msg });
+        console.log(data);
+
+        if (data.msg || data.err) {
+          this.setState({ error: data.msg || data.err });
         } else {
           this.setState({ redirectToProfile: true });
         }

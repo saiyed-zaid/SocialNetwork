@@ -35,6 +35,7 @@ exports.postSignup = async (req, res, next) => {
       .then((result) => {
         //console.log("CREATED USER", user._id);
         //console.log("TYPE", typeof user._id);
+        console.log(result);
 
         const destPosts = path.join(
           __dirname,
