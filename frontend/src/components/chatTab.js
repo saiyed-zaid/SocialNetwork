@@ -3,33 +3,20 @@ import DefaultProfile from "../images/avatar.jpg";
 import openSocket from "socket.io-client";
 
 export default class chatTab extends Component {
-  handleClose = () => {
-    let chattab = document.getElementById("chattab");
-    chattab.style.display = "none";
-  };
   constructor(props) {
     super(props);
 
-    this.masterUl = document.createElement("ul");
-    this.masterUl.setAttribute("id", "myMsg");
-    this.masterUl.classList.add("p-0", "m-0");
-    this.masterUl.style.listStyle = "none";
+    this.parentUl = document.createElement("ul");
+    this.parentUl.setAttribute("id", "myMsg");
+    this.parentUl.classList.add("p-0", "m-0");
+    this.parentUl.style.listStyle = "none";
 
-    /* INVOKED WHENEVER SOMEONE MESSAGE YOU -BEGIN*/
-    this.socket = openSocket("http://localhost:5000");
-    this.socket.on(this.props.senderId, (data) => {
-      const li = this.appendReceivedMsg(data);
-      let myMsg = document.querySelector("#myMsg");
-      const chatBox = document.querySelector("#chatBox");
-      myMsg.appendChild(li);
-      chatBox.scrollTo(0, chatBox.scrollHeight);
-    });
-    /* INVOKED WHENEVER SOMEONE MESSAGE YOU -BEGIN*/
+   
 
     /* APPENDING PREVIOUS MESSAGES BEGIN */
     this.props.messages.forEach((message) => {
       const li = this.appendReceivedMsg(message);
-      this.masterUl.appendChild(li);
+      this.parentUl.appendChild(li);
     });
     /* APPENDING PREVIOUS MESSAGES BEGIN */
 
@@ -42,10 +29,25 @@ export default class chatTab extends Component {
     /* SEND MESSAGE WHEN ENTER KEY PRESS OVER */
   }
   componentDidMount() {
+     /* INVOKED WHENEVER SOMEONE MESSAGE YOU -BEGIN*/
+     this.socket = openSocket("http://localhost:5000");
+     this.socket.on(this.props.senderId, (data) => {
+       const li = this.appendReceivedMsg(data);
+       let myMsg = document.querySelector("#myMsg");
+       const chatBox = document.querySelector("#chatBox");
+       myMsg.appendChild(li);
+       chatBox.scrollTo(0, chatBox.scrollHeight);
+     });
+     /* INVOKED WHENEVER SOMEONE MESSAGE YOU -BEGIN*/
+
     const chatBox = document.querySelector("#chatBox");
-    chatBox.appendChild(this.masterUl);
+    chatBox.appendChild(this.parentUl);
     chatBox.scrollTo(0, chatBox.scrollHeight);
   }
+  handleClose = () => {
+    let chattab = document.getElementById("chat-tab");
+    chattab.style.display = "none";
+  };
   appendReceivedMsg = (data) => {
     /* if (data.msg.length === 0) {
       return alert("Please enter msg");
@@ -60,7 +62,8 @@ export default class chatTab extends Component {
       appendMsg.innerHTML = data.message + " (" + this.props.senderName + ")";
     } else {
       appendLi.classList.add("text-left", "P-1");
-      appendMsg.innerHTML = " (" + this.props.receiverName + ") " + data.message;
+      appendMsg.innerHTML =
+        " (" + this.props.receiverName + ") " + data.message;
     }
     appendMsg.classList.add("p-1");
 
@@ -81,13 +84,14 @@ export default class chatTab extends Component {
   handleSend = () => {
     const msg = document.querySelector("#btn-input");
     const chatBox = document.querySelector("#chatBox");
+    let myMsg = document.querySelector("#myMsg");
+
     this.socket.emit("msg", {
       message: msg.value,
       sender: this.props.senderId,
+      senderName: this.props.senderName,
       receiver: this.props.receiverId,
     });
-
-    let myMsg = document.querySelector("#myMsg");
 
     /* if (data.msg.length === 0) {
       return alert("Please enter msg");

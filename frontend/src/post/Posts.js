@@ -4,13 +4,15 @@ import { Link } from "react-router-dom";
 import DefaultPost from "../images/post.jpg";
 import Card from "../components/card";
 import PageLoader from "../components/pageLoader";
+import LoadingRing from "../l1.gif";
 
 class Posts extends Component {
   constructor() {
     super();
     this.state = {
       posts: [],
-      expanded: false
+      expanded: false,
+      isLoading: true,
     };
   }
 
@@ -18,13 +20,15 @@ class Posts extends Component {
     this.setState({ expanded: !this.state.expanded });
   };
   componentDidMount() {
-    list().then(data => {
-      if (data.error) {
-        console.log(data.error);
-      } else {
-        this.setState({ posts: data.posts });
-      }
-    });
+    setTimeout(() => {
+      list().then((data) => {
+        if (data.error) {
+          console.log(data.error);
+        } else {
+          this.setState({ posts: data.posts, isLoading: false });
+        }
+      });
+    }, 500);
   }
 
   /**
@@ -32,7 +36,7 @@ class Posts extends Component {
    *
    * @param {json} posts  Posts To Be renderd On page
    */
-  renderPosts = posts => {
+  renderPosts = (posts) => {
     return (
       <div className="row">
         {posts.map((post, i) => {
@@ -50,7 +54,7 @@ class Posts extends Component {
                   src={`${process.env.REACT_APP_API_URL}/${
                     post.photo ? post.photo.path : DefaultPost
                   }`}
-                  onError={i => (i.target.src = `${DefaultPost}`)}
+                  onError={(i) => (i.target.src = `${DefaultPost}`)}
                   alt={post.name}
                 />
               }
@@ -71,11 +75,15 @@ class Posts extends Component {
   };
   render() {
     const { posts } = this.state;
-
+    if (posts.length < 0 || this.state.isLoading) {
+      return (
+        this.state.isLoading && (
+          <img src={LoadingRing} />
+        )
+      );
+    }
     return (
-      <div className="container-fluid p-0 m-0">
-        {!posts.length ? <PageLoader /> : this.renderPosts(posts)}
-      </div>
+      <div className="container-fluid p-0 m-0">{this.renderPosts(posts)}</div>
     );
   }
 }

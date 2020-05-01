@@ -8,10 +8,13 @@ const UserSchema = new Schema({
   },
   about: {
     type: String,
+    trim: true,
     default: "-",
   },
   email: {
     type: String,
+    unique: true,
+    trim: true,
     lowercase: true,
     required: true,
   },
@@ -40,6 +43,7 @@ const UserSchema = new Schema({
       user: {
         type: Schema.Types.ObjectId,
         ref: "User",
+        unique: true,
       },
       isNewUser: {
         type: Boolean,
@@ -54,6 +58,7 @@ const UserSchema = new Schema({
   ],
   resetPasswordLink: {
     type: String,
+    trim: true,
     default: "",
   },
   role: {

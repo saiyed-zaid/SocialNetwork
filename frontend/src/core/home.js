@@ -1,12 +1,12 @@
 import React, { Component } from "react";
 import Posts from "../post/posts";
-import  Notification  from "./components/Notification";
+import Notification from "./components/Notification";
 import Chattab from "../components/chatTab";
 class Home extends Component {
   constructor() {
     super();
     this.state = {
-      loaderIsLoading: true
+      loaderIsLoading: true,
     };
   }
 
@@ -39,16 +39,12 @@ class Home extends Component {
     }, 1000);
   }
  */
- 
-  render() {
 
+  render() {
     return (
       <div className="m-3">
         <Notification />
-        <div id="chat-tab" className="d-flex justify-content-end align-items-end chat-box">
 
-        {/* <Chattab username="zaid"/> */}
-        </div>
         {/* Loding Post Begin */}
         <div>
           <div className="jumbotron p-0">
