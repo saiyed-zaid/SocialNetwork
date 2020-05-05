@@ -1,14 +1,13 @@
 import React, { Component } from "react";
 import { list, getOnlineUsers, fetchMessage } from "./apiUser";
 import { Link } from "react-router-dom";
-import DefaultProfile from "../images/avatar.jpg";
 import Card from "../components/card";
 import PageLoader from "../components/pageLoader";
 import LoadingGif from "../l1.gif";
 import { isAuthenticated } from "../auth";
 import ChatBar from "../components/chatBar/chatbar";
 import Chattab from "../components/chatTab";
-
+import UsersList from "../components/users/index";
 class Users extends Component {
   constructor() {
     super();
@@ -20,6 +19,7 @@ class Users extends Component {
       receiverName: undefined,
       messages: null,
       isLoading: true,
+      error: "",
     };
   }
   componentDidMount() {
@@ -44,7 +44,7 @@ class Users extends Component {
           this.setState({ onlineUsers: data[0].following });
         }
       })
-      .catch();
+      .catch((error) => this.setState({ error: error }));
   }
   onMsg = () => {
     let chatbar = document.getElementById("chatbar");
@@ -60,8 +60,11 @@ class Users extends Component {
    */
   renderUsers = (users) => (
     <>
-      {users.map((user, i) =>
-        user.role === "subscriber" &&
+      {users.map(
+        (user, i) => (
+          <UsersList user={user} key={i} />
+        )
+        /*    user.role === "subscriber" &&
         user.name !== isAuthenticated().user.name ? (
           <div
             className="card w-50"
@@ -83,7 +86,6 @@ class Users extends Component {
                 />
               </div>
               <h3 className="profile-username text-center">{user.name}</h3>
-              {/* <p className="text-muted text-center">Software Engineer</p> */}
               <ul className="list-group list-group-unbordered mb-3 ">
                 <li className="list-group-item bg-dark">
                   <b>Followers</b>{" "}
@@ -95,36 +97,14 @@ class Users extends Component {
                 </li>
                 {/* <li className="list-group-item">
                   <b>Friends</b> <a className="float-right">13,287</a>
-                </li> */}
+                </li> 
               </ul>
               <Link to={`/user/${user._id}`} className="btn btn-primary">
                 View Profile
               </Link>
             </div>
-            {/* /.card-body */}
           </div>
-        ) : /*  <Card
-            className="card col-md-0"
-            key={i}
-            style={{ width: "18rem" }}
-            img={
-              <img
-                className="card-img-top"
-                src={`${process.env.REACT_APP_API_URL}/${
-                  user.photo ? user.photo.path : DefaultProfile
-                }`}
-                onError={(i) => (i.target.src = `${DefaultProfile}`)}
-                alt={user.name}
-              />
-            }
-            title={user.title}
-            text={user.email}
-          >
-            <Link to={`/user/${user._id}`} className="btn btn-primary">
-              View Profile
-            </Link>
-          </Card>
-         */ null
+        ) : null */
       )}
     </>
   );
@@ -159,12 +139,17 @@ class Users extends Component {
   };
 
   render() {
-    const { users, onlineUsers } = this.state;
+    const { users, onlineUsers, error } = this.state;
     if (this.state.isLoading) {
       return <img src={LoadingGif} />;
     }
     return (
       <div className="row container-fluid p-0 m-0">
+        {error ? (
+          <div class="alert alert-danger" role="alert">
+            {error}
+          </div>
+        ) : null}
         <div
           id="chat-tab"
           className="justify-content-end align-items-end chat-box"
@@ -178,7 +163,6 @@ class Users extends Component {
           <div className="jumbotron p-3">
             <h4> Users</h4>
             <div className="row">
-           
               {!users.length && this.renderUsers(users)}
             </div>
           </div>

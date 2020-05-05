@@ -166,22 +166,9 @@ div.like-box:hover .likes {
   box-shadow: 0.1em 0.1em 0.3em rgba(0, 0, 0, 0.7);
   transition: all 0.3s ease-in-out;
 }
-.btn-primary {
-  /*  border-image: linear-gradient(
-    90deg,
-    rgb(170, 167, 214) ,
-    Yellow ,
-    rgba(0, 212, 255, 1)
-  ); */
-  background-color: #1a1d24 !important;
-  color: #a59413 !important;
-}
 
-.btn-primary:hover {
-  background-color: #232731 !important;
-  box-shadow: 0.2em 0.2em 0.3em rgba(0, 0, 0, 0.7);
-  color: white !important;
-}
+
+
 
 .btn-outline-primary {
   border-image-source: linear-gradient(
@@ -877,4 +864,61 @@ img {
   position: absolute;
   bottom: 0;
   right: 0;
+}
+
+.lockscreen {
+  background: transparent;
+  padding-top: 140px;
+}
+
+.lockscreen-wrapper {
+  margin: 0 auto;
+  margin-top: 10%;
+  max-width: 400px;
+}
+
+.lockscreen-logo {
+  font-size: 35px;
+  font-weight: 300;
+  margin-bottom: 25px;
+  text-align: center;
+}
+
+.lockscreen .lockscreen-name {
+  font-weight: 600;
+  text-align: center;
+}
+
+.lockscreen-item {
+  border-radius: 4px;
+  background: #fff;
+  margin: 10px auto 30px;
+  padding: 0;
+  position: relative;
+  width: 290px;
+}
+.lockscreen-footer {
+  margin-top: 10px;
+}
+.lockscreen-image {
+  border-radius: 50%;
+  background: #fff;
+  left: -10px;
+  padding: 5px;
+  position: absolute;
+  top: -15px;
+  z-index: 10;
+}
+
+.lockscreen-credentials {
+  margin-left: 70px;
+}
+.lockscreen-image > img {
+  border-radius: 50%;
+  height: 60px;
+  width: 60px;
+}
+
+.lockscreen-credentials .form-control {
+  border: 0;
 }

@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { comment, uncomment } from "./apiPost";
 import { isAuthenticated } from "../auth/index";
 import { Link } from "react-router-dom";
-import DefaultProfile from "../images/avatar.jpg";
+import CommentList from "../components/commentList/index";
 
 class Comment extends Component {
   state = {
@@ -104,7 +104,14 @@ class Comment extends Component {
           <hr />
 
           {comments.map((comment, i) => {
-            const photoUrl = comment.postedBy.photo
+            return (
+              <CommentList
+                data={comment}
+                key={i}
+                deleteClick={() => this.deleteConfirmed(comment)}
+              />
+            );
+            /*  const photoUrl = comment.postedBy.photo
               ? comment.postedBy.photo.path
               : DefaultProfile;
             return (
@@ -159,8 +166,9 @@ class Comment extends Component {
                             className=" font-italic"
                             style={{ fontSize: "12px" }}
                           >
-                            Comment By : {comment.postedBy.name} {"  "}
-                            {new Date(comment.created).toDateString()}
+                            Comment By : {"  "}
+                            {comment.postedBy.name} {"  "}
+                            <Timeago date={comment.created} />
                           </span>
                         </small>
                       </div>
@@ -168,7 +176,7 @@ class Comment extends Component {
                   </div>
                 </div>
               </div>
-            );
+            ); */
           })}
           <form>
             <div className="form-group" style={{ flex: 2 }}>

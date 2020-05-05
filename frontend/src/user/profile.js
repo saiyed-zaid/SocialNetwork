@@ -3,6 +3,7 @@ import { isAuthenticated, signout } from "../auth/index";
 import { Redirect, Link } from "react-router-dom";
 
 import { read, fetchMessage, update } from "./apiUser";
+import { update as updatePost } from "../post/apiPost";
 import DefaultProfile from "../images/avatar.jpg";
 import DefaultPost from "../images/post.jpg";
 import DeleteUser from "./deleteUser";
@@ -15,6 +16,7 @@ import LoadingRing from "../l1.gif";
 import Chattab from "../components/chatTab";
 import Modal from "../components/modal/modal";
 import EditProfile from "./editProfile";
+import TimeAgo from "react-timeago";
 
 class Profile extends Component {
   constructor() {
@@ -31,6 +33,7 @@ class Profile extends Component {
       receiverName: undefined,
       messages: null,
       isLoading: true,
+      post: "",
     };
   }
 
@@ -112,6 +115,30 @@ class Profile extends Component {
       });
   };
 
+  handlePostStatusChange = (post) => {
+    const postId = post._id;
+    let dataToUpdate = post;
+    const data = new FormData();
+
+    data.append("status", !dataToUpdate.status);
+
+    updatePost(postId, isAuthenticated().user.token, data)
+      .then((result) => {
+        if (result.err) {
+          console.log("Error=> ", result.err);
+        } else {
+          this.setState({ post: dataToUpdate });
+          /*  document.getElementById("deleteAccount").style.display = "none";
+          document.getElementById("deleteAccount").classList.remove("show"); */
+        }
+      })
+      .catch((err) => {
+        if (err) {
+          console.log("ERR IN UPDATING", err);
+        }
+      });
+  };
+
   loadPosts = (userId) => {
     const token = isAuthenticated().user.token;
     listByUser(userId, token).then((data) => {
@@ -178,7 +205,7 @@ class Profile extends Component {
       return <Redirect to="/signin" />;
     }
     if (this.state.isLoading) {
-      return this.state.isLoading && <img src={LoadingRing} />;
+      return this.state.isLoading && <img src={LoadingRing} alt="loading" />;
     }
     return (
       <div className="container-fluid mt-0" style={{ color: "#e6cf23" }}>
@@ -301,83 +328,104 @@ class Profile extends Component {
             </div>
           </div>
         )}
+        <hr />
+        <span className="row justify-content-md-center bg-secondary pb-2 pt-2 text-light">
+          {" "}
+          Your Posts ({posts.length})
+        </span>
+        <hr />
+
         <div>
-          <div className="col-md-12 mb-2">
-            <hr />
-            {/* <ProfileTabs
-              followers={user.followers}
-              following={user.following}
-               posts={posts}
-              error={error}
-              hasPostStatusUpdated={this.init}
-              hasChatBoxDisplay={this.handleChatBoxDisplay}
-            /> */}
-          </div>
-        </div>
-
-        {posts.map((post, i) => (
-          <div key={i}>
-            <div className="card-body m-2 bg-light ">
-              {/* Post */}
-              <div className="post ">
-                <div className="user-block">
-                  <img
-                    className="img-circle img-bordered-sm"
-                    src={
-                      post.postedBy.path
-                        ? post.postedBy.photo.path
-                        : DefaultPost
-                    }
-                    alt="user image"
-                  />
-                  <span className="username">
-                    <Link to={`/post/${post._id}`}>{post.postedBy.name}</Link>
-                    {/*  <a href="#" className="float-right btn-tool">
-                    <i className="fas fa-times" />
-                  </a> */}
-                  </span>
-                  <span className="description pb-3">
-                    Shared Publicly -{new Date(post.created).toDateString()}
-                  </span>
-                </div>
-
-                {post.photo ? (
-                  post.photo.mimetype === "video/mp4" ? (
-                    <div className="embed-responsive embed-responsive-16by9 p-0 m-0">
-                      <video controls className="embed-responsive-item p-0 m-0">
-                        <source
-                          src={`${process.env.REACT_APP_API_URL}/${
-                            post.photo ? post.photo.path : DefaultPost
-                          }`}
-                          type="video/mp4"
-                          alt="No Video Found"
-                          // onError={e=>e.target.alt="No Video"}
-                        />
-                        Your browser does not support the video tag.
-                      </video>
-                    </div>
-                  ) : (
+          {posts.map((post, i) => (
+            <div
+              key={i}
+              className="d-flex w-100  align-items-center flex-column p-0 m-0"
+            >
+              <div className="card-body m-2 bg-light w-50 ">
+                {/* Post */}
+                <div className="post ">
+                  <div className="user-block">
                     <img
-                      className="card-img-top"
-                      src={`${process.env.REACT_APP_API_URL}/${
-                        post.photo ? post.photo.path : DefaultPost
-                      }`}
-                      onError={(i) => (i.target.src = `${DefaultPost}`)}
-                      alt={post.name}
+                      className="img-circle img-bordered-sm"
+                      src={
+                        post.postedBy.path
+                          ? post.postedBy.photo.path
+                          : DefaultPost
+                      }
+                      alt="post"
                     />
-                  )
-                ) : null}
+                    <span className="username">
+                      <Link to={`/post/${post._id}`}>{post.postedBy.name}</Link>
 
-                <p className="pt-2 text-dark">{post.body}</p>
-                {isAuthenticated() ? (
-                  <button className="btn">
-                    <Link to={`/post/${post._id}`}>View More</Link>
-                  </button>
-                ) : null}
+                      <div className="btn-group float-right">
+                        <button
+                          type="button"
+                          style={{ boxShadow: "none" }}
+                          className="btn"
+                          data-toggle="dropdown"
+                          aria-haspopup="true"
+                          aria-expanded="false"
+                        >
+                          <i class="fas fa-ellipsis-v text-dark"></i>
+                        </button>
+                        <div className="dropdown-menu dropdown-menu-right bg-secondary">
+                          <button
+                            className="dropdown-item"
+                            type="button"
+                            onClick={() => this.handlePostStatusChange(post)}
+                          >
+                            Make Post {!post.status ? "Public" : " Private"}
+                          </button>
+                        </div>
+                      </div>
+                    </span>
+                    <span className="description pb-3">
+                      {post.status ? "Public" : " Private"} &nbsp;
+                      <TimeAgo date={post.created} />
+                    </span>
+                  </div>
+
+                  {post.photo ? (
+                    post.photo.mimetype === "video/mp4" ? (
+                      <div className="embed-responsive embed-responsive-16by9 p-0 m-0">
+                        <video
+                          controls
+                          className="embed-responsive-item p-0 m-0"
+                        >
+                          <source
+                            src={`${process.env.REACT_APP_API_URL}/${
+                              post.photo ? post.photo.path : DefaultPost
+                            }`}
+                            type="video/mp4"
+                            alt="No Video Found"
+                            // onError={e=>e.target.alt="No Video"}
+                          />
+                          Your browser does not support the video tag.
+                        </video>
+                      </div>
+                    ) : (
+                      <img
+                        className="card-img-top"
+                        src={`${process.env.REACT_APP_API_URL}/${
+                          post.photo ? post.photo.path : DefaultPost
+                        }`}
+                        onError={(i) => (i.target.src = `${DefaultPost}`)}
+                        alt={post.name}
+                      />
+                    )
+                  ) : null}
+
+                  <p className="pt-2 text-dark">{post.body}</p>
+                  {isAuthenticated() ? (
+                    <button className="btn">
+                      <Link to={`/post/${post._id}`}>View More</Link>
+                    </button>
+                  ) : null}
+                </div>
               </div>
             </div>
-          </div>
-        ))}
+          ))}{" "}
+        </div>
         <Modal
           id="editprofile"
           body={<EditProfile userId={this.props.match.params.userId} />}

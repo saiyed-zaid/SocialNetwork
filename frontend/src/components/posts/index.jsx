@@ -37,8 +37,9 @@ export default class PostCard extends Component {
                   <i className="fas fa-times" />
                 </a> */}
             </span>
+            <span className="description">{this.props.post.title}</span>
             <span className="description pb-3">
-              Shared Publicly -
+              Shared Publicly &nbsp;&nbsp;
               <TimeAgo date={this.props.post.created} />
               {/* {new Date(this.props.post.created).toDateString()} */}
             </span>

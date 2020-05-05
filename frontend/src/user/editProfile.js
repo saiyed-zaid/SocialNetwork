@@ -115,9 +115,9 @@ class EditProfile extends Component {
 
   editForm = (name, email, password, about) => {
     return (
-      <div className="col-md-6">
-        <form method="post">
-          <div className="input-group form-group">
+      <form method="post">
+        <div className="form-row">
+          <div className="form-group col-md-6">
             <div className="custom-file">
               <input
                 accept="image/*"
@@ -132,7 +132,7 @@ class EditProfile extends Component {
               </label>
             </div>
           </div>
-          <div className="form-group">
+          <div className="form-group col-md-6">
             <input
               onChange={this.handleChange("name")}
               type="text"
@@ -142,8 +142,9 @@ class EditProfile extends Component {
               placeholder="Name"
             />
           </div>
-
-          <div className="form-group">
+        </div>
+        <div className="form-row">
+          <div className="form-group col-md-6">
             <input
               onChange={this.handleChange("email")}
               type="email"
@@ -153,7 +154,7 @@ class EditProfile extends Component {
               placeholder="Email"
             />
           </div>
-          <div className="form-group">
+          <div className="form-group col-md-6">
             <textarea
               onChange={this.handleChange("about")}
               className="form-control"
@@ -162,7 +163,9 @@ class EditProfile extends Component {
               placeholder="About "
             />
           </div>
-          <div className="form-group">
+        </div>
+        <div className="form-row">
+          <div className="form-group col-md-6">
             <input
               onChange={this.handleChange("password")}
               type="password"
@@ -172,11 +175,24 @@ class EditProfile extends Component {
               placeholder="Password"
             />
           </div>
+          <div className="form-group col-md-6 ">
+            <div className="input-group">
+              <input type="radio" name="gender" value="male" /> &nbsp;&nbsp;
+              <label aria-label="Text input with radio button"> Male</label>
+              &nbsp;
+              <input type="radio" name="gender" value="female" />
+              &nbsp;&nbsp;
+              <label aria-label="Text input with radio button"> Female</label>
+              &nbsp;
+            </div>
+          </div>
+        </div>
+        <div className="form-group col-md-6">
           <button className="btn btn-primary" onClick={this.clickSubmit}>
             Update Profile
           </button>
-        </form>
-      </div>
+        </div>
+      </form>
     );
   };
 
@@ -202,9 +218,9 @@ class EditProfile extends Component {
 
     return (
       <div>
-        <div className="jumbotron p-3">
+        {/*   <div className="jumbotron p-3">
           <h2>Edit Profile</h2>
-        </div>
+        </div> */}
         <div
           className="alert alert-danger alert-dismissible fade show col-md-4"
           style={{ display: error ? "" : "none" }}
@@ -221,22 +237,22 @@ class EditProfile extends Component {
         </div>
         <div
           className="container-fluid p-0"
-          style={{
+          /*  style={{
             display: "flex",
             justifyContent: "space-around",
             flexWrap: "wrap",
-          }}
+          }} */
         >
           {loading ? <PageLoader /> : ""}
 
-          <img
+          {/*   <img
             style={{ height: "200px", width: "200px" }}
             className="img-thumbnail"
             src={photoUrl}
             onError={(i) => (i.target.src = `${DefaultProfile}`)}
             alt={name}
           />
-
+ */}
           {this.editForm(name, email, password, about)}
         </div>
       </div>

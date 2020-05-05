@@ -18,15 +18,15 @@ import AdminUsers from "./admin/users";
 import AdminPosts from "./admin/posts";
 import AdminHome from "./admin/admin";
 import PrivateRoute from "./auth/privateRoute";
+import LockScreen from "./auth/pages/lockScreen";
 import openSocket from "socket.io-client";
-import { isAuthenticated, signout } from "./auth/index";
+import { isAuthenticated } from "./auth/index";
 import Chattab from "./components/chatTab";
 import { fetchMessage } from "./user/apiUser";
 
 export default class MainRouter extends React.Component {
   constructor(props) {
     super();
-
     this.state = {
       hasNewMsg: false,
       receiverId: null,
@@ -59,8 +59,7 @@ export default class MainRouter extends React.Component {
             }
           });
       });
-    }else{
-    
+    } else {
     }
   }
 
@@ -115,6 +114,7 @@ export default class MainRouter extends React.Component {
             component={FindPeople}
           />
           <PrivateRoute path="/user/:userId" exact component={Profile} />
+          <Route path="/lockscreen" exact component={LockScreen} />
         </Switch>
       </div>
     );

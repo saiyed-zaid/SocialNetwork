@@ -11,6 +11,7 @@ class Posts extends Component {
       posts: [],
       expanded: false,
       isLoading: true,
+      error: "",
     };
   }
 
@@ -18,15 +19,19 @@ class Posts extends Component {
     this.setState({ expanded: !this.state.expanded });
   };
   componentDidMount() {
-    setTimeout(() => {
-      list().then((data) => {
-        if (data.error) {
-          console.log(data.error);
-        } else {
-          this.setState({ posts: data.posts, isLoading: false });
-        }
-      });
-    }, 500);
+    try {
+      setTimeout(() => {
+        list().then((data) => {
+          if (data.error) {
+            console.log(data.error);
+          } else {
+            this.setState({ posts: data.posts, isLoading: false });
+          }
+        });
+      }, 500);
+    } catch (error) {
+      this.setState({ error: error });
+    }
   }
 
   /**
@@ -44,11 +49,11 @@ class Posts extends Component {
     );
   };
   render() {
-    const { posts } = this.state;
+    const { posts, error } = this.state;
 
-    if (posts.length < 0 || this.state.isLoading) {
+    /* if (posts.length < 0 || this.state.isLoading ) {
       return this.state.isLoading && <img src={LoadingRing} />;
-    }
+    } */
     return (
       <div className="d-flex w-100 flex-column justify-content-center p-0 m-0">
         {this.renderPosts(posts)}

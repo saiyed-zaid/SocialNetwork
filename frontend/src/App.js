@@ -9,9 +9,10 @@ export default class App extends Component {
 
     this.state = {
       logginStatus: true,
+      warn: false,
     };
 
-    /**  */
+    /** Evets TO Check  */
     this.events = [
       "load",
       "mousemove",
@@ -46,9 +47,7 @@ export default class App extends Component {
 
   warn() {
     if (isAuthenticated()) {
-      alert(
-        "You Will Be Logged Out Automatically After 3 minutes Of Inactivity."
-      );
+      this.setState({ warn: true });
     }
   }
 
@@ -70,6 +69,7 @@ export default class App extends Component {
   render() {
     return (
       <Router>
+        {this.state.warn && <Redirect to="/lockscreen" />}
         {!this.state.logginStatus ? <Redirect to="/signin" /> : null}
         <MainRouter />
       </Router>

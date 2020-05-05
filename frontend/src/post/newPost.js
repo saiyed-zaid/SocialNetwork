@@ -11,20 +11,23 @@ import PageLoader from "../components/pageLoader";
 class NewPost extends Component {
   constructor() {
     super();
+    this.multiselectRef = React.createRef();
     this.state = {
       title: "",
       body: "",
       photo: "",
       tags: [],
       error: "",
-      user: {},
+      user: [],
       fileSize: 0,
       prevPhoto: "",
       loading: false,
       redirectToProfile: false,
       options: [],
-      selectedValue: [],
+      selectedValue: {},
     };
+    this.postData = new FormData();
+    this.selectedopt = [];
   }
 
   componentDidMount() {
@@ -32,7 +35,6 @@ class NewPost extends Component {
     const token = isAuthenticated().user.token;
     document.getElementById("tags").setAttribute("name", "tags");
 
-    this.postData = new FormData();
     this.setState({ user: isAuthenticated().user });
 
     read(userId, token)
@@ -75,9 +77,9 @@ class NewPost extends Component {
     if (body.length === 0) {
       this.setState({ error: "Body field is required", loading: false });
       return false;
-    } else if (title.length < 5 || title.length > 2000) {
+    } else if (body.length < 5 || body.length > 2000) {
       this.setState({
-        error: "Body length must between 5 to 2000.",
+        error: "Description length must between 5 to 2000.",
         loading: false,
       });
     }
@@ -86,20 +88,29 @@ class NewPost extends Component {
       this.setState({ error: "Photo Must Be Smaller then 100kb" });
       return false;
     }
-
     return true;
   };
 
-  onSelect(selectedList, selectedItem) {
-    this.setState({ tags: selectedList });
-    this.postData.set("tags", selectedList);
-  }
+  onSelect = (selectedList, selectedItem) => {
+    //console.log(selectedItem._id);
+
+    this.selectedopt.push(selectedItem._id);
+    //this.selectedopt["tags"] = selectedItem;
+  };
 
   onRemove(selectedList, removedItem) {
-    this.setState({ tags: selectedList });
+    this.setState(
+      { tags: selectedList },
+      this.postData.set("tags", selectedList.name)
+    );
   }
+
   clickSubmit = (event) => {
     event.preventDefault();
+
+    this.postData.append("tags", JSON.stringify(this.selectedopt));
+
+    //this.postData.append("tags", this.selectedopt);
 
     this.setState({ loading: true });
 
@@ -108,8 +119,6 @@ class NewPost extends Component {
       const token = isAuthenticated().user.token;
 
       create(userId, token, this.postData).then((data) => {
-        console.log(data);
-
         if (data.msg || data.err) {
           this.setState({ error: data.msg || data.err });
         } else {
@@ -149,20 +158,12 @@ class NewPost extends Component {
         </div>
         <form method="post" className="col-md-6">
           <div
-            className="alert alert-danger alert-dismissible fade show"
+            className="alert alert-danger fade show"
             style={
               this.state.error ? { display: "block" } : { display: "none" }
             }
           >
             {this.state.error}
-            <button
-              type="button"
-              className="close"
-              data-dismiss="alert"
-              aria-label="Close"
-            >
-              <span aria-hidden="true">&times;</span>
-            </button>
           </div>
           <div className="input-group form-group">
             <div className="custom-file">
@@ -204,18 +205,22 @@ class NewPost extends Component {
             <Multiselect
               id="tags"
               className="form-control"
+              ref={this.multiselectRef}
               options={this.state.options} // Options to display in the dropdown
               selectedValues={this.state.selectedValue} // Preselected value to persist in dropdown
-              onSelect={(selectedList, removedItem) =>
+              /* onSelect={(selectedList, selectedItem) => {
+                this.onSelect(selectedList, selectedItem);
+              }} */
+              onSelect={this.onSelect}
+              /* onSelect={   (selectedList, removedItem) =>
                 this.onSelect(selectedList, removedItem)
-              } // Function will trigger on select event
+              } // Function will trigger on select event */
               onRemove={(selectedList, removedItem) =>
                 this.onRemove(selectedList, removedItem)
               } // Function will trigger on remove event
               displayValue="name" // Property name to display in the dropdown options
               placeholder="Select Peoples To Tag"
               emptyRecordMsg="No People Found"
-              disablePreSelectedValues
             />
           </div>
 

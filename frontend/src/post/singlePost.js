@@ -27,7 +27,6 @@ class SinglePost extends Component {
         if (data.error) {
           console.log(data.error);
         } else {
-          console.log(data);
           this.setState({
             post: data,
             likes: data.likes.length,
@@ -89,6 +88,7 @@ class SinglePost extends Component {
     const userId = isAuthenticated().user._id;
     const postId = this.state.post._id;
     const token = isAuthenticated().user.token;
+
     callApi(userId, token, postId).then((data) => {
       if (data.error) {
         console.log(data.error);
