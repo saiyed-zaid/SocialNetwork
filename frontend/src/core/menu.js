@@ -15,7 +15,7 @@ const isActive = (history, path) => {
 const Menu = ({ history }) => {
   const [onlineUsers, setOnlineUsers] = useState([]);
 
-  useEffect(() => {
+  /* useEffect(() => {
     if (isAuthenticated()) {
       getOnlineUsers(isAuthenticated().user._id, isAuthenticated().user.token)
         .then((data) => {
@@ -27,7 +27,7 @@ const Menu = ({ history }) => {
         })
         .catch();
     }
-  }, []);
+  }, []); */
 
   return ReactDOM.createPortal(
     <nav
@@ -36,18 +36,18 @@ const Menu = ({ history }) => {
     >
       {isAuthenticated() && isAuthenticated().user.role === "admin" ? (
         <Link
-          className="navbar-brand p-2 "
+          className="navbar-brand p-2"
           style={{ color: "#03a9f4" }}
           to="/admin/home"
         >
           SOCIAL NETWORK
         </Link>
       ) : (
-        <Link className="navbar-brand p-2 " style={{ color: "#03a9f4" }} to="/">
+        <Link className="navbar-brand p-2" style={{ color: "#03a9f4" }} to="/">
           SOCIAL NETWORK
         </Link>
       )}
-      {isAuthenticated() && isAuthenticated().user.roll !== "admin" ? (
+      {isAuthenticated() && isAuthenticated().user.roll !== "admin" && (
         <>
           <li className="nav-item dropdown">
             <a
@@ -59,14 +59,13 @@ const Menu = ({ history }) => {
               <i className="far fa-bell text-light" />
               <span className="badge badge-warning navbar-badge">0</span>
             </a>
-            <div
-              className="dropdown-menu dropdown-menu-lg dropdown-menu-left"
-              // style={{ left: "inherit", right: 0 }}
-            >
+
+            <div className="dropdown-menu dropdown-menu-lg dropdown-menu-left">
               <span className="dropdown-item dropdown-header">
                 No Notifications
               </span>
               <div className="dropdown-divider" />
+
               <a href="#" className="dropdown-item">
                 <span className="float-right text-muted text-sm">
                   <Notification />
@@ -119,7 +118,7 @@ const Menu = ({ history }) => {
             </div>
           </li>{" "}
         </>
-      ) : null}
+      )}
       <button
         className="navbar-toggler text-primary"
         type="button"

@@ -72,6 +72,8 @@ class Profile extends Component {
     document.getElementById("followersModal").classList.add("show");
   };
   init = (userId) => {
+    console.log(this.props);
+
     const token = isAuthenticated().user.token;
     read(userId, token)
       .then((data) => {
@@ -128,8 +130,7 @@ class Profile extends Component {
           console.log("Error=> ", result.err);
         } else {
           this.setState({ post: dataToUpdate });
-          /*  document.getElementById("deleteAccount").style.display = "none";
-          document.getElementById("deleteAccount").classList.remove("show"); */
+          this.init(post.postedBy._id);
         }
       })
       .catch((err) => {
@@ -208,11 +209,11 @@ class Profile extends Component {
       return this.state.isLoading && <img src={LoadingRing} alt="loading" />;
     }
     return (
-      <div className="container-fluid mt-0" style={{ color: "#e6cf23" }}>
+      <div className="container" style={{ color: "#e6cf23" }}>
         {!user ? (
           <PageLoader />
         ) : (
-          <div className="profile p-3">
+          <div className="profile">
             {/* ChatBox BEGIN */}
             {this.state.hasChatBoxDisplay && (
               <div
@@ -271,13 +272,13 @@ class Profile extends Component {
                 {isAuthenticated().user &&
                 isAuthenticated().user._id === user._id ? (
                   <div
-                    className="btn-group"
+                    className="btn-group row"
                     role="group"
                     aria-label="Basic example"
                   >
                     {isAuthenticated().user.role === "admin" ? (
                       <button
-                        className="btn btn-outline-secondary mr-2 btn-custom"
+                        className="btn btn-outline-secondary"
                         data-toggle="modal"
                         onClick={this.editProfile}
                         // data-target="#exampleModalCenter"
@@ -341,7 +342,7 @@ class Profile extends Component {
               key={i}
               className="d-flex w-100  align-items-center flex-column p-0 m-0"
             >
-              <div className="card-body m-2 bg-light w-50 ">
+              <div className="card-body m-2 bg-light col-md-7 ">
                 {/* Post */}
                 <div className="post ">
                   <div className="user-block">

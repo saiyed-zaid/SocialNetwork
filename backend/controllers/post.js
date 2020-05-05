@@ -146,13 +146,20 @@ exports.createPost = async (req, res, next) => {
   const tags = JSON.parse(req.body.tags);
   const errors = validationResult(req);
 
-  if (!errors.isEmpty()) {
+  /* if (!errors.isEmpty()) {
     const err = errors.array()[0].msg;
-    //console.log("error handler__", err);
     return res.status(422).json({
-      msg: err,
+      errors: err,
+    });
+  } */
+
+  if (!errors.isEmpty()) {
+    const allErrors = errors.array();
+    return res.status(422).json({
+      errors: allErrors,
     });
   }
+
   const post = new Post({
     title: req.body.title,
     body: req.body.body,
@@ -160,8 +167,10 @@ exports.createPost = async (req, res, next) => {
     photo: req.file,
     tags: tags,
   });
+
   try {
     const result = await post.save();
+
     res.json({ result });
   } catch (err) {
     console.log("Error while Creating Post", err);

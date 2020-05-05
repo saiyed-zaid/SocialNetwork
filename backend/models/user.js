@@ -43,7 +43,6 @@ const UserSchema = new Schema({
       user: {
         type: Schema.Types.ObjectId,
         ref: "User",
-        unique: true,
       },
       isNewUser: {
         type: Boolean,

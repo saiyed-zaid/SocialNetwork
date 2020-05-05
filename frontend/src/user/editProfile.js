@@ -11,6 +11,8 @@ class EditProfile extends Component {
     this.state = {
       id: "",
       name: "",
+      gender: "",
+      birthDate: "",
       email: "",
       password: "",
       redirectToProfile: false,
@@ -154,17 +156,7 @@ class EditProfile extends Component {
               placeholder="Email"
             />
           </div>
-          <div className="form-group col-md-6">
-            <textarea
-              onChange={this.handleChange("about")}
-              className="form-control"
-              value={about}
-              name="about"
-              placeholder="About "
-            />
-          </div>
-        </div>
-        <div className="form-row">
+
           <div className="form-group col-md-6">
             <input
               onChange={this.handleChange("password")}
@@ -175,6 +167,21 @@ class EditProfile extends Component {
               placeholder="Password"
             />
           </div>
+        </div>
+        <div className="form-row">
+          <div className="form-group col-md-6">
+            <textarea
+              onChange={this.handleChange("about")}
+              className="form-control"
+              value={about}
+              name="about"
+              placeholder="About "
+            />
+          </div>
+          <div className="form-group col-md-6">
+            <input type="date" name="birthdate" className="input-control" />
+          </div>
+
           <div className="form-group col-md-6 ">
             <div className="input-group">
               <input type="radio" name="gender" value="male" /> &nbsp;&nbsp;

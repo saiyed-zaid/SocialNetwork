@@ -1,13 +1,13 @@
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
-import { isAuthenticated } from "../../auth";
 import DefaultProfile from "../../images/avatar.jpg";
 
 export default class index extends Component {
   render() {
-    const { user } = this.props;
-    return user.role === "subscriber" &&
-      user.name !== isAuthenticated().user.name ? (
+    const { user, authUser } = this.props;
+    console.log(this.props);
+
+    return user.role === "subscriber" && user.name !== authUser.name ? (
       <div
         className="card w-50"
         style={{

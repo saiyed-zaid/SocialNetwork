@@ -25,11 +25,13 @@ exports.postSignup = async (req, res, next) => {
     if (userExists) {
       return res.status(403).json({ msg: "Email already exists" });
     }
+
     const user = new User({
       name: req.body.name,
       email: req.body.email,
       password: md5(req.body.password),
     });
+
     user
       .save()
       .then((result) => {
@@ -55,6 +57,7 @@ exports.postSignup = async (req, res, next) => {
 
         /* Creating Directory For This User BEGIN */
         if (!fs.existsSync(destPosts) && !fs.existsSync(destProfile)) {
+          
           fs.mkdirSync(
             String(
               path.join(__dirname, "..", "upload", "users") +
@@ -81,14 +84,14 @@ exports.postSignup = async (req, res, next) => {
           console.log("Directory NOT created successfully");
         }
         /* Creating Directory For This User OVER */
+        res.status(200).json({ msg: "Signup successfully, proced to login!" });
       })
       .catch((err) => {
         console.log("Error While Creating user", err);
       });
 
-    res.status(200).json({ msg: "Signup successfully, proced to login!" });
   } catch (error) {
-    res.status(422).json({ msg: "Error while creating User" });
+    res.status(422).json({ msg: "Something went wrong..." });
   }
 };
 
@@ -151,6 +154,7 @@ exports.postSignin = async (req, res, next) => {
       name: userExists.name,
       email: userExists.email,
       role: userExists.role,
+      lastLoggedIn: Date.now(),
       token: token,
     },
   });

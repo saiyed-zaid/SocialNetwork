@@ -23,6 +23,8 @@ class Users extends Component {
     };
   }
   componentDidMount() {
+    console.log("abcdef", this.props);
+
     setTimeout(() => {
       list().then((data) => {
         if (data.error) {
@@ -36,15 +38,17 @@ class Users extends Component {
     /**
      * Function For Getting Online Users
      */
-    getOnlineUsers(isAuthenticated().user._id, isAuthenticated().user.token)
-      .then((data) => {
-        if (data.error) {
-          console.log(data.error);
-        } else {
-          this.setState({ onlineUsers: data[0].following });
-        }
-      })
-      .catch((error) => this.setState({ error: error }));
+    if (this.props.authUser) {
+      getOnlineUsers(this.props.authUser._id, this.props.authUser.token)
+        .then((data) => {
+          if (data.error) {
+            console.log(data.error);
+          } else {
+            this.setState({ onlineUsers: data[0].following });
+          }
+        })
+        .catch((error) => this.setState({ error: error }));
+    }
   }
   onMsg = () => {
     let chatbar = document.getElementById("chatbar");
@@ -60,52 +64,10 @@ class Users extends Component {
    */
   renderUsers = (users) => (
     <>
-      {users.map(
-        (user, i) => (
-          <UsersList user={user} key={i} />
-        )
-        /*    user.role === "subscriber" &&
-        user.name !== isAuthenticated().user.name ? (
-          <div
-            className="card w-50"
-            style={{
-              transition: "unset",
-              transform: "unset",
-              animation: "unset",
-            }}
-          >
-            <div className="card-body box-profile">
-              <div className="text-center">
-                <img
-                  className="profile-user-img img-fluid img-circle"
-                  src={`${process.env.REACT_APP_API_URL}/${
-                    user.photo ? user.photo.path : DefaultProfile
-                  }`}
-                  onError={(i) => (i.target.src = `${DefaultProfile}`)}
-                  alt={user.name}
-                />
-              </div>
-              <h3 className="profile-username text-center">{user.name}</h3>
-              <ul className="list-group list-group-unbordered mb-3 ">
-                <li className="list-group-item bg-dark">
-                  <b>Followers</b>{" "}
-                  <a className="float-right">{user.followers.length}</a>
-                </li>
-                <li className="list-group-item bg-dark">
-                  <b>Following</b>{" "}
-                  <a className="float-right">{user.following.length}</a>
-                </li>
-                {/* <li className="list-group-item">
-                  <b>Friends</b> <a className="float-right">13,287</a>
-                </li> 
-              </ul>
-              <Link to={`/user/${user._id}`} className="btn btn-primary">
-                View Profile
-              </Link>
-            </div>
-          </div>
-        ) : null */
-      )}
+      {users.map((user, i) => (
+        <UsersList user={user} key={i} {...this.props} />
+      ))}
+      {console.log(this.props.authUser)}
     </>
   );
 
@@ -161,7 +123,7 @@ class Users extends Component {
         ></div>
         <div className="col-md-10">
           <div className="jumbotron p-3">
-            <h4> Users</h4>
+            {/* <h4> Users</h4> */}
             <div className="row">
               {!users.length && this.renderUsers(users)}
             </div>

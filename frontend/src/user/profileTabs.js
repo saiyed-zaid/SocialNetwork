@@ -194,7 +194,7 @@ class ProfileTabs extends Component {
                 return (
                   <div
                     key={i}
-                    className="p-2 mt-1"
+                    className=""
                     style={{
                       borderRadius: "0px",
                       display: "flex",

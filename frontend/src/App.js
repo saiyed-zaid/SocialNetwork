@@ -21,6 +21,7 @@ export default class App extends Component {
       "scroll",
       "keypress",
     ];
+
     this.warn = this.warn.bind(this);
     this.logout = this.logout.bind(this);
     this.resetTimeout = this.resetTimeout.bind(this);
@@ -71,6 +72,7 @@ export default class App extends Component {
       <Router>
         {this.state.warn && <Redirect to="/lockscreen" />}
         {!this.state.logginStatus ? <Redirect to="/signin" /> : null}
+
         <MainRouter />
       </Router>
     );
