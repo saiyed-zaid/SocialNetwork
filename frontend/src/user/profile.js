@@ -181,11 +181,11 @@ class Profile extends Component {
       return this.state.isLoading && <img src={LoadingRing} />;
     }
     return (
-      <div className="container-fluid mt-0" style={{ color: "#e6cf23" }}>
+      <div className="container" style={{ color: "#e6cf23" }}>
         {!user ? (
           <PageLoader />
         ) : (
-          <div className="profile p-3">
+          <div className="profile">
             {/* ChatBox BEGIN */}
             {this.state.hasChatBoxDisplay && (
               <div
@@ -244,13 +244,13 @@ class Profile extends Component {
                 {isAuthenticated().user &&
                 isAuthenticated().user._id === user._id ? (
                   <div
-                    className="btn-group"
+                    className="btn-group row"
                     role="group"
                     aria-label="Basic example"
                   >
                     {isAuthenticated().user.role === "admin" ? (
                       <button
-                        className="btn btn-outline-secondary mr-2 btn-custom"
+                        className="btn btn-outline-secondary"
                         data-toggle="modal"
                         onClick={this.editProfile}
                         // data-target="#exampleModalCenter"

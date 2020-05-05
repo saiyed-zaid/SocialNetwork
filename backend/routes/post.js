@@ -89,9 +89,9 @@ router.post(
     body("title")
       .isLength({ min: 5, max: 120 })
       .withMessage("Title length must between 5 to 120."),
-    body("body").notEmpty().withMessage("Title field is required."),
+    body("body").notEmpty().withMessage("Body field is required."),
     body("body")
-      .isLength({ min: 5, max: 2000 })
+      .isLength({ min: 10, max: 2000 })
       .withMessage("Body length must between 5 to 2000."),
   ],
 

@@ -3,6 +3,9 @@ import MainRouter from "./mainRouter";
 import { BrowserRouter as Router, Redirect } from "react-router-dom";
 import { signout, isAuthenticated } from "./auth/index";
 
+
+
+
 export default class App extends Component {
   constructor(props) {
     super(props);
@@ -11,7 +14,6 @@ export default class App extends Component {
       logginStatus: true,
     };
 
-    /**  */
     this.events = [
       "load",
       "mousemove",
@@ -20,6 +22,7 @@ export default class App extends Component {
       "scroll",
       "keypress",
     ];
+
     this.warn = this.warn.bind(this);
     this.logout = this.logout.bind(this);
     this.resetTimeout = this.resetTimeout.bind(this);
@@ -70,7 +73,7 @@ export default class App extends Component {
   render() {
     return (
       <Router>
-        {!this.state.logginStatus ? <Redirect to="/signin" /> : null}
+        {!this.state.logginStatus && <Redirect to="/signin" />}
         <MainRouter />
       </Router>
     );

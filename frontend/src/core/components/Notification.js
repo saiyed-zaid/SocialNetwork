@@ -41,6 +41,7 @@ class Notification extends React.Component {
       this.setState({ hasNewFollow: false });
     }
   };
+  
   render() {
     return <Follow test={this.state.newFollower} />;
   }

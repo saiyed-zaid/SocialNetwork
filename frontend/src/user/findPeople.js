@@ -3,8 +3,10 @@ import { findPeople, follow } from "./apiUser";
 import { Link } from "react-router-dom";
 import DefaultProfile from "../images/avatar.jpg";
 import { isAuthenticated } from "../auth/index";
-import PageLoader from "../components/pageLoader";
 import LoadingRing from "../l1.gif";
+import { store } from "react-notifications-component";
+import "react-notifications-component/dist/theme.css";
+import "animate.css";
 
 class FindPeople extends Component {
   constructor() {
@@ -15,6 +17,7 @@ class FindPeople extends Component {
       open: false,
 
       isLoading: true,
+      isProcessing: false,
       search: "",
       networkError: false,
     };
@@ -43,7 +46,7 @@ class FindPeople extends Component {
   clickFollow = (user, i) => {
     const userId = isAuthenticated().user._id;
     const token = isAuthenticated().user.token;
-
+    this.setState({ isProcessing: true });
     follow(userId, token, user._id).then((data) => {
       if (data.err) {
         this.setState({ error: data.err });
@@ -53,7 +56,8 @@ class FindPeople extends Component {
         this.setState({
           users: toFollow,
           open: true,
-          followMessage: `Following ${user.name}`,
+          notify:`Started Following ${user.name}`,
+          isProcessing: false,
         });
       }
     });
@@ -91,8 +95,12 @@ class FindPeople extends Component {
                     border: "none !important",
                     margin: "1px",
                   }}
+                  disabled={this.state.isProcessing}
                 >
-                  Follow
+                  {this.state.isProcessing && (
+                    <img src={LoadingRing} style={{ height: "15px" }} />
+                  )}
+                  &nbsp; Follow
                 </button>
                 <Link
                   to={`/user/${user._id}`}
@@ -120,7 +128,7 @@ class FindPeople extends Component {
   };
 
   render() {
-    const {  open, followMessage } = this.state;
+    const { open, followMessage } = this.state;
     const users = this.state.users.filter((user) => {
       return user.name.indexOf(this.state.search) !== -1;
     });
@@ -129,32 +137,32 @@ class FindPeople extends Component {
       return this.state.isLoading && <img src={LoadingRing} />;
     }
 
+    this.state.notify &&
+      store.addNotification({
+        title: "Success",
+        message: this.state.notify,
+        type: "success", // 'default', 'success', 'info', 'warning'
+        container: "top-right", // where to position the notifications
+        animationIn: ["animated", "fadeIn"], // animate.css classes that's applied
+        animationOut: ["animated", "fadeOut"], // animate.css classes that's applied
+        dismiss: {
+          duration: 3000,
+        },
+      });
+
     return (
       <div className="container-fluid p-0">
         <div className="jumbotron p-3">
-          <h4>Find Friends</h4>
+          {/* <h4>Find Friends</h4> */}
           <input
             type="text"
             value={this.state.search}
             onChange={this.updateSearch}
             style={{ border: "1px solid black" }}
             className="form-control col-md-2 "
-            placeholder="Search Here"
+            placeholder="Live Search..."
           />
         </div>
-        {open && (
-          <div className="alert alert-info alert-dismissible fade show col-md-4">
-            {followMessage}
-            <button
-              type="button"
-              className="close"
-              data-dismiss="alert"
-              aria-label="Close"
-            >
-              <span aria-hidden="true">&times;</span>
-            </button>
-          </div>
-        )}
         {this.renderUsers(users)}
       </div>
     );

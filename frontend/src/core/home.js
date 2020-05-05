@@ -29,9 +29,9 @@ class Home extends Component {
         {/* Loding Post Begin */}
         <div>
           <div className="jumbotron p-0">
-            <h4>Recent Posts</h4>
+            {/* <h4>Recent Posts</h4> */}
           </div>
-          <div className="container-fluid">
+          <div className="container">
             <Posts />
           </div>
         </div>

@@ -154,6 +154,7 @@ exports.postSignin = async (req, res, next) => {
       name: userExists.name,
       email: userExists.email,
       role: userExists.role,
+      lastLoggedIn: Date.now(),
       token: token,
     },
   });

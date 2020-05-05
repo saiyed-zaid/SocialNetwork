@@ -28,7 +28,7 @@ app.use("/upload", express.static("upload"));
 /* Registering middleware BEGIN*/
 app.use(cors());
 app.use(bodyParser.json()); 
-app.use(morgan("tiny"));
+//app.use(morgan("tiny"));
 /* Registering middleware END*/
 
 /* Handling Requests BEGIN */

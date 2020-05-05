@@ -36,7 +36,7 @@ class Posts extends Component {
    */
   renderPosts = (posts) => {
     return (
-      <div className="row justify-content-md-center  ">
+      <div className="row justify-content-md-center">
         {posts.map((post, i) => {
           return <PostCard post={post} />;
         })}
@@ -50,7 +50,7 @@ class Posts extends Component {
       return this.state.isLoading && <img src={LoadingRing} />;
     }
     return (
-      <div className="d-flex w-100 flex-column justify-content-center p-0 m-0">
+      <div className="d-flex w-100 flex-column">
         {this.renderPosts(posts)}
       </div>
     );

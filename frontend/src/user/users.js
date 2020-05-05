@@ -176,9 +176,8 @@ class Users extends Component {
         ></div>
         <div className="col-md-10">
           <div className="jumbotron p-3">
-            <h4> Users</h4>
+            {/* <h4> Users</h4> */}
             <div className="row">
-           
               {!users.length && this.renderUsers(users)}
             </div>
           </div>
