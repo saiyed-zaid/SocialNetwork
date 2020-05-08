@@ -11,7 +11,7 @@ class NewPost extends React.Component {
     this.state = {
       title: "",
       body: "",
-      photo: "",
+      photo: [],
       tags: [],
       errors: {},
       user: [],
@@ -28,8 +28,6 @@ class NewPost extends React.Component {
   }
 
   componentDidMount() {
-    console.log(this.props);
-
     const userId = this.props.authUser._id;
     const token = this.props.authUser.token;
 
@@ -52,13 +50,19 @@ class NewPost extends React.Component {
 
   handleInputChange = (event) => {
     var value;
+    let imgFiles = [];
+
     if (event.target.name === "photo") {
-      value = event.target.files[0];
-      const fileSize = event.target.files[0].size;
+      for (let i = 0; i < event.target.files.length; i++) {
+        imgFiles.push(event.target.files[i]);
+      }
+
+      // value = event.target.files[0];
+      // const fileSize = event.target.files[0].size;
 
       this.setState({
-        [event.target.name]: value,
-        fileSize,
+        [event.target.name]: imgFiles,
+        // fileSize,
       });
     } else {
       value = event.target.value;
@@ -73,7 +77,9 @@ class NewPost extends React.Component {
     event.preventDefault();
 
     const data = this.state;
+
     this.postData.append("tags", JSON.stringify(this.selectedopt));
+    this.postData.append("photo", JSON.stringify(this.state.photo));
 
     const rules = {
       title: "required|string|max:120|min:5",
@@ -93,6 +99,7 @@ class NewPost extends React.Component {
 
         create(userId, token, this.postData)
           .then((data) => {
+            console.log("asds", data);
             if (data.errors) {
               const formattedErrors = {};
               data.errors.forEach((error) => {
@@ -128,12 +135,12 @@ class NewPost extends React.Component {
     //this.selectedopt["tags"] = selectedItem;
   };
 
-  onRemove(selectedList, removedItem) {
+  onRemove = (selectedList, removedItem) => {
     this.setState(
       { tags: selectedList },
       this.postData.set("tags", selectedList.name)
     );
-  }
+  };
 
   render() {
     return (
@@ -143,10 +150,11 @@ class NewPost extends React.Component {
             <label for="exampleFormControlFile1">Photo</label>
             <input
               type="file"
-              onChange={this.handleInputChange}
+              onChange={(e) => this.handleInputChange(e)}
               name="photo"
               className="form-control-file"
               id="exampleFormControlFile1"
+              multiple
             />
           </div>
           <div className="form-group">

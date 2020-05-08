@@ -12,7 +12,7 @@ class EditProfile extends Component {
       id: "",
       name: "",
       gender: "",
-      birthDate: "",
+      dob: "",
       email: "",
       password: "",
       redirectToProfile: false,
@@ -26,7 +26,6 @@ class EditProfile extends Component {
 
   init = (userId) => {
     const token = isAuthenticated().user.token;
-
     read(userId, token).then((data) => {
       if (data.error) {
         this.setState({ redirectToProfile: true });
@@ -34,6 +33,8 @@ class EditProfile extends Component {
         this.setState({
           id: data._id,
           name: data.name,
+          gender: data.gender,
+          dob: data.dob,
           email: data.email,
           error: "",
           about: data.about,
@@ -115,11 +116,23 @@ class EditProfile extends Component {
     }
   };
 
-  editForm = (name, email, password, about) => {
+  editForm = (name, gender, dob, email, password, about) => {
+    let getDate = new Date(dob);
+    let dobDate =
+      getDate.getFullYear() +
+      "-" +
+      getDate.getMonth("mm") +
+      "-" +
+      getDate.getDate("dd");
+    console.log(dobDate);
+
     return (
       <form method="post">
-        <div className="form-row">
+        <div className="form-row text-dark">
           <div className="form-group col-md-6">
+            <small>
+              <label for="inputGroupFile04"> Profile Photo</label>
+            </small>
             <div className="custom-file">
               <input
                 accept="image/*"
@@ -134,7 +147,11 @@ class EditProfile extends Component {
               </label>
             </div>
           </div>
-          <div className="form-group col-md-6">
+          <div className="form-group col-md-6 ">
+            <small>
+              <label> Name</label>
+            </small>
+
             <input
               onChange={this.handleChange("name")}
               type="text"
@@ -145,8 +162,12 @@ class EditProfile extends Component {
             />
           </div>
         </div>
-        <div className="form-row">
+        <div className="form-row text-dark">
           <div className="form-group col-md-6">
+            <small>
+              <label for="email"> Email</label>
+            </small>
+
             <input
               onChange={this.handleChange("email")}
               type="email"
@@ -154,10 +175,16 @@ class EditProfile extends Component {
               value={email}
               name="email"
               placeholder="Email"
+              id="email"
             />
           </div>
 
           <div className="form-group col-md-6">
+            <small>
+              {" "}
+              <label>Password</label>
+            </small>
+
             <input
               onChange={this.handleChange("password")}
               type="password"
@@ -168,8 +195,13 @@ class EditProfile extends Component {
             />
           </div>
         </div>
-        <div className="form-row">
+        <div className="form-row text-dark">
           <div className="form-group col-md-6">
+            <small>
+              {" "}
+              <label> About</label>
+            </small>
+
             <textarea
               onChange={this.handleChange("about")}
               className="form-control"
@@ -179,22 +211,48 @@ class EditProfile extends Component {
             />
           </div>
           <div className="form-group col-md-6">
-            <input type="date" name="birthdate" className="input-control" />
+            <small>
+              {" "}
+              <label> Date Of Birth</label>
+            </small>
+
+            <input
+              type="date"
+              name="dob"
+              className="form-control"
+              onChange={this.handleChange("dob")}
+            />
           </div>
 
           <div className="form-group col-md-6 ">
             <div className="input-group">
-              <input type="radio" name="gender" value="male" /> &nbsp;&nbsp;
-              <label aria-label="Text input with radio button"> Male</label>
-              &nbsp;
-              <input type="radio" name="gender" value="female" />
+              <small>
+                <label> Gender : &nbsp;</label>
+              </small>
+              <input
+                type="radio"
+                name="gender"
+                value="male"
+                onChange={this.handleChange("gender")}
+                checked={gender === "male"}
+              />
               &nbsp;&nbsp;
-              <label aria-label="Text input with radio button"> Female</label>
+              <label> Male</label>
+              &nbsp;
+              <input
+                type="radio"
+                name="gender"
+                value="female"
+                onChange={this.handleChange("gender")}
+                checked={gender === "female"}
+              />
+              &nbsp;&nbsp;
+              <label> Female</label>
               &nbsp;
             </div>
           </div>
         </div>
-        <div className="form-group col-md-6">
+        <div className="form-group col-md-12 text-center">
           <button className="btn btn-primary" onClick={this.clickSubmit}>
             Update Profile
           </button>
@@ -207,6 +265,8 @@ class EditProfile extends Component {
     const {
       id,
       name,
+      gender,
+      dob,
       email,
       password,
       redirectToProfile,
@@ -260,7 +320,7 @@ class EditProfile extends Component {
             alt={name}
           />
  */}
-          {this.editForm(name, email, password, about)}
+          {this.editForm(name, gender, dob, email, password, about)}
         </div>
       </div>
     );

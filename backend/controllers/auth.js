@@ -57,7 +57,6 @@ exports.postSignup = async (req, res, next) => {
 
         /* Creating Directory For This User BEGIN */
         if (!fs.existsSync(destPosts) && !fs.existsSync(destProfile)) {
-          
           fs.mkdirSync(
             String(
               path.join(__dirname, "..", "upload", "users") +
@@ -89,7 +88,6 @@ exports.postSignup = async (req, res, next) => {
       .catch((err) => {
         console.log("Error While Creating user", err);
       });
-
   } catch (error) {
     res.status(422).json({ msg: "Something went wrong..." });
   }

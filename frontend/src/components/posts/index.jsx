@@ -16,7 +16,7 @@ export default class PostCard extends Component {
 
     return (
       <div
-        className=" col-md-6 card-body m-2  bg-light  "
+        className=" col-md-6 card-body m-2  bg-light  post-card"
         style={{ position: "relative" }}
       >
         {/* this.props.post */}
@@ -32,58 +32,117 @@ export default class PostCard extends Component {
               alt={posterName}
             />
             <span className="username">
-              <Link to={posterId}>{posterName}</Link>
-              {/*  <a href="#" className="float-right btn-tool">
-                  <i className="fas fa-times" />
-                </a> */}
+              <Link to={posterId}>{posterName}</Link> &nbsp;
+              {this.props.post.tags.length > 1 ? (
+                <small
+                  data-toggle="tooltip"
+                  data-placement="bottom"
+                  data-html="true"
+                  title={this.props.post.tags.map((tag) => tag.name + "<br />")}
+                >
+                  With {this.props.post.tags.length} More
+                </small>
+              ) : null}
             </span>
             <span className="description">{this.props.post.title}</span>
             <span className="description pb-3">
               Shared Publicly &nbsp;&nbsp;
               <TimeAgo date={this.props.post.created} />
-              {/* {new Date(this.props.post.created).toDateString()} */}
             </span>
           </div>
-          {this.props.post.photo ? (
-            this.props.post.photo.mimetype === "video/mp4" ? (
-              <div className="embed-responsive embed-responsive-16by9 p-0 m-0">
-                <video controls className="embed-responsive-item p-0 m-0">
-                  <source
-                    src={`${process.env.REACT_APP_API_URL}/${
-                      this.props.post.photo
-                        ? this.props.post.photo.path
-                        : DefaultPost
-                    }`}
-                    type="video/mp4"
-                    alt="No Video Found"
-                    // onError={e=>e.target.alt="No Video"}
+          <div className="post-media">
+            {this.props.post.photo.length > 1 ? (
+              <div
+                id="carouselExampleControls"
+                className="carousel slide"
+                data-ride="carousel"
+              >
+                <div className="carousel-inner">
+                  <div className="carousel-item active">
+                    <img
+                      className="d-block w-100"
+                      src="https://fakeimg.pl/350x200/?text=SwipeLeft&font=lobster"
+                      alt="First slide"
+                    />
+                  </div>
+                  {this.props.post.photo.map((photo) => (
+                    <div className="carousel-item">
+                      <img
+                        className="d-block w-100"
+                        src={photo}
+                        alt="post "
+                        onError={(i) => (i.target.src = `${DefaultPost}`)}
+                      />
+                    </div>
+                  ))}
+                </div>
+                <a
+                  className="carousel-control-prev"
+                  href="#carouselExampleControls"
+                  role="button"
+                  data-slide="prev"
+                >
+                  <span
+                    className="carousel-control-prev-icon"
+                    aria-hidden="true"
                   />
-                  Your browser does not support the video tag.
-                </video>
+                  <span className="sr-only">Previous</span>
+                </a>
+                <a
+                  className="carousel-control-next"
+                  href="#carouselExampleControls"
+                  role="button"
+                  data-slide="next"
+                >
+                  <span
+                    className="carousel-control-next-icon "
+                    aria-hidden="true"
+                  />
+                  <span className="sr-only">Next</span>
+                </a>
               </div>
-            ) : (
-              <img
-                className="card-img-top"
-                src={`${process.env.REACT_APP_API_URL}/${
-                  this.props.post.photo
-                    ? this.props.post.photo.path
-                    : DefaultPost
-                }`}
-                onError={(i) => (i.target.src = `${DefaultPost}`)}
-                alt={this.props.post.name}
-              />
-            )
-          ) : null}
+            ) : null}
+            {/*   {this.props.post.photo ? (
+              this.props.post.photo.mimetype === "video/mp4" ? (
+                <div className="embed-responsive embed-responsive-16by9 p-0 m-0">
+                  <video controls className="embed-responsive-item p-0 m-0">
+                    <source
+                      src={`${process.env.REACT_APP_API_URL}/${
+                        this.props.post.photo
+                          ? this.props.post.photo.path
+                          : DefaultPost
+                      }`}
+                      type="video/mp4"
+                      alt="No Video Found"
+                    />
+                    Your browser does not support the video tag.
+                  </video>
+                </div>
+              ) : (
+                <img
+                  className="card-img-top"
+                  src={`${process.env.REACT_APP_API_URL}/${
+                    this.props.post.photo
+                      ? this.props.post.photo.path
+                      : DefaultPost
+                  }`}
+                  onError={(i) => (i.target.src = `${DefaultPost}`)}
+                  alt={this.props.post.name}
+                />
+              )
+            ) : null} */}
+          </div>
           <div>
             <p className="pt-2 text-dark text-center">
               {this.props.post.body.substring(0, 200) + "........."}
             </p>
           </div>
+
           {isAuthenticated() ? (
             <>
               <div className="row justify-content-md-center">
                 <button
-                  className="btn "
+                  className="btn"
                   style={{
                     borderRadius: "20px",
                     backgroundColor: "#0155ca",

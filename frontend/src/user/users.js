@@ -1,8 +1,5 @@
 import React, { Component } from "react";
 import { list, getOnlineUsers, fetchMessage } from "./apiUser";
-import { Link } from "react-router-dom";
-import Card from "../components/card";
-import PageLoader from "../components/pageLoader";
 import LoadingGif from "../l1.gif";
 import { isAuthenticated } from "../auth";
 import ChatBar from "../components/chatBar/chatbar";
@@ -103,7 +100,7 @@ class Users extends Component {
   render() {
     const { users, onlineUsers, error } = this.state;
     if (this.state.isLoading) {
-      return <img src={LoadingGif} />;
+      return <img src={LoadingGif} alt="loading..." />;
     }
     return (
       <div className="row container-fluid p-0 m-0">

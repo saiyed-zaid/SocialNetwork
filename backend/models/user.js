@@ -6,6 +6,13 @@ const UserSchema = new Schema({
     trim: true,
     required: true,
   },
+  gender: {
+    type: String,
+    trim: true,
+  },
+  dob: {
+    type: Date,
+  },
   about: {
     type: String,
     trim: true,

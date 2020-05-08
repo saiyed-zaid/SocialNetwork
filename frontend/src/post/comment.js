@@ -1,7 +1,6 @@
 import React, { Component } from "react";
 import { comment, uncomment } from "./apiPost";
 import { isAuthenticated } from "../auth/index";
-import { Link } from "react-router-dom";
 import CommentList from "../components/commentList/index";
 
 class Comment extends Component {

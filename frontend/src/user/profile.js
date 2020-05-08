@@ -24,7 +24,7 @@ class Profile extends Component {
     this.state = {
       user: { followers: [], following: [] },
       redirectToSignin: false,
-      following: false,
+      // following: false,
       error: "",
       posts: [],
       hasPostStatusUpdated: false,
@@ -57,7 +57,6 @@ class Profile extends Component {
           this.setState({
             user: data,
             following: !this.state.following,
-            followers: !this.state.followers,
           });
         }
       })
@@ -72,8 +71,6 @@ class Profile extends Component {
     document.getElementById("followersModal").classList.add("show");
   };
   init = (userId) => {
-    console.log(this.props);
-
     const token = isAuthenticated().user.token;
     read(userId, token)
       .then((data) => {
@@ -209,7 +206,7 @@ class Profile extends Component {
       return this.state.isLoading && <img src={LoadingRing} alt="loading" />;
     }
     return (
-      <div className="container" style={{ color: "#e6cf23" }}>
+      <div className="container pt-2" style={{ color: "#e6cf23" }}>
         {!user ? (
           <PageLoader />
         ) : (

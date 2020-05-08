@@ -45,7 +45,7 @@ export default class lockScreen extends Component {
     this.setState({ [name]: event.target.value });
   };
   render() {
-    const { email, password, error, redirectToRefferer, loading } = this.state;
+    const { redirectToRefferer } = this.state;
 
     if (redirectToRefferer) {
       if (isAuthenticated().user.role === "admin") {

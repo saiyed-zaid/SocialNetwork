@@ -92,6 +92,7 @@ class Posts extends Component {
     this.setState({ checkBox: arr });
   };
 
+  
   handleSingleCheckBox = (event) => {
     let selectAllCheckbox = document.getElementsByName("selectall")[0];
     let Checkboxes = document.getElementsByName("childchk");

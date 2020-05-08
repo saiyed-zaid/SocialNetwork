@@ -22,7 +22,7 @@ import PrivateRoute from "./auth/privateRoute";
 import LockScreen from "./auth/pages/lockScreen";
 import openSocket from "socket.io-client";
 
-import { authUser, signout, isAuthenticated } from "./auth/index";
+import { signout, isAuthenticated } from "./auth/index";
 import Chattab from "./components/chatTab";
 import { fetchMessage } from "./user/apiUser";
 import ReactNotifications from "react-notifications-component";
@@ -35,11 +35,11 @@ const isActive = (history, path) => {
 };
 
 const Navbar = withRouter(({ history, authUser, handleLogout }) => {
-  authUser && console.log(authUser);
+  // authUser && console.log(authUser);
   return (
     <nav
       className="navbar navbar-expand-lg navbar-light bg-primary  "
-      style={{ zIndex: 9999 }}
+      style={{ zIndex: 5000 }}
     >
       {authUser && authUser.role === "admin" ? (
         <Link
@@ -66,19 +66,17 @@ const Navbar = withRouter(({ history, authUser, handleLogout }) => {
               <i className="far fa-bell text-light" />
               <span className="badge badge-warning navbar-badge">0</span>
             </a>
-
             <div className="dropdown-menu dropdown-menu-lg dropdown-menu-left">
               <span className="dropdown-item dropdown-header">
                 No Notifications
               </span>
               <div className="dropdown-divider" />
-
-              <a href="#" className="dropdown-item">
+              <a href="/" className="dropdown-item">
                 <span className="float-right text-muted text-sm">
                   <Notification />
                 </span>
               </a>
-              <a href="#" className="dropdown-item dropdown-footer">
+              <a href="/" className="dropdown-item dropdown-footer">
                 See All Notifications
               </a>
             </div>
@@ -87,7 +85,7 @@ const Navbar = withRouter(({ history, authUser, handleLogout }) => {
             <a
               className="nav-link"
               data-toggle="dropdown"
-              href="#"
+              href="/"
               aria-expanded="false"
             >
               <i className="far fa-comments text-light" />
@@ -119,7 +117,7 @@ const Navbar = withRouter(({ history, authUser, handleLogout }) => {
                   ))
                 : null} */}
               <div className="dropdown-divider" />
-              <a href="#" className="dropdown-item dropdown-footer">
+              <a href="/" className="dropdown-item dropdown-footer">
                 See All Messages
               </a>
             </div>
@@ -286,7 +284,6 @@ export default class MainRouter extends React.Component {
           this.state.authUser.token
         )
           .then((result) => {
-            console.log(result);
             this.setState({
               hasNewMsg: true,
               receiverId: data.sender,
@@ -368,11 +365,7 @@ export default class MainRouter extends React.Component {
           />
           <Route path="/post/:postId" exact component={SinglePost} />
           <PrivateRoute path="/post/edit/:postId" exact component={EditPost} />
-          <Route
-            path="/users"
-            exact
-            // component={Users}
-          >
+          <Route path="/users" exact>
             <Users authUser={this.state.authUser} />
           </Route>
           <Route path="/signup" exact component={Signup} />

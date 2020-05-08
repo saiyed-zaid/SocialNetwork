@@ -15,7 +15,6 @@ class FindPeople extends Component {
       users: [],
       error: "",
       open: false,
-
       isLoading: true,
       isProcessing: false,
       search: "",
@@ -56,7 +55,7 @@ class FindPeople extends Component {
         this.setState({
           users: toFollow,
           open: true,
-          notify:`Started Following ${user.name}`,
+          notify: `Started Following ${user.name}`,
           isProcessing: false,
         });
       }
@@ -98,7 +97,11 @@ class FindPeople extends Component {
                   disabled={this.state.isProcessing}
                 >
                   {this.state.isProcessing && (
-                    <img src={LoadingRing} style={{ height: "15px" }} />
+                    <img
+                      src={LoadingRing}
+                      style={{ height: "15px" }}
+                      alt="loading..."
+                    />
                   )}
                   &nbsp; Follow
                 </button>
@@ -128,13 +131,13 @@ class FindPeople extends Component {
   };
 
   render() {
-    const { open, followMessage } = this.state;
+    // const { open, followMessage } = this.state;
     const users = this.state.users.filter((user) => {
       return user.name.indexOf(this.state.search) !== -1;
     });
 
     if (users.length < 0 || this.state.isLoading) {
-      return this.state.isLoading && <img src={LoadingRing} />;
+      return this.state.isLoading && <img src={LoadingRing} alt="loading..." />;
     }
 
     this.state.notify &&

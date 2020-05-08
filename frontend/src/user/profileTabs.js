@@ -4,13 +4,9 @@ import DefaultProfile from "../images/avatar.jpg";
 import { isAuthenticated } from "../auth/index";
 import { update } from "../post/apiPost";
 import { unfollow } from "../user/apiUser";
-import Toast from "../components/Toast";
+// import Toast from "../components/Toast";
 
 class ProfileTabs extends Component {
-  constructor(props) {
-    super(props);
-  }
-
   handleUserUnfollow = (e) => {
     const unfollowId = e.target.getAttribute("data-userId");
     if (unfollowId) {
@@ -36,7 +32,7 @@ class ProfileTabs extends Component {
     const formData = new FormData();
     const postId = e.target.getAttribute("data-post-id");
     const postStatus = e.target.getAttribute("data-post-status");
-    if (postStatus == "true") {
+    if (postStatus === "true") {
       formData.set("status", false);
       formData.append("disabledBy", isAuthenticated().user._id);
     } else {
@@ -56,7 +52,7 @@ class ProfileTabs extends Component {
   };
 
   render() {
-    const { following, followers, posts } = this.props;
+    const { following, followers } = this.props;
 
     return (
       <div>

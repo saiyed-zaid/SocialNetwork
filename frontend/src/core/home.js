@@ -1,7 +1,5 @@
 import React, { Component } from "react";
 import Posts from "../post/posts";
-import Notification from "./components/Notification";
-import Chattab from "../components/chatTab";
 
 class Home extends Component {
   constructor() {
@@ -25,9 +23,7 @@ class Home extends Component {
         ></div>
         {/* Loding Post Begin */}
         <div>
-          <div className="jumbotron p-0">
-            {/* <h4>Recent Posts</h4> */}
-          </div>
+          <div className="jumbotron p-0">{/* <h4>Recent Posts</h4> */}</div>
           <div className="container">
             <Posts />
           </div>

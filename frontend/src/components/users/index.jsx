@@ -9,7 +9,7 @@ export default class index extends Component {
 
     return user.role === "subscriber" && user.name !== authUser.name ? (
       <div
-        className="card w-50"
+        className="card w-100"
         style={{
           transition: "unset",
           transform: "unset",

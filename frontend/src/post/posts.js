@@ -3,6 +3,7 @@ import { list } from "./apiPost";
 import PageLoader from "../components/pageLoader";
 import PostCard from "../components/posts/index";
 import LoadingRing from "../l1.gif";
+import InfiniteLoader from "react-infinite-loader";
 
 class Posts extends Component {
   constructor() {
@@ -55,9 +56,7 @@ class Posts extends Component {
       return this.state.isLoading && <img src={LoadingRing} />;
     } */
     return (
-      <div className="d-flex w-100 flex-column">
-        {this.renderPosts(posts)}
-      </div>
+      <div className="d-flex w-100 flex-column">{this.renderPosts(posts)}</div>
     );
   }
 }

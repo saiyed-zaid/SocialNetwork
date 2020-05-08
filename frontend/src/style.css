@@ -720,7 +720,7 @@ div.content {
   right: 0;
 }
 
-<<<<<<< HEAD .lockscreen {
+ .lockscreen {
   background: transparent;
   padding-top: 140px;
 }
@@ -781,4 +781,46 @@ div.content {
   .profile {
     text-align: center;
   }
+}
+
+.notify-custom{
+  z-index: 9999;
+}
+
+.tags{
+  /* border: 1px solid red; */
+  height: 25px;
+  width: 100px;
+  bottom: 10px;
+  position: absolute;
+  background-color: black;
+  color: lightblue;
+  opacity: 0.5;
+  border-radius: 10px;
+  text-align: center;
+  display: none;
+}
+.post-media{
+  position: relative;
+  
+}
+.post-media:hover .tags{
+  display: block;
+}
+
+
+.grid-column {
+  flex: 25%;
+  max-width: 25%;
+  padding: 0 4px;
+}
+.grid-row {
+  display: flex;
+  flex-wrap: wrap;
+  padding: 0 4px;
+}
+.grid-column img {
+  margin-top: 8px;
+  vertical-align: middle;
+  width: 100%;
 }

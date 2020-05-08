@@ -191,7 +191,7 @@ class SinglePost extends Component {
                     <i className="fas fa-trash"></i>
                   </button> */}
                   <button
-                    className="btn btn-raised btn-primary mr-1"
+                    className="btn btn-raised btn-primary mr-1 bg-dark"
                     data-toggle="modal"
                     onClick={this.handleEditPost}
                   >
@@ -199,7 +199,7 @@ class SinglePost extends Component {
                   </button>
                   <button
                     onClick={this.deleteConfirmed}
-                    className="btn btn-raised btn-primary mr-1"
+                    className="btn btn-raised btn-primary mr-1 bg-dark"
                   >
                     <i className="fas fa-trash"></i>
                   </button>
@@ -218,7 +218,9 @@ class SinglePost extends Component {
   render() {
     const { post, redirectToHome, redirectToSignin, comments } = this.state;
     if (post == null || this.state.isLoading) {
-      return <img src={LoadingRing} style={{ height: "120px" }} />;
+      return (
+        <img src={LoadingRing} style={{ height: "120px" }} alt="loading..." />
+      );
     }
     if (redirectToHome) {
       return <Redirect to="/" />;
@@ -238,7 +240,6 @@ class SinglePost extends Component {
           id="editpost"
           body={<EditPost postId={this.props.match.params.postId} />}
           title="Edit Post"
-          // buttonText=
         />
       </div>
     );
