@@ -26,24 +26,21 @@ class SinglePost extends Component {
       try {
         const response = await this.props.fetchPost(postId);
 
-        
-      if (response.error) {
-        console.log(response.error);
-      } else {
-        console.log(response);
-        this.setState({
-          post: response,
-          likes: response.likes.length,
-          like: this.checkLike(response.likes),
-          comments: response.comments,
-          isLoading: false,
-        });
-      }
-        
-      }catch(error) {
+        if (response.error) {
+          console.log(response.error);
+        } else {
+          console.log(response);
+          this.setState({
+            post: response,
+            likes: response.likes.length,
+            like: this.checkLike(response.likes),
+            comments: response.comments,
+            isLoading: false,
+          });
+        }
+      } catch (error) {
         console.log(error);
       }
-
     }, 500);
   }
 
@@ -96,6 +93,7 @@ class SinglePost extends Component {
     const userId = isAuthenticated().user._id;
     const postId = this.state.post._id;
     const token = isAuthenticated().user.token;
+
     callApi(userId, token, postId).then((data) => {
       if (data.error) {
         console.log(data.error);

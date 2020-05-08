@@ -3,6 +3,7 @@ import { isAuthenticated, signout } from "../auth/index";
 import { Redirect, Link } from "react-router-dom";
 
 import { read, fetchMessage, update } from "./apiUser";
+import { update as updatePost } from "../post/apiPost";
 import DefaultProfile from "../images/avatar.jpg";
 import DefaultPost from "../images/post.jpg";
 import DeleteUser from "./deleteUser";
@@ -15,6 +16,7 @@ import LoadingRing from "../l1.gif";
 import Chattab from "../components/chatTab";
 import Modal from "../components/modal/modal";
 import EditProfile from "./editProfile";
+import TimeAgo from "react-timeago";
 
 class Profile extends Component {
   constructor(props) {
@@ -31,6 +33,7 @@ class Profile extends Component {
       receiverName: undefined,
       messages: null,
       isLoading: true,
+      post: "",
     };
   }
 
@@ -185,7 +188,7 @@ class Profile extends Component {
       return <Redirect to="/signin" />;
     }
     if (this.state.isLoading) {
-      return this.state.isLoading && <img src={LoadingRing} />;
+      return this.state.isLoading && <img src={LoadingRing} alt="loading" />;
     }
 
     return (
@@ -278,77 +281,110 @@ class Profile extends Component {
           <hr className="my-4" />
 
           {/* Display Posts */}
-          {posts.map((post, i) => (
-            <div className="card-body bg-light">
-              {/* Post */}
-              <div className="post">
-                <div className="user-block">
-                  <img
-                    className="img-circle img-bordered-sm"
-                    src={
-                      post.postedBy.path
-                        ? post.postedBy.photo.path
-                        : DefaultPost
-                    }
-                    alt="user image"
-                  />
-                  <span className="username">
-                    <Link to={`/post/${post._id}`}>{post.postedBy.name}</Link>
-                    {/*  <a href="#" className="float-right btn-tool">
-                    <i className="fas fa-times" />
-                  </a> */}
-                  </span>
-                  <span className="description pb-3">
-                    Shared Publicly -{new Date(post.created).toDateString()}
-                  </span>
-                </div>
 
-                {post.photo ? (
-                  post.photo.mimetype === "video/mp4" ? (
-                    <div className="embed-responsive embed-responsive-16by9 p-0 m-0">
-                      <video controls className="embed-responsive-item p-0 m-0">
-                        <source
+          <div>
+            {posts.map((post, i) => (
+              <div
+                key={i}
+                className="d-flex w-100  align-items-center flex-column p-0 m-0"
+              >
+                <div className="card-body m-2 bg-light col-md-7 ">
+                  {/* Post */}
+                  <div className="post ">
+                    <div className="user-block">
+                      <img
+                        className="img-circle img-bordered-sm"
+                        src={
+                          post.postedBy.path
+                            ? post.postedBy.photo.path
+                            : DefaultPost
+                        }
+                        alt="post"
+                      />
+                      <span className="username">
+                        <Link to={`/post/${post._id}`}>
+                          {post.postedBy.name}
+                        </Link>
+
+                        <div className="btn-group float-right">
+                          <button
+                            type="button"
+                            style={{ boxShadow: "none" }}
+                            className="btn"
+                            data-toggle="dropdown"
+                            aria-haspopup="true"
+                            aria-expanded="false"
+                          >
+                            <i class="fas fa-ellipsis-v text-dark"></i>
+                          </button>
+                          <div className="dropdown-menu dropdown-menu-right bg-secondary">
+                            <button
+                              className="dropdown-item"
+                              type="button"
+                              onClick={() => this.handlePostStatusChange(post)}
+                            >
+                              Make Post {!post.status ? "Public" : " Private"}
+                            </button>
+                          </div>
+                        </div>
+                      </span>
+                      <span className="description pb-3">
+                        {post.status ? "Public" : " Private"} &nbsp;
+                        <TimeAgo date={post.created} />
+                      </span>
+                    </div>
+
+                    {post.photo ? (
+                      post.photo.mimetype === "video/mp4" ? (
+                        <div className="embed-responsive embed-responsive-16by9 p-0 m-0">
+                          <video
+                            controls
+                            className="embed-responsive-item p-0 m-0"
+                          >
+                            <source
+                              src={`${process.env.REACT_APP_API_URL}/${
+                                post.photo ? post.photo.path : DefaultPost
+                              }`}
+                              type="video/mp4"
+                              alt="No Video Found"
+                              // onError={e=>e.target.alt="No Video"}
+                            />
+                            Your browser does not support the video tag.
+                          </video>
+                        </div>
+                      ) : (
+                        <img
+                          className="card-img-top"
                           src={`${process.env.REACT_APP_API_URL}/${
                             post.photo ? post.photo.path : DefaultPost
                           }`}
-                          type="video/mp4"
-                          alt="No Video Found"
-                          // onError={e=>e.target.alt="No Video"}
+                          onError={(i) => (i.target.src = `${DefaultPost}`)}
+                          alt={post.name}
                         />
-                        Your browser does not support the video tag.
-                      </video>
-                    </div>
-                  ) : (
-                    <img
-                      className="card-img-top"
-                      src={`${process.env.REACT_APP_API_URL}/${
-                        post.photo ? post.photo.path : DefaultPost
-                      }`}
-                      onError={(i) => (i.target.src = `${DefaultPost}`)}
-                      alt={post.name}
-                    />
-                  )
-                ) : null}
+                      )
+                    ) : null}
 
-                <p className="pt-2 text-dark">{post.body}</p>
-                {isAuthenticated() ? (
-                  <button className="btn">
-                    <Link to={`/post/${post._id}`}>View More</Link>
-                  </button>
-                ) : null}
+                    <p className="pt-2 text-dark">{post.body}</p>
+                    {isAuthenticated() ? (
+                      <button className="btn">
+                        <Link to={`/post/${post._id}`}>View More</Link>
+                      </button>
+                    ) : null}
+                  </div>
+                </div>
+                <hr className="my-4" />
               </div>
-              <hr className="my-4" />
-            </div>
-          ))}
-          {/*END POST RENDER */}
+            ))}
+            {/*END POST RENDER */}
 
-          {/* END Display Posts */}
+            {/* END Display Posts */}
+          </div>
+          <Modal
+            id="editprofile"
+            body={<EditProfile userId={this.props.match.params.userId} />}
+            title="Edit Profile"
+          />
         </div>
-        <Modal
-          id="editprofile"
-          body={<EditProfile userId={this.props.match.params.userId} />}
-          title="Edit Profile"
-        />
       </div>
     );
   }

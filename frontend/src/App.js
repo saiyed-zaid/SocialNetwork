@@ -1,13 +1,10 @@
 import React, { Component } from "react";
-import MainRouter from "./mainRouter";
+import MainRouter from "./MainRouter";
 import { BrowserRouter as Router, Redirect } from "react-router-dom";
 import { signout, isAuthenticated } from "./auth/index";
 
 import Authservice from "./Services/auth";
 import Postservice from "./Services/post";
-
-
-
 
 export default class App extends Component {
   constructor(props) {
@@ -15,8 +12,10 @@ export default class App extends Component {
 
     this.state = {
       logginStatus: true,
+      warn: false,
     };
 
+    /** Evets TO Check  */
     this.events = [
       "load",
       "mousemove",
@@ -52,9 +51,7 @@ export default class App extends Component {
 
   warn() {
     if (isAuthenticated()) {
-      alert(
-        "You Will Be Logged Out Automatically After 3 minutes Of Inactivity."
-      );
+      this.setState({ warn: true });
     }
   }
 
@@ -77,11 +74,13 @@ export default class App extends Component {
     return (
       <Router>
         {!this.state.logginStatus && <Redirect to="/signin" />}
-        <MainRouter 
-        {...this.props} 
-        Authservice={new Authservice()}
-        Postservice={new Postservice()}
+        <MainRouter
+          Authservice={new Authservice()}
+          Postservice={new Postservice()}
+          {...this.props}
         />
+        {this.state.warn && <Redirect to="/lockscreen" />}
+        {!this.state.logginStatus ? <Redirect to="/signin" /> : null}
       </Router>
     );
   }

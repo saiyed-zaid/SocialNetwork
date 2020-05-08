@@ -1,4 +1,7 @@
 import React from "react";
+import { read } from "../user/apiUser";
+import { Multiselect } from "multiselect-react-dropdown";
+
 
 class NewPost extends React.Component {
   constructor(props) {
@@ -10,14 +13,38 @@ class NewPost extends React.Component {
       photo: "",
       fileSizes: [],
       errors: {},
-    };
 
+    };
     this.postData = new FormData();
+    this.multiselectRef = React.createRef();
+    this.selectedopt = [];
+  }
+
+  componentDidMount() {
+    console.log(this.props);
+
+    const userId = this.props.authUser._id;
+    const token = this.props.authUser.token;
+
+    this.setState({ user: this.props.authUser });
+
+    read(userId, token)
+      .then((data) => {
+        if (data.err) {
+          this.setState({ options: [] });
+        } else {
+          this.setState({ options: data.following });
+        }
+      })
+      .catch((err) => {
+        if (err) {
+          console.log(err);
+        }
+      });
   }
 
   handleInputChange = (event) => {
     var value;
-
     if (event.target.name === "photo") {
       var fileSizes = [];
 
@@ -48,6 +75,7 @@ class NewPost extends React.Component {
     event.preventDefault();
 
     const data = this.state;
+    this.postData.append("tags", JSON.stringify(this.selectedopt));
 
     const userId = this.props.authUser._id;
     const token = this.props.authUser.token;
@@ -71,6 +99,20 @@ class NewPost extends React.Component {
       });
     }
   };
+
+  onSelect = (selectedList, selectedItem) => {
+    //console.log(selectedItem._id);
+
+    this.selectedopt.push(selectedItem._id);
+    //this.selectedopt["tags"] = selectedItem;
+  };
+
+  onRemove(selectedList, removedItem) {
+    this.setState(
+      { tags: selectedList },
+      this.postData.set("tags", selectedList.name)
+    );
+  }
 
   render() {
     return (
@@ -125,7 +167,21 @@ class NewPost extends React.Component {
               </div>
             )}
           </div>
-          <button class="btn btn-primary">Submit</button>{" "}
+          <div className="form-group">
+            <Multiselect
+              id="tags"
+              className="form-control"
+              ref={this.multiselectRef}
+              options={this.state.options}
+              selectedValues={this.state.selectedValue}
+              onSelect={this.onSelect}
+              onRemove={this.onRemove} // Function will trigger on remove event
+              displayValue="name" // Property name to display in the dropdown options
+              placeholder="Select Peoples To Tag"
+              emptyRecordMsg="No People Found"
+            />
+          </div>
+          <button class="btn btn-primary">Create</button>
         </form>
       </div>
     );

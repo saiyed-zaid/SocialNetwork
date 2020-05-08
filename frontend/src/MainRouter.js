@@ -1,9 +1,8 @@
 import React from "react";
 import { Route, Switch, withRouter } from "react-router-dom";
 import Home from "./core/home";
-//import Menu from "./core/menu";
+// /import Menu from "./core/menu";
 import Notification from "./core/components/Notification";
-
 import Signup from "./auth/pages/signup";
 import Signin from "./auth/pages/signin";
 import Profile from "./user/profile";
@@ -20,14 +19,15 @@ import AdminUsers from "./admin/users";
 import AdminPosts from "./admin/posts";
 import AdminHome from "./admin/admin";
 import PrivateRoute from "./auth/privateRoute";
+import LockScreen from "./auth/pages/lockScreen";
 import openSocket from "socket.io-client";
 import { authUser, isAuthenticated } from "./auth/index";
+
 import Chattab from "./components/chatTab";
 import { fetchMessage } from "./user/apiUser";
 import ReactNotifications from "react-notifications-component";
 import "react-notifications-component/dist/theme.css";
 import { Link } from "react-router-dom";
-import Postservice from "./Services/post";
 
 const isActive = (history, path) => {
   if (history.location.pathname === path) {
@@ -234,6 +234,7 @@ class MainRouter extends React.Component {
       messages: null,
       authUser: null,
     };
+    console.log(this.props);
 
     this.socket = openSocket("http://localhost:5000");
   }
@@ -262,6 +263,7 @@ class MainRouter extends React.Component {
           });
       });
     }
+
     this.setState({
       authUser: isAuthenticated().user,
     });
@@ -331,11 +333,15 @@ class MainRouter extends React.Component {
           <Route
             path="/post/:postId"
             exact
-            
-            render={(props) => <SinglePost {...props} fetchPost={this.props.Postservice.fetchPost} />}
+            render={(props) => (
+              <SinglePost
+                {...props}
+                fetchPost={this.props.Postservice.fetchPost}
+              />
+            )}
           />
           <PrivateRoute path="/post/edit/:postId" exact component={EditPost} />
-          <Route path="/users" exact render={(props) => <Users {...props} />} />
+          <Route path="/users" exact render={(props) => <Users {...props} authUser={this.state.authUser} />} />
           <Route
             path="/signup"
             exact
@@ -346,6 +352,7 @@ class MainRouter extends React.Component {
               />
             )}
           />
+
           <Route
             path="/signin"
             exact
@@ -374,6 +381,7 @@ class MainRouter extends React.Component {
             component={Profile}
             fetchPostsByUser={this.props.Postservice.fetchPostsByUser}
           />
+          <Route path="/lockscreen" exact component={LockScreen} />
         </Switch>
       </div>
     );

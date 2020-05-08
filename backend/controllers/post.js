@@ -93,9 +93,9 @@ exports.getPostsByUser = async (req, res, next) => {
             {
               disabledBy: "",
             },
-            {
-              status: true,
-            },
+            // {
+            //   status: true,
+            // },
           ],
         },
       ],
@@ -142,6 +142,8 @@ exports.hasAuthorization = (req, res, next) => {
  * @description Handling post request which create new post in database
  */
 exports.createPost = async (req, res, next) => {
+  console.table(JSON.parse(req.body.tags));
+  const tags = JSON.parse(req.body.tags);
   const errors = validationResult(req);
 
   const reqFiles = [];
@@ -170,6 +172,7 @@ exports.createPost = async (req, res, next) => {
     body: req.body.body,
     postedBy: req.auth._id,
     photo: reqFiles,
+    tags: tags,
   });
 
   try {

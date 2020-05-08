@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import ReactDOM from "react-dom";
-
 import { Link, withRouter } from "react-router-dom";
 import { signout, isAuthenticated } from "../auth/index";
 import { getOnlineUsers } from "../user/apiUser";
@@ -72,7 +71,6 @@ const Menu = ({ history }) => {
                   <Notification />
                 </span>
               </a>
-
               <a href="#" className="dropdown-item dropdown-footer">
                 See All Notifications
               </a>

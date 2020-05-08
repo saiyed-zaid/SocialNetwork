@@ -12,6 +12,7 @@ class Posts extends Component {
       posts: [],
       expanded: false,
       isLoading: true,
+      error: "",
     };
   }
 
@@ -51,7 +52,7 @@ class Posts extends Component {
     );
   };
   render() {
-    const { posts } = this.state;
+    const { posts, error } = this.state;
 
     if (posts.length < 0 || this.state.isLoading) {
       return this.state.isLoading && <img src={LoadingRing} />;
