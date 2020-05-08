@@ -7,13 +7,24 @@ import { isAuthenticated } from "./index";
  * This Fuction Wil Redirect the User to Sign In
  */
 
-const PrivateRoute = ({ component: Component, authUser, ...rest }) => {
+const PrivateRoute = ({
+  component: Component,
+  authUser,
+  addPost,
+  fetchPostsByUser,
+  ...rest
+}) => {
   return (
     <Route
       {...rest}
       render={(props) =>
         isAuthenticated() ? (
-          <Component {...props} authUser={authUser} />
+          <Component
+            {...props}
+            authUser={authUser}
+            addPost={addPost}
+            fetchPostsByUser={fetchPostsByUser}
+          />
         ) : (
           <Redirect
             to={{ pathname: "/signin", state: { from: props.location } }}

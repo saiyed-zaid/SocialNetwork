@@ -83,7 +83,7 @@ router.post(
         );
       }
     },
-  }).single("photo"),
+  }).array("photo"),
   [
     body("title").notEmpty().withMessage("Title field is required."),
     body("title")

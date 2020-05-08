@@ -15,9 +15,10 @@ const PostSchema = new Schema({
     minlength: 5,
     maxlength: 2000,
   },
-  photo: {
-    type: Object,
-  },
+  photo: 
+    {
+      type: Array,
+    },
   postedBy: {
     type: ObjectId,
     ref: "User",

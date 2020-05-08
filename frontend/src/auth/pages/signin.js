@@ -1,181 +1,136 @@
-import React, { Component } from "react";
-import { Redirect, Link } from "react-router-dom";
-import { signin, authenticate, isAuthenticated } from "../index";
+import React from "react";
+import { Link } from "react-router-dom";
 import SocialLogin from "./socialLogin";
-import PageLoader from "../../components/pageLoader";
-// import reactLogo from "../../images/react.svg";
 
-class Signin extends Component {
-  constructor() {
-    super();
+class Signin extends React.Component {
+  constructor(props) {
+    super(props);
+
     this.state = {
-      email: "zss@narola.email",
-      password: "123456",
-      error: "",
-      redirectToRefferer: false,
-      loading: false,
+      email: "",
+      password: "",
+      errors: {},
+      responseError: null,
     };
+
+    this.postData = new FormData();
   }
 
-  /* Custom Card Style  */
-  customCard = {
-    transform: "unset",
-    animation: "unset",
-  };
-  customContainer = {
-    maxWidth: "350px",
-    position: "absolute",
-    top: "50%",
-    left: "50%",
-    transform: "translate(-50%,-50%)",
-  };
-  /* /.Custom Card Style  */
+  handleInputChange = (event) => {
+    this.postData.set(event.target.name, event.target.value);
 
-  /**
-   * Fuction For Handling Onchange Events On Controls
-   *
-   *  @param {string} name   Name Of The Control
-   */
-  handleChange = (name) => (event) => {
-    this.setState({ error: "" });
-    this.setState({ [name]: event.target.value });
+    this.setState({
+      [event.target.name]: event.target.value,
+    });
   };
 
-  /**
-   *Function For Handling Submition Of Form
-   */
-  clickSubmit = (event) => {
+  handleSubmit = async (event) => {
     event.preventDefault();
-    this.setState({ loading: true });
-    const { email, password } = this.state;
-    const user = {
-      email,
-      password,
-    };
 
-    signin(user)
-      .then((data) => {
-        if (data.err) {
-          this.setState({ error: data.err, loading: false });
-        } else {
-          authenticate(data, () => {
-            this.setState({ redirectToRefferer: true }, () => {
-              this.props.handleAuthUserUpdate();
-            });
-          });
-        }
-      })
-      .catch((err) => {
-        alert(err);
+    try {
+      this.setState({ errors: {} });
+
+      const response = await this.props.loginUser(this.state);
+      console.log(response);
+      localStorage.setItem("jwt", JSON.stringify(response));
+      this.props.handleAuthUserUpdate();
+      this.props.history.push("/");
+    } catch (errors) {
+      this.setState({
+        errors,
       });
-  };
-
-  /**
-   * Function For Creating Controls For Sign In form
-   *
-   * @param {string} email  Email Of The User
-   * @param {string} password Password Of the User
-   */
-  signinForm = (email, password) => {
-    return (
-      <form method="post">
-        <div className="form-group">
-          <label for="exampleInputEmail1">Email address</label>
-          <input
-            onChange={this.handleChange("email")}
-            type="email"
-            className="form-control"
-            value={email}
-            aria-describedby="emailHelp"
-          />
-        </div>
-        <div className="form-group">
-          <label for="exampleInputPassword1">Password</label>
-          <input
-            onChange={this.handleChange("password")}
-            type="password"
-            className="form-control"
-            value={password}
-          />
-        </div>
-        <div className="form-group form-check">
-          <input
-            type="checkbox"
-            className="form-check-input"
-            id="exampleCheck1"
-          />
-          <label className="form-check-label" for="exampleCheck1">
-            Remember Me
-          </label>
-        </div>
-        <div className="form-group">
-          <button
-            type="submit"
-            onClick={this.clickSubmit}
-            className="btn btn-primary w-100"
-          >
-            Sign In
-          </button>
-        </div>
-
-        <div className="form-group">
-          <SocialLogin />
-        </div>
-      </form>
-    );
+    }
   };
 
   render() {
-    const { email, password, error, redirectToRefferer, loading } = this.state;
-    if (redirectToRefferer) {
-      if (isAuthenticated().user.role === "admin") {
-        return <Redirect to="/admin/home" />;
-      } else {
-        return <Redirect to="/" />;
-      }
-    }
     return (
-      <div className="container col-lg-3" style={this.customContainer}>
-        <div className="card" style={this.customCard}>
-          <div className="card-body p-3">
-            <h4 className="card-title">Sign in</h4>
-
-            <div
-              className="alert alert-danger alert-dismissible fade show"
-              style={{ display: error ? "" : "none" }}
-            >
-              {error}
-              <button
-                type="button"
-                className="close"
-                data-dismiss="alert"
-                aria-label="Close"
-              >
-                <span aria-hidden="true">&times;</span>
-              </button>
+      <div className="container bg-light p-2 my-3 col-md-4">
+        <div className="jumbotron" style={{ padding: "2rem 2rem" }}>
+          {this.state.responseError && (
+            <div className="alert alert-danger" role="alert">
+              {this.state.responseError}
             </div>
-            {loading ? <PageLoader /> : ""}
-            {this.signinForm(email, password)}
+          )}
+          <h2>Login</h2>
+          <form onSubmit={this.handleSubmit}>
+            <div className="form-group">
+              <label htmlFor="exampleInputEmail1">Email address</label>
+              <input
+                type="email"
+                name="email"
+                onChange={this.handleInputChange}
+                className={`form-control ${
+                  this.state.errors["email"] && "is-invalid"
+                }`}
+                id="exampleInputEmail1"
+                aria-describedby="emailHelp"
+              />
 
-            <Link
-              to={{
-                pathname: "/forgot-password",
-                state: {
-                  email: email,
-                },
-              }}
-              className="text-danger"
-            >
-              Forgot Password ?
-            </Link>
-          </div>
-          {/*   <small className=" text-light d-flex justify-content-center">
-            Build With &nbsp;
-            <i class="fab fa-node text-success text-sm"></i>
-            &nbsp;&nbsp;<i class="fab fa-react text-info"></i>
-          </small> */}
+              {this.state.errors["email"] && (
+                <div className="invalid-feedback">
+                  {this.state.errors["email"]}
+                </div>
+              )}
+            </div>
+            <div className="form-group">
+              <label htmlFor="exampleInputPassword1">Password</label>
+              <input
+                type="password"
+                name="password"
+                handleInputChange
+                onChange={this.handleInputChange}
+                className={`form-control ${
+                  this.state.errors["password"] && "is-invalid"
+                }`}
+                id="exampleInputPassword1"
+              />
+
+              {this.state.errors["password"] && (
+                <div className="invalid-feedback">
+                  {this.state.errors["password"]}
+                </div>
+              )}
+            </div>
+
+            <div className="form-group">
+              <label htmlFor="exampleInputPassword1">
+                <Link
+                  to={{
+                    pathname: "/forgot-password",
+                    state: {
+                      email: this.state.email,
+                    },
+                  }}
+                  className="text-danger"
+                >
+                  Forgot Password ?
+                </Link>
+              </label>
+            </div>
+
+            <div className="row">
+              <div className="col">
+                <button type="submit" className="btn btn-primary">
+                  Submit
+                </button>
+              </div>
+              <div className="col">
+                <Link
+                  className="stretched-link"
+                  to="/signup"
+                  style={{ color: "unset" }}
+                >
+                  Create Account
+                </Link>
+              </div>
+            </div>
+
+            <hr className="my-4" />
+            <div className="form-group">
+              <SocialLogin />
+            </div>
+          </form>
         </div>
-        <div></div>
       </div>
     );
   }

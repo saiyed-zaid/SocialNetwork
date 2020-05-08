@@ -203,7 +203,7 @@ class EditProfile extends Component {
     return (
       <div>
         <div className="jumbotron p-3">
-          <h2>Edit Profile</h2>
+          {/* <h2>Edit Profile</h2> */}
         </div>
         <div
           className="alert alert-danger alert-dismissible fade show col-md-4"

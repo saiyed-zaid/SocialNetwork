@@ -1,6 +1,4 @@
 import React from "react";
-import { validateAll } from "indicative/validator";
-import { create } from "./apiPost";
 
 class NewPost extends React.Component {
   constructor(props) {
@@ -10,9 +8,8 @@ class NewPost extends React.Component {
       title: "",
       body: "",
       photo: "",
-      fileSize: 0,
+      fileSizes: [],
       errors: {},
-      photo: null,
     };
 
     this.postData = new FormData();
@@ -22,71 +19,57 @@ class NewPost extends React.Component {
     var value;
 
     if (event.target.name === "photo") {
-      value = event.target.files[0];
-      const fileSize = event.target.files[0].size;
+      var fileSizes = [];
+
+      for (const file of event.target.files) {
+        fileSizes.push(file.size);
+      }
+
+      for (const key of Object.keys(event.target.files)) {
+        this.postData.append("photo", event.target.files[key]);
+      }
 
       this.setState({
-        [event.target.name]: value,
-        fileSize,
+        [event.target.name]: event.target.files,
+        fileSizes,
       });
     } else {
       value = event.target.value;
+
+      this.postData.set(event.target.name, value);
+
       this.setState({
         [event.target.name]: event.target.value,
       });
     }
-    this.postData.set(event.target.name, value);
   };
 
-  handleSubmit = (event) => {
+  handleSubmit = async (event) => {
     event.preventDefault();
 
     const data = this.state;
 
-    const rules = {
-      title: "required|string|max:120|min:5",
-      body: "required|string|max:2000",
-    };
+    const userId = this.props.authUser._id;
+    const token = this.props.authUser.token;
 
-    const messages = {
-      required: "{{field}} field is required",
-    };
+    try {
+      this.setState({ errors: {} });
 
-    validateAll(data, rules, messages)
-      .then(() => {
-        this.setState({ errors: {} });
+      const response = await this.props.addPost(
+        this.postData,
+        data,
+        userId,
+        token
+      );
 
-        const userId = this.props.authUser._id;
-        const token = this.props.authUser.token;
-
-        create(userId, token, this.postData)
-          .then((data) => {
-            if (data.errors) {
-              const formattedErrors = {};
-              data.errors.forEach((error) => {
-                if (!formattedErrors.hasOwnProperty(error.param)) {
-                  formattedErrors[error.param] = error.msg;
-                }
-              });
-              this.setState({ errors: formattedErrors });
-            } else {
-              this.props.history.push(`/user/${userId}`);
-            }
-          })
-          .catch((errors) => {
-            console.log(errors);
-          });
-      })
-      .catch((errors) => {
-        var formattedErrors = {};
-        errors.forEach((error) => {
-          formattedErrors[error.field] = error.message;
-        });
-
-        this.setState({
-          errors: formattedErrors,
-        });
+      console.log("posted", response);
+      this.props.history.push(`/user/${userId}`);
+    } catch (errors) {
+      console.log("error", errors);
+      this.setState({
+        errors,
       });
+    }
   };
 
   render() {
@@ -94,17 +77,18 @@ class NewPost extends React.Component {
       <div className="container bg-light p-3 my-3">
         <form onSubmit={this.handleSubmit}>
           <div className="form-group">
-            <label for="exampleFormControlFile1">Photo</label>
+            <label for="photo">Photo</label>
             <input
               type="file"
               onChange={this.handleInputChange}
               name="photo"
               className="form-control-file"
-              id="exampleFormControlFile1"
+              id="photo"
+              multiple={true}
             />
           </div>
           <div className="form-group">
-            <label htmlFor="exampleFormControlInput1">Title</label>
+            <label htmlFor="title">Title</label>
             <input
               type="text"
               onChange={this.handleInputChange}
@@ -112,7 +96,7 @@ class NewPost extends React.Component {
               className={`form-control ${
                 this.state.errors["title"] && "is-invalid"
               }`}
-              id="exampleFormControlInput1"
+              id="title"
               placeholder="Title"
             />
 
@@ -123,14 +107,14 @@ class NewPost extends React.Component {
             )}
           </div>
           <div className="form-group">
-            <label htmlFor="exampleFormControlTextarea1">Body</label>
+            <label htmlFor="body">Body</label>
             <textarea
               className={`form-control ${
                 this.state.errors["body"] && "is-invalid"
               }`}
               onChange={this.handleInputChange}
               name="body"
-              id="exampleFormControlTextarea1"
+              id="body"
               rows={3}
               placeholder="Enter Body"
             />

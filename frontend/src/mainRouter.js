@@ -21,11 +21,13 @@ import AdminPosts from "./admin/posts";
 import AdminHome from "./admin/admin";
 import PrivateRoute from "./auth/privateRoute";
 import openSocket from "socket.io-client";
-import { authUser, signout, isAuthenticated } from "./auth/index";
+import { authUser, isAuthenticated } from "./auth/index";
 import Chattab from "./components/chatTab";
 import { fetchMessage } from "./user/apiUser";
 import ReactNotifications from "react-notifications-component";
+import "react-notifications-component/dist/theme.css";
 import { Link } from "react-router-dom";
+import Postservice from "./Services/post";
 
 const isActive = (history, path) => {
   if (history.location.pathname === path) {
@@ -33,238 +35,197 @@ const isActive = (history, path) => {
   } else return { color: "#ffffff" };
 };
 
-const Navbar = withRouter(({ history, authUser, handleLogout }) => {
+const Navbar = withRouter(({ history, authUser, handleLogout, signout }) => {
   authUser && console.log(authUser);
   return (
-    <nav
-      className="navbar navbar-expand-lg navbar-light bg-primary  "
-      style={{ zIndex: 9999 }}
-    >
+    <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
       {authUser && authUser.role === "admin" ? (
-        <Link
-          className="navbar-brand p-2"
-          style={{ color: "#03a9f4" }}
-          to="/admin/home"
-        >
-          SOCIAL NETWORK
+        <Link className="navbar-brand" to="/admin/home">
+          Retwit
         </Link>
       ) : (
-        <Link className="navbar-brand p-2" style={{ color: "#03a9f4" }} to="/">
-          SOCIAL NETWORK
+        <Link className="navbar-brand" to="/">
+          Retwit
         </Link>
       )}
-      {authUser && authUser.roll !== "admin" && (
-        <>
-          <li className="nav-item dropdown">
-            <a
-              className="nav-link"
-              data-toggle="dropdown"
-              href="/"
-              aria-expanded="false"
-            >
-              <i className="far fa-bell text-light" />
-              <span className="badge badge-warning navbar-badge">0</span>
-            </a>
 
-            <div className="dropdown-menu dropdown-menu-lg dropdown-menu-left">
-              <span className="dropdown-item dropdown-header">
-                No Notifications
-              </span>
-              <div className="dropdown-divider" />
-
-              <a href="#" className="dropdown-item">
-                <span className="float-right text-muted text-sm">
-                  <Notification />
-                </span>
-              </a>
-              <a href="#" className="dropdown-item dropdown-footer">
-                See All Notifications
-              </a>
-            </div>
-          </li>
-          <li className="nav-item dropdown">
-            <a
-              className="nav-link"
-              data-toggle="dropdown"
-              href="#"
-              aria-expanded="false"
-            >
-              <i className="far fa-comments text-light" />
-              <span className="badge badge-danger navbar-badge">3</span>
-            </a>
-            <div
-              className="dropdown-menu dropdown-menu-lg dropdown-menu-right"
-              style={{ left: "inherit", right: 0 }}
-            >
-              {/* {onlineUsers.length > 0
-                ? onlineUsers.map((user, i) => (
-                    <a href="/" className="dropdown-item" key={i}>
-                      <div className="media">
-                        <img
-                          src={user.photo ? user.photo.path : DefaultProfile}
-                          alt={user.name}
-                          className="img-size-50 img-circle mr-3 im-bordred"
-                          height="25px"
-                        />
-                        <div className="media-body">
-                          <h3 className="dropdown-item-title">{user.name}</h3>
-                          <p className="text-sm text-muted">
-                            Online
-                            Now
-                          </p>
-                        </div>
-                      </div>
-                    </a>
-                  ))
-                : null} */}
-              <div className="dropdown-divider" />
-              <a href="#" className="dropdown-item dropdown-footer">
-                See All Messages
-              </a>
-            </div>
-          </li>{" "}
-        </>
-      )}
       <button
-        className="navbar-toggler text-primary"
+        className="navbar-toggler"
         type="button"
         data-toggle="collapse"
-        data-target="#navbarNavAltMarkup"
-        aria-controls="navbarNavAltMarkup"
+        data-target="#navbarColor01"
+        aria-controls="navbarColor01"
         aria-expanded="false"
         aria-label="Toggle navigation"
       >
-        <span className="toggleBar">
-          <i className="fas fa-bars" id="togglebar"></i>
-        </span>
+        <span className="navbar-toggler-icon" />
       </button>
-      <div className="collapse navbar-collapse" id="navbarNavAltMarkup">
-        <ul className="navbar-nav ml-auto align-items-center">
-          <>
-            {authUser && authUser.role === "admin" ? (
+
+      <div className="collapse navbar-collapse" id="navbarColor01">
+        {authUser && authUser.role === "admin" ? (
+          <ul className="navbar-nav mr-auto">
+            <li className="nav-item active">
+              <Link
+                className="nav-link"
+                to="/admin/users"
+                style={isActive(history, `/admin/users`)}
+              >
+                Users <span className="sr-only">(current)</span>
+              </Link>
+            </li>
+
+            <li className="nav-item">
+              <Link
+                className="nav-link"
+                to="/admin/posts"
+                style={isActive(history, `/admin/posts`)}
+              >
+                POSTS
+              </Link>
+            </li>
+
+            <li className="nav-item">
+              <Link
+                className="nav-link"
+                to={`/user/${authUser._id}`}
+                style={isActive(history, `/user/${authUser._id}`)}
+              >
+                {`${authUser.name.toUpperCase()} 'S PROFILE`}
+              </Link>
+            </li>
+            <li>
+              <Link
+                className="nav-link"
+                to="/signin"
+                style={isActive(history, "/signout")}
+                onClick={() =>
+                  signout(() => {
+                    handleLogout();
+                  })
+                }
+              >
+                LOGOUT
+              </Link>
+
+              {!authUser && (
+                <>
+                  <Link
+                    className="nav-link"
+                    to="/signin"
+                    style={isActive(history, "/signin")}
+                  >
+                    SIGN IN
+                  </Link>
+                  <Link
+                    className="nav-link"
+                    to="/signup"
+                    style={isActive(history, "/signup")}
+                  >
+                    SIGN UP
+                  </Link>
+                </>
+              )}
+            </li>
+          </ul>
+        ) : (
+          <ul className="navbar-nav mr-auto">
+            <li className="nav-item">
+              <Link className="nav-link" to="/" style={isActive(history, "/")}>
+                HOME
+              </Link>
+            </li>
+            <li className="nav-item">
+              <Link
+                className="nav-link"
+                to="/users"
+                style={isActive(history, "/users")}
+              >
+                USERS
+              </Link>
+            </li>
+
+            <li className="nav-item">
+              <Link
+                className="nav-link"
+                to={`/post/create`}
+                style={isActive(history, `/post/create`)}
+              >
+                CREATE POST
+              </Link>
+            </li>
+
+            {!authUser && (
               <>
-                <Link
-                  className="nav-item nav-link menu-link active"
-                  to="/admin/users"
-                  style={isActive(history, `/admin/users`)}
-                >
-                  USERS
-                </Link>
+                <li className="nav-item">
+                  <Link
+                    className="nav-item nav-link menu-link active"
+                    to="/signin"
+                    style={isActive(history, "/signin")}
+                  >
+                    SIGN IN
+                  </Link>
+                </li>
 
-                <Link
-                  className="nav-item nav-link menu-link active"
-                  to="/admin/posts"
-                  style={isActive(history, `/admin/posts`)}
-                >
-                  POSTS
-                </Link>
-
-                <Link
-                  className="nav-item nav-link menu-link active"
-                  to={`/user/${authUser._id}`}
-                  style={isActive(history, `/user/${authUser._id}`)}
-                >
-                  {`${authUser.name.toUpperCase()} 'S PROFILE`}
-                </Link>
-
-                <Link
-                  className="nav-item nav-link menu-link active"
-                  to="/signin"
-                  style={isActive(history, "/signout")}
-                  onClick={() => signout(() => {})}
-                >
-                  LOGOUT
-                </Link>
-              </>
-            ) : (
-              <>
-                <Link
-                  className="menu-link nav-item nav-link"
-                  to="/"
-                  style={isActive(history, "/")}
-                >
-                  HOME
-                </Link>
-
-                <Link
-                  className="nav-item nav-link menu-link active"
-                  to="/users"
-                  style={isActive(history, "/users")}
-                >
-                  USERS
-                </Link>
-
-                <Link
-                  className="nav-item nav-link menu-link active"
-                  to={`/post/create`}
-                  style={isActive(history, `/post/create`)}
-                >
-                  CREATE POST
-                </Link>
-
-                {!authUser && (
-                  <>
-                    <Link
-                      className="nav-item nav-link menu-link active"
-                      to="/signin"
-                      style={isActive(history, "/signin")}
-                    >
-                      SIGN IN
-                    </Link>
-                    <Link
-                      className="nav-item nav-link menu-link active"
-                      to="/signup"
-                      style={isActive(history, "/signup")}
-                    >
-                      SIGN UP
-                    </Link>
-                  </>
-                )}
-
-                {authUser && (
-                  <>
-                    <Link
-                      className="nav-item nav-link menu-link active"
-                      to={`/findpeople/${authUser._id}`}
-                      style={isActive(history, `/findpeople/${authUser._id}`)}
-                    >
-                      FIND FRIENDS
-                    </Link>
-
-                    <Link
-                      className="nav-item nav-link menu-link active"
-                      to={`/user/${authUser._id}`}
-                      style={isActive(history, `/user/${authUser._id}`)}
-                    >
-                      {`${authUser.name.toUpperCase()}'S PROFILE`}
-                    </Link>
-
-                    <Link
-                      className="nav-item nav-link menu-link active"
-                      to="/signin"
-                      style={isActive(history, "/signout")}
-                      onClick={() =>
-                        signout(() => {
-                          handleLogout();
-                        })
-                      }
-                    >
-                      LOGOUT
-                    </Link>
-                  </>
-                )}
+                <li className="nav-item">
+                  <Link
+                    className="nav-link"
+                    to="/signup"
+                    style={isActive(history, "/signup")}
+                  >
+                    SIGN UP
+                  </Link>
+                </li>
               </>
             )}
-          </>
-        </ul>
+
+            {authUser && (
+              <>
+                <li className="nav-item">
+                  <Link
+                    className="nav-link"
+                    to={`/findpeople/${authUser._id}`}
+                    style={isActive(history, `/findpeople/${authUser._id}`)}
+                  >
+                    FIND FRIENDS
+                  </Link>
+                </li>
+
+                <li className="nav-item">
+                  <Link
+                    className="nav-link"
+                    to={`/user/${authUser._id}`}
+                    style={isActive(history, `/user/${authUser._id}`)}
+                  >
+                    {`${authUser.name.toUpperCase()}'S PROFILE`}
+                  </Link>
+                </li>
+
+                <li className="nav-item">
+                  <Link
+                    className="nav-link"
+                    to="/signin"
+                    style={isActive(history, "/signout")}
+                    onClick={() =>
+                      signout(() => {
+                        handleLogout();
+                      })
+                    }
+                  >
+                    LOGOUT
+                  </Link>
+                </li>
+              </>
+            )}
+          </ul>
+        )}
       </div>
     </nav>
   );
 });
 
-export default class MainRouter extends React.Component {
+class MainRouter extends React.Component {
   constructor(props) {
-    super();
+    super(props);
 
     this.state = {
       hasNewMsg: false,
@@ -323,7 +284,6 @@ export default class MainRouter extends React.Component {
   };
 
   render() {
-    
     return (
       <div>
         {this.state.hasNewMsg && (
@@ -346,6 +306,7 @@ export default class MainRouter extends React.Component {
         <Navbar
           authUser={this.state.authUser}
           handleLogout={this.handleLogout}
+          signout={this.props.Authservice.signout}
         />
 
         <Switch>
@@ -360,16 +321,40 @@ export default class MainRouter extends React.Component {
             path="/reset-password/:resetPasswordToken"
             component={ResetPassword}
           />
-          <PrivateRoute path="/post/create" exact component={NewPost} authUser={this.state.authUser}/>
-          <Route path="/post/:postId" exact component={SinglePost} />
+          <PrivateRoute
+            path="/post/create"
+            exact
+            component={NewPost}
+            authUser={this.state.authUser}
+            addPost={this.props.Postservice.addPost}
+          />
+          <Route
+            path="/post/:postId"
+            exact
+            
+            render={(props) => <SinglePost {...props} fetchPost={this.props.Postservice.fetchPost} />}
+          />
           <PrivateRoute path="/post/edit/:postId" exact component={EditPost} />
-          <Route path="/users" exact component={Users} />
-          <Route path="/signup" exact component={Signup} />
+          <Route path="/users" exact render={(props) => <Users {...props} />} />
+          <Route
+            path="/signup"
+            exact
+            render={(props) => (
+              <Signup
+                {...this.props}
+                registerUser={this.props.Authservice.registerUser}
+              />
+            )}
+          />
           <Route
             path="/signin"
             exact
-            render={() => (
-              <Signin handleAuthUserUpdate={this.handleAuthUserUpdate} />
+            render={(props) => (
+              <Signin
+                handleAuthUserUpdate={this.handleAuthUserUpdate}
+                {...this.props}
+                loginUser={this.props.Authservice.loginUser}
+              />
             )}
           />
           <PrivateRoute
@@ -382,9 +367,17 @@ export default class MainRouter extends React.Component {
             exact
             component={FindPeople}
           />
-          <PrivateRoute path="/user/:userId" exact component={Profile} />
+          <PrivateRoute
+            path="/user/:userId"
+            authUser={this.state.authUser}
+            exact
+            component={Profile}
+            fetchPostsByUser={this.props.Postservice.fetchPostsByUser}
+          />
         </Switch>
       </div>
     );
   }
 }
+
+export default withRouter(MainRouter);

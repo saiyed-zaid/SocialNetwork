@@ -183,7 +183,7 @@ div.like-box:hover .likes {
   color: white !important;
 } */
 
-.btn-outline-primary {
+/* .btn-outline-primary {
   border-image-source: linear-gradient(
     90deg,
     rgb(170, 167, 214) 0%,
@@ -192,11 +192,11 @@ div.like-box:hover .likes {
   );
   border: 1px solid #0073ff !important;
   color: #03a9f4 !important;
-}
-.btn-outline-primary:hover {
+} */
+/* .btn-outline-primary:hover {
   background-color: #002b36 !important;
   color: white !important;
-}
+} */
 .custom-Read-more:hover {
   background-color: #03a9f4 !important;
   color: #ffff !important;
@@ -323,11 +323,11 @@ a:hover {
   align-items: center; */
   position: relative;
 }
-.nav-item::after {
+/* .nav-item::after {
   transition: all 0.5s ease-in-out;
   height: 0px;
-}
-.nav-item:hover::after {
+} */
+.nav-item::after {
   content: "";
   height: 3px;
   background: linear-gradient(
@@ -359,10 +359,10 @@ a:hover {
   border: 1px solid red;
 }
 
-.btn-outline-secondary {
+/* .btn-outline-secondary {
   color: #e6cf23;
   border-color: inherit;
-}
+} */
 .table-hover tbody tr:hover {
   color: #ffffff;
   background-color: rgba(0, 0, 0, 0.13);
@@ -530,7 +530,7 @@ a:hover {
 }
 
 @media screen and (max-width: 600px) {
-  .navbar-brand{
+  .navbar-brand {
     display: none;
   }
   @keyframes noti-box {
@@ -851,7 +851,9 @@ img {
   font-size: 13px;
   margin-top: -3px;
 }
-.user-block .comment, .user-block .description, .user-block .username {
+.user-block .comment,
+.user-block .description,
+.user-block .username {
   display: block;
   margin-left: 50px;
 }
@@ -883,4 +885,9 @@ img {
   .profile {
     text-align: center;
   }
+}
+.profile-photo {
+  top: 0%;
+  left: 50%;
+  transform: translate(-50%, -50%);
 }

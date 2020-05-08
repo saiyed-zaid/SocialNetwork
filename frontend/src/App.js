@@ -3,6 +3,9 @@ import MainRouter from "./mainRouter";
 import { BrowserRouter as Router, Redirect } from "react-router-dom";
 import { signout, isAuthenticated } from "./auth/index";
 
+import Authservice from "./Services/auth";
+import Postservice from "./Services/post";
+
 
 
 
@@ -74,7 +77,11 @@ export default class App extends Component {
     return (
       <Router>
         {!this.state.logginStatus && <Redirect to="/signin" />}
-        <MainRouter />
+        <MainRouter 
+        {...this.props} 
+        Authservice={new Authservice()}
+        Postservice={new Postservice()}
+        />
       </Router>
     );
   }

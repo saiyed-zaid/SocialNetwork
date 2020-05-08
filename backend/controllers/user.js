@@ -71,7 +71,7 @@ exports.getUsers = async (req, res, next) => {
  */
 exports.getUser = async (req, res, next) => {
   req.profile.password = undefined;
-  /* console.log("userid", req.profile._id); */
+  console.log("userid", req.profile);
   return res.json(req.profile);
 };
 

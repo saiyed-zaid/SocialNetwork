@@ -17,8 +17,8 @@ import Modal from "../components/modal/modal";
 import EditProfile from "./editProfile";
 
 class Profile extends Component {
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
     this.state = {
       user: { followers: [], following: [] },
       redirectToSignin: false,
@@ -33,6 +33,32 @@ class Profile extends Component {
       isLoading: true,
     };
   }
+
+  componentDidMount() {
+    const userId = this.props.match.params.userId;
+    this.init(userId);
+  }
+
+  init = (userId) => {
+    const token = isAuthenticated().user.token;
+
+    read(userId, token)
+      .then((data) => {
+        if (data.err) {
+          signout(() => {});
+          this.setState({ redirectToSignin: true });
+        } else {
+          let following = this.checkFollow(data);
+          this.setState({ user: data, following, isLoading: false });
+          this.loadPosts(data._id);
+        }
+      })
+      .catch((err) => {
+        if (err) {
+          console.log(err);
+        }
+      });
+  };
 
   checkFollow = (user) => {
     const jwt = isAuthenticated();
@@ -60,32 +86,15 @@ class Profile extends Component {
       })
       .catch();
   };
+
   handleDeactivateModal = () => {
     document.getElementById("deleteAccount").style.display = "block";
     document.getElementById("deleteAccount").classList.add("show");
   };
+
   followersModal = () => {
     document.getElementById("followersModal").style.display = "block";
     document.getElementById("followersModal").classList.add("show");
-  };
-  init = (userId) => {
-    const token = isAuthenticated().user.token;
-    read(userId, token)
-      .then((data) => {
-        if (data.err) {
-          signout(() => {});
-          this.setState({ redirectToSignin: true });
-        } else {
-          let following = this.checkFollow(data);
-          this.setState({ user: data, following, isLoading: false });
-          this.loadPosts(data._id);
-        }
-      })
-      .catch((err) => {
-        if (err) {
-          console.log(err);
-        }
-      });
   };
 
   handleUserStatusChange = (user) => {
@@ -112,20 +121,19 @@ class Profile extends Component {
       });
   };
 
-  loadPosts = (userId) => {
+  loadPosts = async (userId) => {
     const token = isAuthenticated().user.token;
-    listByUser(userId, token).then((data) => {
-      if (data.msg) {
-        this.setState({ error: data.msg });
+    try {
+      const response = await this.props.fetchPostsByUser(userId, token);
+      if (response.msg) {
+        this.setState({ error: response.msg });
       } else {
-        this.setState({ posts: data.posts });
+        this.setState({ posts: response.posts });
       }
-    });
+    } catch (error) {
+      console.log(error);
+    }
   };
-  componentDidMount() {
-    const userId = this.props.match.params.userId;
-    this.init(userId);
-  }
 
   componentWillReceiveProps(props) {
     const userId = this.props.match.params.userId;
@@ -140,18 +148,17 @@ class Profile extends Component {
 
   handleChatBoxDisplay = (e) => {
     e.persist();
-    if (!this.state.hasChatBoxDisplay) {
-      const token = isAuthenticated().user.token;
-      fetchMessage(
-        isAuthenticated().user._id,
-        e.target.getAttribute("data-userId"),
-        token
-      )
+    this.setState({
+      hasChatBoxDisplay: !this.state.hasChatBoxDisplay,
+    });
+    /* if (!this.state.hasChatBoxDisplay) {
+      const token = this.props.authUser.token;
+      fetchMessage(this.props.authUser._id, this.state.user._id, token)
         .then((result) => {
           this.setState({
             hasChatBoxDisplay: true,
-            receiverId: e.target.getAttribute("data-userId"),
-            receiverName: e.target.getAttribute("data-name"),
+            receiverId: this.state.authUser._id,
+            receiverName: this.state.authUser.name,
             messages: result,
           });
         })
@@ -164,7 +171,7 @@ class Profile extends Component {
       this.setState({
         hasChatBoxDisplay: false,
       });
-    }
+    } */
   };
 
   render() {
@@ -180,146 +187,101 @@ class Profile extends Component {
     if (this.state.isLoading) {
       return this.state.isLoading && <img src={LoadingRing} />;
     }
-    return (
-      <div className="container" style={{ color: "#e6cf23" }}>
-        {!user ? (
-          <PageLoader />
-        ) : (
-          <div className="profile">
-            {/* ChatBox BEGIN */}
-            {this.state.hasChatBoxDisplay && (
-              <div
-                id="chat-tab"
-                className=" d-flex justify-content-end align-items-end chat-box"
-              >
-                <Chattab
-                  senderId={isAuthenticated().user._id}
-                  senderName={isAuthenticated().user.name}
-                  receiverId={this.state.receiverId}
-                  receiverName={this.state.receiverName}
-                  handleChatBoxDisplay={this.handleChatBoxDisplay}
-                  messages={this.state.messages}
-                />
-              </div>
-            )}
 
-            {/* ChatBox End */}
-            <div className="row">
-              <div className="col-md-2">
-                <img
-                  style={{
-                    height: "200px",
-                    width: "200px",
-                    borderRadius: "50%",
-                  }}
-                  className="img-thumbnail"
-                  src={photoUrl}
-                  onError={(e) => {
-                    e.target.src = DefaultProfile;
-                  }}
-                  alt={user.name}
-                />
-              </div>
-              <div className="col-md-10">
-                <div>
-                  <p>Hey {user.name}</p>
-                  <p>Email : {user.email}</p>
-                  <p>Joined {new Date(user.created).toDateString()}</p>
-                  <hr />
-                  <p>{user.about}</p>
-                  <p>
-                    <button
-                      className="text-light m-1 "
-                      style={{
-                        backgroundColor: "transparent",
-                        border: "transparent",
-                      }}
-                      onClick={this.followersModal}
-                    >
-                      Followers ({user.followers.length}) &nbsp; Following (
-                      {user.following.length})
-                    </button>
-                  </p>
-                </div>
-                {isAuthenticated().user &&
-                isAuthenticated().user._id === user._id ? (
-                  <div
-                    className="btn-group row"
-                    role="group"
-                    aria-label="Basic example"
-                  >
-                    {isAuthenticated().user.role === "admin" ? (
-                      <button
-                        className="btn btn-outline-secondary"
-                        data-toggle="modal"
-                        onClick={this.editProfile}
-                        // data-target="#exampleModalCenter"
-                      >
-                        Edit Profile &nbsp;<i className="fas fa-edit "></i>
-                      </button>
-                    ) : (
-                      <>
-                        {/*  <Link
-                          to={`/user/edit/${user._id}`}
-                          className="btn btn-outline-secondary btn-custom"
-                        >
-                          Edit Profile&nbsp;<i className="fas fa-edit"></i>
-                        </Link> */}
-                        <button
-                          className="btn btn-outline-secondary btn-custom"
-                          data-toggle="modal"
-                          onClick={this.editProfile}
-                          // data-target="#exampleModalCenter"
-                        >
-                          Edit Profile &nbsp;<i className="fas fa-edit "></i>
-                        </button>
-                        <Link
-                          to={`/post/create`}
-                          className="btn btn-outline-secondary btn-custom"
-                        >
-                          Create Post&nbsp;
-                          <i className="fas fa-plus"></i>
-                        </Link>
-                        <DeleteUser userId={user._id} />
-                        <button
-                          className="btn btn-outline-secondary btn-custom "
-                          onClick={this.handleDeactivateModal}
-                        >
-                          Deactivate Account &nbsp;
-                          <i className="fas fa-times-circle"></i>
-                        </button>
-                      </>
-                    )}
-                  </div>
-                ) : (
-                  <FollowProfileButton
-                    following={this.state.following}
-                    onButtonClick={this.clickFollowButton}
-                  />
-                )}
-              </div>
-            </div>
+    return (
+      <div
+        className="container bg-light position-relative rounded"
+        style={{ margin: "80px auto 10px auto" }}
+      >
+        {/* DISPLAY CHATBOX */}
+        {this.state.hasChatBoxDisplay && (
+          <div
+            id="chat-tab"
+            className=" d-flex justify-content-end align-items-end chat-box"
+          >
+            <Chattab
+              authUser={this.props.authUser}
+              senderId={this.props.authUser._id}
+              senderName={this.props.authUser.name}
+              receiverId={this.state.user._id}
+              receiverName={this.state.user.name}
+              messages={this.state.messages}
+              handleChatBoxDisplay={this.handleChatClose}
+            />
           </div>
         )}
-        <div>
-          <div className="col-md-12 mb-2">
-            <hr />
-            {/* <ProfileTabs
-              followers={user.followers}
-              following={user.following}
-               posts={posts}
-              error={error}
-              hasPostStatusUpdated={this.init}
-              hasChatBoxDisplay={this.handleChatBoxDisplay}
-            /> */}
-          </div>
+        {/* END DISPLAY CHATBOX */}
+        <div className="position-absolute profile-photo">
+          <img
+            src={photoUrl}
+            onError={(e) => {
+              e.target.src = DefaultProfile;
+            }}
+            alt={user.name}
+            className="rounded-circle"
+            style={{ width: "150px" }}
+          />
         </div>
 
-        {posts.map((post, i) => (
-          <div key={i}>
-            <div className="card-body m-2 bg-light ">
+        <div className="jumbotron text-center">
+          <h1 className="display-4">Hello, {this.state.user.name}!</h1>
+          <p className="lead" style={{ color: "#b7b7b7" }}>
+            {this.state.user.about}
+          </p>
+          <hr className="my-4"></hr>
+
+          {/* Follow/Following Details */}
+          <div className="d-flex justify-content-center m-5 text-center">
+            <p className="lead ml-2">
+              <h5 className="card-subtitle mb-2 text-muted">Follower</h5>
+              <h6 className="card-title text-warning">
+                {this.state.user.followers.length}
+              </h6>
+            </p>
+
+            <p className="lead ml-2">
+              <h5 className="card-subtitle mb-2 text-muted">Following</h5>
+              <h6 className="card-title text-warning">
+                {this.state.user.following.length}
+              </h6>
+            </p>
+
+            <p className="lead ml-2">
+              <h5 className="card-subtitle mb-2 text-muted">Posts</h5>
+              <h6 className="card-title text-warning">
+                {this.state.posts.length}
+              </h6>
+            </p>
+          </div>
+          {/* End Follow/Following Details */}
+
+          {(this.props.authUser._id !== this.state.user._id && (
+            <FollowProfileButton
+              following={this.state.following}
+              onButtonClick={this.clickFollowButton}
+              handleChatBoxDisplay={this.handleChatBoxDisplay}
+            />
+          )) || (
+            <div className="row justify-content-center">
+              <div className="form-group">
+                <button
+                  type="button"
+                  onClick={this.editProfile}
+                  className="btn btn-primary btn-sm mr-1"
+                >
+                  Edit
+                </button>
+              </div>
+            </div>
+          )}
+
+          <hr className="my-4" />
+
+          {/* Display Posts */}
+          {posts.map((post, i) => (
+            <div className="card-body bg-light">
               {/* Post */}
-              <div className="post ">
+              <div className="post">
                 <div className="user-block">
                   <img
                     className="img-circle img-bordered-sm"
@@ -375,36 +337,18 @@ class Profile extends Component {
                   </button>
                 ) : null}
               </div>
+              <hr className="my-4" />
             </div>
-          </div>
-        ))}
+          ))}
+          {/*END POST RENDER */}
+
+          {/* END Display Posts */}
+        </div>
         <Modal
           id="editprofile"
           body={<EditProfile userId={this.props.match.params.userId} />}
           title="Edit Profile"
         />
-        <Modal
-          id="deleteAccount"
-          body="Are You Sure You Want To Deactivate Your Account ? "
-          buttonText="Deactivate"
-          buttonClick={() => this.handleUserStatusChange(user)}
-          show
-        />
-        {isAuthenticated() ? (
-          <Modal
-            id="followersModal"
-            body={
-              <ProfileTabs
-                followers={user.followers}
-                following={user.following}
-                // posts={posts}
-                error={error}
-                hasPostStatusUpdated={this.init}
-                hasChatBoxDisplay={this.handleChatBoxDisplay}
-              />
-            }
-          />
-        ) : null}
       </div>
     );
   }

@@ -1,198 +1,156 @@
-import React, { Component } from "react";
+import React from "react";
 import { Link, Redirect } from "react-router-dom";
-import { signup } from "../index";
 
-class Signup extends Component {
-  constructor() {
-    super();
+class Signup extends React.Component {
+  constructor(props) {
+    super(props);
+
     this.state = {
       name: "",
       email: "",
       password: "",
-      error: "",
-      loading: "",
-      redirectToSignin: false
+      password_confirmation: "",
+      errors: {},
+      responseError: null,
     };
+
+    this.postData = new FormData();
   }
-  /* Custom Card Style  */
-  customCard = {
-    transform: "unset",
-    animation: "unset"
-  };
-  customContainer = {
-    maxWidth: "350px",
-    position: "absolute",
-    top: "50%",
-    left: "50%",
-    transform: "translate(-50%,-50%)"
-  };
-  /* /.Custom Card Style  */
 
-  /**
-   * Fuction For Handling Onchange Events On Controls
-   *
-   *  @param {string} name   Name Of The Control
-   */
-  handleChange = name => event => {
-    this.setState({ error: "" });
-    this.setState({ [name]: event.target.value });
+  handleInputChange = (event) => {
+    this.postData.set(event.target.name, event.target.value);
+
+    this.setState({
+      [event.target.name]: event.target.value,
+    });
   };
 
-  /**
-   *Function For Handling Submition Of Form
-   */
-  clickSubmit = event => {
+  handleSubmit = async (event) => {
     event.preventDefault();
-    if (this.isValid()) {
-      const { name, email, password } = this.state;
-      const user = {
-        name: name,
-        email: email,
-        password: password
-      };
-      signup(user).then(data => {
-        if (data.err) {
-          this.setState({ error: data.err });
-        } else {
-          this.setState({
-            error: data.err ? data.err : "",
-            name: "",
-            email: "",
-            password: "",
-            open: false,
-            redirectToSignin: true
-          });
-        }
-      });
-    }
-  };
 
-  isValid = () => {
-    const { name, email, password } = this.state;
+    try {
+      this.setState({ errors: {} });
 
-    if (name.length === 0) {
-      this.setState({ error: "Name Is Required", loading: true });
-      return false;
-    }
-    if (!/^[a-zA-Z0-9]+@(?:[a-zA-Z0-9]+\.)+[A-Za-z]+$/.test(email)) {
-      this.setState({ error: "A Valid Email Is Required", loading: false });
-      return false;
-    }
-    if (password.length >= 1 && password.length <= 5) {
+      const response = await this.props.registerUser(this.state);
+
+      this.props.history.push("/signin");
+    } catch (errors) {
       this.setState({
-        error: "password Must be 6 character Long",
-        loading: false
+        errors,
       });
-      return false;
     }
-    return true;
-  };
-
-  /**
-   * Function For Creating Controls For Sign Un form
-   *
-   * @param {string} name  Name Of The User
-   * @param {string} email  Email Of The User
-   * @param {string} password Password Of the User
-   */
-  signupForm = (name, email, password) => {
-    return (
-      <form method="post">
-        <div className="form-group">
-          <label for="name">Name </label>
-          <input
-            onChange={this.handleChange("name")}
-            type="text"
-            className="form-control"
-            value={name}
-          />
-        </div>
-
-        <div className="form-group">
-          <label for="exampleInputEmail1">Email address</label>
-          <input
-            onChange={this.handleChange("email")}
-            type="email"
-            className="form-control"
-            value={email}
-          />
-        </div>
-
-        <div className="form-group">
-          <label for="exampleInputPassword1">Password</label>
-          <input
-            onChange={this.handleChange("password")}
-            type="password"
-            className="form-control"
-            value={password}
-          />
-        </div>
-        <button
-          onClick={this.clickSubmit}
-          className="btn btn-raised btn-primary w-100"
-        >
-          Sign Up
-        </button>
-      </form>
-    );
   };
 
   render() {
-    const {
-      name,
-      email,
-      password,
-      error,
-      open,
-      loading,
-      redirectToSignin
-    } = this.state;
-    if (redirectToSignin) {
-      return <Redirect to="/signin" />;
-    }
     return (
-      <div className="container col-lg-3" style={this.customContainer}>
-        <div className="card" style={this.customCard}>
-          <div className="card-body p-3">
-            <h4 className="card-title">Sign Up</h4>
-            <div
-              className="alert alert-danger alert-dismissible fade show"
-              style={{ display: error ? "" : "none" }}
-            >
-              {error}
-              <button
-                type="button"
-                className="close"
-                data-dismiss="alert"
-                aria-label="Close"
-              >
-                <span aria-hidden="true">&times;</span>
-              </button>
+      <div className="container bg-light p-2 my-3 col-md-4">
+        <div className="jumbotron" style={{ padding: "0.5rem 2rem" }}>
+          {this.state.responseError && (
+            <div className="alert alert-danger" role="alert">
+              {this.state.responseError}
             </div>
-            <div
-              className="alert alert-success alert-dismissible fade show"
-              style={{ display: open ? "" : "none" }}
-            >
-              New Account Is Successfully Created. Please
-              <Link to="/signin">Sign In</Link>.
-              <button
-                type="button"
-                className="close"
-                data-dismiss="alert"
-                aria-label="Close"
-              >
-                <span aria-hidden="true">&times;</span>
-              </button>
+          )}
+          <h2>Signup</h2>
+          <form onSubmit={this.handleSubmit}>
+            <div className="form-group">
+              <label htmlFor="exampleInputEmail1">Name</label>
+              <input
+                type="text"
+                name="name"
+                onChange={this.handleInputChange}
+                className={`form-control ${
+                  this.state.errors["name"] && "is-invalid"
+                }`}
+                id="exampleInputEmail1"
+                aria-describedby="emailHelp"
+              />
+
+              {this.state.errors["name"] && (
+                <div className="invalid-feedback">
+                  {this.state.errors["name"]}
+                </div>
+              )}
             </div>
-            {loading ? (
-              <div className="spinner-border text-primary" role="status">
-                <span className="sr-only">Loading...</span>
+
+            <div className="form-group">
+              <label htmlFor="exampleInputEmail1">Email address</label>
+              <input
+                type="email"
+                name="email"
+                onChange={this.handleInputChange}
+                className={`form-control ${
+                  this.state.errors["email"] && "is-invalid"
+                }`}
+                id="exampleInputEmail1"
+                aria-describedby="emailHelp"
+              />
+
+              {this.state.errors["email"] && (
+                <div className="invalid-feedback">
+                  {this.state.errors["email"]}
+                </div>
+              )}
+            </div>
+
+            <div className="form-group">
+              <label htmlFor="exampleInputPassword1">Password</label>
+              <input
+                type="password"
+                name="password"
+                handleInputChange
+                onChange={this.handleInputChange}
+                className={`form-control ${
+                  this.state.errors["password"] && "is-invalid"
+                }`}
+                id="exampleInputPassword1"
+              />
+
+              {this.state.errors["password"] && (
+                <div className="invalid-feedback">
+                  {this.state.errors["password"]}
+                </div>
+              )}
+            </div>
+
+            <div className="form-group">
+              <label htmlFor="exampleInputPassword1">Confirm Password</label>
+              <input
+                type="password"
+                name="password_confirmation"
+                handleInputChange
+                onChange={this.handleInputChange}
+                className={`form-control ${
+                  this.state.errors["password_confirmation "] && "is-invalid"
+                }`}
+                id="exampleInputPassword1"
+              />
+
+              {this.state.errors["password_confirmation "] && (
+                <div className="invalid-feedback">
+                  {this.state.errors["password_confirmation "]}
+                </div>
+              )}
+            </div>
+
+            <div className="row">
+              <div className="col">
+                <button type="submit" className="btn btn-primary">
+                  Submit
+                </button>
               </div>
-            ) : (
-              ""
-            )}
-            {this.signupForm(name, email, password)}
-          </div>
+              <div className="col">
+                <Link
+                  className="stretched-link"
+                  to="/signin"
+                  style={{ color: "unset" }}
+                >
+                  Login Instead
+                </Link>
+              </div>
+            </div>
+
+            <hr className="my-4" />
+          </form>
         </div>
       </div>
     );

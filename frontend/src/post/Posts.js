@@ -3,6 +3,7 @@ import { list } from "./apiPost";
 import PageLoader from "../components/pageLoader";
 import PostCard from "../components/posts/index";
 import LoadingRing from "../l1.gif";
+import Postservice from "../Services/post";
 
 class Posts extends Component {
   constructor() {
@@ -18,14 +19,20 @@ class Posts extends Component {
     this.setState({ expanded: !this.state.expanded });
   };
   componentDidMount() {
-    setTimeout(() => {
-      list().then((data) => {
-        if (data.error) {
-          console.log(data.error);
+    var postService = new Postservice();
+
+    setTimeout(async () => {
+      try {
+        const response = await postService.fetchPosts();
+
+        if (response.error) {
+          return Promise.reject(response.error);
         } else {
-          this.setState({ posts: data.posts, isLoading: false });
+          this.setState({ posts: response.posts, isLoading: false });
         }
-      });
+      } catch (error) {
+        return Promise.reject(error);
+      }
     }, 500);
   }
 
@@ -49,11 +56,7 @@ class Posts extends Component {
     if (posts.length < 0 || this.state.isLoading) {
       return this.state.isLoading && <img src={LoadingRing} />;
     }
-    return (
-      <div className="d-flex w-100 flex-column">
-        {this.renderPosts(posts)}
-      </div>
-    );
+    return this.renderPosts(posts);
   }
 }
 

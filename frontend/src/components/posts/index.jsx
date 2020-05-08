@@ -16,7 +16,7 @@ export default class PostCard extends Component {
 
     return (
       <div
-        className=" col-md-6 card-body m-2  bg-light  "
+        className="col-md-6 card-body m-2 bg-light"
         style={{ position: "relative" }}
       >
         {/* this.props.post */}

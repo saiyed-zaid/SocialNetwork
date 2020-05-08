@@ -144,6 +144,13 @@ exports.hasAuthorization = (req, res, next) => {
 exports.createPost = async (req, res, next) => {
   const errors = validationResult(req);
 
+  const reqFiles = [];
+
+  const url = req.protocol + "://" + req.get("host");
+  for (var i = 0; i < req.files.length; i++) {
+    reqFiles.push(url + "/upload/" + req.files[i].filename);
+  }
+
   /* if (!errors.isEmpty()) {
     const err = errors.array()[0].msg;
     return res.status(422).json({
@@ -157,12 +164,12 @@ exports.createPost = async (req, res, next) => {
       errors: allErrors,
     });
   }
-  
+
   const post = new Post({
     title: req.body.title,
     body: req.body.body,
     postedBy: req.auth._id,
-    photo: req.file,
+    photo: reqFiles,
   });
 
   try {
