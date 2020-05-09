@@ -22,20 +22,24 @@ class SinglePost extends Component {
   };
   componentDidMount() {
     const postId = this.props.match.params.postId;
-    setTimeout(() => {
-      singlePost(postId).then((data) => {
-        if (data.error) {
-          console.log(data.error);
+    setTimeout(async () => {
+      try {
+        const response = await this.props.fetchPost(postId);
+
+        if (response.error) {
+          console.log(response.error);
         } else {
           this.setState({
-            post: data,
-            likes: data.likes.length,
-            like: this.checkLike(data.likes),
-            comments: data.comments,
+            post: response,
+            likes: response.likes.length,
+            like: this.checkLike(response.likes),
+            comments: response.comments,
             isLoading: false,
           });
         }
-      });
+      } catch (error) {
+        console.log(error);
+      }
     }, 500);
   }
 

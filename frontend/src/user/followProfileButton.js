@@ -10,9 +10,37 @@ class FollowProfileButton extends Component {
   };
   render() {
     return (
-      <div className="d-inline-block mt-5">
-        {!this.props.following ? (
+      <div className="row justify-content-center">
+        <div className="form-group">
+          {!this.props.following ? (
+            <button
+              type="button"
+              onClick={this.followClick}
+              className="btn btn-primary btn-sm mr-1"
+            >
+              Follow
+            </button>
+          ) : (
+            <button
+              type="button"
+              onClick={this.unfollowClick}
+              className="btn btn-primary btn-sm mr-1"
+            >
+              Unfollow
+            </button>
+          )}
           <button
+            type="button"
+            onClick={this.props.handleChatBoxDisplay}
+            className="btn btn-secondary btn-sm"
+          >
+            Message
+          </button>
+        </div>
+      </div>
+    );
+    {
+      /* <button
             onClick={this.followClick}
             className="btn btn-raised btn-success mr-5"
           >
@@ -26,8 +54,8 @@ class FollowProfileButton extends Component {
             <i class="fas fa-user-minus"></i>
           </button>
         )}
-      </div>
-    );
+    ); */
+    }
   }
 }
 export default FollowProfileButton;

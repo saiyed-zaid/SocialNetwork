@@ -1,45 +1,25 @@
 import React from "react";
-import Toast from "../../components/Toast";
 
-const customStyle = {
-  display: "flex",
-  flexDirection: "column",
-  position: "fixed",
-  bottom: "0",
-  right: "0",
-  zIndex: "111",
-};
-
-function Follow(props) {
-  if (props.test) {
-    if (props.test.length === 0) {
-      return <span></span>;
-    }
-  }
+const Follow = (props) => {
   return (
-    <div /* style={customStyle} className="close-notification" */>
-      {props.test.map((element) => {
-        return (
-          <div>
-            <Toast
-              // status="toast fade show m-2"
-              type="New Follower"
-              msg={element.user.name + " Started following you."}
-              src={
-                element.user.photo
-                  ? `${
-                      process.env.REACT_APP_API_URL +
-                      "/" +
-                      element.user.photo.path
-                    }`
-                  : null
-              }
-              followedFrom={element.followedFrom}
-            />
-          </div>
-        );
-      })}
-    </div>
+    props.newFollowers && (
+      <div>
+        {props.newFollowers.map((follower) => (
+          <li className="noti w-100" style={{ height: "50px" }}>
+            <strong className="mr-auto">
+              {follower.name} Started Following You.
+            </strong>
+            <small>
+              &nbsp;&nbsp;
+              {follower.followedFrom
+                ? `${new Date(follower.followedFrom).toDateString()}`
+                : ""}
+            </small>
+            <div className="dropdown-divider" />
+          </li>
+        ))}
+      </div>
+    )
   );
-}
+};
 export default Follow;

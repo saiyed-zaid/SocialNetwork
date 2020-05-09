@@ -1,10 +1,4 @@
-/**
- * For  Creating Post
- *
- * @param {string} userId  User Id Of the user Who Creates The post
- * @param {string} token   User Login Token
- * @param {} post          Post Data To be Entered In database
- */
+/* 
 export const create = async (userId, token, post) => {
   const postData = await fetch(
     `${process.env.REACT_APP_API_URL}/api/post/${userId}`,
@@ -12,32 +6,16 @@ export const create = async (userId, token, post) => {
       method: "POST",
       headers: {
         Accept: "application/json",
-        Authorization: `Bearer ${token}`,
+        Authorization: `Bearer ${token}`
       },
-      body: post,
+      body: post
     }
   );
 
   return await postData.json();
 };
-
-/* export const create = async (userId, token, post) => {
-  const postData = await axios.post(
-    `${process.env.REACT_APP_API_URL}/api/post/${userId}`,
-    {
-      headers: {
-        "Content-type": "application/json",
-        authorization: `Bearer ${token}`,
-      },
-      body: post,
-    }
-  );
-  return await postData;
-}; */
-
-/**
- * For Listing All the Posts
  */
+
 export const list = async (isAdmin = false, token = null) => {
   var url = `${process.env.REACT_APP_API_URL}/api/posts`;
   if (isAdmin && token) {

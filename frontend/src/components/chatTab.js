@@ -3,6 +3,7 @@ import DefaultProfile from "../images/avatar.jpg";
 import openSocket from "socket.io-client";
 import "emoji-mart/css/emoji-mart.css";
 import { Picker } from "emoji-mart";
+import { fetchMessage } from "../user/apiUser";
 
 export default class chatTab extends Component {
   handleClose = () => {
@@ -15,12 +16,13 @@ export default class chatTab extends Component {
       emoji: "",
       displayEmoji: false,
       msgText: "",
+      messages: null,
     };
 
-    this.masterUl = document.createElement("ul");
+    /*    this.masterUl = document.createElement("ul");
     this.masterUl.setAttribute("id", "myMsg");
     this.masterUl.classList.add("p-0", "m-0");
-    this.masterUl.style.listStyle = "none";
+    this.masterUl.style.listStyle = "none"; */
 
     /* INVOKED WHENEVER SOMEONE MESSAGE YOU -BEGIN*/
     this.socket = openSocket("http://localhost:5000");
@@ -34,12 +36,10 @@ export default class chatTab extends Component {
     /* INVOKED WHENEVER SOMEONE MESSAGE YOU -BEGIN*/
 
     /* APPENDING PREVIOUS MESSAGES BEGIN */
-    if (this.props.messages) {
-      this.props.messages.forEach((message) => {
-        const li = this.appendReceivedMsg(message);
-        this.masterUl.appendChild(li);
-      });
-    }
+    /* if (this.state.messages) {
+      alert("set");
+       
+    } */
     /* APPENDING PREVIOUS MESSAGES BEGIN */
 
     /* SEND MESSAGE WHEN ENTER KEY PRESS BEGIN */
@@ -50,26 +50,48 @@ export default class chatTab extends Component {
     };
     /* SEND MESSAGE WHEN ENTER KEY PRESS OVER */
   }
+
   componentDidMount() {
-    /* INVOKED WHENEVER SOMEONE MESSAGE YOU -BEGIN*/
-    this.socket = openSocket("http://localhost:5000");
-    this.socket.on(this.props.senderId, (data) => {
-      const li = this.appendReceivedMsg(data);
-      let myMsg = document.querySelector("#myMsg");
-      const chatBox = document.querySelector("#chatBox");
-      myMsg.appendChild(li);
-      chatBox.scrollTo(0, chatBox.scrollHeight);
-    });
-    /* INVOKED WHENEVER SOMEONE MESSAGE YOU -BEGIN*/
+    /* Fetching Message When This Component INVOKED */
+    /*END Fetching Message When This Component INVOKED */
+
+    fetchMessage(
+      this.props.senderId,
+      this.props.receiverId,
+      this.props.authUser.token
+    )
+      .then((result) => {
+        console.log(result);
+        this.setState(
+          {
+            hasNewMsg: true,
+            receiverId: this.props.senderId,
+            receiverName: this.props.senderName,
+            messages: result,
+          },
+          () => {
+            let myMsg = document.querySelector("#myMsg");
+            const chatBox = document.querySelector("#chatBox");
+
+            chatBox.scrollTo(0, chatBox.scrollHeight);
+
+            this.state.messages.forEach((message) => {
+              const li = this.appendReceivedMsg(message);
+              myMsg.appendChild(li);
+            });
+          }
+        );
+      })
+      .catch((err) => {
+        if (err) {
+          console.log("Error while fetching record");
+        }
+      });
 
     const chatBox = document.querySelector("#chatBox");
-    chatBox.appendChild(this.parentUl);
+
     chatBox.scrollTo(0, chatBox.scrollHeight);
   }
-  handleClose = () => {
-    let chattab = document.getElementById("chat-tab");
-    chattab.style.display = "none";
-  };
 
   appendReceivedMsg = (data) => {
     /* if (data.msg.length === 0) {
@@ -147,15 +169,6 @@ export default class chatTab extends Component {
 
     /* DATABASE HANDLING */
   };
-  addEmoji = (e) => {
-    const msg = document.querySelector("#btn-input");
-    let emoji = e.native;
-    msg.value += emoji;
-  };
-
-  showEmoji = () => {
-    this.setState({ displayEmoji: !this.state.displayEmoji });
-  };
 
   render() {
     return (
@@ -168,8 +181,6 @@ export default class chatTab extends Component {
           animation: "none",
           transition: "none",
           maxWidth: "283px",
-          // maxHeight: "500px",
-          // width: "355px",
         }}
       >
         <div className="card-header text-left text-light bg-dark">
@@ -193,7 +204,7 @@ export default class chatTab extends Component {
           id="chatBox"
           style={{ height: "200px", overflowY: "scroll" }}
         >
-          {/* <ul className="p-0 m-0" id="myMsg" style={{ listStyle: "none" }}></ul> */}
+          <ul className="p-0 m-0" id="myMsg" style={{ listStyle: "none" }}></ul>
         </div>
         <div className="card-footer">
           <div className="input-group">

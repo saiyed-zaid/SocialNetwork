@@ -44,7 +44,7 @@ exports.getPosts = async (req, res, next) => {
       .populate("comments", "text created")
       .populate("comments.postedBy", "_id name")
       .populate("tags", "_id name")
-      .select("_id title body created likes photo status tags")
+      .select("_id title body created likes photo status")
       .sort({ created: -1 });
     res.json({ posts });
   } catch (error) {
@@ -143,9 +143,16 @@ exports.hasAuthorization = (req, res, next) => {
  * @description Handling post request which create new post in database
  */
 exports.createPost = async (req, res, next) => {
-  console.table(req.body.photo);
+  console.table(JSON.parse(req.body.tags));
   const tags = JSON.parse(req.body.tags);
   const errors = validationResult(req);
+
+  const reqFiles = [];
+
+  const url = req.protocol + "://" + req.get("host");
+  for (var i = 0; i < req.files.length; i++) {
+    reqFiles.push(url + "/upload/" + req.files[i].filename);
+  }
 
   /* if (!errors.isEmpty()) {
     const err = errors.array()[0].msg;
@@ -165,7 +172,7 @@ exports.createPost = async (req, res, next) => {
     title: req.body.title,
     body: req.body.body,
     postedBy: req.auth._id,
-    photo: req.file,
+    photo: reqFiles,
     tags: tags,
   });
 

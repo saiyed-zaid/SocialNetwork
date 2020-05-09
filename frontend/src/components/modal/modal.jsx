@@ -30,13 +30,13 @@ export default class modal extends Component {
             className="modal-content"
             style={{ width: "100% !important", height: "100% !important" }}
           >
-            <div className="modal-header bg-primary text-danger p-2">
+            <div className="modal-header bg-dark text-light p-2">
               <h5 className="modal-title" id="exampleModalLongTitle">
                 {this.props.title}
               </h5>
               <button
                 type="button"
-                className="close text-danger"
+                className="close text-light"
                 // data-dismiss="modal"
                 aria-label="Close"
                 onClick={this.modalClose}
@@ -45,9 +45,9 @@ export default class modal extends Component {
               </button>
             </div>
             <div
-              className="modal-body p-5"
+              className="modal-body p-5 bg-dark"
               id="modal-body"
-              style={{ background: "#7d99a3" }}
+              /* style={{ background: "#7d99a3" }} */
             >
               {this.props.body}
             </div>

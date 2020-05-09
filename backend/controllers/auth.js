@@ -101,20 +101,17 @@ exports.postSignin = async (req, res, next) => {
   const userExists = await User.findOne({ email: req.body.email });
   if (!userExists) {
     return res.status(422).json({
-      err: "User with this email does not exists",
-      user: {},
+      error: "User with this email does not exists.",
     });
   }
   if (userExists.password !== md5(req.body.password)) {
     return res.status(422).json({
-      err: "Incorrect password.",
-      user: {},
+      error: "Incorrect password.",
     });
   }
   if (!userExists.status) {
     return res.status(422).json({
-      err: "Your account is deactiveted, Please contact admin.",
-      user: {},
+      error: "Your account is deactiveted, Please contact admin.",
     });
   }
 

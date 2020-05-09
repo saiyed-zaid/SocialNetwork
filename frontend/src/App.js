@@ -3,6 +3,10 @@ import MainRouter from "./mainRouter";
 import { BrowserRouter as Router, Redirect } from "react-router-dom";
 import { signout, isAuthenticated } from "./auth/index";
 
+import Authservice from "./Services/auth";
+import Postservice from "./Services/post";
+import Userservice from "./Services/user";
+
 export default class App extends Component {
   constructor(props) {
     super(props);
@@ -70,10 +74,15 @@ export default class App extends Component {
   render() {
     return (
       <Router>
+        {!this.state.logginStatus && <Redirect to="/signin" />}
+        <MainRouter
+          Authservice={new Authservice()}
+          Postservice={new Postservice()}
+          Userservice={new Userservice()}
+          {...this.props}
+        />
         {this.state.warn && <Redirect to="/lockscreen" />}
         {!this.state.logginStatus ? <Redirect to="/signin" /> : null}
-
-        <MainRouter />
       </Router>
     );
   }

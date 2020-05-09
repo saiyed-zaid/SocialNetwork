@@ -5,7 +5,6 @@ import DefaultProfile from "../../images/avatar.jpg";
 export default class index extends Component {
   render() {
     const { user, authUser } = this.props;
-    console.log(this.props);
 
     return user.role === "subscriber" && user.name !== authUser.name ? (
       <div

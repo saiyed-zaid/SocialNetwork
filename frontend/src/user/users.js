@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { Component, useHistory } from "react";
 import { list, getOnlineUsers, fetchMessage } from "./apiUser";
 import LoadingGif from "../l1.gif";
 import { isAuthenticated } from "../auth";
@@ -20,17 +20,27 @@ class Users extends Component {
     };
   }
   componentDidMount() {
-    console.log("abcdef", this.props);
-
-    setTimeout(() => {
-      list().then((data) => {
-        if (data.error) {
-          console.log(data.error);
+    // const usrs = aysnc ()=>{ await  this.props.getUsers()}
+    setTimeout(async () => {
+      try {
+        const response = await this.props.getUsers();
+        if (response.error) {
+          console.log(response.error);
         } else {
-          this.setState({ users: data.users, isLoading: false });
+          this.setState({ users: response.users, isLoading: false });
         }
-      });
+      } catch (err) {}
     }, 2000);
+
+    // setTimeout(() => {
+    //   list().then((data) => {
+    //     if (data.error) {
+    //       console.log(data.error);
+    //     } else {
+    //       this.setState({ users: data.users, isLoading: false });
+    //     }
+    //   });
+    // }, 2000);
 
     /**
      * Function For Getting Online Users
@@ -62,7 +72,12 @@ class Users extends Component {
   renderUsers = (users) => (
     <>
       {users.map((user, i) => (
-        <UsersList user={user} key={i} {...this.props} />
+        <UsersList
+          authUser={this.props.authUser}
+          user={user}
+          key={i}
+          {...this.props}
+        />
       ))}
       {console.log(this.props.authUser)}
     </>

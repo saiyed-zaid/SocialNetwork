@@ -1,7 +1,5 @@
 import React from "react";
-import { validateAll } from "indicative/validator";
 import { read } from "../user/apiUser";
-import { create } from "./apiPost";
 import { Multiselect } from "multiselect-react-dropdown";
 
 class NewPost extends React.Component {
@@ -11,16 +9,9 @@ class NewPost extends React.Component {
     this.state = {
       title: "",
       body: "",
-      photo: [],
-      tags: [],
+      photo: "",
+      fileSizes: [],
       errors: {},
-      user: [],
-      fileSize: 0,
-      prevPhoto: "",
-      loading: false,
-      redirectToProfile: false,
-      options: [],
-      selectedValue: {},
     };
     this.postData = new FormData();
     this.multiselectRef = React.createRef();
@@ -28,6 +19,8 @@ class NewPost extends React.Component {
   }
 
   componentDidMount() {
+    console.log(this.props);
+
     const userId = this.props.authUser._id;
     const token = this.props.authUser.token;
 
@@ -50,82 +43,59 @@ class NewPost extends React.Component {
 
   handleInputChange = (event) => {
     var value;
-    let imgFiles = [];
-
     if (event.target.name === "photo") {
-      for (let i = 0; i < event.target.files.length; i++) {
-        imgFiles.push(event.target.files[i]);
+      var fileSizes = [];
+
+      for (const file of event.target.files) {
+        fileSizes.push(file.size);
       }
 
-      // value = event.target.files[0];
-      // const fileSize = event.target.files[0].size;
+      for (const key of Object.keys(event.target.files)) {
+        this.postData.append("photo", event.target.files[key]);
+      }
 
       this.setState({
-        [event.target.name]: imgFiles,
-        // fileSize,
+        [event.target.name]: event.target.files,
+        fileSizes,
       });
     } else {
       value = event.target.value;
+
+      this.postData.set(event.target.name, value);
+
       this.setState({
         [event.target.name]: event.target.value,
       });
     }
-    this.postData.set(event.target.name, value);
   };
 
-  handleSubmit = (event) => {
+  handleSubmit = async (event) => {
     event.preventDefault();
 
     const data = this.state;
-
     this.postData.append("tags", JSON.stringify(this.selectedopt));
-    this.postData.append("photo", JSON.stringify(this.state.photo));
 
-    const rules = {
-      title: "required|string|max:120|min:5",
-      body: "required|string|max:2000",
-    };
+    const userId = this.props.authUser._id;
+    const token = this.props.authUser.token;
 
-    const messages = {
-      required: "{{field}} field is required",
-    };
+    try {
+      this.setState({ errors: {} });
 
-    validateAll(data, rules, messages)
-      .then(() => {
-        this.setState({ errors: {} });
+      const response = await this.props.addPost(
+        this.postData,
+        data,
+        userId,
+        token
+      );
 
-        const userId = this.props.authUser._id;
-        const token = this.props.authUser.token;
-
-        create(userId, token, this.postData)
-          .then((data) => {
-            console.log("asds", data);
-            if (data.errors) {
-              const formattedErrors = {};
-              data.errors.forEach((error) => {
-                if (!formattedErrors.hasOwnProperty(error.param)) {
-                  formattedErrors[error.param] = error.msg;
-                }
-              });
-              this.setState({ errors: formattedErrors });
-            } else {
-              this.props.history.push(`/user/${userId}`);
-            }
-          })
-          .catch((errors) => {
-            console.log(errors);
-          });
-      })
-      .catch((errors) => {
-        var formattedErrors = {};
-        errors.forEach((error) => {
-          formattedErrors[error.field] = error.message;
-        });
-
-        this.setState({
-          errors: formattedErrors,
-        });
+      console.log("posted", response);
+      this.props.history.push(`/user/${userId}`);
+    } catch (errors) {
+      console.log("error", errors);
+      this.setState({
+        errors,
       });
+    }
   };
 
   onSelect = (selectedList, selectedItem) => {
@@ -135,30 +105,30 @@ class NewPost extends React.Component {
     //this.selectedopt["tags"] = selectedItem;
   };
 
-  onRemove = (selectedList, removedItem) => {
+  onRemove(selectedList, removedItem) {
     this.setState(
       { tags: selectedList },
       this.postData.set("tags", selectedList.name)
     );
-  };
+  }
 
   render() {
     return (
       <div className="container bg-light p-3 my-3">
         <form onSubmit={this.handleSubmit}>
           <div className="form-group">
-            <label for="exampleFormControlFile1">Photo</label>
+            <label for="photo">Photo</label>
             <input
               type="file"
-              onChange={(e) => this.handleInputChange(e)}
+              onChange={this.handleInputChange}
               name="photo"
               className="form-control-file"
-              id="exampleFormControlFile1"
-              multiple
+              id="photo"
+              multiple={true}
             />
           </div>
           <div className="form-group">
-            <label htmlFor="exampleFormControlInput1">Title</label>
+            <label htmlFor="title">Title</label>
             <input
               type="text"
               onChange={this.handleInputChange}
@@ -166,7 +136,7 @@ class NewPost extends React.Component {
               className={`form-control ${
                 this.state.errors["title"] && "is-invalid"
               }`}
-              id="exampleFormControlInput1"
+              id="title"
               placeholder="Title"
             />
 
@@ -177,14 +147,14 @@ class NewPost extends React.Component {
             )}
           </div>
           <div className="form-group">
-            <label htmlFor="exampleFormControlTextarea1">Body</label>
+            <label htmlFor="body">Body</label>
             <textarea
               className={`form-control ${
                 this.state.errors["body"] && "is-invalid"
               }`}
               onChange={this.handleInputChange}
               name="body"
-              id="exampleFormControlTextarea1"
+              id="body"
               rows={3}
               placeholder="Enter Body"
             />

@@ -21,6 +21,8 @@ class EditPost extends Component {
     };
   }
   init = (postId) => {
+    console.log(this.props);
+
     singlePost(postId).then((data) => {
       if (data.error) {
         this.setState({ redirectToProfile: true });
@@ -81,6 +83,7 @@ class EditPost extends Component {
       const token = isAuthenticated().user.token;
 
       update(postId, token, this.postData).then((data) => {
+
         if (data.msg) {
           this.setState({ error: data.msg });
         } else {

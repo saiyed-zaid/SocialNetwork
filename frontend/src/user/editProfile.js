@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { isAuthenticated } from "../auth/index";
-import { read, update, updateUser } from "./apiUser";
+import { read, updateUser } from "./apiUser";
 import { Redirect } from "react-router-dom";
 import DefaultProfile from "../images/avatar.jpg";
 import PageLoader from "../components/pageLoader";
@@ -24,30 +24,31 @@ class EditProfile extends Component {
     };
   }
 
-  init = (userId) => {
+  init = async (userId) => {
     const token = isAuthenticated().user.token;
-    read(userId, token).then((data) => {
-      if (data.error) {
-        this.setState({ redirectToProfile: true });
-      } else {
-        this.setState({
-          id: data._id,
-          name: data.name,
-          gender: data.gender,
-          dob: data.dob,
-          email: data.email,
-          error: "",
-          about: data.about,
-          photo: data.photo ? data.photo.path : DefaultProfile,
-        });
-      }
-    });
+
+    const response = await this.props.read(userId, token);
+
+    if (response.error) {
+      this.setState({ redirectToProfile: true });
+    } else {
+      this.setState({
+        id: response._id,
+        name: response.name,
+        gender: response.gender,
+        dob: response.dob,
+        email: response.email,
+        error: "",
+        about: response.about,
+        photo: response.photo ? response.photo.path : DefaultProfile,
+      });
+    }
   };
 
   componentDidMount() {
     this.userData = new FormData();
     const userId =
-      this.props.userId == null
+      this.props.userId === null
         ? this.props.match.params.userId
         : this.props.userId;
     this.init(userId);
@@ -85,8 +86,9 @@ class EditProfile extends Component {
     return true;
   };
 
-  clickSubmit = (event) => {
+  clickSubmit = async (event) => {
     event.preventDefault();
+
     this.setState({ loading: true });
 
     if (this.isValid()) {
@@ -94,25 +96,26 @@ class EditProfile extends Component {
         this.props.userId === null
           ? this.props.match.params.userId
           : this.props.userId;
+
       const token = isAuthenticated().user.token;
 
-      update(userId, token, this.userData).then((data) => {
-        console.log("data", data, userId);
+      const response = await this.props.update(userId, token, this.userData);
 
-        if (data.msg) {
-          this.setState({ error: data.msg });
-        } else if (isAuthenticated().user.role === "admin") {
+      if (response.msg) {
+        this.setState({ error: response.error });
+      } else if (isAuthenticated().user.role === "admin") {
+        this.setState({
+          redirectToProfile: true,
+        });
+      } else {
+        console.log(response);
+
+        updateUser(response, () => {
           this.setState({
             redirectToProfile: true,
           });
-        } else {
-          updateUser(data, () => {
-            this.setState({
-              redirectToProfile: true,
-            });
-          });
-        }
-      });
+        });
+      }
     }
   };
 
@@ -124,7 +127,6 @@ class EditProfile extends Component {
       getDate.getMonth("mm") +
       "-" +
       getDate.getDate("dd");
-    console.log(dobDate);
 
     return (
       <form method="post">
@@ -285,9 +287,8 @@ class EditProfile extends Component {
 
     return (
       <div>
-        {/*   <div className="jumbotron p-3">
-          <h2>Edit Profile</h2>
-        </div> */}
+        <div className="jumbotron p-3">{/* <h2>Edit Profile</h2> */}</div>
+
         <div
           className="alert alert-danger alert-dismissible fade show col-md-4"
           style={{ display: error ? "" : "none" }}

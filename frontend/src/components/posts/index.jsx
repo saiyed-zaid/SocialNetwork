@@ -16,7 +16,7 @@ export default class PostCard extends Component {
 
     return (
       <div
-        className=" col-md-6 card-body m-2  bg-light  post-card"
+        className="col-md-6 card-body m-2 bg-light"
         style={{ position: "relative" }}
       >
         {/* this.props.post */}
@@ -38,7 +38,9 @@ export default class PostCard extends Component {
                   data-toggle="tooltip"
                   data-placement="bottom"
                   data-html="true"
-                  title={this.props.post.tags.map((tag) => tag.name + "<br />")}
+                  title={this.props.post.tags.map(
+                    (tag) => tag.name + " <br />"
+                  )}
                 >
                   With {this.props.post.tags.length} More
                 </small>
@@ -101,7 +103,18 @@ export default class PostCard extends Component {
                   <span className="sr-only">Next</span>
                 </a>
               </div>
-            ) : null}
+            ) : (
+              <img
+                className="card-img-top"
+                src={`${process.env.REACT_APP_API_URL}/${
+                  this.props.post.photo
+                    ? this.props.post.photo.path
+                    : DefaultPost
+                }`}
+                onError={(i) => (i.target.src = `${DefaultPost}`)}
+                alt={this.props.post.name}
+              />
+            )}
             {/*   {this.props.post.photo ? (
               this.props.post.photo.mimetype === "video/mp4" ? (
                 <div className="embed-responsive embed-responsive-16by9 p-0 m-0">

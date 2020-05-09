@@ -29,16 +29,17 @@ class FindPeople extends Component {
     return response;
   }; */
   componentDidMount() {
+    console.log(this.props);
+
     const userId = isAuthenticated().user._id;
     const token = isAuthenticated().user.token;
-    setTimeout(() => {
-      findPeople(userId, token).then((data) => {
-        if (data.err) {
-          console.log(data.err);
-        } else {
-          this.setState({ users: data, isLoading: false });
-        }
-      });
+    setTimeout(async () => {
+      const response = await this.props.findPeople(userId, token);
+      if (response.error) {
+        console.log(response.error);
+      } else {
+        this.setState({ users: response, isLoading: false });
+      }
     }, 1000);
   }
 

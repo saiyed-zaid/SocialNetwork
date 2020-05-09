@@ -132,6 +132,24 @@ div.like-box:hover .likes {
   box-shadow: 0.1em 0.1em 0.3em rgba(0, 0, 0, 0.7);
   transition: all 0.3s ease-in-out;
 }
+.btn-primary {
+  /*  border-image: linear-gradient(
+    90deg,
+    rgb(170, 167, 214) ,
+    Yellow ,
+    rgba(0, 212, 255, 1)
+  ); */
+  /* background-color: #1a1d24 !important;
+  color: #a59413 !important; */
+}
+
+/* .btn-primary:hover {
+  background-color: #232731 !important;
+  box-shadow: 0.2em 0.2em 0.3em rgba(0, 0, 0, 0.7);
+  color: white !important;
+} */
+
+/* .btn-outline-primary {
 .btn-outline-primary {
   border-image-source: linear-gradient(
     90deg,
@@ -141,11 +159,11 @@ div.like-box:hover .likes {
   );
   border: 1px solid #0073ff !important;
   color: #03a9f4 !important;
-}
-.btn-outline-primary:hover {
+} */
+/* .btn-outline-primary:hover {
   background-color: #002b36 !important;
   color: white !important;
-}
+} */
 .custom-Read-more:hover {
   background-color: #03a9f4 !important;
   color: #ffff !important;
@@ -272,11 +290,11 @@ a:hover {
   align-items: center; */
   position: relative;
 }
-.nav-item::after {
+/* .nav-item::after {
   transition: all 0.5s ease-in-out;
   height: 0px;
-}
-.nav-item:hover::after {
+} */
+.nav-item::after {
   content: "";
   height: 3px;
   background: linear-gradient(
@@ -308,10 +326,10 @@ a:hover {
   border: 1px solid red;
 }
 
-.btn-outline-secondary {
+/* .btn-outline-secondary {
   color: #e6cf23;
   border-color: inherit;
-}
+} */
 .table-hover tbody tr:hover {
   color: #ffffff;
   background-color: rgba(0, 0, 0, 0.13);
@@ -787,40 +805,12 @@ div.content {
   z-index: 9999;
 }
 
-.tags{
-  /* border: 1px solid red; */
-  height: 25px;
-  width: 100px;
-  bottom: 10px;
-  position: absolute;
-  background-color: black;
-  color: lightblue;
-  opacity: 0.5;
-  border-radius: 10px;
-  text-align: center;
-  display: none;
-}
-.post-media{
-  position: relative;
-  
-}
-.post-media:hover .tags{
-  display: block;
-}
 
 
-.grid-column {
-  flex: 25%;
-  max-width: 25%;
-  padding: 0 4px;
-}
-.grid-row {
-  display: flex;
-  flex-wrap: wrap;
-  padding: 0 4px;
-}
-.grid-column img {
-  margin-top: 8px;
-  vertical-align: middle;
-  width: 100%;
+
+
+.profile-photo {
+  top: 0%;
+  left: 50%;
+  transform: translate(-50%, -50%);
 }
