@@ -345,10 +345,22 @@ class MainRouter extends React.Component {
               <SinglePost
                 {...props}
                 fetchPost={this.props.Postservice.fetchPost}
+                deletePost={this.props.Postservice.deletePost}
+                editPost={this.props.Postservice.editPost}
+                likePost={this.props.Postservice.likePost}
+                unlikePost={this.props.Postservice.unlikePost}
+                addComment={this.props.Postservice.addComment}
+                removeComment={this.props.Postservice.removeComment}
+                authUser={this.state.authUser}
               />
             )}
           />
-          <PrivateRoute path="/post/edit/:postId" exact component={EditPost} />
+          <PrivateRoute
+            path="/post/edit/:postId"
+            exact
+            component={EditPost}
+            authUser={this.state.authUser}
+          />
           <Route
             path="/users"
             exact

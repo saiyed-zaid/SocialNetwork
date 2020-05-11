@@ -20,6 +20,7 @@ class SinglePost extends Component {
     likes: 0,
     comments: [],
   };
+
   componentDidMount() {
     const postId = this.props.match.params.postId;
     setTimeout(async () => {
@@ -43,25 +44,26 @@ class SinglePost extends Component {
     }, 500);
   }
 
-  deletePost = () => {
-    const postId = this.props.match.params.postId;
-    const token = isAuthenticated().user.token;
-    remove(postId, token).then((data) => {
-      if (data.error) {
-        console.log(data.error);
-      } else {
-        this.setState({ redirectToHome: true });
-      }
-    });
-  };
-
   /**
    * Function For Confirming The Account Deletion
    */
-  deleteConfirmed = () => {
+  deleteConfirmed = async () => {
+    const postId = this.props.match.params.postId;
+    const token = isAuthenticated().user.token;
+
     let answer = window.confirm("Are Youe Sure. You Want To Delete your Post?");
     if (answer) {
-      this.deletePost();
+      try {
+        const response = await this.props.deletePost(postId, token);
+
+        if (response.error) {
+          return Promise.reject(response.error);
+        } else {
+          this.setState({ redirectToHome: true });
+        }
+      } catch (error) {
+        console.log(error);
+      }
     }
   };
 
@@ -83,26 +85,31 @@ class SinglePost extends Component {
     this.setState({ comments });
   };
 
-  likeToggle = () => {
+  likeToggle = async () => {
     if (!isAuthenticated()) {
       this.setState({ redirectToSignin: true });
       return false;
     }
-    let callApi = this.state.like ? unlike : like;
+    let callApi = this.state.like ? this.props.unlikePost : this.props.likePost;
     const userId = isAuthenticated().user._id;
     const postId = this.state.post._id;
     const token = isAuthenticated().user.token;
 
-    callApi(userId, token, postId).then((data) => {
-      if (data.error) {
-        console.log(data.error);
+    try {
+      const response = await callApi(userId, token, postId);
+      console.log("asd", response);
+
+      if (response.error) {
+        console.log(response.error);
       } else {
         this.setState({
           like: !this.state.like,
-          likes: data.likes.length,
+          likes: response.likes.length,
         });
       }
-    });
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   renderPost = (post) => {
@@ -239,10 +246,19 @@ class SinglePost extends Component {
           postId={post._id}
           comments={comments.reverse()}
           updateComments={this.updateComments}
+          addComment={this.props.addComment}
+          removeComment={this.props.removeComment}
         />
         <Modal
           id="editpost"
-          body={<EditPost postId={this.props.match.params.postId} />}
+          body={
+            <EditPost
+              {...this.props}
+              postId={this.props.match.params.postId}
+              authUser={this.props.authUser}
+              editPost={this.props.editPost}
+            />
+          }
           title="Edit Post"
         />
       </div>

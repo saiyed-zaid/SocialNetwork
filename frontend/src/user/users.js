@@ -79,7 +79,6 @@ class Users extends Component {
           {...this.props}
         />
       ))}
-      {console.log(this.props.authUser)}
     </>
   );
 

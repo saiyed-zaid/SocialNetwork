@@ -66,8 +66,8 @@ class NewPost extends React.Component {
     const data = this.state;
     this.postData.append("tags", JSON.stringify(this.selectedopt));
 
-    const userId = this.props.authUser._id;
-    const token = this.props.authUser.token;
+    /* const userId = this.props.authUser._id;
+    const token = this.props.authUser.token; */
 
     try {
       this.setState({ errors: {} });
@@ -75,11 +75,11 @@ class NewPost extends React.Component {
       const response = await this.props.addPost(
         this.postData,
         data,
-        userId,
-        token
+        this.state.user._id,
+        this.state.user.token
       );
 
-      this.props.history.push(`/user/${userId}`);
+      this.props.history.push(`/user/${this.state.user._id}`);
     } catch (errors) {
       this.setState({
         errors,
@@ -88,10 +88,7 @@ class NewPost extends React.Component {
   };
 
   onSelect = (selectedList, selectedItem) => {
-    //console.log(selectedItem._id);
-
     this.selectedopt.push(selectedItem._id);
-    //this.selectedopt["tags"] = selectedItem;
   };
 
   onRemove(selectedList, removedItem) {

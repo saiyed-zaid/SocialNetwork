@@ -143,7 +143,6 @@ exports.hasAuthorization = (req, res, next) => {
  * @description Handling post request which create new post in database
  */
 exports.createPost = async (req, res, next) => {
-  console.table(JSON.parse(req.body.tags));
   const tags = JSON.parse(req.body.tags);
   const errors = validationResult(req);
 
@@ -219,12 +218,27 @@ exports.deletePost = async (req, res, next) => {
  */
 exports.updatePost = async (req, res, next) => {
   let post = req.post;
+  var tags = [];
+  tags = JSON.parse(req.body.tags);
+
+  if (tags) {
+    post.tags = tags;
+  }
+
+  const reqFiles = [];
+
+  const url = req.protocol + "://" + req.get("host");
+  for (var i = 0; i < req.files.length; i++) {
+    reqFiles.push(url + "/upload/" + req.files[i].filename);
+  }
+
+  console.log("req_body_", req.body);
 
   const prevPostPhoto = post.photo;
   if (!req.file) {
     req.file = post.photo;
   }
-  post.photo = req.file;
+  post.photo = reqFiles;
   post = _.extend(post, req.body);
   post.updated = Date.now();
   try {

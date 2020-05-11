@@ -99,4 +99,119 @@ export default class Postservice {
     );
     return await posts.json({ posts });
   }
+
+  async deletePost(postId, token) {
+    try {
+      const response = await fetch(
+        `${process.env.REACT_APP_API_URL}/api/post/${postId}`,
+        {
+          method: "DELETE",
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "Application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      return await response.json();
+    } catch (error) {
+      return Promise.reject(error);
+    }
+  }
+  //REMAINING
+  async editPost(post, postId, token) {
+    const postData = await fetch(
+      `${process.env.REACT_APP_API_URL}/api/post/${postId}`,
+      {
+        method: "PATCH",
+        headers: {
+          Accept: "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: post,
+      }
+    );
+
+    return await postData.json();
+  }
+
+  async likePost(userId, token, postId) {
+    try {
+      const postData = await fetch(
+        `${process.env.REACT_APP_API_URL}/api/post/like`,
+        {
+          method: "PATCH",
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "Application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify({ userId, postId }),
+        }
+      );
+      return await postData.json();
+    } catch (error) {
+      return Promise.reject(error);
+    }
+  }
+
+  async unlikePost(userId, token, postId) {
+    try {
+      const postData = await fetch(
+        `${process.env.REACT_APP_API_URL}/api/post/unlike`,
+        {
+          method: "PATCH",
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "Application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify({ userId, postId }),
+        }
+      );
+      return await postData.json();
+    } catch (error) {
+      return Promise.reject(error);
+    }
+  }
+
+  async addComment(userId, token, postId, comment) {
+    try {
+      const commentData = await fetch(
+        `${process.env.REACT_APP_API_URL}/api/post/comment`,
+        {
+          method: "PATCH",
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "Application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify({ userId, postId, comment }),
+        }
+      );
+      return await commentData.json();
+    } catch (error) {
+      return Promise.reject(error);
+    }
+  }
+
+  async removeComment(userId, token, postId, comment) {
+    try {
+      const commentData = await fetch(
+        `${process.env.REACT_APP_API_URL}/api/post/uncomment`,
+        {
+          method: "PATCH",
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "Application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify({ userId, postId, comment }),
+        }
+      );
+      return await commentData.json();
+    } catch (error) {
+      return Promise.reject(error);
+    }
+  }
 }

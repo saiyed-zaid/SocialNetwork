@@ -251,7 +251,7 @@ class Profile extends Component {
           <hr className="my-4"></hr>
 
           {/* Follow/Following Details */}
-          <div className="d-flex justify-content-center m-5 text-center">
+          <div className="d-flex justify-content-center m-3 text-center">
             <p className="lead ml-2">
               <h5 className="card-subtitle mb-2 text-muted">Follower</h5>
               <h6 className="card-title text-warning">
