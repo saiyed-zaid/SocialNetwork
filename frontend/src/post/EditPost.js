@@ -1,26 +1,37 @@
-import React, { Component } from "react";
-import { singlePost, update } from "./apiPost";
-import { isAuthenticated } from "../auth/index";
-import { Redirect } from "react-router-dom";
+import React from "react";
+import { read } from "../user/apiUser";
+import { singlePost, update } from "../post/apiPost";
+import { Multiselect } from "multiselect-react-dropdown";
 import DefaultPost from "../images/post.jpg";
-import PageLoader from "../components/pageLoader";
 
-class EditPost extends Component {
-  constructor() {
-    super();
+class EditPost extends React.Component {
+  constructor(props) {
+    super(props);
+
     this.state = {
       id: "",
       title: "",
       body: "",
-      redirectToProfile: false,
-      error: "",
-      fileSize: 0,
-      loading: false,
       photo: "",
-      prevPhoto: "",
+      fileSizes: [],
+      errors: {},
     };
+    this.postData = new FormData();
+    this.multiselectRef = React.createRef();
+    this.selectedopt = [];
   }
-  init = (postId) => {
+
+  componentDidMount() {
+    console.log(this.props);
+
+    const userId = this.props.authUser._id;
+    const token = this.props.authUser.token;
+
+    const postId =
+      this.props.postId == null
+        ? this.props.match.params.postId
+        : this.props.postId;
+
     singlePost(postId).then((data) => {
       if (data.error) {
         this.setState({ redirectToProfile: true });
@@ -31,187 +42,163 @@ class EditPost extends Component {
           body: data.body,
           error: "",
           photo: data.photo ? data.photo.path : DefaultPost,
+          user: this.props.authUser,
         });
       }
     });
-  };
 
-  componentDidMount() {
-    this.postData = new FormData();
-    const postId =
-      this.props.postId == null
-        ? this.props.match.params.postId
-        : this.props.postId;
-    this.init(postId);
+    read(userId, token)
+      .then((data) => {
+        if (data.err) {
+          this.setState({ options: [] });
+        } else {
+          this.setState({ options: data.following });
+        }
+      })
+      .catch((err) => {
+        if (err) {
+          console.log(err);
+        }
+      });
   }
 
-  handleChange = (name) => (event) => {
-    this.setState({ error: "" });
-    if (name === "photo") {
-      this.setState({ prevPhoto: event.target.files[0] });
-    }
-    const value = name === "photo" ? event.target.files[0] : event.target.value;
-    const fileSize = name === "photo" ? event.target.files[0].size : 0;
-    this.postData.set(name, value);
-    console.log("pgohtos", value);
+  handleInputChange = (event) => {
+    var value;
+    if (event.target.name === "photo") {
+      var fileSizes = [];
 
-    this.setState({ [name]: value, fileSize });
-  };
+      for (const file of event.target.files) {
+        fileSizes.push(file.size);
+      }
 
-  isValid = () => {
-    const { title, body, fileSize } = this.state;
-    if (fileSize > 1000000000) {
-      this.setState({ error: "Photo Must Be Smaller then 100kb" });
-      return false;
-    }
-    if (title.length === 0 || body.length === 0) {
-      this.setState({ error: "All Fields Are Required", loading: false });
-      return false;
-    }
+      for (const key of Object.keys(event.target.files)) {
+        this.postData.append("photo", event.target.files[key]);
+      }
 
-    return true;
-  };
+      this.setState({
+        [event.target.name]: event.target.files,
+        fileSizes,
+      });
+    } else {
+      value = event.target.value;
 
-  clickSubmit = (event) => {
-    event.preventDefault();
-    this.setState({ loading: true });
+      this.postData.set(event.target.name, value);
 
-    if (this.isValid()) {
-      const postId = this.state.id;
-      const token = isAuthenticated().user.token;
-
-      update(postId, token, this.postData).then((data) => {
-        if (data.msg) {
-          this.setState({ error: data.msg });
-        } else {
-          this.setState({
-            title: "",
-            body: "",
-            redirectToProfile: true,
-            loading: false,
-          });
-        }
+      this.setState({
+        [event.target.name]: event.target.value,
       });
     }
   };
 
-  editPostForm = (title, body) => {
-    return (
-      <div className="col-md-6">
-        <form method="post">
-          <div class="input-group form-group">
-            <div class="custom-file">
-              <input
-                accept="image/*,video/*"
-                className="custom-file-input"
-                type="file"
-                onChange={this.handleChange("photo")}
-                id="inputGroupFile04"
-                aria-describedby="inputGroupFileAddon04"
-              />
-              <label class="custom-file-label" for="inputGroupFile04">
-                Choose Post Photo
-              </label>
-            </div>
-          </div>
+  handleSubmit = async (event) => {
+    event.preventDefault();
 
-          <div className="form-group">
-            <input
-              onChange={this.handleChange("title")}
-              type="text"
-              className="form-control"
-              value={title}
-              name="title"
-            />
-          </div>
+    const data = this.state;
+    this.postData.append("tags", JSON.stringify(this.selectedopt));
 
-          <div className="form-group">
-            <textarea
-              onChange={this.handleChange("body")}
-              className="form-control"
-              value={body}
-              name="body"
-            />
-          </div>
+    const userId = this.props.authUser._id;
+    const token = this.props.authUser.token;
 
-          <button className="btn btn-primary" onClick={this.clickSubmit}>
-            Update Post
-          </button>
-        </form>
-      </div>
-    );
-  };
-  render() {
-    const {
-      id,
-      title,
-      body,
-      redirectToProfile,
-      error,
-      loading,
-      photo,
-    } = this.state;
-    if (redirectToProfile) {
-      return <Redirect to={`/user/${isAuthenticated().user._id}`} />;
+    try {
+      this.setState({ errors: {} });
+
+      const response = await this.props.editPost(
+        this.postData,
+        this.state.id,
+        token
+      );
+        console.log('response__',response);
+      this.props.history.push(`/user/${userId}`);
+    } catch (errors) {
+      console.log("something", errors);
+      this.setState({
+        errors,
+      });
     }
-    const photoUrl = id
-      ? `${process.env.REACT_APP_API_URL}/${photo}`
-      : DefaultPost;
+  };
+
+  onSelect = (selectedList, selectedItem) => {
+    this.selectedopt.push(selectedItem._id);
+  };
+
+  onRemove(selectedList, removedItem) {
+    this.setState(
+      { tags: selectedList },
+      this.postData.set("tags", selectedList.name)
+    );
+  }
+
+  render() {
     return (
-      <div>
-        <div className="jumbotron p-3">
-          <h2>EditPost</h2>
-        </div>
-        <div className="container d-flex align-items-center">
-          <div className="col-md-6">
-            <h2>{title}</h2>
-            {this.state.prevPhoto.type === "video/mp4" ? (
-              <div className="embed-responsive embed-responsive-4by3">
-                <video controls className="embed-responsive-item">
-                  <source
-                    src={
-                      !this.state.prevPhoto
-                        ? photoUrl
-                        : URL.createObjectURL(this.state.prevPhoto)
-                    }
-                    type="video/mp4"
-                    alt="No Video Found"
-                    // onError={e=>e.target.alt="No Video"}
-                  />
-                  Your browser does not support the video tag.
-                </video>
-              </div>
-            ) : (
-              <img
-                style={{ height: "300px", width: "300px" }}
-                className="img-thumbnail"
-                src={
-                  !this.state.prevPhoto
-                    ? photoUrl
-                    : URL.createObjectURL(this.state.prevPhoto)
-                }
-                onError={(i) => (i.target.src = `${DefaultPost}`)}
-                alt={title}
-              />
-            )}
-            <div
-              className="alert alert-danger alert-dismissible fade show"
-              style={{ display: error ? "" : "none" }}
-            >
-              {error}
-              <button
-                type="button"
-                className="close"
-                data-dismiss="alert"
-                aria-label="Close"
-              >
-                <span aria-hidden="true">&times;</span>
-              </button>
-            </div>
-            {loading ? <PageLoader /> : ""}
+      <div className="">
+        <form onSubmit={this.handleSubmit}>
+          <div className="form-group">
+            <label for="photo">Photo</label>
+            <input
+              type="file"
+              onChange={this.handleInputChange}
+              name="photo"
+              id="photo"
+              className="form-control-file"
+              multiple={true}
+            />
           </div>
-          {this.editPostForm(title, body)}
-        </div>
+          <div className="form-group">
+            <label htmlFor="title">Title</label>
+            <input
+              type="text"
+              onChange={this.handleInputChange}
+              name="title"
+              id="title"
+              className={`form-control ${
+                this.state.errors["title"] && "is-invalid"
+              }`}
+              value={this.state.title}
+              placeholder="Title"
+            />
+
+            {this.state.errors["title"] && (
+              <div className="invalid-feedback">
+                {this.state.errors["title"]}
+              </div>
+            )}
+          </div>
+          <div className="form-group">
+            <label htmlFor="body">Body</label>
+            <textarea
+              className={`form-control ${
+                this.state.errors["body"] && "is-invalid"
+              }`}
+              onChange={this.handleInputChange}
+              name="body"
+              id="body"
+              value={this.state.body}
+              rows={3}
+              placeholder="Enter Body"
+            />
+
+            {this.state.errors["body"] && (
+              <div className="invalid-feedback">
+                {this.state.errors["body"]}
+              </div>
+            )}
+          </div>
+          <div className="form-group">
+            <Multiselect
+              id="tags"
+              className="form-control"
+              ref={this.multiselectRef}
+              options={this.state.options}
+              selectedValues={this.state.selectedValue}
+              onSelect={this.onSelect}
+              onRemove={this.onRemove} // Function will trigger on remove event
+              displayValue="name" // Property name to display in the dropdown options
+              placeholder="Select Peoples To Tag"
+              emptyRecordMsg="No People Found"
+            />
+          </div>
+          <button class="btn btn-primary">Edit</button>
+        </form>
       </div>
     );
   }

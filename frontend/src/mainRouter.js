@@ -36,7 +36,6 @@ const isActive = (history, path) => {
 };
 
 const Navbar = withRouter(({ history, authUser, handleLogout, signout }) => {
-  authUser && console.log(authUser);
   return (
     <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
       {authUser && authUser.role === "admin" ? (
@@ -234,7 +233,6 @@ class MainRouter extends React.Component {
       messages: null,
       authUser: null,
     };
-    console.log(this.props);
 
     this.socket = openSocket("http://localhost:5000");
   }
@@ -248,7 +246,6 @@ class MainRouter extends React.Component {
           this.state.authUser.token
         )
           .then((result) => {
-            console.log(result);
             this.setState({
               hasNewMsg: true,
               receiverId: data.sender,
@@ -337,11 +334,29 @@ class MainRouter extends React.Component {
               <SinglePost
                 {...props}
                 fetchPost={this.props.Postservice.fetchPost}
+                deletePost={this.props.Postservice.deletePost}
+                editPost={this.props.Postservice.editPost}
+                likePost={this.props.Postservice.likePost}
+                unlikePost={this.props.Postservice.unlikePost}
+                addComment={this.props.Postservice.addComment}
+                removeComment={this.props.Postservice.removeComment}
+                authUser={this.state.authUser}
               />
             )}
           />
-          <PrivateRoute path="/post/edit/:postId" exact component={EditPost} />
-          <Route path="/users" exact render={(props) => <Users {...props} authUser={this.state.authUser} />} />
+          <PrivateRoute
+            path="/post/edit/:postId"
+            exact
+            component={EditPost}
+            authUser={this.state.authUser}
+          />
+          <Route
+            path="/users"
+            exact
+            render={(props) => (
+              <Users {...props} authUser={this.state.authUser} />
+            )}
+          />
           <Route
             path="/signup"
             exact

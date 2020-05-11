@@ -2,7 +2,6 @@ import React from "react";
 import { read } from "../user/apiUser";
 import { Multiselect } from "multiselect-react-dropdown";
 
-
 class NewPost extends React.Component {
   constructor(props) {
     super(props);
@@ -13,7 +12,7 @@ class NewPost extends React.Component {
       photo: "",
       fileSizes: [],
       errors: {},
-
+      user: null,
     };
     this.postData = new FormData();
     this.multiselectRef = React.createRef();
@@ -21,14 +20,10 @@ class NewPost extends React.Component {
   }
 
   componentDidMount() {
-    console.log(this.props);
-
-    const userId = this.props.authUser._id;
-    const token = this.props.authUser.token;
-
+    console.log("props", this.state);
     this.setState({ user: this.props.authUser });
 
-    read(userId, token)
+    read(this.props.authUser._id, this.props.authUser.token)
       .then((data) => {
         if (data.err) {
           this.setState({ options: [] });
@@ -77,8 +72,8 @@ class NewPost extends React.Component {
     const data = this.state;
     this.postData.append("tags", JSON.stringify(this.selectedopt));
 
-    const userId = this.props.authUser._id;
-    const token = this.props.authUser.token;
+    /* const userId = this.props.authUser._id;
+    const token = this.props.authUser.token; */
 
     try {
       this.setState({ errors: {} });
@@ -86,14 +81,12 @@ class NewPost extends React.Component {
       const response = await this.props.addPost(
         this.postData,
         data,
-        userId,
-        token
+        this.state.user._id,
+        this.state.user.token
       );
 
-      console.log("posted", response);
-      this.props.history.push(`/user/${userId}`);
+      this.props.history.push(`/user/${this.state.user._id}`);
     } catch (errors) {
-      console.log("error", errors);
       this.setState({
         errors,
       });
@@ -101,10 +94,7 @@ class NewPost extends React.Component {
   };
 
   onSelect = (selectedList, selectedItem) => {
-    //console.log(selectedItem._id);
-
     this.selectedopt.push(selectedItem._id);
-    //this.selectedopt["tags"] = selectedItem;
   };
 
   onRemove(selectedList, removedItem) {

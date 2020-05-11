@@ -234,7 +234,7 @@ class Profile extends Component {
           <hr className="my-4"></hr>
 
           {/* Follow/Following Details */}
-          <div className="d-flex justify-content-center m-5 text-center">
+          <div className="d-flex justify-content-center m-3 text-center">
             <p className="lead ml-2">
               <h5 className="card-subtitle mb-2 text-muted">Follower</h5>
               <h6 className="card-title text-warning">
@@ -364,9 +364,9 @@ class Profile extends Component {
                       )
                     ) : null}
 
-                    <p className="pt-2 text-dark">{post.body}</p>
+                    <p className="pt-2 ">{post.body}</p>
                     {isAuthenticated() ? (
-                      <button className="btn">
+                      <button className="btn btn-outline-dark">
                         <Link to={`/post/${post._id}`}>View More</Link>
                       </button>
                     ) : null}

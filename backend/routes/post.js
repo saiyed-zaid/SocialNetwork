@@ -181,7 +181,7 @@ router.patch(
         );
       }
     },
-  }).single("photo"),
+  }).array("photo"),
   postController.updatePost
 );
 router.get(

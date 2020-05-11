@@ -26,7 +26,7 @@ class Comment extends Component {
     this.setState({ text: event.target.value });
   };
 
-  addComment = (event) => {
+  addComment = async (event) => {
     event.preventDefault();
     if (!isAuthenticated()) {
       this.setState({ error: "Please Login To Leave The Comment" });
@@ -37,30 +37,42 @@ class Comment extends Component {
       const token = isAuthenticated().user.token;
       const postId = this.props.postId;
 
-      comment(userId, token, postId, { text: this.state.text }).then((data) => {
-        if (data.error) {
-          console.log(data.error);
+      try {
+        const response = await this.props.addComment(userId, token, postId, {
+          text: this.state.text,
+        });
+        if (response.error) {
+          console.log(response.error);
         } else {
           this.setState({ text: "" });
-
-          this.props.updateComments(data.comments);
+          this.props.updateComments(response.comments);
         }
-      });
+      } catch (error) {
+        console.log(error);
+      }
     }
   };
 
-  deleteComment = (comment) => {
+  deleteComment = async (comment) => {
     const userId = isAuthenticated().user._id;
     const token = isAuthenticated().user.token;
     const postId = this.props.postId;
 
-    uncomment(userId, token, postId, comment).then((data) => {
-      if (data.error) {
-        console.log(data.error);
+    try {
+      const response = await this.props.removeComment(
+        userId,
+        token,
+        postId,
+        comment
+      );
+      if (response.error) {
+        console.log(response.error);
       } else {
-        this.props.updateComments(data.comments);
+        this.props.updateComments(response.comments);
       }
-    });
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   /**

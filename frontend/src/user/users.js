@@ -66,7 +66,6 @@ class Users extends Component {
       {users.map((user, i) => (
         <UsersList authUser={this.props.authUser} user={user} key={i} {...this.props} />
       ))}
-      {console.log(this.props.authUser)}
     </>
   );
 

@@ -130,7 +130,7 @@ div.like-box:hover .likes {
 
 .btn {
   box-shadow: 0.1em 0.1em 0.3em rgba(0, 0, 0, 0.7);
-  transition: all 0.3s ease-in-out;
+  /* transition: all 0.1s ease-in-out; */
 }
 .btn-primary {
   /*  border-image: linear-gradient(
@@ -164,10 +164,10 @@ div.like-box:hover .likes {
   background-color: #002b36 !important;
   color: white !important;
 } */
-.custom-Read-more:hover {
+/* .custom-Read-more:hover {
   background-color: #03a9f4 !important;
   color: #ffff !important;
-}
+} */
 .btn-custom {
   color: #ffff !important;
 }
@@ -200,11 +200,11 @@ div.like-box:hover .likes {
 
 a {
   /* color: black; */
-  color: rgb(32, 32, 32);
+  /* color: rgb(32, 32, 32); */
   text-decoration: none !important;
 }
 a:hover {
-  color: rgb(19, 18, 18);
+/*   color: rgb(19, 18, 18); */
 }
 
 * {
