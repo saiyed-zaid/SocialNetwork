@@ -11,27 +11,26 @@ class DeleteUser extends Component {
   /**
    * function For Deleteing The User Account
    */
-  deleteAccount = () => {
+  deleteAccount = async () => {
     const token = isAuthenticated().user.token;
     const userId = this.props.userId;
 
     if (isAuthenticated().user.role === "admin") {
-      remove(userId, token).then((data) => {
-        if (data.isDeleted) {
-          this.setState({ redirect: true });
-        } else {
-          console.log(data.msg);
-        }
-      });
+      const response = await this.props.remove(userId, token);
+
+      if (response.isDeleted) {
+        this.setState({ redirect: true });
+      } else {
+        console.log(response.msg);
+      }
     } else {
-      remove(userId, token).then((data) => {
-        if (data.error) {
-          console.log(data.error);
-        } else {
-          signout(() => console.log("deleted"));
-          this.setState({ redirect: true });
-        }
-      });
+      const response = await this.props.remove(userId, token);
+      if (response.error) {
+        console.log(data.error);
+      } else {
+        signout(() => console.log("deleted"));
+        this.setState({ redirect: true });
+      }
     }
   };
 

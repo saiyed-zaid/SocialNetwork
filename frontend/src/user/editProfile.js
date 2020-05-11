@@ -4,6 +4,7 @@ import { read, updateUser } from "./apiUser";
 import { Redirect } from "react-router-dom";
 import DefaultProfile from "../images/avatar.jpg";
 import PageLoader from "../components/pageLoader";
+import moment from "moment";
 
 class EditProfile extends Component {
   constructor() {
@@ -47,10 +48,12 @@ class EditProfile extends Component {
 
   componentDidMount() {
     this.userData = new FormData();
-    const userId =
-      this.props.userId === null
-        ? this.props.match.params.userId
-        : this.props.userId;
+
+    const userId = !this.props.userId
+      ? this.props.match.params.userId
+      : this.props.userId;
+    console.log(this.props);
+
     this.init(userId);
   }
 
@@ -92,10 +95,9 @@ class EditProfile extends Component {
     this.setState({ loading: true });
 
     if (this.isValid()) {
-      const userId =
-        this.props.userId === null
-          ? this.props.match.params.userId
-          : this.props.userId;
+      const userId = !this.props.userId
+        ? this.props.match.params.userId
+        : this.props.userId;
 
       const token = isAuthenticated().user.token;
 
@@ -108,9 +110,7 @@ class EditProfile extends Component {
           redirectToProfile: true,
         });
       } else {
-        console.log(response);
-
-        updateUser(response, () => {
+        await this.props.updateUser(response, () => {
           this.setState({
             redirectToProfile: true,
           });
@@ -120,17 +120,9 @@ class EditProfile extends Component {
   };
 
   editForm = (name, gender, dob, email, password, about) => {
-    let getDate = new Date(dob);
-    let dobDate =
-      getDate.getFullYear() +
-      "-" +
-      getDate.getMonth("mm") +
-      "-" +
-      getDate.getDate("dd");
-
     return (
       <form method="post">
-        <div className="form-row text-dark">
+        <div className="form-row text-light">
           <div className="form-group col-md-6">
             <small>
               <label for="inputGroupFile04"> Profile Photo</label>
@@ -164,7 +156,7 @@ class EditProfile extends Component {
             />
           </div>
         </div>
-        <div className="form-row text-dark">
+        <div className="form-row text-light">
           <div className="form-group col-md-6">
             <small>
               <label for="email"> Email</label>
@@ -197,10 +189,9 @@ class EditProfile extends Component {
             />
           </div>
         </div>
-        <div className="form-row text-dark">
+        <div className="form-row text-light">
           <div className="form-group col-md-6">
             <small>
-              {" "}
               <label> About</label>
             </small>
 
@@ -214,7 +205,6 @@ class EditProfile extends Component {
           </div>
           <div className="form-group col-md-6">
             <small>
-              {" "}
               <label> Date Of Birth</label>
             </small>
 
@@ -223,11 +213,46 @@ class EditProfile extends Component {
               name="dob"
               className="form-control"
               onChange={this.handleChange("dob")}
+              value={moment(dob).format("YYYY-MM-DD")}
             />
           </div>
 
           <div className="form-group col-md-6 ">
-            <div className="input-group">
+            <small>
+              <label> Gender : &nbsp;</label>
+            </small>
+            <div>
+              <div className="form-check form-check-inline">
+                <input
+                  className="form-check-input"
+                  type="radio"
+                  name="gender"
+                  id="inlineRadio1"
+                  value="male"
+                  onChange={this.handleChange("gender")}
+                  checked={gender === "male"}
+                />
+                <label className="form-check-label" htmlFor="inlineRadio1">
+                  Male
+                </label>
+              </div>
+              <div className="form-check form-check-inline">
+                <input
+                  className="form-check-input"
+                  type="radio"
+                  name="gender"
+                  id="inlineRadio2"
+                  value="female"
+                  onChange={this.handleChange("gender")}
+                  checked={gender === "female"}
+                />
+                <label className="form-check-label" htmlFor="inlineRadio2">
+                  Female
+                </label>
+              </div>
+            </div>
+
+            {/* <div className="input-group">
               <small>
                 <label> Gender : &nbsp;</label>
               </small>
@@ -251,7 +276,7 @@ class EditProfile extends Component {
               &nbsp;&nbsp;
               <label> Female</label>
               &nbsp;
-            </div>
+            </div> */}
           </div>
         </div>
         <div className="form-group col-md-12 text-center">
@@ -286,8 +311,8 @@ class EditProfile extends Component {
       : DefaultProfile;
 
     return (
-      <div>
-        <div className="jumbotron p-3">{/* <h2>Edit Profile</h2> */}</div>
+      <div className="container">
+        {/* <div className="jumbotron p-3"><h2>Edit Profile</h2></div> */}
 
         <div
           className="alert alert-danger alert-dismissible fade show col-md-4"

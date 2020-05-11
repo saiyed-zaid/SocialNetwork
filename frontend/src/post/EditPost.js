@@ -55,7 +55,6 @@ class EditPost extends Component {
     const value = name === "photo" ? event.target.files[0] : event.target.value;
     const fileSize = name === "photo" ? event.target.files[0].size : 0;
     this.postData.set(name, value);
-    console.log("pgohtos", value);
 
     this.setState({ [name]: value, fileSize });
   };
@@ -83,7 +82,6 @@ class EditPost extends Component {
       const token = isAuthenticated().user.token;
 
       update(postId, token, this.postData).then((data) => {
-
         if (data.msg) {
           this.setState({ error: data.msg });
         } else {
@@ -111,6 +109,7 @@ class EditPost extends Component {
                 onChange={this.handleChange("photo")}
                 id="inputGroupFile04"
                 aria-describedby="inputGroupFileAddon04"
+                multiple
               />
               <label class="custom-file-label" for="inputGroupFile04">
                 Choose Post Photo

@@ -29,8 +29,6 @@ class FindPeople extends Component {
     return response;
   }; */
   componentDidMount() {
-    console.log(this.props);
-
     const userId = isAuthenticated().user._id;
     const token = isAuthenticated().user.token;
     setTimeout(async () => {
@@ -47,6 +45,7 @@ class FindPeople extends Component {
     const userId = isAuthenticated().user._id;
     const token = isAuthenticated().user.token;
     this.setState({ isProcessing: true });
+
     follow(userId, token, user._id).then((data) => {
       if (data.err) {
         this.setState({ error: data.err });

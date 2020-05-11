@@ -51,42 +51,34 @@ export default class chatTab extends Component {
     /* SEND MESSAGE WHEN ENTER KEY PRESS OVER */
   }
 
-  componentDidMount() {
+  async componentDidMount() {
     /* Fetching Message When This Component INVOKED */
     /*END Fetching Message When This Component INVOKED */
 
-    fetchMessage(
+    const result = await this.props.fetchMessage(
       this.props.senderId,
       this.props.receiverId,
       this.props.authUser.token
-    )
-      .then((result) => {
-        console.log(result);
-        this.setState(
-          {
-            hasNewMsg: true,
-            receiverId: this.props.senderId,
-            receiverName: this.props.senderName,
-            messages: result,
-          },
-          () => {
-            let myMsg = document.querySelector("#myMsg");
-            const chatBox = document.querySelector("#chatBox");
+    );
+    this.setState(
+      {
+        hasNewMsg: true,
+        receiverId: this.props.senderId,
+        receiverName: this.props.senderName,
+        messages: result,
+      },
+      () => {
+        let myMsg = document.querySelector("#myMsg");
+        const chatBox = document.querySelector("#chatBox");
 
-            chatBox.scrollTo(0, chatBox.scrollHeight);
+        chatBox.scrollTo(0, chatBox.scrollHeight);
 
-            this.state.messages.forEach((message) => {
-              const li = this.appendReceivedMsg(message);
-              myMsg.appendChild(li);
-            });
-          }
-        );
-      })
-      .catch((err) => {
-        if (err) {
-          console.log("Error while fetching record");
-        }
-      });
+        this.state.messages.forEach((message) => {
+          const li = this.appendReceivedMsg(message);
+          myMsg.appendChild(li);
+        });
+      }
+    );
 
     const chatBox = document.querySelector("#chatBox");
 

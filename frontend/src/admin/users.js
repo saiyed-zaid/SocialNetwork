@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-import { list } from "../user/apiUser";
 import { isAuthenticated } from "../auth/index";
 import { remove, update } from "../user/apiUser";
 import { Link } from "react-router-dom";
@@ -30,33 +29,32 @@ class Users extends Component {
     this.index = undefined;
   }
 
-  componentDidMount() {
-    list().then((data) => {
-      if (data.error) {
-        console.log(data.error);
-      } else {
-        this.setState({ users: data.users });
+  async componentDidMount() {
+    const response = await this.props.list();
+    if (response.error) {
+      console.log(response.error);
+    } else {
+      this.setState({ users: response.users });
 
-        const script = document.createElement("script");
-        script.src = "/js/dataTables.js";
-        document.body.appendChild(script);
-      }
-    });
+      const script = document.createElement("script");
+      script.src = "/js/dataTables.js";
+      document.body.appendChild(script);
+    }
   }
 
-  deleteAccount = (userId) => {
+  deleteAccount = async (userId) => {
     const token = isAuthenticated().user.token;
 
     if (isAuthenticated().user.role === "admin") {
-      remove(userId, token).then((data) => {
-        if (data.isDeleted) {
-          this.setState({ redirect: true });
-          document.getElementById("deleteprofile").style.display = "none";
-          document.getElementById("deleteprofile").classList.remove("show");
-        } else {
-          console.log(data.msg);
-        }
-      });
+      const response = await this.props.remove(userId, token);
+
+      if (response.isDeleted) {
+        this.setState({ redirect: true });
+        document.getElementById("deleteprofile").style.display = "none";
+        document.getElementById("deleteprofile").classList.remove("show");
+      } else {
+        console.log(response.msg);
+      }
     }
   };
 
@@ -133,29 +131,28 @@ class Users extends Component {
     document.getElementById("deleteprofile").classList.add("show");
   };
 
-  deleteMultiple = () => {
+  deleteMultiple = async () => {
     const { checkBox } = this.state;
     const token = isAuthenticated().user.token;
 
     if (checkBox.length === 0) {
       alert("Please Select Records To Delete.");
     } else {
-      checkBox.forEach((id) => {
-        remove(id, token)
-          .then((data) => {
-            if (data.isDeleted) {
-              this.setState({ redirect: true });
-              let getRow = document.getElementById(id);
-              getRow.addEventListener("animationend", () => {
-                getRow.parentNode.removeChild(getRow);
-                getRow.classList.remove("row-remove");
-              });
-              getRow.classList.toggle("row-remove");
-            } else {
-              console.log(data.msg);
-            }
-          })
-          .catch();
+      checkBox.forEach(async (id) => {
+        const response = await this.props.remove(id, token);
+        try {
+          if (response.isDeleted) {
+            this.setState({ redirect: true });
+            let getRow = document.getElementById(id);
+            getRow.addEventListener("animationend", () => {
+              getRow.parentNode.removeChild(getRow);
+              getRow.classList.remove("row-remove");
+            });
+            getRow.classList.toggle("row-remove");
+          } else {
+            console.log(response.msg);
+          }
+        } catch (error) {}
       });
       document.getElementById("deleteprofile").style.display = "none";
       document.getElementById("deleteprofile").classList.remove("show");
@@ -166,7 +163,7 @@ class Users extends Component {
     this.setState({ search: event.target.value.substr(0, 20) });
   };
 
-  handleUserStatusChange = (event) => {
+  handleUserStatusChange = async (event) => {
     const index = event.target.getAttribute("data-index");
     const userId = this.state.users[index]._id;
     if (!userId) {
@@ -184,26 +181,26 @@ class Users extends Component {
     const data = new FormData();
     data.append("status", dataToUpdate[index].status);
 
-    update(userId, isAuthenticated().user.token, data)
-      .then((result) => {
-        if (result.err) {
-          console.log("Error=> ", result.err);
-        } else {
-          this.setState({
-            users: dataToUpdate,
-            toastPopup: true,
-            toastType: "success",
-            toastMsg: "Record updated successfully.",
-          });
-          setTimeout(this.toastPopupEnable, 8000);
-          console.log("RECORD UPDATED", result);
-        }
-      })
-      .catch((err) => {
-        if (err) {
-          console.log("ERR IN UPDATING", err);
-        }
-      });
+    const response = await this.props.update(
+      userId,
+      isAuthenticated().user.token,
+      data
+    );
+    try {
+      if (response.err) {
+        console.log("Error=> ", response.err);
+      } else {
+        this.setState({
+          users: dataToUpdate,
+          toastPopup: true,
+          toastType: "success",
+          toastMsg: "Record updated successfully.",
+        });
+        setTimeout(this.toastPopupEnable, 8000);
+      }
+    } catch (error) {
+      console.log("ERR IN UPDATING", error);
+    }
   };
   toastPopupEnable = () => {
     this.setState({ toastPopup: false });

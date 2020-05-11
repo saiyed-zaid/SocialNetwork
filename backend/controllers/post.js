@@ -178,6 +178,7 @@ exports.createPost = async (req, res, next) => {
 
   try {
     const result = await post.save();
+    console.log("testes", result);
 
     res.json({ result });
   } catch (err) {

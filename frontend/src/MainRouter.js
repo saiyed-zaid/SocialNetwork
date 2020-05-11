@@ -22,7 +22,7 @@ import PrivateRoute from "./auth/privateRoute";
 import LockScreen from "./auth/pages/lockScreen";
 import openSocket from "socket.io-client";
 import { authUser, isAuthenticated } from "./auth/index";
-
+import avatar from "./images/avatar.jpg";
 import Chattab from "./components/chatTab";
 import { fetchMessage } from "./user/apiUser";
 import ReactNotifications from "react-notifications-component";
@@ -39,7 +39,7 @@ const Navbar = withRouter(({ history, authUser, handleLogout, signout }) => {
   return (
     <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
       {authUser && authUser.role === "admin" ? (
-        <Link className="navbar-brand" to="/admin/home">
+        <Link className="navbar-brand " to="/admin/home">
           Retwit
         </Link>
       ) : (
@@ -69,7 +69,7 @@ const Navbar = withRouter(({ history, authUser, handleLogout, signout }) => {
                 to="/admin/users"
                 style={isActive(history, `/admin/users`)}
               >
-                Users <span className="sr-only">(current)</span>
+                USERS <span className="sr-only">(current)</span>
               </Link>
             </li>
 
@@ -311,7 +311,17 @@ class MainRouter extends React.Component {
         <Switch>
           <Route path="/" exact component={Home} />
           <Route exact path="/admin/posts" component={AdminPosts} />
-          <Route exact path="/admin/users" component={AdminUsers} />
+          <Route
+            exact
+            path="/admin/users"
+            // component={AdminUsers}
+            render={() => (
+              <AdminUsers
+                remove={this.props.Userservice.remove}
+                list={this.props.Userservice.list}
+              />
+            )}
+          />
           <Route exact path="/admin/home" component={AdminHome} />
           <Route exact path="/admin" component={Admin} />
           <Route exact path="/forgot-password" component={ForgotPassword} />
@@ -326,6 +336,7 @@ class MainRouter extends React.Component {
             component={NewPost}
             authUser={this.state.authUser}
             addPost={this.props.Postservice.addPost}
+            read={this.props.Userservice.read}
           />
           <Route
             path="/post/:postId"
@@ -377,6 +388,7 @@ class MainRouter extends React.Component {
             component={EditProfile}
             update={this.props.Userservice.update}
             read={this.props.Userservice.read}
+            updateUser={this.props.Userservice.updateUser}
           />
 
           <PrivateRoute
@@ -394,6 +406,9 @@ class MainRouter extends React.Component {
             fetchPostsByUser={this.props.Postservice.fetchPostsByUser}
             update={this.props.Userservice.update}
             read={this.props.Userservice.read}
+            remove={this.props.Userservice.remove}
+            fetchMessage={this.props.Userservice.fetchMessage}
+            updateUser={this.props.Userservice.updateUser}
           />
           <Route path="/lockscreen" exact component={LockScreen} />
         </Switch>

@@ -6,7 +6,6 @@ import { read, fetchMessage, update } from "./apiUser";
 import { update as updatePost } from "../post/apiPost";
 import DefaultProfile from "../images/avatar.jpg";
 import DefaultPost from "../images/post.jpg";
-import DeleteUser from "./deleteUser";
 import FollowProfileButton from "./followProfileButton";
 import ProfileTabs from "./profileTabs";
 import { listByUser } from "../post/apiPost";
@@ -42,25 +41,18 @@ class Profile extends Component {
     this.init(userId);
   }
 
-  init = (userId) => {
+  init = async (userId) => {
     const token = isAuthenticated().user.token;
+    const data = await this.props.read(userId, token);
 
-    read(userId, token)
-      .then((data) => {
-        if (data.err) {
-          signout(() => {});
-          this.setState({ redirectToSignin: true });
-        } else {
-          let following = this.checkFollow(data);
-          this.setState({ user: data, following, isLoading: false });
-          this.loadPosts(data._id);
-        }
-      })
-      .catch((err) => {
-        if (err) {
-          console.log(err);
-        }
-      });
+    if (data.err) {
+      signout(() => {});
+      this.setState({ redirectToSignin: true });
+    } else {
+      let following = this.checkFollow(data);
+      this.setState({ user: data, following, isLoading: false });
+      this.loadPosts(data._id);
+    }
   };
 
   checkFollow = (user) => {
@@ -115,6 +107,30 @@ class Profile extends Component {
           this.setState({ users: dataToUpdate });
           document.getElementById("deleteAccount").style.display = "none";
           document.getElementById("deleteAccount").classList.remove("show");
+        }
+      })
+      .catch((err) => {
+        if (err) {
+          console.log("ERR IN UPDATING", err);
+        }
+      });
+  };
+
+  handlePostStatusChange = (post) => {
+    const postId = post._id;
+    let dataToUpdate = post;
+    const data = new FormData();
+
+    data.append("status", !dataToUpdate.status);
+
+    updatePost(postId, isAuthenticated().user.token, data)
+      .then((result) => {
+        if (result.err) {
+          console.log("Error=> ", result.err);
+        } else {
+          this.setState({ post: dataToUpdate });
+          /*  document.getElementById("deleteAccount").style.display = "none";
+          document.getElementById("deleteAccount").classList.remove("show"); */
         }
       })
       .catch((err) => {
@@ -193,7 +209,7 @@ class Profile extends Component {
 
     return (
       <div
-        className="container bg-light position-relative rounded"
+        className=" bg-light position-relative rounded"
         style={{ margin: "80px auto 10px auto" }}
       >
         {/* DISPLAY CHATBOX */}
@@ -210,6 +226,7 @@ class Profile extends Component {
               receiverName={this.state.user.name}
               messages={this.state.messages}
               handleChatBoxDisplay={this.handleChatClose}
+              fetchMessage={this.props.fetchMessage}
             />
           </div>
         )}
@@ -238,7 +255,7 @@ class Profile extends Component {
             <p className="lead ml-2">
               <h5 className="card-subtitle mb-2 text-muted">Follower</h5>
               <h6 className="card-title text-warning">
-                {this.state.user.followers.length}
+                {/* {this.state.user.followers.length} */}
               </h6>
             </p>
 
@@ -376,8 +393,6 @@ class Profile extends Component {
               </div>
             ))}
             {/*END POST RENDER */}
-
-            {/* END Display Posts */}
           </div>
           <Modal
             id="editprofile"
@@ -387,6 +402,7 @@ class Profile extends Component {
                 update={this.props.update}
                 read={this.props.read}
                 authUser={this.props.authUser}
+                updateUser={this.props.updateUser}
               />
             }
             title="Edit Profile"
@@ -396,5 +412,4 @@ class Profile extends Component {
     );
   }
 }
-
 export default Profile;

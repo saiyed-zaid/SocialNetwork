@@ -132,38 +132,7 @@ div.like-box:hover .likes {
   box-shadow: 0.1em 0.1em 0.3em rgba(0, 0, 0, 0.7);
   transition: all 0.3s ease-in-out;
 }
-.btn-primary {
-  /*  border-image: linear-gradient(
-    90deg,
-    rgb(170, 167, 214) ,
-    Yellow ,
-    rgba(0, 212, 255, 1)
-  ); */
-  /* background-color: #1a1d24 !important;
-  color: #a59413 !important; */
-}
 
-/* .btn-primary:hover {
-  background-color: #232731 !important;
-  box-shadow: 0.2em 0.2em 0.3em rgba(0, 0, 0, 0.7);
-  color: white !important;
-} */
-
-/* .btn-outline-primary {
-.btn-outline-primary {
-  border-image-source: linear-gradient(
-    90deg,
-    rgb(170, 167, 214) 0%,
-    Yellow 35%,
-    rgba(0, 212, 255, 1) 100%
-  );
-  border: 1px solid #0073ff !important;
-  color: #03a9f4 !important;
-} */
-/* .btn-outline-primary:hover {
-  background-color: #002b36 !important;
-  color: white !important;
-} */
 .custom-Read-more:hover {
   background-color: #03a9f4 !important;
   color: #ffff !important;
@@ -401,7 +370,7 @@ a:hover {
   z-index: 9999;
   height: 120px;
   position: absolute;
-  bottom: 0;
+  top: 80%;
   right: 0;
 }
 .emoji-mart-preview {
@@ -453,25 +422,6 @@ a:hover {
 .nav-pills .show > .nav-link {
   background-color: #17a2b8;
 }
-/* .dropdown-menu {
-  top: 60px;
-  right: 0px;
-  left: 0px;
-  width: 380px;
-  box-shadow: 0px 5px 7px -1px black;
-  padding-bottom: 0px;
-  padding: 0px;
-  animation: noti-box 0.2s ease-in;
-}
-.dropdown-menu::before {
-  content: "";
-  position: absolute;
-  top: -20px;
-  left: 12px;
-  border: 10px solid #343a40;
-  border-collapse: collapse;
-  border-color: transparent transparent #343a40 transparent;
-} */
 .head {
   padding: 5px 15px;
   border-radius: 3px 3px 0px 0px;
@@ -729,16 +679,16 @@ div.content {
   font-size: 21px;
   margin-top: 5px;
 }
-.chat-box {
+/* .chat-box {
   width: 100%;
   z-index: 9999;
   height: 100px;
   position: absolute;
   bottom: 0;
   right: 0;
-}
+} */
 
- .lockscreen {
+.lockscreen {
   background: transparent;
   padding-top: 140px;
 }
@@ -801,16 +751,13 @@ div.content {
   }
 }
 
-.notify-custom{
+.notify-custom {
   z-index: 9999;
 }
-
-
-
-
 
 .profile-photo {
   top: 0%;
   left: 50%;
   transform: translate(-50%, -50%);
+  
 }

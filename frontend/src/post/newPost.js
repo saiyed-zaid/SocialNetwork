@@ -18,27 +18,18 @@ class NewPost extends React.Component {
     this.selectedopt = [];
   }
 
-  componentDidMount() {
-    console.log(this.props);
-
+  async componentDidMount() {
     const userId = this.props.authUser._id;
     const token = this.props.authUser.token;
 
     this.setState({ user: this.props.authUser });
 
-    read(userId, token)
-      .then((data) => {
-        if (data.err) {
-          this.setState({ options: [] });
-        } else {
-          this.setState({ options: data.following });
-        }
-      })
-      .catch((err) => {
-        if (err) {
-          console.log(err);
-        }
-      });
+    const data = await this.props.read(userId, token);
+    if (data.err) {
+      this.setState({ options: [] });
+    } else {
+      this.setState({ options: data.following });
+    }
   }
 
   handleInputChange = (event) => {
@@ -88,10 +79,8 @@ class NewPost extends React.Component {
         token
       );
 
-      console.log("posted", response);
       this.props.history.push(`/user/${userId}`);
     } catch (errors) {
-      console.log("error", errors);
       this.setState({
         errors,
       });
