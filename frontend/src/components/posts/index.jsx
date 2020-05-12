@@ -115,35 +115,6 @@ export default class PostCard extends Component {
                 alt={this.props.post.name}
               />
             )}
-            {/*   {this.props.post.photo ? (
-              this.props.post.photo.mimetype === "video/mp4" ? (
-                <div className="embed-responsive embed-responsive-16by9 p-0 m-0">
-                  <video controls className="embed-responsive-item p-0 m-0">
-                    <source
-                      src={`${process.env.REACT_APP_API_URL}/${
-                        this.props.post.photo
-                          ? this.props.post.photo.path
-                          : DefaultPost
-                      }`}
-                      type="video/mp4"
-                      alt="No Video Found"
-                    />
-                    Your browser does not support the video tag.
-                  </video>
-                </div>
-              ) : (
-                <img
-                  className="card-img-top"
-                  src={`${process.env.REACT_APP_API_URL}/${
-                    this.props.post.photo
-                      ? this.props.post.photo.path
-                      : DefaultPost
-                  }`}
-                  onError={(i) => (i.target.src = `${DefaultPost}`)}
-                  alt={this.props.post.name}
-                />
-              )
-            ) : null} */}
           </div>
           <div>
             <p className="pt-2 text-dark text-center">
