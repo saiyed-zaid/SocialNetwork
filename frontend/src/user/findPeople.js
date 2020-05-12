@@ -3,7 +3,7 @@ import { findPeople, follow } from "./apiUser";
 import { Link } from "react-router-dom";
 import DefaultProfile from "../images/avatar.jpg";
 import { isAuthenticated } from "../auth/index";
-import LoadingRing from "../l1.gif";
+import Spinner from "../ui-components/Spinner";
 import { store } from "react-notifications-component";
 import "react-notifications-component/dist/theme.css";
 import "animate.css";
@@ -78,17 +78,17 @@ class FindPeople extends Component {
               onError={(i) => (i.target.src = `${DefaultProfile}`)}
               alt={user.name}
             />
-            <div className="card-body">
+            <div className="card-body  text-info">
               <h6 className="card-title">{user.name}</h6>
               <p>
-                <span>Following {user.following.length} </span>
-                <span>Followers {user.followers.length}</span>
+                <span>Following ({user.following.length}) </span>
+                <span>Followers ({user.followers.length}) </span>
               </p>
 
               <div>
                 <button
                   onClick={() => this.clickFollow(user, i)}
-                  className="btn btn-primary mr-1"
+                  className="btn btn-outline-info mr-1"
                   style={{
                     flex: "1",
                     border: "none !important",
@@ -97,17 +97,21 @@ class FindPeople extends Component {
                   disabled={this.state.isProcessing}
                 >
                   {this.state.isProcessing && (
+<<<<<<< HEAD
                     <img
                       src={LoadingRing}
                       style={{ height: "15px" }}
                       alt="loading..."
                     />
+=======
+                    <Spinner />
+>>>>>>> aa13c9748cddd34b3e225c0316abcaee085a0f6e
                   )}
                   &nbsp; Follow
                 </button>
                 <Link
                   to={`/user/${user._id}`}
-                  className="btn btn-outline-primary"
+                  className="btn btn-outline-info"
                   style={{
                     flex: "1",
                     border: "none !important",
@@ -137,7 +141,11 @@ class FindPeople extends Component {
     });
 
     if (users.length < 0 || this.state.isLoading) {
+<<<<<<< HEAD
       return this.state.isLoading && <img src={LoadingRing} alt="loading..." />;
+=======
+      return this.state.isLoading && <Spinner />;
+>>>>>>> aa13c9748cddd34b3e225c0316abcaee085a0f6e
     }
 
     this.state.notify &&

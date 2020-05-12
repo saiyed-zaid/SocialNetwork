@@ -1,10 +1,18 @@
 import React, { Component, useHistory } from "react";
 import { list, getOnlineUsers, fetchMessage } from "./apiUser";
+<<<<<<< HEAD
 import LoadingGif from "../l1.gif";
+=======
+import { Link } from "react-router-dom";
+import Card from "../components/card";
+import PageLoader from "../components/pageLoader";
+import Spinner from "../ui-components/Spinner";
+>>>>>>> aa13c9748cddd34b3e225c0316abcaee085a0f6e
 import { isAuthenticated } from "../auth";
 import ChatBar from "../components/chatBar/chatbar";
 import Chattab from "../components/chatTab";
 import UsersList from "../components/users/index";
+
 class Users extends Component {
   constructor() {
     super();
@@ -20,12 +28,19 @@ class Users extends Component {
     };
   }
   componentDidMount() {
+<<<<<<< HEAD
     // const usrs = aysnc ()=>{ await  this.props.getUsers()}
     setTimeout(async () => {
       try {
         const response = await this.props.getUsers();
         if (response.error) {
           console.log(response.error);
+=======
+    setTimeout(() => {
+      list().then((data) => {
+        if (data.error) {
+          console.log(data.error);
+>>>>>>> aa13c9748cddd34b3e225c0316abcaee085a0f6e
         } else {
           this.setState({ users: response.users, isLoading: false });
         }
@@ -114,12 +129,18 @@ class Users extends Component {
   render() {
     const { users, onlineUsers, error } = this.state;
     if (this.state.isLoading) {
+<<<<<<< HEAD
       return <img src={LoadingGif} alt="loading..." />;
+=======
+      return (
+          <Spinner />
+      );
+>>>>>>> aa13c9748cddd34b3e225c0316abcaee085a0f6e
     }
     return (
       <div className="row container-fluid p-0 m-0">
         {error ? (
-          <div class="alert alert-danger" role="alert">
+          <div className="alert alert-danger" role="alert">
             {error}
           </div>
         ) : null}

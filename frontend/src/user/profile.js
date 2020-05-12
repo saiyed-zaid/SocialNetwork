@@ -332,7 +332,11 @@ class Profile extends Component {
                             aria-haspopup="true"
                             aria-expanded="false"
                           >
+<<<<<<< HEAD
                             {post.status ? "Public" : " Private"} &nbsp;
+=======
+                            <i className="fas fa-ellipsis-v text-dark"></i>
+>>>>>>> aa13c9748cddd34b3e225c0316abcaee085a0f6e
                           </button>
                           <div className="dropdown-menu dropdown-menu-right bg-secondary">
                             <button

@@ -140,9 +140,9 @@ class ProfileTabs extends Component {
                       <h5 style={{ color: "rgb(230, 207, 35)" }}>
                         {person.name}
                         {person.isLoggedIn ? (
-                          <span class="badge badge-success">Online </span>
+                          <span className="badge badge-success">Online </span>
                         ) : (
-                          <span class="badge badge-secondary">Offline</span>
+                          <span className="badge badge-secondary">Offline</span>
                         )}
                       </h5>
                     </Link>
@@ -154,7 +154,7 @@ class ProfileTabs extends Component {
                           data-userId={person._id}
                           onClick={this.handleUserUnfollow}
                         >
-                          <i class="fas fa-user-minus"></i>
+                          <i className="fas fa-user-minus"></i>
                         </button>
                         <button
                           className="btn btn-primary"
@@ -162,7 +162,7 @@ class ProfileTabs extends Component {
                           data-name={person.name}
                           onClick={this.props.hasChatBoxDisplay}
                         >
-                          <i class="fas fa-paper-plane"></i>
+                          <i className="fas fa-paper-plane"></i>
                         </button>
                       </>
                     ) : null}

@@ -248,7 +248,7 @@ class Posts extends Component {
         </div>
         {/* Toast / */}
         {this.state.posts.length > 0 ? (
-          <table id="poststable" class="table table-hover text-light">
+          <table id="poststable" className="table table-hover text-light">
             <thead>
               <tr>
                 <th scope="col" width="5%">

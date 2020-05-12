@@ -95,7 +95,7 @@ class Admin extends Component {
                 {newPosts.length}
                 &nbsp;
               </h1>
-              <i class="fas fa-list-alt dash-icon"></i>
+              <i className="fas fa-list-alt dash-icon"></i>
             </div>
             <div
               className="dash-card p-3"
@@ -106,12 +106,12 @@ class Admin extends Component {
                 {dailyActiveUsers.length}
                 &nbsp;
               </h1>
-              <i class="fas fa-user-check dash-icon"></i>
+              <i className="fas fa-user-check dash-icon"></i>
             </div>
             <div className="dash-card bg-danger p-3">
               <h3>Active Now</h3>
               <h1>{usersOnline.length}&nbsp;</h1>
-              <i class="fas fa-eye dash-icon"></i>
+              <i className="fas fa-eye dash-icon"></i>
             </div>
           </div>
         </div>

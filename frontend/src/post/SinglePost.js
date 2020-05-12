@@ -6,7 +6,7 @@ import DefaultPost from "../images/post.jpg";
 import Comment from "./comment";
 // import PageLoader from "../components/pageLoader";
 
-import LoadingRing from "../l1.gif";
+import Spinner from "../ui-components/Spinner";
 import Modal from "../components/modal/modal";
 import EditPost from "./editPost";
 
@@ -229,9 +229,8 @@ class SinglePost extends Component {
   render() {
     const { post, redirectToHome, redirectToSignin, comments } = this.state;
     if (post == null || this.state.isLoading) {
-      return (
-        <img src={LoadingRing} style={{ height: "120px" }} alt="loading..." />
-      );
+
+      return <Spinner />;
     }
     if (redirectToHome) {
       return <Redirect to="/" />;
