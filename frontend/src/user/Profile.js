@@ -12,7 +12,7 @@ import ProfileTabs from "./profileTabs";
 import { listByUser } from "../post/apiPost";
 import PageLoader from "../components/pageLoader";
 
-import LoadingRing from "../l1.gif";
+import Spinner from "../ui-components/Spinner";
 import Chattab from "../components/chatTab";
 import Modal from "../components/modal/modal";
 import EditProfile from "./editProfile";
@@ -188,7 +188,7 @@ class Profile extends Component {
       return <Redirect to="/signin" />;
     }
     if (this.state.isLoading) {
-      return this.state.isLoading && <img src={LoadingRing} alt="loading" />;
+      return this.state.isLoading && <Spinner />;
     }
 
     return (
