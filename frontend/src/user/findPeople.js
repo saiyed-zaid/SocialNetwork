@@ -96,17 +96,7 @@ class FindPeople extends Component {
                   }}
                   disabled={this.state.isProcessing}
                 >
-                  {this.state.isProcessing && (
-<<<<<<< HEAD
-                    <img
-                      src={LoadingRing}
-                      style={{ height: "15px" }}
-                      alt="loading..."
-                    />
-=======
-                    <Spinner />
->>>>>>> aa13c9748cddd34b3e225c0316abcaee085a0f6e
-                  )}
+                  {this.state.isProcessing && <Spinner />}
                   &nbsp; Follow
                 </button>
                 <Link
@@ -141,11 +131,7 @@ class FindPeople extends Component {
     });
 
     if (users.length < 0 || this.state.isLoading) {
-<<<<<<< HEAD
-      return this.state.isLoading && <img src={LoadingRing} alt="loading..." />;
-=======
       return this.state.isLoading && <Spinner />;
->>>>>>> aa13c9748cddd34b3e225c0316abcaee085a0f6e
     }
 
     this.state.notify &&
