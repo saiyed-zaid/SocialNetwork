@@ -51,7 +51,7 @@ class FollowProfileButton extends Component {
             onClick={this.unfollowClick}
             className="btn btn-raised btn-danger mr-5"
           >
-            <i class="fas fa-user-minus"></i>
+            <i className="fas fa-user-minus"></i>
           </button>
         )}
     ); */

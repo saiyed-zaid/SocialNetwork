@@ -171,7 +171,7 @@ class NewPost extends React.Component {
               emptyRecordMsg="No People Found"
             />
           </div>
-          <button class="btn btn-primary">Create</button>
+          <button className="btn btn-primary">Create</button>
         </form>
       </div>
     );

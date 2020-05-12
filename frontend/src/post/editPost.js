@@ -197,7 +197,7 @@ class EditPost extends React.Component {
               emptyRecordMsg="No People Found"
             />
           </div>
-          <button class="btn btn-primary">Edit</button>
+          <button className="btn btn-primary">Edit</button>
         </form>
       </div>
     );

@@ -316,7 +316,7 @@ class Profile extends Component {
                             aria-haspopup="true"
                             aria-expanded="false"
                           >
-                            <i class="fas fa-ellipsis-v text-dark"></i>
+                            <i className="fas fa-ellipsis-v text-dark"></i>
                           </button>
                           <div className="dropdown-menu dropdown-menu-right bg-secondary">
                             <button

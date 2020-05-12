@@ -18,20 +18,13 @@ class Home extends Component {
 
   render() {
     return (
-      <div className="m-3">
+      <div className="container">
         <div
           id="chat-tab"
           className="d-flex justify-content-end align-items-end chat-box"
         ></div>
         {/* Loding Post Begin */}
-        <div>
-          <div className="jumbotron p-0">
-            {/* <h4>Recent Posts</h4> */}
-          </div>
-          <div className="container">
             <Posts />
-          </div>
-        </div>
         {/* Loding Post Over */}
       </div>
     );

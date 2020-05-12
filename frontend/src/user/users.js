@@ -3,11 +3,12 @@ import { list, getOnlineUsers, fetchMessage } from "./apiUser";
 import { Link } from "react-router-dom";
 import Card from "../components/card";
 import PageLoader from "../components/pageLoader";
-import LoadingGif from "../l1.gif";
+import Spinner from "../ui-components/Spinner";
 import { isAuthenticated } from "../auth";
 import ChatBar from "../components/chatBar/chatbar";
 import Chattab from "../components/chatTab";
 import UsersList from "../components/users/index";
+
 class Users extends Component {
   constructor() {
     super();
@@ -23,7 +24,6 @@ class Users extends Component {
     };
   }
   componentDidMount() {
-
     setTimeout(() => {
       list().then((data) => {
         if (data.error) {
@@ -64,7 +64,12 @@ class Users extends Component {
   renderUsers = (users) => (
     <>
       {users.map((user, i) => (
-        <UsersList authUser={this.props.authUser} user={user} key={i} {...this.props} />
+        <UsersList
+          authUser={this.props.authUser}
+          user={user}
+          key={i}
+          {...this.props}
+        />
       ))}
     </>
   );
@@ -101,12 +106,14 @@ class Users extends Component {
   render() {
     const { users, onlineUsers, error } = this.state;
     if (this.state.isLoading) {
-      return <img src={LoadingGif} />;
+      return (
+          <Spinner />
+      );
     }
     return (
       <div className="row container-fluid p-0 m-0">
         {error ? (
-          <div class="alert alert-danger" role="alert">
+          <div className="alert alert-danger" role="alert">
             {error}
           </div>
         ) : null}

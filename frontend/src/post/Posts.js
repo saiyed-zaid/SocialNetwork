@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { list } from "./apiPost";
 import PageLoader from "../components/pageLoader";
 import PostCard from "../components/posts/index";
-import LoadingRing from "../l1.gif";
+import Spinner from "../ui-components/Spinner";
 import Postservice from "../Services/post";
 
 class Posts extends Component {
@@ -53,9 +53,9 @@ class Posts extends Component {
   };
   render() {
     const { posts, error } = this.state;
-
+    
     if (posts.length < 0 || this.state.isLoading) {
-      return this.state.isLoading && <img src={LoadingRing} />;
+      return <Spinner />;
     }
     return this.renderPosts(posts);
   }
