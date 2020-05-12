@@ -285,9 +285,10 @@ class Profile extends Component {
           <div>
             {posts.map((post, i) => (
               <div
-                key={i}
-                className="d-flex w-100  align-items-center flex-column p-0 m-0"
+              key={i}
+              className="d-flex w-100  align-items-center flex-column p-0 m-0"
               >
+              {console.log('posts__',post)}
                 <div className="card-body m-2 bg-light col-md-7 ">
                   {/* Post */}
                   <div className="post ">
@@ -381,7 +382,8 @@ class Profile extends Component {
           </div>
           <Modal
             id="editprofile"
-            body={<EditProfile userId={this.props.match.params.userId} />}
+            body={<EditProfile userId={this.props.match.params.userId} authUser={this.props.authUser} />}
+            
             title="Edit Profile"
           />
         </div>

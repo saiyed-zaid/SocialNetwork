@@ -44,20 +44,45 @@ class EditProfile extends Component {
   };
 
   componentDidMount() {
-    this.userData = new FormData();
-    const userId =
-      this.props.userId == null
+    this.postData = new FormData();
+    /* const userId =
+      this.props.authUser == null
         ? this.props.match.params.userId
-        : this.props.userId;
-    this.init(userId);
+        : this.props.authUser._id; */
+    this.init(this.props.authUser._id);
   }
 
-  handleChange = (name) => (event) => {
-    this.setState({ error: "" });
-    const value = name === "photo" ? event.target.files[0] : event.target.value;
-    const fileSize = name === "photo" ? event.target.files[0].size : 0;
-    this.userData.set(name, value);
-    this.setState({ [name]: value });
+  handleInputChange = (name) => (event) => {
+    /* this.setState({ error: "" }); */
+    var value;
+    if (event.target.name === "photo") {
+      var fileSizes = [];
+
+      for (const file of event.target.files) {
+        fileSizes.push(file.size);
+      }
+
+      for (const key of Object.keys(event.target.files)) {
+        this.postData.append("photo", event.target.files[key]);
+      }
+
+      this.setState({
+        [event.target.name]: event.target.files,
+        fileSizes,
+      });
+    } else {
+      value = event.target.value;
+
+      this.postData.set(event.target.name, value);
+
+      this.setState({
+        [event.target.name]: event.target.value,
+      });
+    }
+
+    //    this.postData.set(name, value);
+
+    //  this.setState({ [name]: value });
   };
 
   isValid = () => {
@@ -89,13 +114,14 @@ class EditProfile extends Component {
     this.setState({ loading: true });
 
     if (this.isValid()) {
-      const userId =
+      /* const userId =
         this.props.userId === null
           ? this.props.match.params.userId
-          : this.props.userId;
-      const token = isAuthenticated().user.token;
+          : this.props.userId; */
+      const userId = this.props.authUser._id;
+      const token = this.props.authUser.token;
 
-      update(userId, token, this.userData).then((data) => {
+      update(userId, token, this.postData).then((data) => {
         console.log("data", data, userId);
 
         if (data.msg) {
@@ -125,7 +151,7 @@ class EditProfile extends Component {
                 accept="image/*"
                 className="custom-file-input"
                 type="file"
-                onChange={this.handleChange("photo")}
+                onChange={this.handleInputChange("photo")}
                 id="inputGroupFile04"
                 aria-describedby="inputGroupFileAddon04"
               />
@@ -136,7 +162,7 @@ class EditProfile extends Component {
           </div>
           <div className="form-group col-md-6">
             <input
-              onChange={this.handleChange("name")}
+              onChange={this.handleInputChange("name")}
               type="text"
               className="form-control"
               value={name}
@@ -148,7 +174,7 @@ class EditProfile extends Component {
         <div className="form-row">
           <div className="form-group col-md-6">
             <input
-              onChange={this.handleChange("email")}
+              onChange={this.handleInputChange("email")}
               type="email"
               className="form-control"
               value={email}
@@ -159,7 +185,7 @@ class EditProfile extends Component {
 
           <div className="form-group col-md-6">
             <input
-              onChange={this.handleChange("password")}
+              onChange={this.handleInputChange("password")}
               type="password"
               className="form-control"
               value={password}
@@ -171,7 +197,7 @@ class EditProfile extends Component {
         <div className="form-row">
           <div className="form-group col-md-6">
             <textarea
-              onChange={this.handleChange("about")}
+              onChange={this.handleInputChange("about")}
               className="form-control"
               value={about}
               name="about"
@@ -225,9 +251,7 @@ class EditProfile extends Component {
 
     return (
       <div>
-        <div className="jumbotron p-3">
-          {/* <h2>Edit Profile</h2> */}
-        </div>
+        <div className="jumbotron p-3">{/* <h2>Edit Profile</h2> */}</div>
 
         <div
           className="alert alert-danger alert-dismissible fade show col-md-4"
