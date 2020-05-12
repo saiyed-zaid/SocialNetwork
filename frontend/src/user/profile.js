@@ -303,6 +303,7 @@ class Profile extends Component {
                 key={i}
                 className="d-flex w-100  align-items-center flex-column p-0 m-0"
               >
+                {console.log("posts__", post)}
                 <div className="card-body m-2 bg-light col-md-7 ">
                   {/* Post */}
                   <div className="post ">

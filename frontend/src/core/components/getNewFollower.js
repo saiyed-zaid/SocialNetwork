@@ -1,4 +1,5 @@
 import React from "react";
+import TimeAgo from "react-timeago";
 
 const Follow = (props) => {
   return (
@@ -11,9 +12,11 @@ const Follow = (props) => {
             </strong>
             <small>
               &nbsp;&nbsp;
-              {follower.followedFrom
-                ? `${new Date(follower.followedFrom).toDateString()}`
-                : ""}
+              {follower.followedFrom ? (
+                <TimeAgo date={follower.followedFrom} />
+              ) : (
+                ""
+              )}
             </small>
             <div className="dropdown-divider" />
           </li>

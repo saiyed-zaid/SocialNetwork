@@ -248,11 +248,3 @@ exports.socialLogin = (req, res, next) => {
     }
   });
 };
-
-exports.changePassword = async (req, res) => {
-  try {
-    const user = await User.findOne({ _id });
-  } catch (error) {
-    return res.status("401").json(error);
-  }
-};

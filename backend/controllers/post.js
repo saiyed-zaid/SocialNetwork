@@ -149,7 +149,7 @@ exports.createPost = async (req, res, next) => {
 
   const url = req.protocol + "://" + req.get("host");
   for (var i = 0; i < req.files.length; i++) {
-    reqFiles.push(url + "/upload/" + req.files[i].filename);
+    reqFiles.push(`${url}/upload/${req.auth._id}/posts/${req.files[i].filename}`);
   }
 
   /* if (!errors.isEmpty()) {

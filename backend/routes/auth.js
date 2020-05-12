@@ -68,8 +68,6 @@ router.put(
   authController.resetPassword
 );
 
-router.get("/api/changepassword", authController.changePassword);
-
 router.get("/api/signout", auth_check, (req, res, next) => {
   try {
     User.updateOne(
