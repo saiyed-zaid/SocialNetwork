@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { list } from "./apiPost";
-import PageLoader from "../components/pageLoader";
+// import PageLoader from "../components/pageLoader";
 import PostCard from "../components/posts/index";
 import LoadingRing from "../l1.gif";
 import Postservice from "../Services/post";

@@ -5,16 +5,15 @@ const _ = require("lodash");
 
 /**
  * @function middleware
- * @description Handling get request which fetch all posts by postId
+ * @description Handling get request which fetch Single Post by postId
  */
 exports.postById = async (req, res, next, id) => {
   try {
     const post = await Post.findOne({ _id: id })
-
       .populate("postedBy", "_id name role")
       .populate("likes", "_id ")
       .populate("comments.postedBy", "_id name photo")
-      .select("comments title body photo created");
+      .select("comments title body photo created tags");
 
     if (post) {
       req.post = post;
@@ -44,7 +43,7 @@ exports.getPosts = async (req, res, next) => {
       .populate("comments", "text created")
       .populate("comments.postedBy", "_id name")
       .populate("tags", "_id name")
-      .select("_id title body created likes photo status")
+      .select("_id title body created likes photo status tags")
       .sort({ created: -1 });
     res.json({ posts });
   } catch (error) {
@@ -177,7 +176,6 @@ exports.createPost = async (req, res, next) => {
 
   try {
     const result = await post.save();
-    console.log("testes", result);
 
     res.json({ result });
   } catch (err) {
@@ -218,6 +216,8 @@ exports.deletePost = async (req, res, next) => {
  */
 exports.updatePost = async (req, res, next) => {
   let post = req.post;
+  console.table(req.tags);
+
   var tags = [];
   tags = JSON.parse(req.body.tags);
 
@@ -231,8 +231,6 @@ exports.updatePost = async (req, res, next) => {
   for (var i = 0; i < req.files.length; i++) {
     reqFiles.push(url + "/upload/" + req.files[i].filename);
   }
-
-  console.log("req_body_", req.body);
 
   const prevPostPhoto = post.photo;
   if (!req.file) {
@@ -264,8 +262,6 @@ exports.updatePost = async (req, res, next) => {
  * @description Handling patch request which update post like in database
  */
 exports.likePost = async (req, res, next) => {
-  //console.log("uiserID__", req.body);
-
   try {
     const UpdatedLikePost = await Post.findByIdAndUpdate(
       req.body.postId,
@@ -349,7 +345,6 @@ exports.uncommentPost = async (req, res, next) => {
 exports.dailyNewPosts = async (req, res, next) => {
   let created = req.profile.created.toDateString();
   let startDate = new Date();
-  console.log(req);
 
   try {
     const posts = await Post.find({

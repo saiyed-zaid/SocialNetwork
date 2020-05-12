@@ -3,7 +3,7 @@ import { isAuthenticated } from "../auth/index";
 import { read, updateUser } from "./apiUser";
 import { Redirect } from "react-router-dom";
 import DefaultProfile from "../images/avatar.jpg";
-import PageLoader from "../components/pageLoader";
+// import PageLoader from "../components/pageLoader";
 import moment from "moment";
 
 class EditProfile extends Component {
@@ -336,7 +336,7 @@ class EditProfile extends Component {
             flexWrap: "wrap",
           }} */
         >
-          {loading ? <PageLoader /> : ""}
+          {/* {loading ? <PageLoader /> : ""} */}
 
           {/*   <img
             style={{ height: "200px", width: "200px" }}

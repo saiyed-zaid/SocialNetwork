@@ -254,16 +254,14 @@ a:hover {
   background-color: inherit;
 }
 .menu-link {
-  /* border-bottom: 3px solid transparent;
-  line-height: 1.5 !important;
-  align-items: center; */
+ 
   position: relative;
 }
 /* .nav-item::after {
   transition: all 0.5s ease-in-out;
   height: 0px;
 } */
-.nav-item::after {
+/* .nav-item::after {
   content: "";
   height: 3px;
   background: linear-gradient(
@@ -277,7 +275,7 @@ a:hover {
   bottom: 0;
   width: 100%;
   animation: anim 0.3s ease-in-out;
-}
+} */
 @keyframes anim {
   0% {
     width: 0%;
@@ -303,7 +301,7 @@ a:hover {
   color: #ffffff;
   background-color: rgba(0, 0, 0, 0.13);
 }
-
+/* 
 .loader-top {
   background: linear-gradient(
     -45deg,
@@ -332,7 +330,7 @@ a:hover {
     width: 100%;
     background-position: 0% 50%;
   }
-}
+} */
 .close-notification {
   animation-name: anim-close;
   animation-duration: 0.3s;
@@ -374,7 +372,7 @@ a:hover {
   right: 0;
 }
 .emoji-mart-preview {
-  display: none;
+  display: none;  
 }
 .emoji-mart {
   border: none;

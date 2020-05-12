@@ -31,10 +31,11 @@ class Signin extends React.Component {
       this.setState({ errors: {} });
 
       const response = await this.props.loginUser(this.state);
-      console.log(response);
       localStorage.setItem("jwt", JSON.stringify(response));
       this.props.handleAuthUserUpdate();
-      this.props.history.push("/");
+      response.user.role === "admin"
+        ? this.props.history.push("/admin/home")
+        : this.props.history.push("/");
     } catch (errors) {
       this.setState({
         errors,

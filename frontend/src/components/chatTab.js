@@ -3,11 +3,12 @@ import DefaultProfile from "../images/avatar.jpg";
 import openSocket from "socket.io-client";
 import "emoji-mart/css/emoji-mart.css";
 import { Picker } from "emoji-mart";
-import { fetchMessage } from "../user/apiUser";
+// import { fetchMessage } from "../user/apiUser";
 
 export default class chatTab extends Component {
   handleClose = () => {
     let chattab = document.getElementById("chattab");
+
     chattab.style.display = "none";
   };
   constructor(props) {
@@ -162,6 +163,9 @@ export default class chatTab extends Component {
     /* DATABASE HANDLING */
   };
 
+  showEmoji = () => {
+    this.setState({ displayEmoji: !this.state.displayEmoji });
+  };
   render() {
     return (
       <div
@@ -185,7 +189,7 @@ export default class chatTab extends Component {
               type="button"
               className="close text-light"
               aria-label="Close"
-              onClick={this.props.handleChatBoxDisplay}
+              onClick={this.handleClose}
             >
               <span aria-hidden="true">&times;</span>
             </button>

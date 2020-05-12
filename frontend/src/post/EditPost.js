@@ -15,6 +15,8 @@ class EditPost extends React.Component {
       photo: "",
       fileSizes: [],
       errors: {},
+      options: [],
+      selectedTags: [],
     };
     this.postData = new FormData();
     this.multiselectRef = React.createRef();
@@ -41,6 +43,7 @@ class EditPost extends React.Component {
           error: "",
           photo: data.photo ? data.photo.path : DefaultPost,
           user: this.props.authUser,
+          selectedTags: data.tags,
         });
       }
     });
@@ -119,12 +122,12 @@ class EditPost extends React.Component {
     this.selectedopt.push(selectedItem._id);
   };
 
-  onRemove(selectedList, removedItem) {
+  onRemove = (selectedList, removedItem) => {
     this.setState(
       { tags: selectedList },
       this.postData.set("tags", selectedList.name)
     );
-  }
+  };
 
   render() {
     return (
@@ -187,7 +190,6 @@ class EditPost extends React.Component {
               className="form-control"
               ref={this.multiselectRef}
               options={this.state.options}
-              selectedValues={this.state.selectedValue}
               onSelect={this.onSelect}
               onRemove={this.onRemove} // Function will trigger on remove event
               displayValue="name" // Property name to display in the dropdown options

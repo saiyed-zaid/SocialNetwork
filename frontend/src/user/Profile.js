@@ -9,7 +9,7 @@ import DefaultPost from "../images/post.jpg";
 import FollowProfileButton from "./followProfileButton";
 import ProfileTabs from "./profileTabs";
 import { listByUser } from "../post/apiPost";
-import PageLoader from "../components/pageLoader";
+// import PageLoader from "../components/pageLoader";
 
 import LoadingRing from "../l1.gif";
 import Chattab from "../components/chatTab";
@@ -129,8 +129,6 @@ class Profile extends Component {
           console.log("Error=> ", result.err);
         } else {
           this.setState({ post: dataToUpdate });
-          /*  document.getElementById("deleteAccount").style.display = "none";
-          document.getElementById("deleteAccount").classList.remove("show"); */
         }
       })
       .catch((err) => {
@@ -255,7 +253,7 @@ class Profile extends Component {
             <p className="lead ml-2">
               <h5 className="card-subtitle mb-2 text-muted">Follower</h5>
               <h6 className="card-title text-warning">
-                {/* {this.state.user.followers.length} */}
+                {this.state.user.followers.length}
               </h6>
             </p>
 
@@ -322,8 +320,9 @@ class Profile extends Component {
                         <Link to={`/post/${post._id}`}>
                           {post.postedBy.name}
                         </Link>
-
-                        <div className="btn-group float-right">
+                      </span>
+                      <span className="description pb-3">
+                        <div className="btn-group ">
                           <button
                             type="button"
                             style={{ boxShadow: "none" }}
@@ -332,7 +331,7 @@ class Profile extends Component {
                             aria-haspopup="true"
                             aria-expanded="false"
                           >
-                            <i class="fas fa-ellipsis-v text-dark"></i>
+                            {post.status ? "Public" : " Private"} &nbsp;
                           </button>
                           <div className="dropdown-menu dropdown-menu-right bg-secondary">
                             <button
@@ -344,9 +343,6 @@ class Profile extends Component {
                             </button>
                           </div>
                         </div>
-                      </span>
-                      <span className="description pb-3">
-                        {post.status ? "Public" : " Private"} &nbsp;
                         <TimeAgo date={post.created} />
                       </span>
                     </div>

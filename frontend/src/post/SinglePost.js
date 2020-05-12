@@ -4,7 +4,7 @@ import { Link, Redirect } from "react-router-dom";
 import { isAuthenticated } from "../auth/index";
 import DefaultPost from "../images/post.jpg";
 import Comment from "./comment";
-import PageLoader from "../components/pageLoader";
+// import PageLoader from "../components/pageLoader";
 
 import LoadingRing from "../l1.gif";
 import Modal from "../components/modal/modal";

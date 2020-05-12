@@ -35,10 +35,6 @@ exports.postSignup = async (req, res, next) => {
     user
       .save()
       .then((result) => {
-        //console.log("CREATED USER", user._id);
-        //console.log("TYPE", typeof user._id);
-        console.log(result);
-
         const destPosts = path.join(
           __dirname,
           "..",
@@ -78,9 +74,8 @@ exports.postSignup = async (req, res, next) => {
             ),
             { recursive: true }
           );
-          //console.log("Directory created successfully");
         } else {
-          console.log("Directory NOT created successfully");
+          console.log("Directory Not created successfully");
         }
         /* Creating Directory For This User OVER */
         res.status(200).json({ msg: "Signup successfully, proced to login!" });
@@ -252,4 +247,12 @@ exports.socialLogin = (req, res, next) => {
       return res.json({ user: { token, _id, name, email } });
     }
   });
+};
+
+exports.changePassword = async (req, res) => {
+  try {
+    const user = await User.findOne({ _id });
+  } catch (error) {
+    return res.status("401").json(error);
+  }
 };
