@@ -30,12 +30,20 @@ export default class Authservice {
               password: data.password,
             }),
           }
-        );
+        ).then((result) => {
+          return result.json().then((result) => {
+            return result;
+          });
+        });
 
         if (response.error) {
-          return Promise.reject(response.error);
+
+          return Promise.reject({
+            responseError: response.error,
+          });
+
         } else {
-          return await response.json();
+          return response;
         }
       } catch (error) {
         return Promise.reject(error);
@@ -104,7 +112,7 @@ export default class Authservice {
     }
   }
 
-  signout(next) {
+  async signout(next) {
     const token = isAuthenticated().user.token;
     return fetch(`${process.env.REACT_APP_API_URL}/api/signout`, {
       method: "GET",
@@ -123,5 +131,55 @@ export default class Authservice {
         return response.json();
       })
       .catch((err) => console.log(err));
+  }
+
+  async changePassword(data, token) {
+    const rules = {
+      oldPassword: "required|string",
+      password: "required|string|confirmed|min:6",
+      password_confirmation: "required|string",
+    };
+
+    const messages = {
+      required: "{{field}} Field is Required.",
+      "password.confirmed": "Password Does Not Matched.",
+    };
+
+    try {
+      await validateAll(data, rules, messages);
+
+      var formData = {
+        oldPassword: data.oldPassword,
+        password: data.password,
+        password_confirmation: data.password_confirmation,
+      };
+
+      try {
+        const response = await fetch(
+          `${process.env.REACT_APP_API_URL}/api/changePassword`,
+          {
+            method: "POST",
+            headers: {
+              Accept: "application/json",
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${token}`,
+            },
+            body: JSON.stringify(formData),
+          }
+        );
+        return await response.json();
+      } catch (error) {
+        console.log(error);
+      }
+    } catch (errors) {
+      //console.log(data);
+
+      var formattedErrors = {};
+      errors.forEach((error) => {
+        formattedErrors[error.field] = error.message;
+      });
+
+      return Promise.reject(formattedErrors);
+    }
   }
 }

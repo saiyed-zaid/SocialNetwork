@@ -150,6 +150,47 @@ exports.postSignin = async (req, res, next) => {
   });
 };
 
+exports.chnagePassword = async (req, res, next) => {
+  const errs = validationResult(req);
+
+  if (!errs.isEmpty()) {
+    const errors = errs.array();
+    return res.status(422).json({
+      errors,
+    });
+  }
+
+  try {
+    const user = await User.findOne({ password: md5(req.body.oldPassword) });
+    if (!user) {
+      return res.status(422).json({
+        errors: [
+          {
+            param: "oldPassword",
+            msg: "Old Password Does Not Matched.",
+          },
+        ],
+      });
+    }
+
+    User.updateOne(
+      { _id: req.auth._id },
+      {
+        $set: {
+          password: md5(req.body.password),
+        },
+      },
+      (data) => {
+        return res.json({
+          msg: "Password Changed Successfully",
+        });
+      }
+    );
+  } catch (error) {
+    console.log("errr", error);
+  }
+};
+
 exports.forgetPassword = async (req, res, next) => {
   const { email } = req.body;
   User.findOne({ email }, (err, user) => {

@@ -64,7 +64,8 @@ exports.getUsers = async (req, res, next) => {
  * @description Handling get request which fetch single User
  */
 exports.getUser = async (req, res, next) => {
-  // req.profile.password = undefined;
+  req.profile.password = undefined;
+
   return res.json(req.profile);
 };
 

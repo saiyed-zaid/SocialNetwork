@@ -97,7 +97,6 @@ class Signup extends React.Component {
               <input
                 type="password"
                 name="password"
-                handleInputChange
                 onChange={this.handleInputChange}
                 className={`form-control ${
                   this.state.errors["password"] && "is-invalid"
@@ -117,7 +116,6 @@ class Signup extends React.Component {
               <input
                 type="password"
                 name="password_confirmation"
-                handleInputChange
                 onChange={this.handleInputChange}
                 className={`form-control ${
                   this.state.errors["password_confirmation "] && "is-invalid"

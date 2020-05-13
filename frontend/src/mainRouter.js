@@ -217,9 +217,9 @@ const Navbar = withRouter(({ history, authUser, handleLogout, signout }) => {
             </ul>
             {authUser ? (
               <ul className="navbar-nav ml-auto mb-0 mr-2 pt-0">
-                <li class="nav-item dropdown">
+                <li className="nav-item dropdown">
                   <a
-                    class="nav-link"
+                    className="nav-link"
                     href="/"
                     id="navbarDropdownMenuLink"
                     role="button"
@@ -237,17 +237,17 @@ const Navbar = withRouter(({ history, authUser, handleLogout, signout }) => {
                     />
                   </a>
                   <div
-                    class="dropdown-menu dropdown-menu-right"
+                    className="dropdown-menu dropdown-menu-right"
                     aria-labelledby="navbarDropdownMenuLink"
                   >
                     <Link
-                      class="dropdown-item"
+                      className="dropdown-item"
                       to={`/user/changepassword/${authUser._id}`}
                     >
                       Change Password
                     </Link>
                     <Link
-                      class="dropdown-item"
+                      className="dropdown-item"
                       to="/signin"
                       onClick={() =>
                         signout(() => {
@@ -517,6 +517,7 @@ class MainRouter extends React.Component {
             exact
             component={ChangePassword}
             read={this.props.Userservice.read}
+            changePassword={this.props.Authservice.changePassword}
           />
         </Switch>
       </div>
