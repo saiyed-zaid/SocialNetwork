@@ -149,7 +149,9 @@ exports.createPost = async (req, res, next) => {
 
   const url = req.protocol + "://" + req.get("host");
   for (var i = 0; i < req.files.length; i++) {
-    reqFiles.push(`${url}/upload/users/${req.auth._id}/posts/${req.files[i].filename}`);
+    reqFiles.push(
+      `${url}/upload/users/${req.auth._id}/posts/${req.files[i].filename}`
+    );
   }
 
   /* if (!errors.isEmpty()) {
@@ -216,35 +218,33 @@ exports.deletePost = async (req, res, next) => {
  */
 exports.updatePost = async (req, res, next) => {
   let post = req.post;
-  console.table(req.tags);
-
-  var tags = [];
-  tags = JSON.parse(req.body.tags);
-
-  if (tags) {
-    post.tags = tags;
-  }
 
   const reqFiles = [];
 
   const url = req.protocol + "://" + req.get("host");
+
   for (var i = 0; i < req.files.length; i++) {
-    reqFiles.push(url + "/upload/" + req.files[i].filename);
+    reqFiles.push(
+      `${url}/upload/users/${req.auth._id}/posts/${req.files[i].filename}`
+    );
   }
 
   const prevPostPhoto = post.photo;
+
   if (!req.file) {
     req.file = post.photo;
   }
+
   post.photo = reqFiles;
   post = _.extend(post, req.body);
   post.updated = Date.now();
+
   try {
     const result = await post.save();
     //prevPostPhoto
     if (result) {
-      if (prevPostPhoto) {
-        fs.unlink(prevPostPhoto.path, (err) => {
+       if (prevPostPhoto) {
+        fs.unlink(prevPostPhoto, (err) => {
           console.log("Error while unlink user image", err);
         });
       }

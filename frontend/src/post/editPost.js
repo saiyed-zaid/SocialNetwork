@@ -7,7 +7,6 @@ import DefaultPost from "../images/post.jpg";
 class EditPost extends React.Component {
   constructor(props) {
     super(props);
-
     this.state = {
       id: "",
       title: "",
@@ -95,7 +94,7 @@ class EditPost extends React.Component {
     event.preventDefault();
 
     const data = this.state;
-    this.postData.append("tags", JSON.stringify(this.selectedopt));
+    this.postData.append("tags", this.selectedopt);
 
     const userId = this.props.authUser._id;
     const token = this.props.authUser.token;
@@ -105,7 +104,7 @@ class EditPost extends React.Component {
 
       const response = await this.props.editPost(
         this.postData,
-        this.state.id,
+        this.state.id,  
         token
       );
       console.log("response__", response);

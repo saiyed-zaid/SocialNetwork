@@ -118,7 +118,8 @@ export default class Postservice {
       return Promise.reject(error);
     }
   }
-  //REMAINING
+  
+  
   async editPost(post, postId, token) {
     const postData = await fetch(
       `${process.env.REACT_APP_API_URL}/api/post/${postId}`,
