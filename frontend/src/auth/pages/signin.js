@@ -1,6 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import SocialLogin from "./socialLogin";
+import Alert from "../../ui-components/Alert";
 
 class Signin extends React.Component {
   constructor(props) {
@@ -28,18 +29,25 @@ class Signin extends React.Component {
     event.preventDefault();
 
     try {
-      this.setState({ errors: {} });
+      this.setState({ errors: {}, responseError: null });
 
       const response = await this.props.loginUser(this.state);
+
       localStorage.setItem("jwt", JSON.stringify(response));
       this.props.handleAuthUserUpdate();
       response.user.role === "admin"
         ? this.props.history.push("/admin/home")
         : this.props.history.push("/");
     } catch (errors) {
-      this.setState({
-        errors,
-      });
+      if (errors.responseError) {
+        this.setState({
+          responseError: errors.responseError,
+        });
+      } else {
+        this.setState({
+          errors,
+        });
+      }
     }
   };
 
@@ -48,9 +56,7 @@ class Signin extends React.Component {
       <div className="container bg-light p-2 my-3 col-md-4">
         <div className="jumbotron" style={{ padding: "2rem 2rem" }}>
           {this.state.responseError && (
-            <div className="alert alert-danger" role="alert">
-              {this.state.responseError}
-            </div>
+            <Alert type="danger" message={this.state.responseError} />
           )}
           <h2>Login</h2>
           <form onSubmit={this.handleSubmit}>

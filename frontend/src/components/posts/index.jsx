@@ -53,7 +53,7 @@ export default class PostCard extends Component {
             </span>
           </div>
           <div className="post-media">
-            {this.props.post.photo.length > 1 ? (
+            {this.props.post.photo.length >= 1 ? (
               <div
                 id="carouselExampleControls"
                 className="carousel slide"

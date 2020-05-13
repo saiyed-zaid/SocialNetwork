@@ -1,10 +1,11 @@
 const express = require("express");
 const router = express.Router();
 const authController = require("../controllers/auth");
-const { body } = require("express-validator");
+const { body, validationResult } = require("express-validator");
 const userController = require("../controllers/user");
 const auth_check = require("../middleware/auth-check");
 const User = require("../models/user");
+const md5 = require("md5");
 
 /**
  * @function post
@@ -43,6 +44,36 @@ router.post("/api/social-login", authController.socialLogin);
  * @param {property} controller name
  */
 router.post("/api/signin", authController.postSignin);
+
+/* test */
+/**
+ * @function post
+ * @description Handling post request for creating new post
+ * @param {String} path of router
+ * @param {array} validations
+ * @param {property} controller name
+ */
+router.post(
+  "/api/changePassword",
+  [
+    body("password").notEmpty().withMessage("Password feild is required."),
+
+    body("password")
+      .isLength({ min: 6 })
+      .withMessage("Password must be 6 character long."),
+    body("password_confirmation").custom((value, { req }) => {
+      if (value !== req.body.password) {
+        //return Promise.reject("Password confirmation does not match password");
+        throw new Error("Password confirmation does not match password");
+      }
+      return true;
+    }),
+  ],
+  auth_check,
+  authController.chnagePassword
+);
+
+/* test */
 
 /**
  * @function put
