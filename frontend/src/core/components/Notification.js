@@ -12,7 +12,6 @@ class Notification extends React.Component {
   componentDidMount() {
     read()
       .then((data) => {
-        console.log("Check__", data);
         var newFollowerList = [];
         if (data.followers.length > 0) {
           //this.setState({ newFollower: new Array(data.followers.length) });

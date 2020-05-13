@@ -3,7 +3,7 @@ import { list } from "./apiPost";
 // import PageLoader from "../components/pageLoader";
 import PostCard from "../components/posts/index";
 import Spinner from "../ui-components/Spinner";
-import Postservice from "../Services/post";
+import Postservice from "../services/post";
 
 class Posts extends Component {
   constructor() {
@@ -53,7 +53,7 @@ class Posts extends Component {
   };
   render() {
     const { posts, error } = this.state;
-    
+
     if (posts.length < 0 || this.state.isLoading) {
       return <Spinner />;
     }

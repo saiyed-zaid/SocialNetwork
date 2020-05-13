@@ -762,3 +762,23 @@ div.content {
 .nav-item{
   padding: 5px;
 }
+
+
+.gototop{
+  display: none; 
+  position: fixed;
+  bottom: 20px; 
+  right: 30px; 
+  z-index: 9999; 
+  border: none;
+  outline: none;
+  background-color:grey;
+  color:white;
+  text-align: center;
+  cursor: pointer;
+  border-radius: 50%;
+  font-size: 18px; 
+  height: 50px;
+  width: 50px;
+  transition:  all 2s;
+}

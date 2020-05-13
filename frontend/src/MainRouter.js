@@ -95,19 +95,6 @@ const Navbar = withRouter(({ history, authUser, handleLogout, signout }) => {
                 </Link>
               </li>
               <li>
-                <Link
-                  className="nav-link"
-                  to="/signin"
-                  style={isActive(history, "/signout")}
-                  onClick={() =>
-                    signout(() => {
-                      handleLogout();
-                    })
-                  }
-                >
-                  LOGOUT
-                </Link>
-
                 {!authUser && (
                   <>
                     <Link
@@ -182,7 +169,7 @@ const Navbar = withRouter(({ history, authUser, handleLogout, signout }) => {
                 <>
                   <li className="nav-item">
                     <Link
-                      className="nav-item nav-link menu-link active"
+                      className="nav-link  active"
                       to="/signin"
                       style={isActive(history, "/signin")}
                     >

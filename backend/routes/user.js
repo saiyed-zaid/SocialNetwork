@@ -26,7 +26,6 @@ router.post("/api/user/messages", auth_check, (req, res, next) => {
   })
     .sort({ created: 1 })
     .then((result) => {
-      console.log("FRESHED DATA__+", result);
       res.json(result);
       //io.emit(data.receiver, data);
     })

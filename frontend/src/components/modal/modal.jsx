@@ -13,7 +13,6 @@ export default class modal extends Component {
     return (
       <div
         className="modal fade"
-        // id="exampleModalCenter"
         id={this.props.id}
         tabIndex="-1"
         role="dialog"
@@ -37,7 +36,6 @@ export default class modal extends Component {
               <button
                 type="button"
                 className="close text-light"
-                // data-dismiss="modal"
                 aria-label="Close"
                 onClick={this.modalClose}
               >

@@ -93,15 +93,12 @@ exports.getPostsByUser = async (req, res, next) => {
             {
               disabledBy: "",
             },
-            // {
-            //   status: true,
-            // },
           ],
         },
       ],
     })
       .populate("postedBy", "_id name role")
-      .select("_id title body created likes status photo")
+      .select("_id title body created likes status photo tags")
       .sort("_created");
     if (posts.length == 0) {
       return res.json({
@@ -149,7 +146,9 @@ exports.createPost = async (req, res, next) => {
 
   const url = req.protocol + "://" + req.get("host");
   for (var i = 0; i < req.files.length; i++) {
-    reqFiles.push(`${url}/upload/${req.auth._id}/posts/${req.files[i].filename}`);
+    reqFiles.push(
+      `${url}/upload/${req.auth._id}/posts/${req.files[i].filename}`
+    );
   }
 
   /* if (!errors.isEmpty()) {

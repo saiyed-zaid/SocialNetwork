@@ -48,11 +48,10 @@ class EditProfile extends Component {
 
   componentDidMount() {
     this.postData = new FormData();
-    const userId =
-      this.props.authUser == null
-        ? this.props.match.params.userId
-        : this.props.authUser._id;
-    this.init(this.props.authUser._id);
+    const userId = !this.props.authUser
+      ? this.props.match.params.userId
+      : this.props.authUser._id;
+    this.init(userId);
   }
 
   handleInputChange = (name) => (event) => {
@@ -82,10 +81,6 @@ class EditProfile extends Component {
         [event.target.name]: event.target.value,
       });
     }
-
-    //    this.postData.set(name, value);
-
-    //  this.setState({ [name]: value });
   };
 
   isValid = () => {
@@ -141,7 +136,7 @@ class EditProfile extends Component {
     }
   };
 
-  editForm = (name, gender, dob, email, password, about) => {
+  editForm = (name, gender, dob, email, about) => {
     return (
       <form method="post">
         <div className="form-row text-light">
@@ -197,17 +192,15 @@ class EditProfile extends Component {
 
           <div className="form-group col-md-6">
             <small>
-              {" "}
-              <label>Password</label>
+              <label> Date Of Birth</label>
             </small>
 
             <input
-              onChange={this.handleInputChange("password")}
-              type="password"
+              type="date"
+              name="dob"
               className="form-control"
-              value={password}
-              name="password"
-              placeholder="Password"
+              onChange={this.handleInputChange("dob")}
+              value={moment(dob).format("YYYY-MM-DD")}
             />
           </div>
         </div>
@@ -223,19 +216,6 @@ class EditProfile extends Component {
               value={about}
               name="about"
               placeholder="About "
-            />
-          </div>
-          <div className="form-group col-md-6">
-            <small>
-              <label> Date Of Birth</label>
-            </small>
-
-            <input
-              type="date"
-              name="dob"
-              className="form-control"
-              onChange={this.handleInputChange("dob")}
-              value={moment(dob).format("YYYY-MM-DD")}
             />
           </div>
 
@@ -273,32 +253,6 @@ class EditProfile extends Component {
                 </label>
               </div>
             </div>
-
-            {/* <div className="input-group">
-              <small>
-                <label> Gender : &nbsp;</label>
-              </small>
-              <input
-                type="radio"
-                name="gender"
-                value="male"
-                onChange={this.handleChange("gender")}
-                checked={gender === "male"}
-              />
-              &nbsp;&nbsp;
-              <label> Male</label>
-              &nbsp;
-              <input
-                type="radio"
-                name="gender"
-                value="female"
-                onChange={this.handleChange("gender")}
-                checked={gender === "female"}
-              />
-              &nbsp;&nbsp;
-              <label> Female</label>
-              &nbsp;
-            </div> */}
           </div>
         </div>
         <div className="form-group col-md-12 text-center">
@@ -317,7 +271,6 @@ class EditProfile extends Component {
       gender,
       dob,
       email,
-      password,
       redirectToProfile,
       error,
       loading,
@@ -328,13 +281,15 @@ class EditProfile extends Component {
     if (redirectToProfile) {
       return <Redirect to={`/user/${id}`} />;
     }
-    const photoUrl = id
-      ? `${process.env.REACT_APP_API_URL}/${photo}`
-      : DefaultProfile;
+    // const photoUrl = id
+    //   ? `${process.env.REACT_APP_API_URL}/${photo}`
+    //   : DefaultProfile;
 
     return (
-      <div>
-        <div className="jumbotron p-3">{/* <h2>Edit Profile</h2> */}</div>
+      <div className="container">
+        <div className="jumbotron p-3">
+          <h2>Edit Profile</h2>
+        </div>
 
         <div
           className="alert alert-danger alert-dismissible fade show col-md-4"
@@ -368,7 +323,7 @@ class EditProfile extends Component {
             alt={name}
           />
  */}
-          {this.editForm(name, gender, dob, email, password, about)}
+          {this.editForm(name, gender, dob, email, about)}
         </div>
       </div>
     );

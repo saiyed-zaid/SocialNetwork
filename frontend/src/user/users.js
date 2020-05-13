@@ -1,9 +1,6 @@
 import React, { Component, useHistory } from "react";
 import { list, getOnlineUsers, fetchMessage } from "./apiUser";
-import LoadingGif from "../l1.gif";
-import { Link } from "react-router-dom";
-import Card from "../components/card";
-import PageLoader from "../components/pageLoader";
+import GoToTop from "../ui-components/goToTop";
 import Spinner from "../ui-components/Spinner";
 import { isAuthenticated } from "../auth";
 import ChatBar from "../components/chatBar/chatbar";
@@ -157,6 +154,7 @@ class Users extends Component {
         <button id="floating-btn" className="floating-btn" onClick={this.onMsg}>
           <i className="fas fa-paper-plane anim-icon"></i>
         </button>
+        <GoToTop />
       </div>
     );
   }

@@ -9,7 +9,6 @@ module.exports = async (req, res, next) => {
     let token;
     token = req.headers.authorization.split(" ")[1];
 
-    //console.log("__TOKEN", token);
 
     if (!token) {
       //return res.status(401).json({ msg: "Autherization failed" });
@@ -19,7 +18,6 @@ module.exports = async (req, res, next) => {
     const decodedToken = jwt.verify(token, process.env.JWT_KEY);
 
     req.auth = { _id: decodedToken._id, role: decodedToken.role };
-    //console.log('AAUTH_',req.auth);
        next();
   } catch (error) {
     /* return res.status(401).json({ msg: "Autherization failed" }); */

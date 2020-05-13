@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import Posts from "../post/posts";
+import GoToTop from "../ui-components/goToTop";
 
 class Home extends Component {
   constructor() {
@@ -11,7 +12,7 @@ class Home extends Component {
   }
 
   componentDidMount() {
-    document.title = "Social Network | HOME";
+    document.title = "Retwit | HOME";
   }
 
   render() {
@@ -25,6 +26,7 @@ class Home extends Component {
 
         <Posts />
         {/* Loding Post Over */}
+        <GoToTop/>
       </div>
     );
   }
