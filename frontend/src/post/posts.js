@@ -46,7 +46,7 @@ class Posts extends Component {
     return (
       <div className="row justify-content-md-center">
         {posts.map((post, i) => {
-          return <PostCard post={post} />;
+          return <PostCard post={post} index={i} />;
         })}
       </div>
     );
