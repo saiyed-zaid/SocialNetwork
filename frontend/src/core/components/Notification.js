@@ -1,12 +1,23 @@
 import React from "react";
-import { read, isFollowStatusChange } from "../api/getNotification";
+import {
+  read,
+  isFollowStatusChange,
+  readPost,
+  isLikesStatusChange,
+} from "../api/getNotification";
 
 import Follow from "./getNewFollower";
 
 class Notification extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { hasNewFollow: false, timer: null, newFollowerList: [] };
+    this.state = {
+      hasNewFollow: false,
+      timer: null,
+      newFollowerList: [],
+      hasNewLikes: false,
+      newLikesList: [],
+    };
   }
 
   componentDidMount() {
@@ -45,7 +56,47 @@ class Notification extends React.Component {
           console.log("Error while fetching new Followers", err);
         }
       });
+
+    readPost().then((data) => {
+      let newLikesList = [];
+
+      data.posts.forEach((post) => {
+        if (post.likes.length > 0) {
+          post.likes.forEach((like, i) => {
+            console.log("testtststetse", like);
+
+            if (like.isNewLike) {
+              console.log(like);
+
+              newLikesList.push({
+                id: like.user._id,
+                name: like.user.name,
+                likedFrom: like.likedFrom,
+              });
+            }
+          });
+          if (newLikesList.length > 0) {
+            console.log("New Like List", newLikesList);
+
+            this.setState({
+              hasNewLikes: true,
+              newLikesList: newLikesList,
+            });
+          }
+        }
+      });
+    });
   }
+  likeStatusChange = () => {
+    if (this.state.hasNewLikes) {
+      const toast = document.querySelectorAll(".noti");
+      toast.forEach((t) => {
+        t.classList.replace("show", "hide");
+      });
+      clearTimeout(this.state.timer);
+      this.setState({ hasNewLikes: false });
+    }
+  };
 
   followStatusChange = () => {
     if (this.state.hasNewFollow) {
@@ -81,7 +132,10 @@ class Notification extends React.Component {
             <>
               <a href="#" className="dropdown-item">
                 <span className="float-right text-muted text-sm">
-                  <Follow newFollowers={this.state.newFollowerList} />
+                  <Follow
+                    newFollowers={this.state.newFollowerList}
+                    newLikes={this.state.newLikesList}
+                  />
                 </span>
               </a>
             </>

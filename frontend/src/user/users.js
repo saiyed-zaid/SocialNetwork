@@ -6,6 +6,7 @@ import { isAuthenticated } from "../auth";
 import ChatBar from "../components/chatBar/chatbar";
 import Chattab from "../components/chatTab";
 import UsersList from "../components/users/index";
+import Alert from "../ui-components/Alert";
 
 class Users extends Component {
   constructor() {
@@ -109,11 +110,7 @@ class Users extends Component {
     }
     return (
       <div className="row container-fluid p-0 m-0">
-        {error ? (
-          <div className="alert alert-danger" role="alert">
-            {error}
-          </div>
-        ) : null}
+        {error ? <Alert message={error} type="danger" /> : null}
         <div
           id="chat-tab"
           className="justify-content-end align-items-end chat-box"

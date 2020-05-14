@@ -4,12 +4,10 @@ import { Link, Redirect } from "react-router-dom";
 import { isAuthenticated } from "../auth/index";
 import DefaultPost from "../images/post.jpg";
 import Comment from "./comment";
-// import PageLoader from "../components/pageLoader";
-
 import Spinner from "../ui-components/Spinner";
 import Modal from "../components/modal/modal";
 import EditPost from "./editPost";
-
+import Carousel from "../ui-components/carosuel";
 class SinglePost extends Component {
   state = {
     post: null,
@@ -72,9 +70,11 @@ class SinglePost extends Component {
     let arr = [];
 
     likes.forEach((e) => {
-      arr.push(e._id);
+      arr.push(e.user);
     });
+
     var match = arr.indexOf(userId);
+
     if (match >= 0) {
       return true;
     }
@@ -97,7 +97,6 @@ class SinglePost extends Component {
 
     try {
       const response = await callApi(userId, token, postId);
-      console.log("asd", response);
 
       if (response.error) {
         console.log(response.error);
@@ -119,7 +118,12 @@ class SinglePost extends Component {
     return (
       <div>
         <div>
-          {post.photo && post.photo.mimetype === "video/mp4" ? (
+          {post.photo.length > 1 ? (
+            <div style={{ height: "100px !important" }}>
+              <Carousel images={post.photo} />
+            </div>
+          ) : (
+            /*  {post.photo && post.photo.mimetype === "video/mp4" ? (
             <div
               className="embed-responsive embed-responsive-21by9"
               style={{ height: "500px" }}
@@ -134,7 +138,7 @@ class SinglePost extends Component {
                 Unsupported Browser.
               </video>
             </div>
-          ) : (
+          ) : ( */
             <img
               className="img-thumbnail p-0 rounded-0"
               src={`${process.env.REACT_APP_API_URL}/${
@@ -229,7 +233,6 @@ class SinglePost extends Component {
   render() {
     const { post, redirectToHome, redirectToSignin, comments } = this.state;
     if (post == null || this.state.isLoading) {
-
       return <Spinner />;
     }
     if (redirectToHome) {

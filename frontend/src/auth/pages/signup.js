@@ -1,5 +1,6 @@
 import React from "react";
 import { Link, Redirect } from "react-router-dom";
+import Alert from "../../ui-components/Alert";
 
 class Signup extends React.Component {
   constructor(props) {
@@ -46,9 +47,7 @@ class Signup extends React.Component {
       <div className="container bg-light p-2 my-3 col-md-4">
         <div className="jumbotron" style={{ padding: "0.5rem 2rem" }}>
           {this.state.responseError && (
-            <div className="alert alert-danger" role="alert">
-              {this.state.responseError}
-            </div>
+            <Alert message={this.state.responseError} type="danger" />
           )}
           <h2>Signup</h2>
           <form onSubmit={this.handleSubmit}>

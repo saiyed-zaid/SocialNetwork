@@ -8,6 +8,8 @@ exports.userById = async (req, res, next, id) => {
     const user = await User.findById(id)
       .populate("following", "_id name photo isLoggedIn lastLoggedIn")
       .populate("followers.user", "_id name photo");
+    // .populate("comments", "_id");
+
     if (!user) {
       return next(new Error("User not Found."));
     }
@@ -240,6 +242,23 @@ exports.newFollowerStatusChagne = (req, res, next) => {
     {
       $set: {
         "followers.$[].isNewUser": false,
+      },
+    },
+    { multi: true }
+  )
+    .then((result) => {})
+    .catch((err) => {
+      if (err) {
+        console.error(err);
+      }
+    });
+};
+exports.newLikesStatusChange = (req, res, next) => {
+  User.findByIdAndUpdate(
+    req.auth._id,
+    {
+      $set: {
+        "likes.$[].isNewLike": false,
       },
     },
     { multi: true }

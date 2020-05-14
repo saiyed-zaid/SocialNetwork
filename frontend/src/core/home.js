@@ -26,7 +26,7 @@ class Home extends Component {
 
         <Posts />
         {/* Loding Post Over */}
-        <GoToTop/>
+        <GoToTop />
       </div>
     );
   }

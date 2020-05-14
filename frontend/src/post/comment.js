@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { comment, uncomment } from "./apiPost";
 import { isAuthenticated } from "../auth/index";
 import CommentList from "../components/commentList/index";
+import Alert from "../ui-components/Alert";
 
 class Comment extends Component {
   state = {
@@ -91,20 +92,12 @@ class Comment extends Component {
     const { error } = this.state;
     return (
       <div className="ml-0 mr-5">
-        <div
-          className="alert alert-danger alert-dismissible fade show"
+        <Alert
           style={{ display: error ? "" : "none" }}
-        >
-          {error}
-          <button
-            type="button"
-            className="close"
-            data-dismiss="alert"
-            aria-label="Close"
-          >
-            <span aria-hidden="true">&times;</span>
-          </button>
-        </div>
+          message={error}
+          type="danger"
+        />
+        
         <hr />
         <div className="col-md-12">
           <h5 className="text-light">

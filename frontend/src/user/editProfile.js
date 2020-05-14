@@ -3,7 +3,7 @@ import { isAuthenticated } from "../auth/index";
 import { read, updateUser } from "./apiUser";
 import { Redirect } from "react-router-dom";
 import DefaultProfile from "../images/avatar.jpg";
-// import PageLoader from "../components/pageLoader";
+import Alert from "../ui-components/Alert";
 import moment from "moment";
 
 class EditProfile extends Component {
@@ -290,21 +290,12 @@ class EditProfile extends Component {
         <div className="jumbotron p-3">
           <h2>Edit Profile</h2>
         </div>
-
-        <div
-          className="alert alert-danger alert-dismissible fade show col-md-4"
+        <Alert
+          message={error}
+          type="danger"
           style={{ display: error ? "" : "none" }}
-        >
-          {error}
-          <button
-            type="button"
-            className="close"
-            data-dismiss="alert"
-            aria-label="Close"
-          >
-            <span aria-hidden="true">&times;</span>
-          </button>
-        </div>
+        />
+
         <div
           className="container-fluid p-0"
           /*  style={{

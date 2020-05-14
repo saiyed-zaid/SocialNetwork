@@ -11,9 +11,8 @@ exports.postById = async (req, res, next, id) => {
   try {
     const post = await Post.findOne({ _id: id })
       .populate("postedBy", "_id name role")
-      .populate("likes", "_id ")
       .populate("comments.postedBy", "_id name photo")
-      .select("comments title body photo created tags");
+      .select("comments title body likes photo created tags");
 
     if (post) {
       req.post = post;
@@ -50,7 +49,6 @@ exports.getPosts = async (req, res, next) => {
     console.log("Error while fetching posts", error);
     res.status(422).json({ msg: "Error while fetching posts" });
   }
-  4;
 };
 
 /**
@@ -98,7 +96,8 @@ exports.getPostsByUser = async (req, res, next) => {
       ],
     })
       .populate("postedBy", "_id name role")
-      .select("_id title body created likes status photo tags")
+      .populate("likes.user", "_id name")
+      .select("_id title body created likes comments status photo tags")
       .sort("_created");
     if (posts.length == 0) {
       return res.json({
@@ -150,13 +149,6 @@ exports.createPost = async (req, res, next) => {
       `${url}/upload/users/${req.auth._id}/posts/${req.files[i].filename}`
     );
   }
-
-  /* if (!errors.isEmpty()) {
-    const err = errors.array()[0].msg;
-    return res.status(422).json({
-      errors: err,
-    });
-  } */
 
   if (!errors.isEmpty()) {
     const allErrors = errors.array();
@@ -240,7 +232,7 @@ exports.updatePost = async (req, res, next) => {
     const result = await post.save();
     //prevPostPhoto
     if (result) {
-       if (prevPostPhoto) {
+      if (prevPostPhoto) {
         fs.unlink(prevPostPhoto, (err) => {
           console.log("Error while unlink user image", err);
         });
@@ -263,7 +255,12 @@ exports.likePost = async (req, res, next) => {
     const UpdatedLikePost = await Post.findByIdAndUpdate(
       req.body.postId,
       {
-        $push: { likes: req.body.userId },
+        $push: {
+          likes: {
+            user: req.body.userId,
+            isNewLike: true,
+          },
+        },
       },
       { new: true }
     );
@@ -282,7 +279,7 @@ exports.unlikePost = async (req, res, next) => {
     const UpdatedLikePost = await Post.findByIdAndUpdate(
       req.body.postId,
       {
-        $pull: { likes: req.body.userId },
+        $pull: { likes: { user: req.body.userId } },
       },
       { new: true }
     );

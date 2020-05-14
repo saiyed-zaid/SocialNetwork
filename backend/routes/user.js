@@ -48,6 +48,7 @@ router.put(
   userController.newFollowerStatusChagne
 );
 
+
 /**
  * @function put
  * @description Handling put request which Update user follow and add followers

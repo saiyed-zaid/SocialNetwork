@@ -19,6 +19,17 @@ const Follow = (props) => {
             <div className="dropdown-divider" />
           </li>
         ))}
+        {props.newLikes.map((like) => (
+          <li className="noti w-100" style={{ height: "50px" }}>
+            <strong className="mr-auto"> {like.name} Liked Your Post.</strong>
+            <small>
+              &nbsp;&nbsp;
+              {like.likedFrom ? <TimeAgo date={like.likedFrom} /> : null}
+            </small>
+            d
+            <div className="dropdown-divider" />
+          </li>
+        ))}
       </div>
     )
   );
