@@ -7,7 +7,6 @@ import DefaultPost from "../images/post.jpg";
 class EditPost extends React.Component {
   constructor(props) {
     super(props);
-
     this.state = {
       id: "",
       title: "",
