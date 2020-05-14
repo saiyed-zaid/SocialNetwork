@@ -243,7 +243,7 @@ exports.updatePost = async (req, res, next) => {
     const result = await post.save();
     //prevPostPhoto
     if (result) {
-       if (prevPostPhoto) {
+      if (prevPostPhoto) {
         fs.unlink(prevPostPhoto, (err) => {
           console.log("Error while unlink user image", err);
         });
@@ -266,7 +266,12 @@ exports.likePost = async (req, res, next) => {
     const UpdatedLikePost = await Post.findByIdAndUpdate(
       req.body.postId,
       {
-        $push: { likes: req.body.userId },
+        $push: {
+          likes: {
+            likeBy: req.body.userId,
+            isNewLike: true,
+          },
+        },
       },
       { new: true }
     );

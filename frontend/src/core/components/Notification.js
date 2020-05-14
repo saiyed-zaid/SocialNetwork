@@ -47,6 +47,10 @@ class Notification extends React.Component {
         }
       });
   }
+  componentWillMount()
+  {
+    
+  }
 
   followStatusChange = () => {
     if (this.state.hasNewFollow) {
@@ -91,7 +95,6 @@ class Notification extends React.Component {
               No Notifications
             </span>
           )}
-
           <div className="dropdown-divider" />
         </div>
       </li>

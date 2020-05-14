@@ -304,10 +304,17 @@ class Profile extends Component {
                 className="d-flex w-100  align-items-center flex-column p-0 m-0"
               >
                 {console.log("posts__", post)}
-                <div className="card-body m-2 bg-light col-md-7 ">
+                <div
+                  className="card-body m-2 col-md-7 "
+                  style={{
+                    backgroundColor: "#a5a4a333",
+                    border: "1px solid #adb5bd",
+                    boxShadow: "0.1em 0.1em 0.3em 0px rgba(0, 0, 0, 1)",
+                  }}
+                >
                   {/* Post */}
                   <div className="post ">
-                    <div className="user-block">
+                    <div className="user-block text-left">
                       <img
                         className="img-circle img-bordered-sm"
                         src={
@@ -377,8 +384,8 @@ class Profile extends Component {
                         />
                       )
                     ) : null}
-
-                    <p className="pt-2 ">{post.body}</p>
+                    <h5 className="pt-2 text-dark">{post.title}</h5>
+                    <p className="pt-2 text-dark">{post.body}</p>
                     {isAuthenticated() ? (
                       <button className="btn btn-outline-dark">
                         <Link to={`/post/${post._id}`}>View More</Link>

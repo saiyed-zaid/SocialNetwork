@@ -97,7 +97,6 @@ class SinglePost extends Component {
 
     try {
       const response = await callApi(userId, token, postId);
-      console.log("asd", response);
 
       if (response.error) {
         console.log(response.error);
@@ -153,32 +152,40 @@ class SinglePost extends Component {
           )}
         </div>
 
-        <div className="card-body">
+        <div className="card-body text-light">
           {like ? (
             <h5 onClick={this.likeToggle} className="text-light">
-              <i className="fas fa-heart text-danger"> </i>&nbsp; {likes}
+              <i
+                className="fas fa-heart text-danger"
+                style={{ cursor: "pointer" }}
+              >
+                {" "}
+              </i>
+              &nbsp; {likes}
               &nbsp; {likes > 1 ? "likes" : "like"}
             </h5>
           ) : (
             <h5 onClick={this.likeToggle} style={{ color: "#ffff" }}>
-              <i className="far fa-heart"> </i>
+              <i className="far fa-heart" style={{ cursor: "pointer" }}>
+                {" "}
+              </i>
               &nbsp;{likes}&nbsp;{likes > 1 ? "likes" : "like"}
             </h5>
           )}
-          <div className="text-light">
-            <h3>{post.title}</h3>
+          <div className="">
             <h4 className="lead pt-2 pb-2">
               <small>
-                <span className=" font-italic" style={{ fontSize: "12px" }}>
+                <span className="font-italic" style={{ fontSize: "12px" }}>
                   Posted By
                   <Link style={{ color: "#a59413" }} to={`${posterId}`}>
-                    {posterName}
+                    &nbsp;{posterName}&nbsp;
                   </Link>
                   on {new Date(post.created).toDateString()}
                 </span>
               </small>
             </h4>
           </div>
+          <h3>{post.title}</h3>
           <p className="card-text">{post.body}</p>
 
           <div className="d-inline-block">
@@ -229,7 +236,6 @@ class SinglePost extends Component {
   render() {
     const { post, redirectToHome, redirectToSignin, comments } = this.state;
     if (post == null || this.state.isLoading) {
-
       return <Spinner />;
     }
     if (redirectToHome) {
@@ -239,7 +245,7 @@ class SinglePost extends Component {
       return <Redirect to="/signin" />;
     }
     return (
-      <div className="container col-md-12 mb-2">
+      <div className="container col-md-6 m-2">
         {this.state.post ? this.renderPost(post) : {}}
         <Comment
           postId={post._id}

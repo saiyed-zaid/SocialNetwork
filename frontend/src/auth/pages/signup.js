@@ -10,6 +10,9 @@ class Signup extends React.Component {
       email: "",
       password: "",
       password_confirmation: "",
+      day: 0,
+      month: 0,
+      year: 0,
       errors: {},
       responseError: null,
     };
@@ -39,6 +42,45 @@ class Signup extends React.Component {
         errors,
       });
     }
+  };
+
+  getYearDropList = () => {
+    const year = new Date().getFullYear();
+    return Array.from(new Array(50), (v, i) => (
+      <option key={i} value={year - i}>
+        {year - i}
+      </option>
+    ));
+  };
+  getMonthDropList = () => {
+    const mlist = [
+      "January",
+      "February",
+      "March",
+      "April",
+      "May",
+      "June",
+      "July",
+      "August",
+      "September",
+      "October",
+      "November",
+      "December",
+    ];
+    return Array.from(new Array(12), (v, i) => (
+      <option key={i} value={i + 1}>
+        {mlist[i]}
+      </option>
+    ));
+  };
+
+  getDayDropList = () => {
+    //const year = new Date().getFullYear();
+    return Array.from(new Array(31), (v, i) => (
+      <option key={i} value={i + 1}>
+        {i + 1}
+      </option>
+    ));
   };
 
   render() {
@@ -128,6 +170,39 @@ class Signup extends React.Component {
                   {this.state.errors["password_confirmation "]}
                 </div>
               )}
+            </div>
+
+            <div className="form-group">
+              <label htmlFor="inputCity">Birthday</label>
+            </div>
+            <div className="form-row">
+              <div className="form-group col-md-4">
+                {/* <label htmlFor="inputCity">Day</label> */}
+                <select id="inputState" className="form-control" name="day" onChange={this.handleInputChange}>
+                  <option value="0" selected>
+                    Day
+                  </option>
+                  {this.getDayDropList()}
+                </select>
+              </div>
+              <div className="form-group col-md-4">
+                {/* <label htmlFor="inputState">Month</label> */}
+                <select id="inputState" className="form-control" name="month" onChange={this.handleInputChange}>
+                  <option value="0" selected>
+                    Month
+                  </option>
+                  {this.getMonthDropList()}
+                </select>
+              </div>
+              <div className="form-group col-md-4">
+                {/* <label htmlFor="inputZip">Year</label> */}
+                <select id="inputState" className="form-control" name="year" onChange={this.handleInputChange}>
+                  <option value="0" selected>
+                    Year
+                  </option>
+                  {this.getYearDropList()}
+                </select>
+              </div>
             </div>
 
             <div className="row">

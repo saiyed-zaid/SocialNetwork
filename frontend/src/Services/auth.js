@@ -37,11 +37,9 @@ export default class Authservice {
         });
 
         if (response.error) {
-
           return Promise.reject({
             responseError: response.error,
           });
-
         } else {
           return response;
         }
@@ -72,6 +70,8 @@ export default class Authservice {
       "password.confirmed": "Password Does Not Matched.",
     };
 
+    console.log("bday", new Date(data.year, data.month - 1, data.day));
+
     try {
       await validateAll(data, rules, messages);
 
@@ -79,6 +79,7 @@ export default class Authservice {
         name: data.name,
         email: data.email,
         password: data.password,
+        dob: new Date(data.year, data.month - 1, data.day + 1),
       };
 
       try {

@@ -30,6 +30,7 @@ exports.postSignup = async (req, res, next) => {
       name: req.body.name,
       email: req.body.email,
       password: md5(req.body.password),
+      dob: req.body.dob,
     });
 
     user

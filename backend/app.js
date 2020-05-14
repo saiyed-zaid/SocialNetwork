@@ -53,7 +53,7 @@ mongoose
     useFindAndModify: false,
   })
   .then((result) => {
-    server.listen(5000, () => {
+    server.listen(process.env.PORT|| 5000, () => {
       console.log('Server is up and running','Connected with mongoDb');
       io.on("connection", function (socket) {
         console.log("Client Connected");

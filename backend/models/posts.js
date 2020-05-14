@@ -32,8 +32,14 @@ const PostSchema = new Schema({
   },
   likes: [
     {
-      type: ObjectId,
-      ref: "User",
+      likeBy: {
+        type: ObjectId,
+        ref: "User",
+      },
+      isNewLike: {
+        type: Boolean,
+        default: true,
+      },
     },
   ],
   tags: [
