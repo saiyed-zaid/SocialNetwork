@@ -1,5 +1,5 @@
 import React from "react";
-import { Link, Redirect } from "react-router-dom";
+import { Link } from "react-router-dom";
 import Alert from "../../ui-components/Alert";
 
 class Signup extends React.Component {
@@ -35,7 +35,7 @@ class Signup extends React.Component {
     try {
       this.setState({ errors: {} });
 
-      const response = await this.props.registerUser(this.state);
+      await this.props.registerUser(this.state);
 
       this.props.history.push("/signin");
     } catch (errors) {
@@ -177,7 +177,12 @@ class Signup extends React.Component {
             <div className="form-row">
               <div className="form-group col-md-4">
                 {/* <label htmlFor="inputCity">Day</label> */}
-                <select id="inputState" className="form-control" name="day" onChange={this.handleInputChange}>
+                <select
+                  id="inputState"
+                  className="form-control"
+                  name="day"
+                  onChange={this.handleInputChange}
+                >
                   <option value="0" selected>
                     Day
                   </option>
@@ -186,7 +191,12 @@ class Signup extends React.Component {
               </div>
               <div className="form-group col-md-4">
                 {/* <label htmlFor="inputState">Month</label> */}
-                <select id="inputState" className="form-control" name="month" onChange={this.handleInputChange}>
+                <select
+                  id="inputState"
+                  className="form-control"
+                  name="month"
+                  onChange={this.handleInputChange}
+                >
                   <option value="0" selected>
                     Month
                   </option>
@@ -195,7 +205,12 @@ class Signup extends React.Component {
               </div>
               <div className="form-group col-md-4">
                 {/* <label htmlFor="inputZip">Year</label> */}
-                <select id="inputState" className="form-control" name="year" onChange={this.handleInputChange}>
+                <select
+                  id="inputState"
+                  className="form-control"
+                  name="year"
+                  onChange={this.handleInputChange}
+                >
                   <option value="0" selected>
                     Year
                   </option>

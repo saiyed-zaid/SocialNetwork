@@ -1,5 +1,5 @@
-import React, { Component, useHistory } from "react";
-import { list, getOnlineUsers, fetchMessage } from "./apiUser";
+import React, { Component } from "react";
+import { getOnlineUsers, fetchMessage } from "./apiUser";
 import GoToTop from "../ui-components/goToTop";
 import Spinner from "../ui-components/Spinner";
 import { isAuthenticated } from "../auth";
@@ -124,7 +124,7 @@ class Users extends Component {
           <div className="jumbotron p-3">
             {/* <h4> Users</h4> */}
             <div className="row">
-              {!users.length && this.renderUsers(users)}
+              {/* {!users.length && this.renderUsers(users)} */}
             </div>
           </div>
         </div>

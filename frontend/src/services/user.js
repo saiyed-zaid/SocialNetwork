@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import { validateAll } from "indicative/validator";
 
 export default class user extends Component {
   /**
@@ -37,11 +38,6 @@ export default class user extends Component {
     return await users.json({ users });
   }
 
-  /* async list  ()  {
-    const users = await axios.get(`${process.env.REACT_APP_API_URL}/api/users`);
-    return await users.data;
-  };
-   */
   /**
    * Api For Deleting The User Profile
    *
@@ -71,19 +67,82 @@ export default class user extends Component {
    * @param {json} user        User data
    */
   async update(userId, token, user) {
-    const userData = await fetch(
-      `${process.env.REACT_APP_API_URL}/api/user/${userId}`,
-      {
-        method: "PUT",
-        headers: {
-          Accept: "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-        body: user,
-      }
-    );
+    const fieldData = {};
+    const rules = {};
 
-    return await userData.json();
+    for (const iterator of user.keys()) {
+      /*  alert("value " + user.get(iterator));
+      alert("key " + iterator); */
+
+      fieldData[iterator] = user.get(iterator);
+      rules[iterator] = "required";
+    }
+
+    /*  const rules = {
+      name: "required",
+      email: "required|email",
+    }; */
+
+    const messages = {
+      required: "{{field}} Field is Required.",
+    };
+
+    try {
+      await validateAll(fieldData, rules, messages);
+
+      const response = await fetch(
+        `${process.env.REACT_APP_API_URL}/api/user/${userId}`,
+        {
+          method: "PUT",
+          headers: {
+            Accept: "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: user,
+        }
+      );
+
+      if (response.err) {
+        return Promise.reject(response.err);
+      } else {
+        return await response.json();
+      }
+    } catch (errors) {
+      var formattedErrors = {};
+      errors.forEach((error) => {
+        formattedErrors[error.field] = error.message;
+      });
+      return Promise.reject(formattedErrors);
+    }
+
+    /*  const fields = {
+      name: user.get("name"),
+    };
+    console.log(user);  */
+
+    try {
+      /* try {
+        const response = await fetch(
+          `${process.env.REACT_APP_API_URL}/api/user/${userId}`,
+          {
+            method: "PUT",
+            headers: {
+              Accept: "application/json",
+              Authorization: `Bearer ${token}`,
+            },
+            body: user,
+          }
+        );
+
+        if (response.err) {
+          return Promise.reject(response.err);
+        } else {
+          return await response.json();
+        }
+      } catch (error) {
+        return Promise.reject(error);
+      } */
+    } catch (errors) {}
   }
 
   /**

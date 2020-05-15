@@ -8,7 +8,6 @@ import Carosuel from "../../ui-components/carosuel";
 
 export default class PostCard extends Component {
   render() {
-    
     const { post } = this.props;
     const posterId = post.postedBy ? `/user/${post.postedBy._id}` : "";
     const posterName = post.postedBy ? post.postedBy.name : "Unknown";
@@ -72,9 +71,7 @@ export default class PostCard extends Component {
             ) : (
               <img
                 className="card-img-top"
-                src={`${
-                  post.photo ? post.photo[0] : DefaultPost
-                }`}
+                src={`${post.photo ? post.photo[0] : DefaultPost}`}
                 onError={(i) => (i.target.src = `${DefaultPost}`)}
                 alt={post.name}
               />
@@ -126,6 +123,8 @@ export default class PostCard extends Component {
                   clip-rule="evenodd"
                 />
               </svg>
+              <small>&nbsp;{post.comments.length}</small>
+              {console.log(post)}
             </div>
           </div>
 

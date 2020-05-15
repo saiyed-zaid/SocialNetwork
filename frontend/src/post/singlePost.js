@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-import { singlePost, remove, like, unlike } from "./apiPost";
 import { Link, Redirect } from "react-router-dom";
 import { isAuthenticated } from "../auth/index";
 import DefaultPost from "../images/post.jpg";
@@ -250,7 +249,7 @@ class SinglePost extends Component {
       return <Redirect to="/signin" />;
     }
     return (
-      <div className="container col-md-6 m-2">
+      <div className="container-fluid m-0 p-0">
         {this.state.post ? this.renderPost(post) : {}}
         <Comment
           postId={post._id}

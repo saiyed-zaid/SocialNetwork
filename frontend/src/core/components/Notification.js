@@ -1,10 +1,5 @@
 import React from "react";
-import {
-  read,
-  isFollowStatusChange,
-  readPost,
-  isLikesStatusChange,
-} from "../api/getNotification";
+import { read, isFollowStatusChange, readPost } from "../api/getNotification";
 
 import Follow from "./getNewFollower";
 
@@ -87,7 +82,16 @@ class Notification extends React.Component {
       });
     });
   }
-
+  /* likeStatusChange = () => {
+    if (this.state.hasNewLikes) {
+      const toast = document.querySelectorAll(".noti");
+      toast.forEach((t) => {
+        t.classList.replace("show", "hide");
+      });
+      clearTimeout(this.state.timer);
+      this.setState({ hasNewLikes: false });
+    }
+  }; */
   followStatusChange = () => {
     if (this.state.hasNewFollow) {
       isFollowStatusChange();
@@ -119,10 +123,10 @@ class Notification extends React.Component {
           ) : null}
         </a>
 
-        <div className="dropdown-menu dropdown-menu-lg dropdown-menu-left">
+        <div className="dropdown-menu dropdown-menu-lg dropdown-menu-right">
           {(this.state.newFollowerList.length > 0 && (
             <>
-              <a href="#" className="dropdown-item">
+              <a href="/" className="dropdown-item">
                 <span className="float-right text-muted text-sm">
                   <Follow
                     newFollowers={this.state.newFollowerList}

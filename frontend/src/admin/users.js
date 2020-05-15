@@ -1,6 +1,5 @@
 import React, { Component } from "react";
 import { isAuthenticated } from "../auth/index";
-import { remove, update } from "../user/apiUser";
 import { Link } from "react-router-dom";
 import DefaultProfile from "../images/avatar.jpg";
 import "../../node_modules/react-toggle-switch/dist/css/switch.min.css";
