@@ -120,9 +120,11 @@ class Notification extends React.Component {
           aria-expanded="false"
         >
           <i className="far fa-bell text-light" />
-          {this.state.newFollowerList.length > 0 ? (
+          {this.state.newFollowerList.length > 0 ||
+          this.state.newLikesList.length > 0 ? (
             <span className="badge badge-warning navbar-badge">
-              {this.state.newFollowerList.length}
+              {this.state.newFollowerList.length +
+                this.state.newLikesList.length}
             </span>
           ) : null}
         </a>

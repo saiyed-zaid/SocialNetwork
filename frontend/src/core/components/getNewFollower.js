@@ -26,7 +26,6 @@ const Follow = (props) => {
               &nbsp;&nbsp;
               {like.likedFrom ? <TimeAgo date={like.likedFrom} /> : null}
             </small>
-            d
             <div className="dropdown-divider" />
           </li>
         ))}
