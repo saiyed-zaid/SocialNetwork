@@ -200,7 +200,7 @@ class Profile extends Component {
 
     return (
       <div
-        className=" bg-light position-relative rounded"
+        className=" bg-dark position-relative rounded"
         style={{ margin: "80px auto 10px auto" }}
       >
         {/* DISPLAY CHATBOX */}

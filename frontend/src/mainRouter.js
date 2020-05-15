@@ -211,20 +211,17 @@ const Navbar = withRouter(({ history, authUser, handleLogout, signout }) => {
                       {`${authUser.name.toUpperCase()}'S PROFILE`}
                     </Link>
                   </li>
-
-                  {authUser && authUser.roll !== "admin" && (
-                    <Notification authUser={authUser} />
-                  )}
                 </>
               )}
             </ul>
             {authUser ? (
               <ul className="navbar-nav ml-auto ">
-                {authUser && authUser.roll !== "admin" && <Notification />}
-
+                {authUser && authUser.roll !== "admin" && (
+                  <Notification authUser={authUser} />
+                )}
                 <li className="nav-item dropdown profile-btn ">
                   <a
-                    className="nav-link"
+                    className="nav-link d-flex align-items-center"
                     href="/"
                     id="navbarDropdownMenuLink"
                     role="button"
@@ -232,7 +229,6 @@ const Navbar = withRouter(({ history, authUser, handleLogout, signout }) => {
                     aria-haspopup="true"
                     aria-expanded="false"
                   >
-                    {authUser.name.toUpperCase()} {"  "}
                     <img
                       style={{
                         borderRadius: "50%",
@@ -240,9 +236,10 @@ const Navbar = withRouter(({ history, authUser, handleLogout, signout }) => {
                       className="nav-link  p-0 m-0 ml-1 img-circle float-right "
                       src={authUser.photo}
                       height="30px"
-                      onError={(e) => (e.target.src = avatar)}
+                      /* onError={(e) => (e.target.src = avatar)} */
                       alt="user "
                     />
+                    <span>&nbsp;{authUser.name.toUpperCase()}</span>
                   </a>
                   <div
                     className="dropdown-menu  dropdown-menu-right"

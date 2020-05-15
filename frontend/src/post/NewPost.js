@@ -102,7 +102,7 @@ class NewPost extends React.Component {
 
   render() {
     return (
-      <div className="container bg-light p-3 my-3">
+      <div className="container p-3 my-3" style={{backgroundColor:'#1f2022',color: "#c0c8d0",}}>
         <form onSubmit={this.handleSubmit}>
           <div className="form-group">
             <label for="photo">Photo</label>

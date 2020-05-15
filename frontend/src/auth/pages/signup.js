@@ -86,7 +86,7 @@ class Signup extends React.Component {
 
   render() {
     return (
-      <div className="container bg-light p-2 my-3 col-md-4">
+      <div className="container p-2 my-3 col-md-4" style={{backgroundColor:'#005a71'}}>
         <div className="jumbotron" style={{ padding: "0.5rem 2rem" }}>
           {this.state.responseError && (
             <Alert message={this.state.responseError} type="danger" />

@@ -82,7 +82,7 @@ class EditPost extends React.Component {
     } else {
       value = event.target.value;
 
-      this.postData.set(event.target.name, value);
+      this.postData.append(event.target.name, value);
 
       this.setState({
         [event.target.name]: event.target.value,

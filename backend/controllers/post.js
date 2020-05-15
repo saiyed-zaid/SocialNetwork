@@ -215,28 +215,42 @@ exports.updatePost = async (req, res, next) => {
     reqFiles.push(
       `${url}/upload/users/${req.auth._id}/posts/${req.files[i].filename}`
     );
+    //post.photo.push(`${url}/upload/users/${req.auth._id}/posts/${req.files[i].filename}`);
+  }
+  //const prevPostPhoto = post.photo;
+
+  if (!req.files) {
+    req.files = post.photo;
+  } else {
+    req.body.photo = reqFiles;
+    console.log("photos", req.body.photo);
+    console.log("files path", reqFiles);
+
+    // for just modifing the email property
+    post.photo = _.merge(post.photo, req.body.photo);
+    post.save(function (err) {
+      if(err)
+      {
+        console.log(err)
+      }
+      console.log('saved');
+      // handle successfull save
+    });
   }
 
-  const prevPostPhoto = post.photo;
-
-  if (!req.file) {
-    req.file = post.photo;
-  }
-
-  post.photo = reqFiles;
   post = _.extend(post, req.body);
   post.updated = Date.now();
 
   try {
     const result = await post.save();
     //prevPostPhoto
-    if (result) {
+    /*  if (result) {
       if (prevPostPhoto) {
         fs.unlink(prevPostPhoto, (err) => {
           console.log("Error while unlink user image", err);
         });
       }
-    }
+    } */
     res.json({ post });
   } catch (error) {
     res.json({
