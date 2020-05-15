@@ -93,24 +93,21 @@ class EditPost extends React.Component {
   handleSubmit = async (event) => {
     event.preventDefault();
 
-    const data = this.state;
-    this.postData.append("tags", this.selectedopt);
-
     const userId = this.props.authUser._id;
     const token = this.props.authUser.token;
+    const data = this.state;
+    this.postData.append("tags", JSON.stringify(this.selectedopt));
 
     try {
       this.setState({ errors: {} });
 
       const response = await this.props.editPost(
         this.postData,
-        this.state.id,  
+        this.state.id,
         token
       );
-      console.log("response__", response);
       this.props.history.push(`/user/${userId}`);
     } catch (errors) {
-      console.log("something", errors);
       this.setState({
         errors,
       });
@@ -130,9 +127,9 @@ class EditPost extends React.Component {
 
   render() {
     return (
-      <div className="">
+      <div className="container">
         <form onSubmit={this.handleSubmit}>
-          <div className="form-group">
+          <div className="form-group text-light">
             <label for="photo">Photo</label>
             <input
               type="file"
@@ -143,7 +140,7 @@ class EditPost extends React.Component {
               multiple={true}
             />
           </div>
-          <div className="form-group">
+          <div className="form-group text-light">
             <label htmlFor="title">Title</label>
             <input
               type="text"
@@ -163,7 +160,7 @@ class EditPost extends React.Component {
               </div>
             )}
           </div>
-          <div className="form-group">
+          <div className="form-group text-light">
             <label htmlFor="body">Body</label>
             <textarea
               className={`form-control ${

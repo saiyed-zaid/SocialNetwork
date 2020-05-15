@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { resetPassword } from "../index";
+import Alert from "../../ui-components/Alert";
 
 class ResetPassword extends Component {
   constructor(props) {
@@ -7,24 +8,21 @@ class ResetPassword extends Component {
     this.state = {
       newPassword: "",
       message: "",
-      error: ""
+      error: "",
     };
   }
 
-  resetPassword = e => {
+  resetPassword = (e) => {
     e.preventDefault();
     this.setState({ message: "", error: "" });
 
     resetPassword({
       newPassword: this.state.newPassword,
-      resetPasswordLink: this.props.match.params.resetPasswordToken
-    }).then(data => {
-      console.log("data", data);
-
+      resetPasswordLink: this.props.match.params.resetPasswordToken,
+    }).then((data) => {
       if (data.message) {
         this.setState({ error: data.message });
       } else {
-        console.log(data.message);
         this.setState({ message: data.message, newPassword: "" });
       }
     });
@@ -36,37 +34,9 @@ class ResetPassword extends Component {
         <h2 className="mt-5 mb-5">Reset your Password</h2>
 
         {this.state.message && (
-          <div
-            className="alert alert-success alert-dismissible fade show"
-            style={{ display: this.state.message ? "" : "none" }}
-          >
-            {this.state.message}
-            <button
-              type="button"
-              className="close"
-              data-dismiss="alert"
-              aria-label="Close"
-            >
-              <span aria-hidden="true">&times;</span>
-            </button>
-          </div>
+          <Alert message={this.state.message} type="success" />
         )}
-        {this.state.error && (
-          <div
-            className="alert alert-danger alert-dismissible fade show"
-            style={{ display: this.state.message ? "" : "none" }}
-          >
-            {this.state.message}
-            <button
-              type="button"
-              className="close"
-              data-dismiss="alert"
-              aria-label="Close"
-            >
-              <span aria-hidden="true">&times;</span>
-            </button>
-          </div>
-        )}
+        {this.state.error && <Alert message={this.state.error} type="danger" />}
 
         <form>
           <div className="form-group mt-5">
@@ -76,11 +46,11 @@ class ResetPassword extends Component {
               placeholder="Your new password"
               value={this.state.newPassword}
               name="newPassword"
-              onChange={e =>
+              onChange={(e) =>
                 this.setState({
                   newPassword: e.target.value,
                   message: "",
-                  error: ""
+                  error: "",
                 })
               }
               autoFocus

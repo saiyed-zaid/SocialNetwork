@@ -3,9 +3,9 @@ import MainRouter from "./mainRouter";
 import { BrowserRouter as Router, Redirect } from "react-router-dom";
 import { signout, isAuthenticated } from "./auth/index";
 
-import Authservice from "./Services/auth";
-import Postservice from "./Services/post";
-import Userservice from "./Services/user";
+import Authservice from "./services/auth";
+import Postservice from "./services/post";
+import Userservice from "./services/user";
 
 export default class App extends Component {
   constructor(props) {

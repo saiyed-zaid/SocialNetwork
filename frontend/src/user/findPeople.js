@@ -7,6 +7,7 @@ import Spinner from "../ui-components/Spinner";
 import { store } from "react-notifications-component";
 import "react-notifications-component/dist/theme.css";
 import "animate.css";
+import GoToTop from "../ui-components/goToTop";
 
 class FindPeople extends Component {
   constructor() {
@@ -161,6 +162,7 @@ class FindPeople extends Component {
           />
         </div>
         {this.renderUsers(users)}
+        <GoToTop />
       </div>
     );
   }

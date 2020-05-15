@@ -1,14 +1,12 @@
 import React, { Component, useHistory } from "react";
 import { list, getOnlineUsers, fetchMessage } from "./apiUser";
-import LoadingGif from "../l1.gif";
-import { Link } from "react-router-dom";
-import Card from "../components/card";
-import PageLoader from "../components/pageLoader";
+import GoToTop from "../ui-components/goToTop";
 import Spinner from "../ui-components/Spinner";
 import { isAuthenticated } from "../auth";
 import ChatBar from "../components/chatBar/chatbar";
 import Chattab from "../components/chatTab";
 import UsersList from "../components/users/index";
+import Alert from "../ui-components/Alert";
 
 class Users extends Component {
   constructor() {
@@ -112,11 +110,7 @@ class Users extends Component {
     }
     return (
       <div className="row container-fluid p-0 m-0">
-        {error ? (
-          <div className="alert alert-danger" role="alert">
-            {error}
-          </div>
-        ) : null}
+        {error ? <Alert message={error} type="danger" /> : null}
         <div
           id="chat-tab"
           className="justify-content-end align-items-end chat-box"
@@ -157,6 +151,7 @@ class Users extends Component {
         <button id="floating-btn" className="floating-btn" onClick={this.onMsg}>
           <i className="fas fa-paper-plane anim-icon"></i>
         </button>
+        <GoToTop />
       </div>
     );
   }

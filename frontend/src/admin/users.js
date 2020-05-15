@@ -344,8 +344,6 @@ class Users extends Component {
                       <button
                         className="btn btn-sm"
                         disabled={isAuthenticated().user._id === user._id}
-                        // data-toggle="modal"
-                        // data-target="#exampleModalCenter"
                         onClick={() => this.handleDeleteModal(user._id)}
                       >
                         <i className="fas fa-trash"> </i>

@@ -8,11 +8,12 @@ exports.userById = async (req, res, next, id) => {
     const user = await User.findById(id)
       .populate("following", "_id name photo isLoggedIn lastLoggedIn")
       .populate("followers.user", "_id name photo");
+    // .populate("comments", "_id");
+
     if (!user) {
       return next(new Error("User not Found."));
     }
     req.profile = user;
-    //console.log("__USER DATA___", req.profile);
     next();
   } catch (error) {
     return next(new Error("User not Found."));
@@ -20,11 +21,6 @@ exports.userById = async (req, res, next, id) => {
 };
 
 exports.hasAuthorization = (req, res, next) => {
-  // console.log("AUTH__");
-  /*   console.log('Role_',req.auth.role);
-  console.log('Profile',req.profile);
-  console.log('Auth',req.auth); */
-
   if (req.auth.role != "admin" && req.auth.role != "subscriber") {
     return res.json({ msg: "Not authorized user for this action." });
   }
@@ -71,7 +67,7 @@ exports.getUsers = async (req, res, next) => {
  */
 exports.getUser = async (req, res, next) => {
   req.profile.password = undefined;
-  //console.log("userid", req.profile);
+
   return res.json(req.profile);
 };
 
@@ -246,6 +242,23 @@ exports.newFollowerStatusChagne = (req, res, next) => {
     {
       $set: {
         "followers.$[].isNewUser": false,
+      },
+    },
+    { multi: true }
+  )
+    .then((result) => {})
+    .catch((err) => {
+      if (err) {
+        console.error(err);
+      }
+    });
+};
+exports.newLikesStatusChange = (req, res, next) => {
+  User.findByIdAndUpdate(
+    req.auth._id,
+    {
+      $set: {
+        "likes.$[].isNewLike": false,
       },
     },
     { multi: true }

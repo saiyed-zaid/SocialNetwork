@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { forgotPassword } from "../index";
+import Alert from "../../ui-components/Alert";
 
 class ForgotPassword extends Component {
   state = {
@@ -7,10 +8,10 @@ class ForgotPassword extends Component {
       ? this.props.location.state.email
       : "",
     message: "",
-    error: ""
+    error: "",
   };
 
-  forgotPassword = e => {
+  forgotPassword = (e) => {
     let sec = 59;
     let m = 2;
     var t = sec.toString();
@@ -19,7 +20,7 @@ class ForgotPassword extends Component {
 
     e.preventDefault();
     this.setState({ message: "", error: "" });
-    forgotPassword(this.state.email).then(data => {
+    forgotPassword(this.state.email).then((data) => {
       if (data.error) {
         this.setState({ error: data.error });
       } else {
@@ -59,10 +60,10 @@ class ForgotPassword extends Component {
           <h2 className="mt-5 ">Reset Password</h2>
           <h3 id="t"> </h3>
           {this.state.message && (
-            <p className="alert-info rounded p-1">{this.state.message}</p>
+            <Alert message={this.state.message} type="info" />
           )}
           {this.state.error && (
-            <p className="alert-dange rounded p-1">{this.state.error}</p>
+            <Alert message={this.state.error} type="danger" />
           )}
 
           <form>
@@ -73,11 +74,11 @@ class ForgotPassword extends Component {
                 placeholder="Your email address"
                 value={this.state.email}
                 name="email"
-                onChange={e =>
+                onChange={(e) =>
                   this.setState({
                     email: e.target.value,
                     message: "",
-                    error: ""
+                    error: "",
                   })
                 }
                 autoFocus

@@ -3,7 +3,7 @@ import { list } from "./apiPost";
 // import PageLoader from "../components/pageLoader";
 import PostCard from "../components/posts/index";
 import Spinner from "../ui-components/Spinner";
-import Postservice from "../Services/post";
+import Postservice from "../services/post";
 
 class Posts extends Component {
   constructor() {
@@ -46,14 +46,14 @@ class Posts extends Component {
     return (
       <div className="row justify-content-md-center">
         {posts.map((post, i) => {
-          return <PostCard post={post} />;
+          return <PostCard post={post} index={i} />;
         })}
       </div>
     );
   };
   render() {
     const { posts, error } = this.state;
-    
+
     if (posts.length < 0 || this.state.isLoading) {
       return <Spinner />;
     }

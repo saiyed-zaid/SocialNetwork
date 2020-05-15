@@ -4,116 +4,79 @@ import DefaultProfile from "../../images/avatar.jpg";
 import DefaultPost from "../../images/post.jpg";
 import { isAuthenticated } from "../../auth/index";
 import TimeAgo from "react-timeago";
+import Carosuel from "../../ui-components/carosuel";
 
 export default class PostCard extends Component {
   render() {
-    const posterId = this.props.post.postedBy
-      ? `/user/${this.props.post.postedBy._id}`
-      : "";
-    const posterName = this.props.post.postedBy
-      ? this.props.post.postedBy.name
-      : "Unknown";
+    
+    const { post } = this.props;
+    const posterId = post.postedBy ? `/user/${post.postedBy._id}` : "";
+    const posterName = post.postedBy ? post.postedBy.name : "Unknown";
 
     return (
       <div
         className="col-md-6 card-body m-2 bg-light"
         style={{ position: "relative" }}
       >
-        {/* this.props.post */}
+        {/* post */}
         <div className="post">
           <div className="user-block">
             <img
               className="img-circle img-bordered-sm"
               src={
-                this.props.post.postedBy.photo
-                  ? this.props.post.postedBy.photo.path
-                  : DefaultProfile
+                post.postedBy.photo ? post.postedBy.photo.path : DefaultProfile
               }
               alt={posterName}
               onError={(event) => (event.target.src = DefaultProfile)}
             />
-            <span className="username">
+            <span className="username text-left">
               <Link to={posterId}>{posterName}</Link> &nbsp;
-              {this.props.post.tags.length > 1 ? (
+              {post.tags.length > 1 ? (
                 <small
                   data-toggle="tooltip"
                   data-placement="bottom"
                   data-html="true"
-                  title={this.props.post.tags.map(
-                    (tag) => tag.name + " <br />"
-                  )}
+                  title={post.tags.map((tag) => tag.name + " <br />")}
                 >
-                  With {this.props.post.tags.length} More
+                  With {post.tags.length} More
                 </small>
               ) : null}
             </span>
 
-            <span className="description pb-3">
-              Shared Publicly &nbsp;&nbsp;
-              <TimeAgo date={this.props.post.created} />
-            </span>
+            {this.props.profile ? (
+              <span className="description pb-3 text-left">
+                {post.status ? (
+                  <>
+                    <i class="fas fa-lock"></i>&nbsp;&nbsp;
+                    <small>Private</small>
+                  </>
+                ) : (
+                  <>
+                    <i class="fas fa-globe-asia"></i>&nbsp;&nbsp;
+                    <small>Public</small>
+                  </>
+                )}
+                &nbsp;&nbsp;
+                <TimeAgo date={post.created} />
+              </span>
+            ) : (
+              <span className="description pb-3">
+                Shared Publicly &nbsp;&nbsp;
+                <TimeAgo date={post.created} />
+              </span>
+            )}
           </div>
           <div className="post-media">
-            {this.props.post.photo.length >= 1 ? (
-              <div
-                id="carouselExampleControls"
-                className="carousel slide"
-                data-ride="carousel"
-              >
-                <div className="carousel-inner">
-                  <div className="carousel-item active">
-                    <img
-                      className="d-block w-100"
-                      src="https://fakeimg.pl/350x200/?text=SwipeLeft&font=lobster"
-                      alt="First slide"
-                    />
-                  </div>
-                  {this.props.post.photo.map((photo) => (
-                    <div className="carousel-item">
-                      <img
-                        className="d-block w-100"
-                        src={photo}
-                        alt="post "
-                        onError={(i) => (i.target.src = `${DefaultPost}`)}
-                      />
-                    </div>
-                  ))}
-                </div>
-                <a
-                  className="carousel-control-prev"
-                  href="#carouselExampleControls"
-                  role="button"
-                  data-slide="prev"
-                >
-                  <span
-                    className="carousel-control-prev-icon"
-                    aria-hidden="true"
-                  />
-                  <span className="sr-only">Previous</span>
-                </a>
-                <a
-                  className="carousel-control-next"
-                  href="#carouselExampleControls"
-                  role="button"
-                  data-slide="next"
-                >
-                  <span
-                    className="carousel-control-next-icon "
-                    aria-hidden="true"
-                  />
-                  <span className="sr-only">Next</span>
-                </a>
-              </div>
+            {post.photo.length > 1 ? (
+              <Carosuel images={post.photo} index={this.props.index} />
             ) : (
               <img
                 className="card-img-top"
-                src={`${process.env.REACT_APP_API_URL}/${
-                  this.props.post.photo
-                    ? this.props.post.photo.path
-                    : DefaultPost
+                src={`${
+                  post.photo ? post.photo[0] : DefaultPost
                 }`}
                 onError={(i) => (i.target.src = `${DefaultPost}`)}
-                alt={this.props.post.name}
+                alt={post.name}
               />
             )}
           </div>
@@ -126,7 +89,7 @@ export default class PostCard extends Component {
                 viewBox="0 0 16 16"
                 fill="currentColor"
                 xmlns="http://www.w3.org/2000/svg"
-                style={{color:'red'}}
+                style={{ color: "red" }}
               >
                 <path
                   fill-rule="evenodd"
@@ -134,7 +97,7 @@ export default class PostCard extends Component {
                   clip-rule="evenodd"
                 />
               </svg>
-              <small>&nbsp;105</small>
+              <small>&nbsp;{post.likes.length}</small>
             </div>
             <div>
               <svg
@@ -163,36 +126,34 @@ export default class PostCard extends Component {
                   clip-rule="evenodd"
                 />
               </svg>
-              <small>&nbsp;5</small>
             </div>
           </div>
-          <div className="text-center">
-            <h5 className="description">{this.props.post.title}</h5>
-            <p className="pt-2 text-dark">
-              {this.props.post.body.substring(0, 500) + "..."}
-            </p>
-          </div>
 
-          {isAuthenticated() ? (
-            <>
-              <div className="row justify-content-md-center">
-                <button
-                  className="btn"
-                  style={{
-                    borderRadius: "20px",
-                    backgroundColor: "#0155ca",
-                  }}
-                >
-                  <Link
-                    className="text-light"
-                    to={`/post/${this.props.post._id}`}
+          <h4 className="description text-center">{post.title}</h4>
+
+          <div>
+            <p className="pt-2 text-dark text-center">
+              {post.body.substring(0, 200) + "...."}
+            </p>
+
+            {isAuthenticated() ? (
+              <>
+                <div className="row justify-content-md-center">
+                  <button
+                    className="btn"
+                    style={{
+                      borderRadius: "20px",
+                      backgroundColor: "#0155ca",
+                    }}
                   >
-                    Read More
-                  </Link>
-                </button>
-              </div>
-            </>
-          ) : null}
+                    <Link className="text-light" to={`/post/${post._id}`}>
+                      Read More
+                    </Link>
+                  </button>
+                </div>
+              </>
+            ) : null}
+          </div>
         </div>
       </div>
     );

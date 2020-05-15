@@ -95,19 +95,6 @@ const Navbar = withRouter(({ history, authUser, handleLogout, signout }) => {
                 </Link>
               </li>
               <li>
-                <Link
-                  className="nav-link"
-                  to="/signin"
-                  style={isActive(history, "/signout")}
-                  onClick={() =>
-                    signout(() => {
-                      handleLogout();
-                    })
-                  }
-                >
-                  LOGOUT
-                </Link>
-
                 {!authUser && (
                   <>
                     <Link
@@ -182,7 +169,7 @@ const Navbar = withRouter(({ history, authUser, handleLogout, signout }) => {
                 <>
                   <li className="nav-item">
                     <Link
-                      className="nav-item nav-link menu-link active"
+                      className="nav-link  active"
                       to="/signin"
                       style={isActive(history, "/signin")}
                     >
@@ -230,7 +217,7 @@ const Navbar = withRouter(({ history, authUser, handleLogout, signout }) => {
             </ul>
             {authUser ? (
               <ul className="navbar-nav ml-auto mb-0 mr-2 pt-0">
-                <li className="nav-item dropdown">
+                <li className="nav-item dropdown ">
                   <a
                     className="nav-link"
                     href="/"
@@ -250,7 +237,7 @@ const Navbar = withRouter(({ history, authUser, handleLogout, signout }) => {
                     />
                   </a>
                   <div
-                    className="dropdown-menu dropdown-menu-right"
+                    className="dropdown-menu  dropdown-menu-right"
                     aria-labelledby="navbarDropdownMenuLink"
                   >
                     <Link

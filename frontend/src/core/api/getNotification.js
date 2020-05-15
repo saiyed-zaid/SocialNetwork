@@ -16,8 +16,8 @@ export const read = async () => {
       headers: {
         Accept: "application/json",
         "Content-Type": "Application/json",
-        Authorization: `Bearer ${isAuthenticated().user.token}`
-      }
+        Authorization: `Bearer ${isAuthenticated().user.token}`,
+      },
     }
   );
 
@@ -25,15 +25,49 @@ export const read = async () => {
 };
 export const isFollowStatusChange = async () => {
   const userData = await fetch(
-    `${process.env.REACT_APP_API_URL}/api/user/newFollowerStatusChange/${isAuthenticated().user._id}`,
+    `${process.env.REACT_APP_API_URL}/api/user/newFollowerStatusChange/${
+      isAuthenticated().user._id
+    }`,
     {
       method: "PUT",
       headers: {
         Accept: "application/json",
-        Authorization: `Bearer ${isAuthenticated().user.token}`
-      }
+        Authorization: `Bearer ${isAuthenticated().user.token}`,
+      },
     }
   );
 
   return await userData.json();
+};
+
+export const isLikesStatusChange = async (postId) => {
+  const userData = await fetch(
+    `${process.env.REACT_APP_API_URL}/api/post/newLikesStatusChange/${postId}`,
+    {
+      method: "PUT",
+      headers: {
+        Accept: "application/json",
+        Authorization: `Bearer ${isAuthenticated().user.token}`,
+      },
+    }
+  );
+
+  return await userData.json();
+};
+
+export const readPost = async () => {
+  const posts = await fetch(
+    `${process.env.REACT_APP_API_URL}/api/post/by/${
+      isAuthenticated().user._id
+    }`,
+    {
+      method: "GET",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "Application/json",
+        Authorization: `Bearer ${isAuthenticated().user.token}`,
+      },
+    }
+  );
+  return await posts.json({ posts });
 };

@@ -1,21 +1,18 @@
 import React, { Component } from "react";
 import { isAuthenticated, signout } from "../auth/index";
 import { Redirect, Link } from "react-router-dom";
-
-import { read, fetchMessage, update } from "./apiUser";
+import { update } from "./apiUser";
 import { update as updatePost } from "../post/apiPost";
 import DefaultProfile from "../images/avatar.jpg";
 import DefaultPost from "../images/post.jpg";
 import FollowProfileButton from "./followProfileButton";
-import ProfileTabs from "./profileTabs";
-import { listByUser } from "../post/apiPost";
-// import PageLoader from "../components/pageLoader";
-
 import Spinner from "../ui-components/Spinner";
 import Chattab from "../components/chatTab";
 import Modal from "../components/modal/modal";
 import EditProfile from "./editProfile";
 import TimeAgo from "react-timeago";
+import Postcard from "../components/posts/index";
+import GoToTop from "../ui-components/goToTop";
 
 class Profile extends Component {
   constructor(props) {
@@ -297,107 +294,12 @@ class Profile extends Component {
 
           {/* Display Posts */}
 
-          <div>
+          <div className="row justify-content-md-center">
             {posts.map((post, i) => (
-              <div
-                key={i}
-                className="d-flex w-100  align-items-center flex-column p-0 m-0"
-              >
-                {console.log("posts__", post)}
-                <div
-                  className="card-body m-2 col-md-7 "
-                  style={{
-                    backgroundColor: "#a5a4a333",
-                    border: "1px solid #adb5bd",
-                    boxShadow: "0.1em 0.1em 0.3em 0px rgba(0, 0, 0, 1)",
-                  }}
-                >
-                  {/* Post */}
-                  <div className="post ">
-                    <div className="user-block text-left">
-                      <img
-                        className="img-circle img-bordered-sm"
-                        src={
-                          post.postedBy.path
-                            ? post.postedBy.photo.path
-                            : DefaultPost
-                        }
-                        alt="post"
-                      />
-                      <span className="username">
-                        <Link to={`/post/${post._id}`}>
-                          {post.postedBy.name}
-                        </Link>
-                      </span>
-                      <span className="description pb-3">
-                        <div className="btn-group ">
-                          <button
-                            type="button"
-                            style={{ boxShadow: "none" }}
-                            className="btn"
-                            data-toggle="dropdown"
-                            aria-haspopup="true"
-                            aria-expanded="false"
-                          >
-                            {post.status ? "Public" : " Private"} &nbsp;
-                          </button>
-                          <div className="dropdown-menu dropdown-menu-right bg-secondary">
-                            <button
-                              className="dropdown-item"
-                              type="button"
-                              onClick={() => this.handlePostStatusChange(post)}
-                            >
-                              Make Post {!post.status ? "Public" : " Private"}
-                            </button>
-                          </div>
-                        </div>
-                        <TimeAgo date={post.created} />
-                      </span>
-                    </div>
-
-                    {post.photo ? (
-                      post.photo.mimetype === "video/mp4" ? (
-                        <div className="embed-responsive embed-responsive-16by9 p-0 m-0">
-                          <video
-                            controls
-                            className="embed-responsive-item p-0 m-0"
-                          >
-                            <source
-                              src={`${process.env.REACT_APP_API_URL}/${
-                                post.photo ? post.photo.path : DefaultPost
-                              }`}
-                              type="video/mp4"
-                              alt="No Video Found"
-                              // onError={e=>e.target.alt="No Video"}
-                            />
-                            Your browser does not support the video tag.
-                          </video>
-                        </div>
-                      ) : (
-                        <img
-                          className="card-img-top"
-                          src={`${process.env.REACT_APP_API_URL}/${
-                            post.photo ? post.photo.path : DefaultPost
-                          }`}
-                          onError={(i) => (i.target.src = `${DefaultPost}`)}
-                          alt={post.name}
-                        />
-                      )
-                    ) : null}
-                    <h5 className="pt-2 text-dark">{post.title}</h5>
-                    <p className="pt-2 text-dark">{post.body}</p>
-                    {isAuthenticated() ? (
-                      <button className="btn btn-outline-dark">
-                        <Link to={`/post/${post._id}`}>View More</Link>
-                      </button>
-                    ) : null}
-                  </div>
-                </div>
-                <hr className="my-4" />
-              </div>
+              <Postcard post={post} profile />
             ))}
-            {/*END POST RENDER */}
           </div>
+          {/*END POST RENDER */}
           <Modal
             id="editprofile"
             body={
@@ -412,6 +314,7 @@ class Profile extends Component {
             title="Edit Profile"
           />
         </div>
+        <GoToTop />
       </div>
     );
   }

@@ -3,7 +3,7 @@ import { isAuthenticated } from "../auth/index";
 import { read, updateUser } from "./apiUser";
 import { Redirect } from "react-router-dom";
 import DefaultProfile from "../images/avatar.jpg";
-// import PageLoader from "../components/pageLoader";
+import Alert from "../ui-components/Alert";
 import moment from "moment";
 
 class EditProfile extends Component {
@@ -48,11 +48,10 @@ class EditProfile extends Component {
 
   componentDidMount() {
     this.postData = new FormData();
-    const userId =
-      this.props.authUser == null
-        ? this.props.match.params.userId
-        : this.props.authUser._id;
-    this.init(this.props.authUser._id);
+    const userId = !this.props.authUser
+      ? this.props.match.params.userId
+      : this.props.authUser._id;
+    this.init(userId);
   }
 
   handleInputChange = (name) => (event) => {
@@ -82,10 +81,6 @@ class EditProfile extends Component {
         [event.target.name]: event.target.value,
       });
     }
-
-    //    this.postData.set(name, value);
-
-    //  this.setState({ [name]: value });
   };
 
   isValid = () => {
@@ -141,7 +136,7 @@ class EditProfile extends Component {
     }
   };
 
-  editForm = (name, gender, dob, email, password, about) => {
+  editForm = (name, gender, dob, email, about) => {
     return (
       <form method="post">
         <div className="form-group">
@@ -259,7 +254,6 @@ class EditProfile extends Component {
       gender,
       dob,
       email,
-      password,
       redirectToProfile,
       error,
       loading,
@@ -270,28 +264,21 @@ class EditProfile extends Component {
     if (redirectToProfile) {
       return <Redirect to={`/user/${id}`} />;
     }
-    const photoUrl = id
-      ? `${process.env.REACT_APP_API_URL}/${photo}`
-      : DefaultProfile;
+    // const photoUrl = id
+    //   ? `${process.env.REACT_APP_API_URL}/${photo}`
+    //   : DefaultProfile;
 
     return (
-      <div>
-        <div className="jumbotron p-3">{/* <h2>Edit Profile</h2> */}</div>
-
-        <div
-          className="alert alert-danger alert-dismissible fade show col-md-4"
-          style={{ display: error ? "" : "none" }}
-        >
-          {error}
-          <button
-            type="button"
-            className="close"
-            data-dismiss="alert"
-            aria-label="Close"
-          >
-            <span aria-hidden="true">&times;</span>
-          </button>
+      <div className="container">
+        <div className="jumbotron p-3">
+          <h2>Edit Profile</h2>
         </div>
+        <Alert
+          message={error}
+          type="danger"
+          style={{ display: error ? "" : "none" }}
+        />
+
         <div
           className="container-fluid p-0"
           /*  style={{
@@ -310,7 +297,7 @@ class EditProfile extends Component {
             alt={name}
           />
  */}
-          {this.editForm(name, gender, dob, email, password, about)}
+          {this.editForm(name, gender, dob, email, about)}
         </div>
       </div>
     );

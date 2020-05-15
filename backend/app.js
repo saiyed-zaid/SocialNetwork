@@ -27,7 +27,7 @@ app.use("/upload", express.static("upload"));
 
 /* Registering middleware BEGIN*/
 app.use(cors());
-app.use(bodyParser.json()); 
+app.use(bodyParser.json());
 //app.use(morgan("tiny"));
 /* Registering middleware END*/
 
@@ -53,8 +53,8 @@ mongoose
     useFindAndModify: false,
   })
   .then((result) => {
-    server.listen(process.env.PORT|| 5000, () => {
-      console.log('Server is up and running','Connected with mongoDb');
+    server.listen(process.env.PORT || 5000, () => {
+      console.log("Server is up and running", "Connected with mongoDb");
       io.on("connection", function (socket) {
         console.log("Client Connected");
         socket.on("msg", function (data) {

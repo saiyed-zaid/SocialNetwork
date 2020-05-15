@@ -191,6 +191,18 @@ router.get(
 );
 
 /**
+ * @function put
+ * @description Handling put request which Update isNewLike status false
+ * @param {middleware} Checking Authorization
+ * @param {middleware} newLikesStatusChange
+ */
+router.put(
+  "/api/post/newLikesStatusChange/:postId",
+  auth_check,
+  userController.newFollowerStatusChagne
+);
+
+/**
  * @function param
  * @description Invoked a callback function whenever userId appended in URL
  * @param {String} userId

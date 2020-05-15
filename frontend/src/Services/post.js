@@ -78,7 +78,6 @@ export default class Postservice {
           method: "GET",
         }
       );
-      console.log(post);
       return await post.json({ post });
     } catch (error) {
       return Promise.reject(error);
@@ -118,8 +117,7 @@ export default class Postservice {
       return Promise.reject(error);
     }
   }
-  
-  
+
   async editPost(post, postId, token) {
     const postData = await fetch(
       `${process.env.REACT_APP_API_URL}/api/post/${postId}`,

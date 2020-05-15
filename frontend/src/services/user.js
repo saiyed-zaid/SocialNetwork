@@ -71,8 +71,6 @@ export default class user extends Component {
    * @param {json} user        User data
    */
   async update(userId, token, user) {
-    console.log("api", userId, token, user);
-
     const userData = await fetch(
       `${process.env.REACT_APP_API_URL}/api/user/${userId}`,
       {
@@ -217,9 +215,5 @@ export default class user extends Component {
     );
 
     return await onlineUsers.json({ onlineUsers });
-  }
-
-  render() {
-    return <div></div>;
   }
 }
