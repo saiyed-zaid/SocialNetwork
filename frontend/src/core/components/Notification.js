@@ -87,16 +87,6 @@ class Notification extends React.Component {
       });
     });
   }
-  likeStatusChange = () => {
-    if (this.state.hasNewLikes) {
-      const toast = document.querySelectorAll(".noti");
-      toast.forEach((t) => {
-        t.classList.replace("show", "hide");
-      });
-      clearTimeout(this.state.timer);
-      this.setState({ hasNewLikes: false });
-    }
-  };
 
   followStatusChange = () => {
     if (this.state.hasNewFollow) {
@@ -146,7 +136,6 @@ class Notification extends React.Component {
               No Notifications
             </span>
           )}
-
           <div className="dropdown-divider" />
         </div>
       </li>

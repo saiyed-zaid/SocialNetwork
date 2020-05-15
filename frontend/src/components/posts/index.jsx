@@ -8,6 +8,7 @@ import Carosuel from "../../ui-components/carosuel";
 
 export default class PostCard extends Component {
   render() {
+    
     const { post } = this.props;
     const posterId = post.postedBy ? `/user/${post.postedBy._id}` : "";
     const posterName = post.postedBy ? post.postedBy.name : "Unknown";
@@ -26,6 +27,7 @@ export default class PostCard extends Component {
                 post.postedBy.photo ? post.postedBy.photo.path : DefaultProfile
               }
               alt={posterName}
+              onError={(event) => (event.target.src = DefaultProfile)}
             />
             <span className="username text-left">
               <Link to={posterId}>{posterName}</Link> &nbsp;
@@ -40,6 +42,7 @@ export default class PostCard extends Component {
                 </small>
               ) : null}
             </span>
+
             {this.props.profile ? (
               <span className="description pb-3 text-left">
                 {post.status ? (
@@ -69,8 +72,8 @@ export default class PostCard extends Component {
             ) : (
               <img
                 className="card-img-top"
-                src={`${process.env.REACT_APP_API_URL}/${
-                  post.photo ? post.photo.path : DefaultPost
+                src={`${
+                  post.photo ? post.photo[0] : DefaultPost
                 }`}
                 onError={(i) => (i.target.src = `${DefaultPost}`)}
                 alt={post.name}
@@ -123,7 +126,6 @@ export default class PostCard extends Component {
                   clip-rule="evenodd"
                 />
               </svg>
-              <small>&nbsp;{post.comments.length}</small>
             </div>
           </div>
 
@@ -133,25 +135,25 @@ export default class PostCard extends Component {
             <p className="pt-2 text-dark text-center">
               {post.body.substring(0, 200) + "...."}
             </p>
-          </div>
 
-          {isAuthenticated() ? (
-            <>
-              <div className="row justify-content-md-center">
-                <button
-                  className="btn"
-                  style={{
-                    borderRadius: "20px",
-                    backgroundColor: "#0155ca",
-                  }}
-                >
-                  <Link className="text-light" to={`/post/${post._id}`}>
-                    Read More
-                  </Link>
-                </button>
-              </div>
-            </>
-          ) : null}
+            {isAuthenticated() ? (
+              <>
+                <div className="row justify-content-md-center">
+                  <button
+                    className="btn"
+                    style={{
+                      borderRadius: "20px",
+                      backgroundColor: "#0155ca",
+                    }}
+                  >
+                    <Link className="text-light" to={`/post/${post._id}`}>
+                      Read More
+                    </Link>
+                  </button>
+                </div>
+              </>
+            ) : null}
+          </div>
         </div>
       </div>
     );

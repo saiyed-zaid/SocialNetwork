@@ -139,123 +139,106 @@ class EditProfile extends Component {
   editForm = (name, gender, dob, email, about) => {
     return (
       <form method="post">
-        <div className="form-row text-light">
-          <div className="form-group col-md-6">
-            <small>
-              <label for="inputGroupFile04"> Profile Photo</label>
-            </small>
-            <div className="custom-file">
+        <div className="form-group">
+          <label for="inputGroupFile04"> Profile Photo</label>
+          <div className="custom-file">
+            <input
+              accept="image/*"
+              className="custom-file-input"
+              type="file"
+              onChange={this.handleInputChange("photo")}
+              id="inputGroupFile04"
+              aria-describedby="inputGroupFileAddon04"
+            />
+            <label className="custom-file-label" htmlFor="inputGroupFile04">
+              Choose Post Photo
+            </label>
+          </div>
+        </div>
+
+        <div className="form-group ">
+          <label> Name</label>
+          <input
+            onChange={this.handleInputChange("name")}
+            type="text"
+            className="form-control"
+            value={name}
+            name="name"
+            placeholder="Name"
+          />
+        </div>
+
+        <div className="form-group ">
+          <label htmlFor="email"> Email</label>
+
+          <input
+            onChange={this.handleInputChange("email")}
+            type="email"
+            className="form-control"
+            value={email}
+            name="email"
+            placeholder="Email"
+            id="email"
+          />
+        </div>
+        <div className="form-group ">
+          <label> Date Of Birth</label>
+
+          <input
+            type="date"
+            name="dob"
+            className="form-control"
+            onChange={this.handleInputChange("dob")}
+            value={moment(dob).format("YYYY-MM-DD")}
+          />
+        </div>
+
+        <div className="form-group ">
+          <label> About</label>
+
+          <textarea
+            onChange={this.handleInputChange("about")}
+            className="form-control"
+            value={about}
+            name="about"
+            placeholder="About "
+          />
+        </div>
+        <div className="form-group ">
+          <label> Gender : &nbsp;</label>
+          <div>
+            <div className="form-check form-check-inline">
               <input
-                accept="image/*"
-                className="custom-file-input"
-                type="file"
-                onChange={this.handleInputChange("photo")}
-                id="inputGroupFile04"
-                aria-describedby="inputGroupFileAddon04"
+                className="form-check-input"
+                type="radio"
+                name="gender"
+                id="inlineRadio1"
+                value="male"
+                onChange={this.handleInputChange("gender")}
+                checked={gender === "male"}
               />
-              <label className="custom-file-label" htmlFor="inputGroupFile04">
-                Choose Post Photo
+              <label className="form-check-label" htmlFor="inlineRadio1">
+                Male
+              </label>
+            </div>
+            <div className="form-check form-check-inline">
+              <input
+                className="form-check-input"
+                type="radio"
+                name="gender"
+                id="inlineRadio2"
+                value="female"
+                onChange={this.handleInputChange("gender")}
+                checked={gender === "female"}
+              />
+              <label className="form-check-label" htmlFor="inlineRadio2">
+                Female
               </label>
             </div>
           </div>
-          <div className="form-group col-md-6 ">
-            <small>
-              <label> Name</label>
-            </small>
-
-            <input
-              onChange={this.handleInputChange("name")}
-              type="text"
-              className="form-control"
-              value={name}
-              name="name"
-              placeholder="Name"
-            />
-          </div>
         </div>
-        <div className="form-row text-light">
-          <div className="form-group col-md-6">
-            <small>
-              <label for="email"> Email</label>
-            </small>
 
-            <input
-              onChange={this.handleInputChange("email")}
-              type="email"
-              className="form-control"
-              value={email}
-              name="email"
-              placeholder="Email"
-              id="email"
-            />
-          </div>
-
-          <div className="form-group col-md-6">
-            <small>
-              <label> Date Of Birth</label>
-            </small>
-
-            <input
-              type="date"
-              name="dob"
-              className="form-control"
-              onChange={this.handleInputChange("dob")}
-              value={moment(dob).format("YYYY-MM-DD")}
-            />
-          </div>
-        </div>
-        <div className="form-row text-light">
-          <div className="form-group col-md-6">
-            <small>
-              <label> About</label>
-            </small>
-
-            <textarea
-              onChange={this.handleInputChange("about")}
-              className="form-control"
-              value={about}
-              name="about"
-              placeholder="About "
-            />
-          </div>
-
-          <div className="form-group col-md-6 ">
-            <small>
-              <label> Gender : &nbsp;</label>
-            </small>
-            <div>
-              <div className="form-check form-check-inline">
-                <input
-                  className="form-check-input"
-                  type="radio"
-                  name="gender"
-                  id="inlineRadio1"
-                  value="male"
-                  onChange={this.handleInputChange("gender")}
-                  checked={gender === "male"}
-                />
-                <label className="form-check-label" htmlFor="inlineRadio1">
-                  Male
-                </label>
-              </div>
-              <div className="form-check form-check-inline">
-                <input
-                  className="form-check-input"
-                  type="radio"
-                  name="gender"
-                  id="inlineRadio2"
-                  value="female"
-                  onChange={this.handleInputChange("gender")}
-                  checked={gender === "female"}
-                />
-                <label className="form-check-label" htmlFor="inlineRadio2">
-                  Female
-                </label>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div className="form-group col-md-12 text-center">
+        <div className="form-group text-center">
           <button className="btn btn-primary" onClick={this.clickSubmit}>
             Update Profile
           </button>

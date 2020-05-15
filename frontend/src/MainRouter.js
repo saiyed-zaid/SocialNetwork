@@ -290,8 +290,11 @@ class MainRouter extends React.Component {
         Date.now()
       );
       if (hourDiff > 1) {
-        localStorage.removeItem("jwt");
-        this.props.history.push("/login");
+        alert("1 hour complted");
+        this.setState({ authUser: null }, () => {
+          localStorage.removeItem("jwt");
+          this.props.history.push("/login");
+        });
       }
     }
 
