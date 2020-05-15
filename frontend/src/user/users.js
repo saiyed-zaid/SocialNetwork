@@ -9,8 +9,8 @@ import UsersList from "../components/users/index";
 import Alert from "../ui-components/Alert";
 
 class Users extends Component {
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
     this.state = {
       users: [],
       onlineUsers: [],
@@ -23,17 +23,6 @@ class Users extends Component {
     };
   }
   componentDidMount() {
-    setTimeout(async () => {
-      try {
-        const response = await this.props.getUsers();
-        if (response.error) {
-          console.log(response.error);
-        } else {
-          this.setState({ users: response.users, isLoading: false });
-        }
-      } catch (err) {}
-    }, 2000);
-
     /**
      * Function For Getting Online Users
      */
@@ -49,6 +38,26 @@ class Users extends Component {
         .catch((error) => this.setState({ error: error }));
     }
   }
+
+  async componentWillMount() {
+    try {
+      if (this.props.authUser) {
+        const response = await this.props.getUsers(this.props.authUser.token);
+        if (response.isAuthorized) {
+          if (response.error) {
+            console.log(response.error);
+          } else {
+            this.setState({ users: response.users, isLoading: false });
+          }
+        }
+      } else {
+        this.props.history.push("/signin");
+      }
+    } catch (err) {
+      console.log("error", err);
+    }
+  }
+
   onMsg = () => {
     let chatbar = document.getElementById("chatbar");
     chatbar.style.display = "block";
@@ -109,48 +118,51 @@ class Users extends Component {
       return <Spinner />;
     }
     return (
-      <div className="row container-fluid p-0 m-0">
+      <div className="container-fluid">
+        {/* d-flex flex-column align-items-center */}
         {error ? <Alert message={error} type="danger" /> : null}
         <div
           id="chat-tab"
-          className="justify-content-end align-items-end chat-box"
+          className="chat-box"
           style={
             this.state.hasChatBoxDisplay
               ? { display: "flex" }
               : { display: "none" }
           }
         ></div>
-        <div className="col-md-10">
+        <div className="col-md-12">
           <div className="jumbotron p-3">
             {/* <h4> Users</h4> */}
             <div className="row">
-              {!users.length && this.renderUsers(users)}
+              {/* {!users.length && this.renderUsers(users)} */}
+        {this.renderUsers(users)}
             </div>
           </div>
         </div>
-        {this.renderUsers(users)}
-        <div
+        
+       {/*  <div
           className="col-md-2 p-0 m-0"
           style={{
             height: "400px",
             position: "fixed !important",
             overflowY: "auto",
           }}
-        ></div>
+        ></div> */}
+
         <ChatBar data={onlineUsers} />
         {this.state.hasChatBoxDisplay ? (
           <Chattab
-            senderId={isAuthenticated().user._id}
-            senderName={isAuthenticated().user.name}
+            senderId={this.props.authUser._id}
+            senderName={this.props.authUser.name}
             receiverId={this.state.receiverId}
             receiverName={this.state.receiverName}
             handleChatBoxDisplay={this.handleChatBoxDisplay}
             messages={this.state.messages}
           />
         ) : null}
-        <button id="floating-btn" className="floating-btn" onClick={this.onMsg}>
+        {/*  <button id="floating-btn" className="floating-btn" onClick={this.onMsg}>
           <i className="fas fa-paper-plane anim-icon"></i>
-        </button>
+        </button> */}
         <GoToTop />
       </div>
     );

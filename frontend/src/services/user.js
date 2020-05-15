@@ -30,9 +30,12 @@ export default class user extends Component {
    *
    * @returns {json}
    */
-  async list() {
+  async list(token) {
     const users = await fetch(`${process.env.REACT_APP_API_URL}/api/users`, {
       method: "GET",
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
     });
     return await users.json({ users });
   }

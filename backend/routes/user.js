@@ -75,7 +75,7 @@ router.put(
  * @param {String} path of router
  * @param {middleware} property getUsers
  */
-router.get("/api/users", userController.getUsers);
+router.get("/api/users", auth_check,userController.getUsers);
 
 /**
  * @function get

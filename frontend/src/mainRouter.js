@@ -211,7 +211,9 @@ const Navbar = withRouter(({ history, authUser, handleLogout, signout }) => {
                     </Link>
                   </li>
 
-                  {authUser && authUser.roll !== "admin" && <Notification />}
+                  {authUser && authUser.roll !== "admin" && (
+                    <Notification authUser={authUser} />
+                  )}
                 </>
               )}
             </ul>
@@ -277,27 +279,14 @@ class MainRouter extends React.Component {
       receiverId: null,
       receiverName: null,
       messages: null,
-      authUser: null,
+      authUser: isAuthenticated().user || null,
+      isAuthorized: null,
     };
 
     this.socket = openSocket("http://localhost:5000");
   }
 
   componentDidMount() {
-    if (this.state.authUser) {
-      const hourDiff = this.timeDiffCalc(
-        new Date(isAuthenticated().user.lastLoggedIn),
-        Date.now()
-      );
-      if (hourDiff > 1) {
-        alert("1 hour complted");
-        this.setState({ authUser: null }, () => {
-          localStorage.removeItem("jwt");
-          this.props.history.push("/login");
-        });
-      }
-    }
-
     if (this.state.authUser) {
       this.socket.on(this.state.authUser._id, (data) => {
         fetchMessage(
@@ -320,10 +309,22 @@ class MainRouter extends React.Component {
           });
       });
     }
+  }
 
-    this.setState({
-      authUser: isAuthenticated().user,
-    });
+  componentWillMount() {
+    if (this.state.authUser) {
+      const hourDiff = this.timeDiffCalc(
+        new Date(isAuthenticated().user.lastLoggedIn),
+        Date.now()
+      );
+      if (hourDiff >= 1) {
+        alert("1 hour complted");
+        this.setState({ authUser: null, isAuthorized: false }, () => {
+          localStorage.removeItem("jwt");
+          this.props.history.push("/signin");
+        });
+      }
+    }
   }
 
   handleChatClose = () => {

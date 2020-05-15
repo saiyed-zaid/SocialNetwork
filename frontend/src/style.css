@@ -751,8 +751,13 @@ div.content {
 .notify-custom {
   z-index: 9999;
 }
+.wrapper{
+  height:30px;
+  display:flex;
+}
 
 .profile-photo {
+  margin:auto;
   top: 0%;
   left: 50%;
   transform: translate(-50%, -50%);

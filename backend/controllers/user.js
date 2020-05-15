@@ -53,7 +53,7 @@ exports.getUsers = async (req, res, next) => {
       });
     }
 
-    return res.json({ users });
+    return res.json({ users, isAuthorized: req.auth.isAuthorized });
   } catch (error) {
     return res.status(404).json({
       msg: "No User Found",
@@ -76,25 +76,36 @@ exports.getUser = async (req, res, next) => {
  * @description Handling put request which Update single user
  */
 exports.updateUser = async (req, res, next) => {
+  console.log('req body__',req.body);
+  
+  const url = req.protocol + "://" + req.get("host");
+  var reqFilePath;
+
   let user = req.profile;
 
-  if (user.photo) {
-    fs.unlink(user.photo.path, (err) => {
-      console.log("Error while unlink user image", err);
-    });
-  }
   if (!req.file) {
-    req.file = user.photo;
+    //req.file = reqFilePath;
+
+    reqFilePath = user.photo;
+  } else {
+    reqFilePath = `${url}/upload/users/${req.auth._id}/profile/${req.file.filename}`;
+
+    if (user.photo) {
+      fs.unlink(user.photo, (err) => {
+        console.log("Error while unlink user image", err);
+      });
+    }
   }
-  if (req.body.password) {
+
+  /* if (req.body.password) {
     req.body.password = md5(req.body.password);
   } else {
     req.body.password = user.password;
-  }
+  } */
+
+  user.photo = reqFilePath;
   user = _.extend(user, req.body);
   user.updated = Date.now();
-
-  user.photo = req.file;
 
   user.save(req.body, async (err, result) => {
     if (err) {
