@@ -1,5 +1,4 @@
 import React from "react";
-import { read } from "../user/apiUser";
 import { Multiselect } from "multiselect-react-dropdown";
 
 class NewPost extends React.Component {
@@ -21,8 +20,10 @@ class NewPost extends React.Component {
   async componentDidMount() {
     /* this.setState({ user: this.props.authUser }); */
     try {
-
-      const data = await this.props.read(this.props.authUser._id, this.props.authUser.token);
+      const data = await this.props.read(
+        this.props.authUser._id,
+        this.props.authUser.token
+      );
       if (data.err) {
         this.setState({ options: [] });
       } else {
@@ -73,7 +74,7 @@ class NewPost extends React.Component {
     try {
       this.setState({ errors: {} });
 
-      const response = await this.props.addPost(
+      await this.props.addPost(
         this.postData,
         data,
         this.props.authUser._id,

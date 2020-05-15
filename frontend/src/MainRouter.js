@@ -21,7 +21,7 @@ import AdminHome from "./admin/admin";
 import PrivateRoute from "./auth/privateRoute";
 import LockScreen from "./auth/pages/lockScreen";
 import openSocket from "socket.io-client";
-import { authUser, isAuthenticated } from "./auth/index";
+import { isAuthenticated } from "./auth/index";
 import avatar from "./images/avatar.jpg";
 import Chattab from "./components/chatTab";
 import { fetchMessage } from "./user/apiUser";
@@ -129,6 +129,7 @@ const Navbar = withRouter(({ history, authUser, handleLogout, signout }) => {
                   className="nav-link  p-0 m-0 "
                   src={avatar}
                   height="30px"
+                  alt="user "
                 />
               </li>
             </ul>
@@ -218,8 +219,10 @@ const Navbar = withRouter(({ history, authUser, handleLogout, signout }) => {
               )}
             </ul>
             {authUser ? (
-              <ul className="navbar-nav ml-auto mb-0 mr-2 pt-0">
-                <li className="nav-item dropdown ">
+              <ul className="navbar-nav ml-auto ">
+                {authUser && authUser.roll !== "admin" && <Notification />}
+
+                <li className="nav-item dropdown profile-btn ">
                   <a
                     className="nav-link"
                     href="/"
@@ -229,19 +232,28 @@ const Navbar = withRouter(({ history, authUser, handleLogout, signout }) => {
                     aria-haspopup="true"
                     aria-expanded="false"
                   >
+                    {authUser.name.toUpperCase()} {"  "}
                     <img
                       style={{
                         borderRadius: "50%",
                       }}
-                      className="nav-link  p-0 m-0 img-circle "
-                      src={avatar}
+                      className="nav-link  p-0 m-0 ml-1 img-circle float-right "
+                      src={authUser.photo}
                       height="30px"
+                      onError={(e) => (e.target.src = avatar)}
+                      alt="user "
                     />
                   </a>
                   <div
                     className="dropdown-menu  dropdown-menu-right"
                     aria-labelledby="navbarDropdownMenuLink"
                   >
+                    <Link
+                      className="dropdown-item"
+                      to={`/user/edit/${authUser._id}`}
+                    >
+                      Manage Profile
+                    </Link>
                     <Link
                       className="dropdown-item"
                       to={`/user/changepassword/${authUser._id}`}

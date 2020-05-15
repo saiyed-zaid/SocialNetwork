@@ -39,8 +39,8 @@ class FollowProfileButton extends Component {
         </div>
       </div>
     );
-    {
-      /* <button
+
+    /* <button
             onClick={this.followClick}
             className="btn btn-raised btn-success mr-5"
           >
@@ -55,7 +55,6 @@ class FollowProfileButton extends Component {
           </button>
         )}
     ); */
-    }
   }
 }
 export default FollowProfileButton;

@@ -76,8 +76,7 @@ exports.getUser = async (req, res, next) => {
  * @description Handling put request which Update single user
  */
 exports.updateUser = async (req, res, next) => {
-  console.log('req body__',req.body);
-  
+
   const url = req.protocol + "://" + req.get("host");
   var reqFilePath;
 

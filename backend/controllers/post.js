@@ -39,10 +39,9 @@ exports.getPosts = async (req, res, next) => {
   try {
     const posts = await Post.find({ status: true })
       .populate("postedBy", "_id name photo")
-      .populate("comments", "text created")
       .populate("comments.postedBy", "_id name")
       .populate("tags", "_id name")
-      .select("_id title body created likes photo status tags")
+      .select("_id title body created comments likes photo status tags")
       .sort({ created: -1 });
     res.json({ posts });
   } catch (error) {

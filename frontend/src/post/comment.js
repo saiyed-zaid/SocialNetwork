@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-import { comment, uncomment } from "./apiPost";
 import { isAuthenticated } from "../auth/index";
 import CommentList from "../components/commentList/index";
 import Alert from "../ui-components/Alert";

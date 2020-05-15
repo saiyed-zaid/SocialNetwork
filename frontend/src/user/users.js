@@ -1,5 +1,5 @@
-import React, { Component, useHistory } from "react";
-import { list, getOnlineUsers, fetchMessage } from "./apiUser";
+import React, { Component } from "react";
+import { getOnlineUsers, fetchMessage } from "./apiUser";
 import GoToTop from "../ui-components/goToTop";
 import Spinner from "../ui-components/Spinner";
 import { isAuthenticated } from "../auth";
@@ -135,12 +135,12 @@ class Users extends Component {
             {/* <h4> Users</h4> */}
             <div className="row">
               {/* {!users.length && this.renderUsers(users)} */}
-        {this.renderUsers(users)}
+              {this.renderUsers(users)}
             </div>
           </div>
         </div>
-        
-       {/*  <div
+
+        {/*  <div
           className="col-md-2 p-0 m-0"
           style={{
             height: "400px",

@@ -1,6 +1,6 @@
 import React from "react";
 import { read } from "../user/apiUser";
-import { singlePost, update } from "../post/apiPost";
+import { singlePost } from "../post/apiPost";
 import { Multiselect } from "multiselect-react-dropdown";
 import DefaultPost from "../images/post.jpg";
 
@@ -95,17 +95,12 @@ class EditPost extends React.Component {
 
     const userId = this.props.authUser._id;
     const token = this.props.authUser.token;
-    const data = this.state;
     this.postData.append("tags", JSON.stringify(this.selectedopt));
 
     try {
       this.setState({ errors: {} });
 
-      const response = await this.props.editPost(
-        this.postData,
-        this.state.id,
-        token
-      );
+      await this.props.editPost(this.postData, this.state.id, token);
       this.props.history.push(`/user/${userId}`);
     } catch (errors) {
       this.setState({

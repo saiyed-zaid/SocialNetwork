@@ -1,16 +1,14 @@
 import React, { Component } from "react";
 import { isAuthenticated, signout } from "../auth/index";
-import { Redirect, Link } from "react-router-dom";
+import { Redirect } from "react-router-dom";
 import { update } from "./apiUser";
 import { update as updatePost } from "../post/apiPost";
 import DefaultProfile from "../images/avatar.jpg";
-import DefaultPost from "../images/post.jpg";
 import FollowProfileButton from "./followProfileButton";
 import Spinner from "../ui-components/Spinner";
 import Chattab from "../components/chatTab";
 import Modal from "../components/modal/modal";
 import EditProfile from "./editProfile";
-import TimeAgo from "react-timeago";
 import Postcard from "../components/posts/index";
 import GoToTop from "../ui-components/goToTop";
 
@@ -190,11 +188,8 @@ class Profile extends Component {
   };
 
   render() {
-    const { redirectToSignin, user, posts, error } = this.state;
-    const photoUrl =
-      user._id && user.photo
-        ? `${process.env.REACT_APP_API_URL}/${user.photo.path}`
-        : DefaultProfile;
+    const { redirectToSignin, user, posts } = this.state;
+    const photoUrl = user._id && user.photo ? `${user.photo}` : DefaultProfile;
 
     if (redirectToSignin) {
       return <Redirect to="/signin" />;
@@ -239,6 +234,7 @@ class Profile extends Component {
               style={{ width: "150px" }}
             />
           </div>
+
         </div>
 
         <div className="jumbotron text-center">
@@ -273,13 +269,14 @@ class Profile extends Component {
           </div>
           {/* End Follow/Following Details */}
 
-          {(this.props.authUser._id !== this.state.user._id && (
-            <FollowProfileButton
-              following={this.state.following}
-              onButtonClick={this.clickFollowButton}
-              handleChatBoxDisplay={this.handleChatBoxDisplay}
-            />
-          )) || (
+          {
+            this.props.authUser._id !== this.state.user._id && (
+              <FollowProfileButton
+                following={this.state.following}
+                onButtonClick={this.clickFollowButton}
+                handleChatBoxDisplay={this.handleChatBoxDisplay}
+              />
+            ) /* || (
             <div className="row justify-content-center">
               <div className="form-group">
                 <button
@@ -291,7 +288,8 @@ class Profile extends Component {
                 </button>
               </div>
             </div>
-          )}
+          ) */
+          }
 
           <hr className="my-4" />
 

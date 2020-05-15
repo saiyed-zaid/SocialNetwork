@@ -5,8 +5,8 @@ const Follow = (props) => {
   return (
     props.newFollowers && (
       <div>
-        {props.newFollowers.map((follower) => (
-          <li className="noti w-100" style={{ height: "50px" }}>
+        {props.newFollowers.map((follower, i) => (
+          <li className="noti w-100" style={{ height: "50px" }} key={i}>
             <strong className="mr-auto">
               {follower.name} Started Following You.
             </strong>
@@ -19,14 +19,13 @@ const Follow = (props) => {
             <div className="dropdown-divider" />
           </li>
         ))}
-        {props.newLikes.map((like) => (
-          <li className="noti w-100" style={{ height: "50px" }}>
+        {props.newLikes.map((like, i) => (
+          <li className="noti w-100" style={{ height: "50px" }} key={i}>
             <strong className="mr-auto"> {like.name} Liked Your Post.</strong>
             <small>
               &nbsp;&nbsp;
               {like.likedFrom ? <TimeAgo date={like.likedFrom} /> : null}
             </small>
-            d
             <div className="dropdown-divider" />
           </li>
         ))}
