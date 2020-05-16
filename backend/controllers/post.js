@@ -205,37 +205,38 @@ exports.deletePost = async (req, res, next) => {
  * @description Handling patch request which update post in database
  */
 exports.updatePost = async (req, res, next) => {
-  let post = req.post;
-
+  let reqTags;
+  let tags = [];
   const reqFiles = [];
-
+  let post = req.post;
   const url = req.protocol + "://" + req.get("host");
 
-  for (var i = 0; i < req.files.length; i++) {
-    reqFiles.push(
-      `${url}/upload/users/${req.auth._id}/posts/${req.files[i].filename}`
-    );
-    //post.photo.push(`${url}/upload/users/${req.auth._id}/posts/${req.files[i].filename}`);
-  }
-  //const prevPostPhoto = post.photo;
+  if (req.body.tags) {
+    reqTags = JSON.parse(req.body.tags);
 
-  if (!req.files) {
-    req.files = post.photo;
+    for (let index = 0; index < reqTags.length; index++) {
+      tags.push(reqTags[index].id);
+    }
+    req.body.tags = tags;
   } else {
-    req.body.photo = reqFiles;
+    req.body.tags = post.tags;
+  }
+
+  if (req.files) {
+    //req.files = post.photo;
+    if (req.files.length > 0) {
+      for (var i = 0; i < req.files.length; i++) {
+        reqFiles.push(
+          `${url}/upload/users/${req.auth._id}/posts/${req.files[i].filename}`
+        );
+      }
+      req.body.photo = reqFiles;
+    } else {
+      req.body.photo = post.photo;
+    }
+    //const prevPostPhoto = post.photo;
     console.log("photos", req.body.photo);
     console.log("files path", reqFiles);
-
-    // for just modifing the email property
-    post.photo = _.merge(post.photo, req.body.photo);
-    post.save(function (err) {
-      if(err)
-      {
-        console.log(err)
-      }
-      console.log('saved');
-      // handle successfull save
-    });
   }
 
   post = _.extend(post, req.body);

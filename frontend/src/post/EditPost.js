@@ -92,10 +92,14 @@ class EditPost extends React.Component {
 
   handleSubmit = async (event) => {
     event.preventDefault();
+    console.log("tags", this.selectedopt);
 
     const userId = this.props.authUser._id;
     const token = this.props.authUser.token;
-    this.postData.append("tags", JSON.stringify(this.selectedopt));
+
+    if (this.selectedopt.length > 0) {
+      this.postData.append("tags", JSON.stringify(this.selectedopt));
+    }
 
     try {
       this.setState({ errors: {} });
@@ -110,7 +114,7 @@ class EditPost extends React.Component {
   };
 
   onSelect = (selectedList, selectedItem) => {
-    this.selectedopt.push(selectedItem._id);
+    this.selectedopt.push({ id: selectedItem._id });
   };
 
   onRemove = (selectedList, removedItem) => {
