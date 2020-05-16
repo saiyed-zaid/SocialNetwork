@@ -293,7 +293,11 @@ class Profile extends Component {
 
           <div className="row justify-content-md-center">
             {posts.map((post, i) => (
-              <Postcard post={post} profile />
+              <Postcard
+                post={post}
+                profile
+                handlePostStatusChange={this.handlePostStatusChange}
+              />
             ))}
           </div>
           {/*END POST RENDER */}

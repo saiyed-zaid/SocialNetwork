@@ -2,16 +2,16 @@ import React, { Component } from "react";
 
 export default class goToTop extends Component {
   scrollFunction = () => {
+    let mybutton = document.getElementById("gototop")
+      ? document.getElementById("gototop")
+      : false;
+
     if (
       document.body.scrollTop > 20 ||
       document.documentElement.scrollTop > 20
     ) {
-      let mybutton = document.getElementById("gototop");
-
       mybutton.style.display = "block";
     } else {
-      let mybutton = document.getElementById("gototop");
-
       mybutton.style.display = "none";
     }
   };

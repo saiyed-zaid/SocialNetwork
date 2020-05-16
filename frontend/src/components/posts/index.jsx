@@ -44,17 +44,37 @@ export default class PostCard extends Component {
 
             {this.props.profile ? (
               <span className="description pb-3 text-left">
-                {post.status ? (
-                  <>
-                    <i class="fas fa-lock"></i>&nbsp;&nbsp;
-                    <small>Private</small>
-                  </>
-                ) : (
-                  <>
-                    <i class="fas fa-globe-asia"></i>&nbsp;&nbsp;
-                    <small>Public</small>
-                  </>
-                )}
+                <div className="btn-group ">
+                  <a
+                    // type="button"
+                    style={{ boxShadow: "none", cursor: "pointer" }}
+                    // className="btn"
+                    data-toggle="dropdown"
+                    aria-haspopup="true"
+                    aria-expanded="false"
+                  >
+                    {post.status ? (
+                      <>
+                        <i class="fas fa-globe-asia"></i> &nbsp;
+                        <small>Public</small>&nbsp;
+                      </>
+                    ) : (
+                      <>
+                        <i class="fas fa-lock"></i>&nbsp;
+                        <small>Private</small>&nbsp;
+                      </>
+                    )}
+                  </a>
+                  <div className="dropdown-menu dropdown-menu-right bg-secondary">
+                    <button
+                      className="dropdown-item"
+                      type="button"
+                      onClick={() => this.props.handlePostStatusChange(post)}
+                    >
+                      Make Post {!post.status ? "Public" : " Private"}
+                    </button>
+                  </div>
+                </div>
                 &nbsp;&nbsp;
                 <TimeAgo date={post.created} />
               </span>
@@ -124,7 +144,6 @@ export default class PostCard extends Component {
                 />
               </svg>
               <small>&nbsp;{post.comments.length}</small>
-              {console.log(post)}
             </div>
           </div>
 

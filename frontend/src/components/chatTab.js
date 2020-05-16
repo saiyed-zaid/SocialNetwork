@@ -162,7 +162,11 @@ export default class chatTab extends Component {
 
     /* DATABASE HANDLING */
   };
-
+  addEmoji = (e) => {
+    const msg = document.querySelector("#btn-input");
+    let emoji = e.native;
+    msg.value += emoji;
+  };
   showEmoji = () => {
     this.setState({ displayEmoji: !this.state.displayEmoji });
   };
