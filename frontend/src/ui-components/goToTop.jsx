@@ -7,12 +7,14 @@ export default class goToTop extends Component {
       document.documentElement.scrollTop > 20
     ) {
       let mybutton = document.getElementById("gototop");
-
-      mybutton.style.display = "block";
+      if (mybutton) {
+        mybutton.style.display = "block";
+      }
     } else {
       let mybutton = document.getElementById("gototop");
-
-      mybutton.style.display = "none";
+      if (mybutton) {
+        mybutton.style.display = "none";
+      }
     }
   };
   componentDidMount() {

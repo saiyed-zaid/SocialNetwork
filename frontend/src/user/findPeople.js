@@ -72,7 +72,7 @@ class FindPeople extends Component {
     <div className="row m-0">
       {users.map((user, i) =>
         user.role === "subscriber" ? (
-          <div className="card text-dark" key={i} style={{
+          <div className="card text-light bg-dark" key={i} style={{
             transition: "unset",
             transform: "unset",
             animation: "unset",
@@ -87,7 +87,7 @@ class FindPeople extends Component {
             />
             <div className="card-body">
               <h6 className="card-title">{user.name}</h6>
-              <p  className="text-dark">
+              <p  className="text-light">
                 <span>Following ({user.following.length}) </span>
                 <span>Followers ({user.followers.length}) </span>
               </p>
