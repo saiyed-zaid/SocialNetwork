@@ -14,18 +14,17 @@ export default class PostCard extends Component {
 
     return (
       <div
-        className="col-md-6 card-body m-1"
-        style={{
-          backgroundColor: "#1f2022",
-          color: "#c0c8d0",
-        }}
+        className="col-md-6 card-body m-2 bg-light"
+        style={{ position: "relative" }}
       >
         {/* post */}
         <div className="post">
           <div className="user-block">
             <img
               className="img-circle img-bordered-sm"
-              src={post.postedBy.photo ? post.postedBy.photo : DefaultProfile}
+              src={
+                post.postedBy.photo ? post.postedBy.photo.path : DefaultProfile
+              }
               alt={posterName}
               onError={(event) => (event.target.src = DefaultProfile)}
             />
@@ -45,17 +44,37 @@ export default class PostCard extends Component {
 
             {this.props.profile ? (
               <span className="description pb-3 text-left">
-                {post.status ? (
-                  <>
-                    <i class="fas fa-lock"></i>&nbsp;&nbsp;
-                    <small>Private</small>
-                  </>
-                ) : (
-                  <>
-                    <i class="fas fa-globe-asia"></i>&nbsp;&nbsp;
-                    <small>Public</small>
-                  </>
-                )}
+                <div className="btn-group ">
+                  <a
+                    // type="button"
+                    style={{ boxShadow: "none", cursor: "pointer" }}
+                    // className="btn"
+                    data-toggle="dropdown"
+                    aria-haspopup="true"
+                    aria-expanded="false"
+                  >
+                    {post.status ? (
+                      <>
+                        <i class="fas fa-globe-asia"></i> &nbsp;
+                        <small>Public</small>&nbsp;
+                      </>
+                    ) : (
+                      <>
+                        <i class="fas fa-lock"></i>&nbsp;
+                        <small>Private</small>&nbsp;
+                      </>
+                    )}
+                  </a>
+                  <div className="dropdown-menu dropdown-menu-right bg-secondary">
+                    <button
+                      className="dropdown-item"
+                      type="button"
+                      onClick={() => this.props.handlePostStatusChange(post)}
+                    >
+                      Make Post {!post.status ? "Public" : " Private"}
+                    </button>
+                  </div>
+                </div>
                 &nbsp;&nbsp;
                 <TimeAgo date={post.created} />
               </span>
@@ -125,20 +144,19 @@ export default class PostCard extends Component {
                 />
               </svg>
               <small>&nbsp;{post.comments.length}</small>
-              {console.log(post)}
             </div>
           </div>
 
           <h4 className="description text-center">{post.title}</h4>
 
           <div>
-            <p className="pt-2 text-center">
+            <p className="pt-2 text-dark text-center">
               {post.body.substring(0, 200) + "...."}
             </p>
 
             {isAuthenticated() ? (
               <>
-                <div className="row justify-content-center">
+                <div className="row justify-content-md-center">
                   <button
                     className="btn"
                     style={{

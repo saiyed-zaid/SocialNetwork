@@ -223,6 +223,7 @@ class EditProfile extends Component {
               <label> About</label>
 
               <textarea
+                style={{ resize: "none" }}
                 onChange={this.handleInputChange}
                 className={`form-control ${
                   this.state.errors["about"] && "is-invalid"

@@ -79,6 +79,7 @@ class FindPeople extends Component {
             width:'15rem',
             margin:'1rem'
           }}>
+
             <img
               className="img-thumbnail"
               src={`${process.env.REACT_APP_API_URL}/user/photo/${user._id}`}
@@ -88,6 +89,7 @@ class FindPeople extends Component {
             <div className="card-body">
               <h6 className="card-title">{user.name}</h6>
               <p  className="text-light">
+
                 <span>Following ({user.following.length}) </span>
                 <span>Followers ({user.followers.length}) </span>
               </p>
