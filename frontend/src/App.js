@@ -35,6 +35,8 @@ export default class App extends Component {
     }
     this.setTimeout();
   }
+
+  
   clearTimeout() {
     if (this.warnTimeout) clearTimeout(this.warnTimeout);
     if (this.logoutTimeout) clearTimeout(this.logoutTimeout);
@@ -59,6 +61,7 @@ export default class App extends Component {
   logout() {
     // Send a logout request to the API
     if (isAuthenticated()) {
+      alert('logout timeout');
       signout(() => {});
       this.setState({ logginStatus: false });
     }

@@ -9,7 +9,6 @@ module.exports = async (req, res, next) => {
     let token;
     token = req.headers.authorization.split(" ")[1];
 
-
     if (!token) {
       //return res.status(401).json({ msg: "Autherization failed" });
       const err = new Error("Unauthorzed Access");
@@ -17,10 +16,15 @@ module.exports = async (req, res, next) => {
     }
     const decodedToken = jwt.verify(token, process.env.JWT_KEY);
 
-    req.auth = { _id: decodedToken._id, role: decodedToken.role };
-       next();
+    req.auth = {
+      _id: decodedToken._id,
+      role: decodedToken.role,
+      isAuthorized: true,
+    };
+    next();
   } catch (error) {
     /* return res.status(401).json({ msg: "Autherization failed" }); */
+    req.isAuthorized = false;
     const err = new Error("Unauthorzed Access");
     return next(err);
   }

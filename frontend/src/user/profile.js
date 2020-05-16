@@ -37,10 +37,11 @@ class Profile extends Component {
   }
 
   init = async (userId) => {
-    const token = isAuthenticated().user.token;
+    const token = this.props.authUser.token;
     const data = await this.props.read(userId, token);
 
     if (data.err) {
+      alert("logout from profile");
       signout(() => {});
       this.setState({ redirectToSignin: true });
     } else {
@@ -199,7 +200,7 @@ class Profile extends Component {
 
     return (
       <div
-        className=" bg-light position-relative rounded"
+        className=" bg-dark position-relative rounded"
         style={{ margin: "80px auto 10px auto" }}
       >
         {/* DISPLAY CHATBOX */}
@@ -221,16 +222,19 @@ class Profile extends Component {
           </div>
         )}
         {/* END DISPLAY CHATBOX */}
-        <div className="position-absolute profile-photo">
-          <img
-            src={photoUrl}
-            /*  onError={(e) => {
-              e.target.src = DefaultProfile;
-            }} */
-            alt={user.name}
-            className="rounded-circle"
-            style={{ width: "150px" }}
-          />
+        <div className="wrapper">
+          <div className="position-absolute profile-photo">
+            <img
+              src={photoUrl}
+              onError={(e) => {
+                e.target.src = DefaultProfile;
+              }}
+              alt={user.name}
+              className="rounded-circle"
+              style={{ width: "150px" }}
+            />
+          </div>
+
         </div>
 
         <div className="jumbotron text-center">

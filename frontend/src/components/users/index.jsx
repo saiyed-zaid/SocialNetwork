@@ -4,15 +4,16 @@ import DefaultProfile from "../../images/avatar.jpg";
 
 export default class index extends Component {
   render() {
-    const { user, authUser } = this.props;
-
+    const { user, authUser, history } = this.props;
     return user.role === "subscriber" && user.name !== authUser.name ? (
       <div
-        className="card w-100"
+        className="card"
         style={{
           transition: "unset",
           transform: "unset",
           animation: "unset",
+          width:'15rem',
+          margin:'1rem'
         }}
       >
         <div className="card-body box-profile">
@@ -37,10 +38,10 @@ export default class index extends Component {
               <p className="float-right">{user.following.length}</p>
             </li>
             {/* <li className="list-group-item">
-                      <b>Friends</b> <a className="float-right">13,287</a>
-                    </li> */}
+                        <b>Friends</b> <a className="float-right">13,287</a>
+                      </li> */}
           </ul>
-          <Link to={`/user/${user._id}`} className="btn btn-primary ">
+          <Link to={`/user/${user._id}`} className="btn btn-dark">
             View Profile
           </Link>
         </div>

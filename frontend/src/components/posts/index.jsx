@@ -14,17 +14,18 @@ export default class PostCard extends Component {
 
     return (
       <div
-        className="col-md-6 card-body m-2 bg-light"
-        style={{ position: "relative" }}
+        className="col-md-6 card-body m-1"
+        style={{
+          backgroundColor: "#1f2022",
+          color: "#c0c8d0",
+        }}
       >
         {/* post */}
         <div className="post">
           <div className="user-block">
             <img
               className="img-circle img-bordered-sm"
-              src={
-                post.postedBy.photo ? post.postedBy.photo.path : DefaultProfile
-              }
+              src={post.postedBy.photo ? post.postedBy.photo : DefaultProfile}
               alt={posterName}
               onError={(event) => (event.target.src = DefaultProfile)}
             />
@@ -150,13 +151,13 @@ export default class PostCard extends Component {
           <h4 className="description text-center">{post.title}</h4>
 
           <div>
-            <p className="pt-2 text-dark text-center">
+            <p className="pt-2 text-center">
               {post.body.substring(0, 200) + "...."}
             </p>
 
             {isAuthenticated() ? (
               <>
-                <div className="row justify-content-md-center">
+                <div className="row justify-content-center">
                   <button
                     className="btn"
                     style={{

@@ -32,7 +32,7 @@ p {
 }
 
 .card {
-  border-radius: 2%;
+  /* border-radius: 2%;
   border: 1px solid rgba(0, 0, 0, 0.12);
   background-color: #1a1d24;
   color: #ffff;
@@ -42,7 +42,7 @@ p {
   max-width: 280px;
   transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
   box-shadow: 0.2em 0.2em 0.5em #000304;
-  animation: card-load 0.3s ease-in-out;
+  animation: card-load 0.3s ease-in-out; */
 }
 @keyframes card-load {
   0% {
@@ -733,8 +733,13 @@ div.content {
 .notify-custom {
   z-index: 9999;
 }
+.wrapper{
+  height:30px;
+  display:flex;
+}
 
 .profile-photo {
+  margin:auto;
   top: 0%;
   left: 50%;
   transform: translate(-50%, -50%);

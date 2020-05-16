@@ -30,6 +30,7 @@ export const read = async (userId, token) => {
 export const list = async () => {
   const users = await fetch(`${process.env.REACT_APP_API_URL}/api/users`, {
     method: "GET",
+   
   });
   return await users.json({ users });
 };

@@ -18,31 +18,33 @@ class Notification extends React.Component {
   componentDidMount() {
     read()
       .then((data) => {
-        var newFollowerList = [];
-        if (data.followers.length > 0) {
-          //this.setState({ newFollower: new Array(data.followers.length) });
+        if (data.isAuthorized) {
+          var newFollowerList = [];
+          if (data.followers.length > 0) {
+            //this.setState({ newFollower: new Array(data.followers.length) });
 
-          data.followers.forEach((follower, i) => {
-            if (follower.isNewUser) {
-              newFollowerList.push({
-                id: follower.user._id,
-                name: follower.user.name,
-                followedFrom: follower.followedFrom,
+            data.followers.forEach((follower, i) => {
+              if (follower.isNewUser) {
+                newFollowerList.push({
+                  id: follower.user._id,
+                  name: follower.user.name,
+                  followedFrom: follower.followedFrom,
+                });
+              }
+            });
+
+            if (newFollowerList.length > 0) {
+              console.log("NEW FOLLOWER LIST", newFollowerList);
+
+              this.setState({
+                hasNewFollow: true,
+                newFollowerList: newFollowerList,
               });
             }
-          });
 
-          if (newFollowerList.length > 0) {
-            console.log("NEW FOLLOWER LIST", newFollowerList);
-
-            this.setState({
-              hasNewFollow: true,
-              newFollowerList: newFollowerList,
-            });
-          }
-
-          if (this.state.hasNewFollow) {
-            //setTimeout(this.followStatusChange, 16000);
+            if (this.state.hasNewFollow) {
+              //setTimeout(this.followStatusChange, 16000);
+            }
           }
         }
       })
@@ -52,35 +54,40 @@ class Notification extends React.Component {
         }
       });
 
-    readPost().then((data) => {
-      let newLikesList = [];
+    try {
+      readPost().then((data) => {
+        console.log("POST data_", data);
+        if (data.isAuthorized) {
+          let newLikesList = [];
 
-      data.posts.forEach((post) => {
-        if (post.likes.length > 0) {
-          post.likes.forEach((like, i) => {
-            console.log("testtststetse", like);
+          data.posts.forEach((post) => {
+            if (post.likes.length > 0) {
+              post.likes.forEach((like, i) => {
+                console.log("testtststetse", like);
 
-            if (like.isNewLike) {
-              console.log(like);
+                if (like.isNewLike) {
+                  console.log(like);
 
-              newLikesList.push({
-                id: like.user._id,
-                name: like.user.name,
-                likedFrom: like.likedFrom,
+                  newLikesList.push({
+                    id: like.user._id,
+                    name: like.user.name,
+                    likedFrom: like.likedFrom,
+                  });
+                }
               });
+              if (newLikesList.length > 0) {
+                console.log("New Like List", newLikesList);
+
+                this.setState({
+                  hasNewLikes: true,
+                  newLikesList: newLikesList,
+                });
+              }
             }
           });
-          if (newLikesList.length > 0) {
-            console.log("New Like List", newLikesList);
-
-            this.setState({
-              hasNewLikes: true,
-              newLikesList: newLikesList,
-            });
-          }
         }
       });
-    });
+    } catch (error) {}
   }
   /* likeStatusChange = () => {
     if (this.state.hasNewLikes) {

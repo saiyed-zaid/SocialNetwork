@@ -216,11 +216,12 @@ const Navbar = withRouter(({ history, authUser, handleLogout, signout }) => {
             </ul>
             {authUser ? (
               <ul className="navbar-nav ml-auto ">
-                {authUser && authUser.roll !== "admin" && <Notification />}
-
+                {authUser && authUser.roll !== "admin" && (
+                  <Notification authUser={authUser} />
+                )}
                 <li className="nav-item dropdown profile-btn ">
                   <a
-                    className="nav-link"
+                    className="nav-link d-flex align-items-center"
                     href="/"
                     id="navbarDropdownMenuLink"
                     role="button"
@@ -228,7 +229,6 @@ const Navbar = withRouter(({ history, authUser, handleLogout, signout }) => {
                     aria-haspopup="true"
                     aria-expanded="false"
                   >
-                    {authUser.name.toUpperCase()} {"  "}
                     <img
                       style={{
                         borderRadius: "50%",
@@ -236,9 +236,10 @@ const Navbar = withRouter(({ history, authUser, handleLogout, signout }) => {
                       className="nav-link  p-0 m-0 ml-1 img-circle float-right "
                       src={authUser.photo}
                       height="30px"
-                      onError={(e) => (e.target.src = avatar)}
+                      /* onError={(e) => (e.target.src = avatar)} */
                       alt="user "
                     />
+                    <span>&nbsp;{authUser.name.toUpperCase()}</span>
                   </a>
                   <div
                     className="dropdown-menu  dropdown-menu-right"
@@ -287,27 +288,14 @@ class MainRouter extends React.Component {
       receiverId: null,
       receiverName: null,
       messages: null,
-      authUser: null,
+      authUser: isAuthenticated().user || null,
+      isAuthorized: null,
     };
 
     this.socket = openSocket("http://localhost:5000");
   }
 
   componentDidMount() {
-    if (this.state.authUser) {
-      const hourDiff = this.timeDiffCalc(
-        new Date(isAuthenticated().user.lastLoggedIn),
-        Date.now()
-      );
-      if (hourDiff > 1) {
-        alert("1 hour complted");
-        this.setState({ authUser: null }, () => {
-          localStorage.removeItem("jwt");
-          this.props.history.push("/login");
-        });
-      }
-    }
-
     if (this.state.authUser) {
       this.socket.on(this.state.authUser._id, (data) => {
         fetchMessage(
@@ -330,10 +318,22 @@ class MainRouter extends React.Component {
           });
       });
     }
+  }
 
-    this.setState({
-      authUser: isAuthenticated().user,
-    });
+  componentWillMount() {
+    if (this.state.authUser) {
+      const hourDiff = this.timeDiffCalc(
+        new Date(isAuthenticated().user.lastLoggedIn),
+        Date.now()
+      );
+      if (hourDiff >= 1) {
+        alert("1 hour complted");
+        this.setState({ authUser: null, isAuthorized: false }, () => {
+          localStorage.removeItem("jwt");
+          this.props.history.push("/signin");
+        });
+      }
+    }
   }
 
   handleChatClose = () => {

@@ -205,38 +205,53 @@ exports.deletePost = async (req, res, next) => {
  * @description Handling patch request which update post in database
  */
 exports.updatePost = async (req, res, next) => {
-  let post = req.post;
-
+  let reqTags;
+  let tags = [];
   const reqFiles = [];
-
+  let post = req.post;
   const url = req.protocol + "://" + req.get("host");
 
-  for (var i = 0; i < req.files.length; i++) {
-    reqFiles.push(
-      `${url}/upload/users/${req.auth._id}/posts/${req.files[i].filename}`
-    );
+  if (req.body.tags) {
+    reqTags = JSON.parse(req.body.tags);
+
+    for (let index = 0; index < reqTags.length; index++) {
+      tags.push(reqTags[index].id);
+    }
+    req.body.tags = tags;
+  } else {
+    req.body.tags = post.tags;
   }
 
-  const prevPostPhoto = post.photo;
-
-  if (!req.file) {
-    req.file = post.photo;
+  if (req.files) {
+    //req.files = post.photo;
+    if (req.files.length > 0) {
+      for (var i = 0; i < req.files.length; i++) {
+        reqFiles.push(
+          `${url}/upload/users/${req.auth._id}/posts/${req.files[i].filename}`
+        );
+      }
+      req.body.photo = reqFiles;
+    } else {
+      req.body.photo = post.photo;
+    }
+    //const prevPostPhoto = post.photo;
+    console.log("photos", req.body.photo);
+    console.log("files path", reqFiles);
   }
 
-  post.photo = reqFiles;
   post = _.extend(post, req.body);
   post.updated = Date.now();
 
   try {
     const result = await post.save();
     //prevPostPhoto
-    if (result) {
+    /*  if (result) {
       if (prevPostPhoto) {
         fs.unlink(prevPostPhoto, (err) => {
           console.log("Error while unlink user image", err);
         });
       }
-    }
+    } */
     res.json({ post });
   } catch (error) {
     res.json({

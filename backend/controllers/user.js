@@ -53,7 +53,7 @@ exports.getUsers = async (req, res, next) => {
       });
     }
 
-    return res.json({ users });
+    return res.json({ users, isAuthorized: req.auth.isAuthorized });
   } catch (error) {
     return res.status(404).json({
       msg: "No User Found",
@@ -76,6 +76,7 @@ exports.getUser = async (req, res, next) => {
  * @description Handling put request which Update single user
  */
 exports.updateUser = async (req, res, next) => {
+
   const url = req.protocol + "://" + req.get("host");
   var reqFilePath;
 

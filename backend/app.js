@@ -39,9 +39,17 @@ app.use(postRoutes);
 
 /* Error Handling Middleware BEGIN */
 app.use((error, req, res, next) => {
-  res.status(401).json({
-    err: error.message,
-  });
+  console.log("HANDLER__", req.isAuthorized);
+  if (!req.isAuthorized) {
+    res.status(401).json({
+      isAuthorized: req.isAuthorized,
+      err: error.message,
+    });
+  } else {
+    res.status(401).json({
+      err: error.message,
+    });
+  }
 });
 /* Error Handling Middleware END */
 

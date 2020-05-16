@@ -35,12 +35,12 @@ class Posts extends Component {
     }, 500);
   }
 
-  /**
-   * Function For Creating Controls For  Users Page
-   *
-   * @param {json} posts  Posts To Be renderd On page
-   */
-  renderPosts = (posts) => {
+  render() {
+    const { posts } = this.state;
+
+    if (posts.length < 0 || this.state.isLoading) {
+      return <Spinner />;
+    }
     return (
       <div className="row justify-content-md-center">
         {posts.map((post, i) => {
@@ -48,14 +48,6 @@ class Posts extends Component {
         })}
       </div>
     );
-  };
-  render() {
-    const { posts } = this.state;
-
-    if (posts.length < 0 || this.state.isLoading) {
-      return <Spinner />;
-    }
-    return this.renderPosts(posts);
   }
 }
 

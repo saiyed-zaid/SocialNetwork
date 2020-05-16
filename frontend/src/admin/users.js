@@ -9,8 +9,8 @@ import Modal from "../components/modal/modal";
 // import EditProfile from "../user/editProfile";
 
 class Users extends Component {
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
 
     this.state = {
       users: [],
@@ -29,7 +29,7 @@ class Users extends Component {
   }
 
   async componentDidMount() {
-    const response = await this.props.list();
+    const response = await this.props.list(isAuthenticated().user.token);
     if (response.error) {
       console.log(response.error);
     } else {

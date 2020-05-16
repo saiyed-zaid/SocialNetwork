@@ -53,7 +53,7 @@ class Signin extends React.Component {
 
   render() {
     return (
-      <div className="container bg-light p-2 my-3 col-md-4">
+      <div className="container p-2 my-3 col-md-4" style={{backgroundColor: '#343a40'}}>
         <div className="jumbotron" style={{ padding: "2rem 2rem" }}>
           {this.state.responseError && (
             <Alert type="danger" message={this.state.responseError} />
@@ -108,7 +108,7 @@ class Signin extends React.Component {
                       email: this.state.email,
                     },
                   }}
-                  className="text-danger"
+                  className="text-light"
                 >
                   Forgot Password ?
                 </Link>
