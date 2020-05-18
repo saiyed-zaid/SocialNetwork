@@ -249,7 +249,7 @@ class SinglePost extends Component {
       return <Redirect to="/signin" />;
     }
     return (
-      <div className="container-fluid m-0 p-0">
+      <div className="container-fluid">
         {this.state.post ? this.renderPost(post) : {}}
         <Comment
           postId={post._id}

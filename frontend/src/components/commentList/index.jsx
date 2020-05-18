@@ -10,17 +10,12 @@ export default class commentList extends Component {
       ? this.props.data.postedBy.photo
       : DefaultProfile;
     return (
-      <div key={this.props.key} className="p-0 mt-0" style={{ color: "white" }}>
+      <div key={this.props.key} className="text-light">
         <div className="comment-block">
           <Link to={`/user/${this.props.data.postedBy._id}`}>
             <img
-              style={{
-                borderRadius: "50%",
-                border: "1px solid black",
-              }}
-              className="float-left mr-2"
+              className="float-left mr-2 rounded"
               height="30px"
-              width="30px"
               src={photoUrl}
               alt={this.props.data.postedBy.name}
               onError={(e) => {
@@ -29,20 +24,17 @@ export default class commentList extends Component {
             />
           </Link>
           <div>
-            <h6 className="lead">
+            <h6 className="lead m-0 p-0">
               {this.props.data.text}
               &nbsp;
               {isAuthenticated().user &&
                 isAuthenticated().user._id === this.props.data.postedBy._id && (
                   <button
-                    style={{
-                      justifyContent: "flex-end",
-                      border: "1px solid red",
-                    }}
+                    
                     onClick={() => this.props.deleteClick(this.props.data)}
-                    className="btn text-danger float-right btn-delete"
+                    className="btn btn-outline-primary float-right"
                   >
-                    <i className="fas fa-trash" style={{ color: "none" }}></i>
+                    <i className="fas fa-trash"></i>
                   </button>
                 )}
               <br />

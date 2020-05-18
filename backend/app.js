@@ -10,6 +10,7 @@ const morgan = require("morgan");
 const dotenv = require("dotenv");
 const mongoose = require("mongoose");
 const cors = require("cors");
+const compression = require('compression');
 
 const Message = require("./models/messages");
 
@@ -27,6 +28,7 @@ app.use("/upload", express.static("upload"));
 
 /* Registering middleware BEGIN*/
 app.use(cors());
+app.use(compression());
 app.use(bodyParser.json());
 //app.use(morgan("tiny"));
 /* Registering middleware END*/

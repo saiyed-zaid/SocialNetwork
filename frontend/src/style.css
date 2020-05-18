@@ -260,13 +260,13 @@ a:hover {
   transition: all 0.5s ease-in-out;
   height: 0px;
 } */
-/* .nav-item::after {
+.nav-item::after {
   content: "";
   height: 3px;
   background: linear-gradient(
-    90deg,
+    160deg,
     rgb(170, 167, 214) 0%,
-    Yellow 35%,
+    Yellow 40%,
     rgba(0, 212, 255, 1) 100%
   );
   position: absolute;
@@ -274,7 +274,7 @@ a:hover {
   bottom: 0;
   width: 100%;
   animation: anim 0.3s ease-in-out;
-} */
+}
 @keyframes anim {
   0% {
     width: 0%;

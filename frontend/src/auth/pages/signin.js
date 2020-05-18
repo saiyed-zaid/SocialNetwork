@@ -53,8 +53,8 @@ class Signin extends React.Component {
 
   render() {
     return (
-      <div className="container p-2 my-3 col-md-4" style={{backgroundColor: '#343a40'}}>
-        <div className="jumbotron" style={{ padding: "2rem 2rem" }}>
+      <div className="container col-md-4 my-3" style={{backgroundColor: '#343a40'}}>
+        <div className="jumbotron text-light">
           {this.state.responseError && (
             <Alert type="danger" message={this.state.responseError} />
           )}

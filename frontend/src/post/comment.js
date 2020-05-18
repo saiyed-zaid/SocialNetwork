@@ -90,7 +90,7 @@ class Comment extends Component {
     const { comments } = this.props;
     const { error } = this.state;
     return (
-      <div className="ml-0 mr-5">
+      <div className="ml-0">
         <Alert
           style={{ display: error ? "" : "none" }}
           message={error}
