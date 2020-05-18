@@ -95,6 +95,7 @@ exports.getPostsByUser = async (req, res, next) => {
       ],
     })
       .populate("postedBy", "_id name role photo")
+      .populate("comments.postedBy", "_id name")
       .populate("likes.user", "_id name")
       .select("_id title body created likes comments status photo tags")
       .sort("_created");
@@ -362,5 +363,40 @@ exports.dailyNewPosts = async (req, res, next) => {
     return await res.json(posts);
   } catch (error) {
     res.status(400).json({ err: error });
+  }
+};
+
+exports.replyComment = async (req, res, next) => {
+  console.table(req.body);
+
+  try {
+    let comment = req.body.comment;
+    comment.postedBy = req.body.userId;
+
+    const UpdatedCommentPost = await Post.findByIdAndUpdate(
+      {
+        _id: req.body.postId,
+        comments: { _id: comment },
+      },
+      {
+        $push: {
+          comments: [
+            { hasReply: true },
+            {
+              replies: [
+                { text: req.body.reply },
+                { postedBy: comment.postedBy },
+              ],
+            },
+          ],
+        },
+      },
+      { new: true }
+    )
+      .populate("comments.postedBy", "_id name")
+      .populate("postedBy", "_id name");
+    res.json(UpdatedCommentPost);
+  } catch (error) {
+    res.status(400).json(error);
   }
 };

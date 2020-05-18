@@ -200,18 +200,6 @@ class SinglePost extends Component {
             {isAuthenticated().user &&
               isAuthenticated().user._id === post.postedBy._id && (
                 <>
-                  {/* <Link
-                    to={`/post/edit/${post._id}`}
-                    className="btn btn-raised btn-primary mr-1"
-                  >
-                    <i className="fas fa-edit"></i>
-                  </Link>
-                  <button
-                    onClick={this.deleteConfirmed}
-                    className="btn btn-raised btn-primary mr-1"
-                  >
-                    <i className="fas fa-trash"></i>
-                  </button> */}
                   <button
                     className="btn btn-raised btn-primary mr-1 bg-dark"
                     data-toggle="modal"
@@ -250,7 +238,7 @@ class SinglePost extends Component {
     }
     return (
       <div className="container-fluid m-0 p-0">
-        {this.state.post ? this.renderPost(post) : {}}
+        {this.state.post ? this.renderPost(post) : null}
         <Comment
           postId={post._id}
           comments={comments.reverse()}

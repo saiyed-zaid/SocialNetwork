@@ -63,6 +63,27 @@ const PostSchema = new Schema({
         type: ObjectId,
         ref: "User",
       },
+      isNewComment: {
+        type: Boolean,
+        default: true,
+      },
+      hasReply: {
+        type: Boolean,
+        default: false,
+      },
+      replies: [
+        {
+          text: String,
+          created: {
+            type: Date,
+            default: Date.now,
+          },
+          postedBy: {
+            type: ObjectId,
+            ref: "User",
+          },
+        },
+      ],
     },
   ],
   status: {

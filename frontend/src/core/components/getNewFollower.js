@@ -29,6 +29,20 @@ const Follow = (props) => {
             <div className="dropdown-divider" />
           </li>
         ))}
+        {props.newComments.map((comment, i) => (
+          <li className="noti w-100" style={{ height: "50px" }} key={i}>
+            <strong className="mr-auto">
+              {comment.name} Commented On Your Post.
+            </strong>
+            <small>
+              &nbsp;&nbsp;
+              {comment.commentedFrom ? (
+                <TimeAgo date={comment.commentedFrom} />
+              ) : null}
+            </small>
+            <div className="dropdown-divider" />
+          </li>
+        ))}
       </div>
     )
   );
