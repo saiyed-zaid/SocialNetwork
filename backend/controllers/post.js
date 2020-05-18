@@ -350,6 +350,36 @@ exports.uncommentPost = async (req, res, next) => {
   }
 };
 
+/**
+ * @function middleware
+ * @description Handling patch request which update/Add post Comment Reply in database
+ */
+exports.commentPostReply = async (req, res, next) => {
+  try {
+    const post = await Post.findOne({
+      _id: req.body.postId,
+    });
+
+    const comments = post.comments;
+
+    const commentIndex = comments.findIndex((comment, index) => {
+      return comment._id == req.body.commentId;
+    });
+
+    comments[commentIndex].replies.push({
+      text: req.body.comment,
+      postedBy: req.body.userId,
+    });
+
+    const updatedrecord = await post.updateOne({ comments });
+
+    res.json(updatedrecord);
+  } catch (error) {
+    console.log("error", error);
+    res.status(400).json(error);
+  }
+};
+
 exports.dailyNewPosts = async (req, res, next) => {
   let created = req.profile.created.toDateString();
   let startDate = new Date();

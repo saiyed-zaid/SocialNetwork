@@ -6,6 +6,7 @@ const { body } = require("express-validator");
 const auth_check = require("../middleware/auth-check");
 var multer = require("multer");
 const path = require("path");
+const Post = require("../models/posts");
 
 /**
  * @function get
@@ -125,6 +126,18 @@ router.patch("/api/post/unlike", auth_check, postController.unlikePost);
  */
 router.patch("/api/post/comment", auth_check, postController.commentPost);
 
+/**
+ * @function patch
+ * @description Handling patch request which update/Add post Comment Reply in database
+ * @param {String} path of router
+ * @param {router} auth_check for checking authorization
+ * @param {property} property reply commentPost
+ */
+router.patch(
+  "/api/post/comment/reply",
+  auth_check,
+  postController.commentPostReply
+);
 /**
  * @function patch
  * @description Handling patch request which update post Uncomment in database
