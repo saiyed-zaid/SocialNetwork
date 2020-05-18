@@ -153,6 +153,13 @@ router.patch("/api/post/uncomment", auth_check, postController.uncommentPost);
  * @param {router} auth_check for checking authorization
  * @param {property} property deletePost
  */
+
+router.patch(
+  "/api/post/comment/reply",
+  auth_check,
+  postController.commentPostReply
+);
+
 router.delete(
   "/api/post/:postId",
   auth_check,

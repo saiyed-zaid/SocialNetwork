@@ -239,12 +239,14 @@ class SinglePost extends Component {
     return (
       <div className="container-fluid">
         {this.state.post ? this.renderPost(post) : {}}
+
         <Comment
           postId={post._id}
           comments={comments.reverse()}
           updateComments={this.updateComments}
           addComment={this.props.addComment}
           removeComment={this.props.removeComment}
+          replyComment={this.props.replyComment}
         />
         <Modal
           id="editpost"

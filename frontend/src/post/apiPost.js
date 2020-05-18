@@ -1,21 +1,3 @@
-/* 
-export const create = async (userId, token, post) => {
-  const postData = await fetch(
-    `${process.env.REACT_APP_API_URL}/api/post/${userId}`,
-    {
-      method: "POST",
-      headers: {
-        Accept: "application/json",
-        Authorization: `Bearer ${token}`
-      },
-      body: post
-    }
-  );
-
-  return await postData.json();
-};
- */
-
 export const list = async (isAdmin = false, token = null) => {
   var url = `${process.env.REACT_APP_API_URL}/api/posts`;
   if (isAdmin && token) {

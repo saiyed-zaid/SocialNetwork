@@ -110,8 +110,11 @@ class Comment extends Component {
             return (
               <CommentList
                 data={comment}
-                key={i}
+                i={i}
                 deleteClick={() => this.deleteConfirmed(comment)}
+                postId={this.props.postId}
+                replyComment={this.props.replyComment}
+                updateComments={this.props.updateComments}
               />
             );
           })}
