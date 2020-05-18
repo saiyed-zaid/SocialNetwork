@@ -3,8 +3,6 @@ import DefaultProfile from "../../images/avatar.jpg";
 import Timeago from "react-timeago";
 import { Link } from "react-router-dom";
 import { isAuthenticated } from "../../auth/index";
-import { commentReply } from "./api";
-import { comment } from "../../post/apiPost";
 
 export default class commentList extends Component {
   constructor() {
@@ -18,20 +16,26 @@ export default class commentList extends Component {
     this.setState({ commentReply: event.target.value });
   };
   addCommentReply = async () => {
-    let userId = this.props.data.postedBy._id;
+    let userId = isAuthenticated().user._id;
     let token = isAuthenticated().user.token;
     let postId = this.props.postId;
     let commentId = this.props.data._id;
     try {
-      await this.props.replyComment(
+      const response = await this.props.replyComment(
         userId,
         token,
         postId,
         this.state.commentReply,
         commentId
       );
+      if (response.error) {
+        console.log(response.error);
+      } else {
+        this.setState({ commentReply: "" });
+        this.props.updateComments(response.comments);
+      }
     } catch (error) {
-      
+      console.log(error);
     }
   };
   showReplyBox = (e) => {
@@ -42,8 +46,6 @@ export default class commentList extends Component {
     } else {
       replybox.style.display = "none";
     }
-
-    // console.log(e);
   };
   render() {
     const photoUrl = this.props.data.postedBy.photo

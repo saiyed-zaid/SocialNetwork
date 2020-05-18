@@ -127,9 +127,10 @@ const Navbar = withRouter(({ history, authUser, handleLogout, signout }) => {
                     borderRadius: "50%",
                   }}
                   className="nav-link  p-0 m-0 "
-                  src={avatar}
+                  src={authUser ? authUser.photo : avatar}
                   height="30px"
                   alt="user "
+                  onError={(e) => (e.target.src = avatar)}
                 />
               </li>
             </ul>

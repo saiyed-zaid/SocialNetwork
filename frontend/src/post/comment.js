@@ -114,6 +114,7 @@ class Comment extends Component {
                 deleteClick={() => this.deleteConfirmed(comment)}
                 postId={this.props.postId}
                 replyComment={this.props.replyComment}
+                updateComments={this.props.updateComments}
               />
             );
           })}
