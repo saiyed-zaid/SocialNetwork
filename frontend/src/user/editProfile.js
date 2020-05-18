@@ -144,8 +144,8 @@ class EditProfile extends Component {
     }
 
     return (
-      <div className="container  bg-light p-2 my-3 col-md-6">
-        <div className="jumbotron" style={{ padding: "0.5rem 2rem" }}>
+      <div className="container  bg-dark my-3 col-md-5">
+        <div className="jumbotron  text-light">
           <h2>Edit Profile</h2>
           <form onSubmit={this.handleSubmit}>
             <div className="form-group">
@@ -220,10 +220,9 @@ class EditProfile extends Component {
             </div>
 
             <div className="form-group ">
-              <label> About</label>
+              <label>About</label>
 
               <textarea
-                style={{ resize: "none" }}
                 onChange={this.handleInputChange}
                 className={`form-control ${
                   this.state.errors["about"] && "is-invalid"
@@ -235,7 +234,7 @@ class EditProfile extends Component {
               />
             </div>
             <div className="form-group ">
-              <label> Gender : &nbsp;</label>
+              <label> Gender &nbsp;</label>
               <div>
                 <div className="form-check form-check-inline">
                   <input

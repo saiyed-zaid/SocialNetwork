@@ -118,7 +118,7 @@ class SinglePost extends Component {
       <div>
         <div>
           {post.photo.length > 1 ? (
-            <div style={{ height: "100px !important" }}>
+            <div style={{ height: "500px !important" }}>
               <Carousel images={post.photo} />
             </div>
           ) : (
@@ -200,18 +200,6 @@ class SinglePost extends Component {
             {isAuthenticated().user &&
               isAuthenticated().user._id === post.postedBy._id && (
                 <>
-                  {/* <Link
-                    to={`/post/edit/${post._id}`}
-                    className="btn btn-raised btn-primary mr-1"
-                  >
-                    <i className="fas fa-edit"></i>
-                  </Link>
-                  <button
-                    onClick={this.deleteConfirmed}
-                    className="btn btn-raised btn-primary mr-1"
-                  >
-                    <i className="fas fa-trash"></i>
-                  </button> */}
                   <button
                     className="btn btn-raised btn-primary mr-1 bg-dark"
                     data-toggle="modal"

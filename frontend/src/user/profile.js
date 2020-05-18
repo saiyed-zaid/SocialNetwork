@@ -233,8 +233,19 @@ class Profile extends Component {
               className="rounded-circle"
               style={{ width: "150px" }}
             />
+            {this.state.user.isLoggedIn && (
+              <span
+                className="badge badge-pill badge-success"
+                style={{
+                  position: "absolute",
+                  left: "82%",
+                  top: "80%",
+                }}
+              >
+                &nbsp;
+              </span>
+            )}
           </div>
-
         </div>
 
         <div className="jumbotron text-center">

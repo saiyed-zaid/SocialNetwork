@@ -774,3 +774,5 @@ div.content {
   background-color: #191c23;
   color: white;
 }
+::-moz-selection { background: #ffc107;color:black; }
+::selection { background: #ffc107;;color:black; }
