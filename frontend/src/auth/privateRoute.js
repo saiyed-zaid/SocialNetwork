@@ -19,6 +19,7 @@ const PrivateRoute = ({
   fetchMessage,
   updateUser,
   changePassword,
+  replyComment,
   ...rest
 }) => {
   return (
@@ -38,6 +39,7 @@ const PrivateRoute = ({
             fetchMessage={fetchMessage}
             updateUser={updateUser}
             changePassword={changePassword}
+            replyComment={replyComment}
           />
         ) : (
           <Redirect

@@ -59,6 +59,10 @@ const PostSchema = new Schema({
         type: Date,
         default: Date.now,
       },
+      isNewComment: {
+        type: Boolean,
+        default: true,
+      },
       postedBy: {
         type: ObjectId,
         ref: "User",

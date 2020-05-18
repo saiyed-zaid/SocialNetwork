@@ -96,7 +96,7 @@ class Comment extends Component {
           message={error}
           type="danger"
         />
-        
+
         <hr />
         <div className="col-md-12">
           <h5 className="text-light">
@@ -110,76 +110,12 @@ class Comment extends Component {
             return (
               <CommentList
                 data={comment}
-                key={i}
+                i={i}
                 deleteClick={() => this.deleteConfirmed(comment)}
+                postId={this.props.postId}
+                replyComment={this.props.replyComment}
               />
             );
-            /*  const photoUrl = comment.postedBy.photo
-              ? comment.postedBy.photo.path
-              : DefaultProfile;
-            return (
-              <div key={i} className="p-0 mt-0" style={{ color: "white" }}>
-                <div className="comment-block">
-                  <Link to={`/user/${comment.postedBy._id}`}>
-                    <img
-                      style={{
-                        borderRadius: "50%",
-                        border: "1px solid black",
-                      }}
-                      className="float-left mr-2"
-                      height="30px"
-                      width="30px"
-                      src={`${process.env.REACT_APP_API_URL}/${photoUrl}`}
-                      alt={comment.postedBy.name}
-                      onError={(e) => {
-                        e.target.src = DefaultProfile;
-                      }}
-                    />
-                  </Link>
-                  <div>
-                    <h6 className="lead">
-                      {comment.text}
-                      &nbsp;
-                      {isAuthenticated().user &&
-                        isAuthenticated().user._id === comment.postedBy._id && (
-                          <button
-                            style={{
-                              justifyContent: "flex-end",
-                              border: "1px solid red",
-                            }}
-                            onClick={() => this.deleteConfirmed(comment)}
-                            className="btn text-danger float-right btn-delete"
-                          >
-                            <i
-                              className="fas fa-trash"
-                              style={{ color: "none" }}
-                            ></i>
-                          </button>
-                        )}
-                      <br />
-                      <br />
-                      <div
-                        style={{
-                          display: "flex",
-                          justifyContent: "flex-end",
-                        }}
-                      >
-                        <small>
-                          <span
-                            className=" font-italic"
-                            style={{ fontSize: "12px" }}
-                          >
-                            Comment By : {"  "}
-                            {comment.postedBy.name} {"  "}
-                            <Timeago date={comment.created} />
-                          </span>
-                        </small>
-                      </div>
-                    </h6>
-                  </div>
-                </div>
-              </div>
-            ); */
           })}
           <form>
             <div className="form-group" style={{ flex: 2 }}>

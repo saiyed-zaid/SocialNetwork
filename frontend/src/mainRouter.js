@@ -452,6 +452,7 @@ class MainRouter extends React.Component {
                 unlikePost={this.props.Postservice.unlikePost}
                 addComment={this.props.Postservice.addComment}
                 removeComment={this.props.Postservice.removeComment}
+                replyComment={this.props.Postservice.commentReply}
                 authUser={this.state.authUser}
               />
             )}

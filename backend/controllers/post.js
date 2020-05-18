@@ -12,7 +12,8 @@ exports.postById = async (req, res, next, id) => {
     const post = await Post.findOne({ _id: id })
       .populate("postedBy", "_id name role")
       .populate("comments.postedBy", "_id name photo")
-      .select("comments title body likes photo created tags");
+      .populate("comments.replies.postedBy", "_id name photo")
+      .select("comments title body  likes  photo created tags");
 
     if (post) {
       req.post = post;
@@ -95,8 +96,9 @@ exports.getPostsByUser = async (req, res, next) => {
       ],
     })
       .populate("postedBy", "_id name role photo")
+      .populate("comments.postedBy", "_id name")
       .populate("likes.user", "_id name")
-      .select("_id title body created likes comments status photo tags")
+      .select("_id title body created likes replies comments status photo tags")
       .sort("_created");
     if (posts.length == 0) {
       return res.json({
@@ -363,11 +365,11 @@ exports.commentPostReply = async (req, res, next) => {
     const comments = post.comments;
 
     const commentIndex = comments.findIndex((comment, index) => {
-      return comment._id == req.body.commentId;
+      return comment._id == req.body.comment;
     });
 
     comments[commentIndex].replies.push({
-      text: req.body.comment,
+      text: req.body.reply,
       postedBy: req.body.userId,
     });
 
@@ -392,5 +394,34 @@ exports.dailyNewPosts = async (req, res, next) => {
     return await res.json(posts);
   } catch (error) {
     res.status(400).json({ err: error });
+  }
+};
+/**
+ * @function middleware
+ * @description Handling patch request which update/Add post Comment Reply in database
+ */
+exports.commentPostReply = async (req, res, next) => {
+  try {
+    const post = await Post.findOne({
+      _id: req.body.postId,
+    });
+
+    const comments = post.comments;
+
+    const commentIndex = comments.findIndex((comment, index) => {
+      return comment._id == req.body.comment;
+    });
+
+    comments[commentIndex].replies.push({
+      text: req.body.reply,
+      postedBy: req.body.userId,
+    });
+
+    const updatedrecord = await post.updateOne({ comments });
+
+    res.json(updatedrecord);
+  } catch (error) {
+    console.log("error", error);
+    res.status(400).json(error);
   }
 };
