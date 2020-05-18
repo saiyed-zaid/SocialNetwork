@@ -365,38 +365,32 @@ exports.dailyNewPosts = async (req, res, next) => {
     res.status(400).json({ err: error });
   }
 };
-
-exports.replyComment = async (req, res, next) => {
-  console.table(req.body);
-
+/**
+ * @function middleware
+ * @description Handling patch request which update/Add post Comment Reply in database
+ */
+exports.commentPostReply = async (req, res, next) => {
   try {
-    let comment = req.body.comment;
-    comment.postedBy = req.body.userId;
+    const post = await Post.findOne({
+      _id: req.body.postId,
+    });
 
-    const UpdatedCommentPost = await Post.findByIdAndUpdate(
-      {
-        _id: req.body.postId,
-        comments: { _id: comment },
-      },
-      {
-        $push: {
-          comments: [
-            { hasReply: true },
-            {
-              replies: [
-                { text: req.body.reply },
-                { postedBy: comment.postedBy },
-              ],
-            },
-          ],
-        },
-      },
-      { new: true }
-    )
-      .populate("comments.postedBy", "_id name")
-      .populate("postedBy", "_id name");
-    res.json(UpdatedCommentPost);
+    const comments = post.comments;
+
+    const commentIndex = comments.findIndex((comment, index) => {
+      return comment._id == req.body.commentId;
+    });
+
+    comments[commentIndex].replies.push({
+      text: req.body.reply,
+      postedBy: req.body.userId,
+    });
+
+    const updatedrecord = await post.updateOne({ comments });
+
+    res.json(updatedrecord);
   } catch (error) {
+    console.log("error", error);
     res.status(400).json(error);
   }
 };

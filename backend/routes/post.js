@@ -144,7 +144,7 @@ router.patch("/api/post/uncomment", auth_check, postController.uncommentPost);
 router.patch(
   "/api/post/comment/reply",
   auth_check,
-  postController.replyComment
+  postController.commentPostReply
 );
 
 router.delete(
