@@ -115,6 +115,7 @@ export default class commentList extends Component {
             </h6>
           </div>
         </div>
+        {console.log(this.props.data.replies)}
         <div className="comment-block ml-5">
           <Link to={`/user/${this.props.data.postedBy._id}`}>
             <img

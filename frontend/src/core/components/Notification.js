@@ -93,7 +93,7 @@ class Notification extends React.Component {
           }
 
           //Comment Notification
-          /* if (post.comments.length > 0) {
+          if (post.comments.length > 0) {
             post.comments.forEach((comment, i) => {
               console.log("testtststetse", comment);
 
@@ -115,7 +115,7 @@ class Notification extends React.Component {
                 newCommentList: newCommentsList,
               });
             }
-          } */
+          }
         });
       });
     } catch (error) {

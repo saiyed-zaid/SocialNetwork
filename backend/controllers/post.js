@@ -378,7 +378,7 @@ exports.commentPostReply = async (req, res, next) => {
     const comments = post.comments;
 
     const commentIndex = comments.findIndex((comment, index) => {
-      return comment._id == req.body.commentId;
+      return comment._id == req.body.comment;
     });
 
     comments[commentIndex].replies.push({
