@@ -292,7 +292,7 @@ class MainRouter extends React.Component {
       isAuthorized: null,
     };
 
-    this.socket = openSocket("http://localhost:5000");
+    this.socket = openSocket("https://retwit-backend.herokuapp.com/");
   }
 
   componentDidMount() {

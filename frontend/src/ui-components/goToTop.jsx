@@ -15,7 +15,7 @@ export default class goToTop extends Component {
         mybutton.style.display = "block";
       }
     } else {
-      let mybutton = document.getElementById("gototop");z
+      let mybutton = document.getElementById("gototop");
       if (mybutton) {
         mybutton.style.display = "none";
       }

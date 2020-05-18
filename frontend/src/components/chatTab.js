@@ -26,7 +26,7 @@ export default class chatTab extends Component {
     this.masterUl.style.listStyle = "none"; */
 
     /* INVOKED WHENEVER SOMEONE MESSAGE YOU -BEGIN*/
-    this.socket = openSocket("http://localhost:5000");
+    this.socket = openSocket("https://retwit-backend.herokuapp.com/");
     this.socket.on(this.props.senderId, (data) => {
       const li = this.appendReceivedMsg(data);
       let myMsg = document.querySelector("#myMsg");
@@ -55,31 +55,34 @@ export default class chatTab extends Component {
   async componentDidMount() {
     /* Fetching Message When This Component INVOKED */
     /*END Fetching Message When This Component INVOKED */
+    try {
+      const result = await this.props.fetchMessage(
+        this.props.senderId,
+        this.props.receiverId,
+        this.props.authUser.token
+      );
+      this.setState(
+        {
+          hasNewMsg: true,
+          receiverId: this.props.senderId,
+          receiverName: this.props.senderName,
+          messages: result,
+        },
+        () => {
+          let myMsg = document.querySelector("#myMsg");
+          const chatBox = document.querySelector("#chatBox");
 
-    const result = await this.props.fetchMessage(
-      this.props.senderId,
-      this.props.receiverId,
-      this.props.authUser.token
-    );
-    this.setState(
-      {
-        hasNewMsg: true,
-        receiverId: this.props.senderId,
-        receiverName: this.props.senderName,
-        messages: result,
-      },
-      () => {
-        let myMsg = document.querySelector("#myMsg");
-        const chatBox = document.querySelector("#chatBox");
+          chatBox.scrollTo(0, chatBox.scrollHeight);
 
-        chatBox.scrollTo(0, chatBox.scrollHeight);
-
-        this.state.messages.forEach((message) => {
-          const li = this.appendReceivedMsg(message);
-          myMsg.appendChild(li);
-        });
-      }
-    );
+          this.state.messages.forEach((message) => {
+            const li = this.appendReceivedMsg(message);
+            myMsg.appendChild(li);
+          });
+        }
+      );
+    } catch (error) {
+      console.log(error);
+    }
 
     const chatBox = document.querySelector("#chatBox");
 
@@ -206,7 +209,7 @@ export default class chatTab extends Component {
         >
           <ul className="p-0 m-0" id="myMsg" style={{ listStyle: "none" }}></ul>
         </div>
-        <div className="card-footer">
+        <div className="card-footer bg-dark">
           <div className="input-group">
             <input
               id="btn-input"
@@ -219,7 +222,7 @@ export default class chatTab extends Component {
                 <i className="fas fa-smile text-warning"></i>
               </button>
               <button
-                className="btn text-light"
+                className="btn text-light bg-dark"
                 style={{
                   border: "1px solid #1a1d24",
                   borderTopLeftRadius: "0",

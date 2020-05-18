@@ -7,7 +7,7 @@ import { isAuthenticated } from "../../auth/index";
 export default class commentList extends Component {
   render() {
     const photoUrl = this.props.data.postedBy.photo
-      ? this.props.data.postedBy.photo.path
+      ? this.props.data.postedBy.photo
       : DefaultProfile;
     return (
       <div key={this.props.key} className="p-0 mt-0" style={{ color: "white" }}>
@@ -21,7 +21,7 @@ export default class commentList extends Component {
               className="float-left mr-2"
               height="30px"
               width="30px"
-              src={`${process.env.REACT_APP_API_URL}/${photoUrl}`}
+              src={photoUrl}
               alt={this.props.data.postedBy.name}
               onError={(e) => {
                 e.target.src = DefaultProfile;

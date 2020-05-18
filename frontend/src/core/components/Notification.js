@@ -18,33 +18,35 @@ class Notification extends React.Component {
   componentDidMount() {
     read()
       .then((data) => {
-        if (data.isAuthorized) {
-          var newFollowerList = [];
-          if (data.followers.length > 0) {
-            //this.setState({ newFollower: new Array(data.followers.length) });
-
-            data.followers.forEach((follower, i) => {
-              if (follower.isNewUser) {
-                newFollowerList.push({
-                  id: follower.user._id,
-                  name: follower.user.name,
-                  followedFrom: follower.followedFrom,
-                });
-              }
-            });
-
-            if (newFollowerList.length > 0) {
-              console.log("NEW FOLLOWER LIST", newFollowerList);
-
-              this.setState({
-                hasNewFollow: true,
-                newFollowerList: newFollowerList,
+        /* if (!data.isAuthorized) {
+          return;
+        } */
+        var newFollowerList = [];
+        if (data.followers.length > 0) {
+          //this.setState({ newFollower: new Array(data.followers.length) });
+          
+          console.log("NEW FOLLOWER LIST",data.followers.length, newFollowerList);
+          data.followers.forEach((follower, i) => {
+            if (follower.isNewUser) {
+              newFollowerList.push({
+                id: follower.user._id,
+                name: follower.user.name,
+                followedFrom: follower.followedFrom,
               });
             }
+          });
 
-            if (this.state.hasNewFollow) {
-              //setTimeout(this.followStatusChange, 16000);
-            }
+          if (newFollowerList.length > 0) {
+
+            this.setState({
+              hasNewFollow: true,
+              newFollowerList: newFollowerList,
+            });
+          }
+
+          if (this.state.hasNewFollow) {
+            //setTimeout(this.followStatusChange, 16000);
+
           }
         }
       })
@@ -87,7 +89,9 @@ class Notification extends React.Component {
           });
         }
       });
-    } catch (error) {}
+    } catch (error) {
+      console.log(error);
+    }
   }
   /* likeStatusChange = () => {
     if (this.state.hasNewLikes) {

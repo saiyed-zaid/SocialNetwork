@@ -94,7 +94,7 @@ exports.getPostsByUser = async (req, res, next) => {
         },
       ],
     })
-      .populate("postedBy", "_id name role")
+      .populate("postedBy", "_id name role photo")
       .populate("likes.user", "_id name")
       .select("_id title body created likes comments status photo tags")
       .sort("_created");
