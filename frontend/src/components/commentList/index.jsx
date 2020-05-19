@@ -40,26 +40,33 @@ export default class commentList extends Component {
   };
   showReplyBox = (e) => {
     const replybox = document.getElementById(this.props.i);
+    console.log(replybox);
 
     if (replybox.style.display === "none") {
-      replybox.style.display = "block";
+      replybox.style.display = "flex";
+      replybox.style.alignItems = "baseline";
+      replybox.style.justifyContent = "space-between";
+
     } else {
       replybox.style.display = "none";
     }
   };
   render() {
-    const photoUrl = this.props.data.postedBy.photo
-      ? this.props.data.postedBy.photo
-      : DefaultProfile;
+    const { data } = this.props;
+    const photoUrl = data.postedBy.photo ? data.postedBy.photo : DefaultProfile;
     return (
-      <div key={this.props.i} className="p-0 mt-0" style={{ color: "white" }}>
+      <div
+        key={this.props.i + "asdsd"}
+        className="p-0 mt-0"
+        style={{ color: "white" }}
+      >
         <div className="comment-block">
-          <Link to={`/user/${this.props.data.postedBy._id}`}>
+          <Link to={`/user/${data.postedBy._id}`}>
             <img
               className="float-left mr-2 rounded"
               height="30px"
               src={photoUrl}
-              alt={this.props.data.postedBy.name}
+              alt={data.postedBy.name}
               onError={(e) => {
                 e.target.src = DefaultProfile;
               }}
@@ -67,16 +74,16 @@ export default class commentList extends Component {
           </Link>
           <div>
             <h6>
-              {this.props.data.text}
+              {data.text}
               &nbsp;
               {isAuthenticated().user &&
-              isAuthenticated().user._id === this.props.data.postedBy._id ? (
+              isAuthenticated().user._id === data.postedBy._id ? (
                 <button
                   style={{
                     justifyContent: "flex-end",
                     border: "1px solid red",
                   }}
-                  onClick={() => this.props.deleteClick(this.props.data)}
+                  onClick={() => this.props.deleteClick(data)}
                   className="btn text-danger float-right btn-delete"
                 >
                   <i className="fas fa-trash" style={{ color: "none" }}></i>
@@ -103,15 +110,15 @@ export default class commentList extends Component {
                 <small>
                   <span className=" font-italic" style={{ fontSize: "12px" }}>
                     Comment By : {"  "}
-                    {this.props.data.postedBy.name} {"  "}
-                    <Timeago date={this.props.data.created} />
+                    {data.postedBy.name} {"  "}
+                    <Timeago date={data.created} />
                   </span>
                 </small>
               </div>
             </h6>
           </div>
         </div>
-        {this.props.data.replies.map((reply) => (
+        {data.replies.map((reply) => (
           <div className="comment-block ml-5">
             <Link to={`/user/${reply.postedBy._id}`}>
               <img
@@ -134,11 +141,10 @@ export default class commentList extends Component {
                 {reply.text}
                 &nbsp;
                 {isAuthenticated().user &&
-                  isAuthenticated().user._id ===
-                    this.props.data.postedBy._id && (
+                  isAuthenticated().user._id === data.postedBy._id && (
                     <i
                       className="fas fa-trash float-right"
-                      onClick={() => this.props.deleteClick(this.props.data)}
+                      onClick={() => this.props.deleteClick(data)}
                       style={{ color: "none", cursor: "pointer" }}
                     ></i>
                   )}
@@ -161,14 +167,15 @@ export default class commentList extends Component {
           </div>
         ))}
         <br />
-        <div className="row" id={this.props.i} style={{ display: "none" }}>
+        <div className="" id={this.props.i} style={{ display: "none" }}>
           <input
-            className="form-control-sm col-md-10 ml-4 "
+            className="form-control-sm my-2"
             type="text"
             name="commentreply"
             id="commentreply"
             placeholder="Reply Comment"
             onChange={this.handleReplyInput}
+            style={{ flex: "1" }}
           />
           <button
             className="btn-sm btn-primary"

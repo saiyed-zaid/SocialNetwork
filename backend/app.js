@@ -41,7 +41,6 @@ app.use(postRoutes);
 
 /* Error Handling Middleware BEGIN */
 app.use((error, req, res, next) => {
-  console.log("HANDLER__", req.isAuthorized);
   if (!req.isAuthorized) {
     res.status(401).json({
       isAuthorized: req.isAuthorized,

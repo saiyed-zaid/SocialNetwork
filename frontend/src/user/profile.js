@@ -244,6 +244,7 @@ class Profile extends Component {
               >
                 &nbsp;
               </span>
+              
             )}
           </div>
         </div>
