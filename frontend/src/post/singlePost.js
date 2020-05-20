@@ -118,14 +118,8 @@ class SinglePost extends Component {
       <div>
         <div>
           {post.photo.length > 1 ? (
-            <div
-              style={{
-                display: "block",
-              }}
-            >
-              <div className="carosuel-height">
-                <Carousel images={post.photo} />
-              </div>
+            <div style={{ height: "500px !important" }}>
+              <Carousel images={post.photo} />
             </div>
           ) : (
             <img

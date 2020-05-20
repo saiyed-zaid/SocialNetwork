@@ -90,7 +90,7 @@ class Comment extends Component {
     const { comments } = this.props;
     const { error } = this.state;
     return (
-      <div className="ml-0">
+      <div className="ml-0 pb-3">
         <Alert
           style={{ display: error ? "" : "none" }}
           message={error}
@@ -122,10 +122,16 @@ class Comment extends Component {
             <div className="form-group" style={{ flex: 2 }}>
               <input
                 type="text"
-                className="form-control"
+                className="form-control text-light"
                 onChange={this.handleChange}
                 value={this.state.text}
                 placeholder="Leave A Comment"
+                style={{
+                  backgroundColor: "#023340",
+                  borderTop: "none",
+                  borderLeft: "none",
+                  borderRight: "none",
+                }}
               />
             </div>
             <button

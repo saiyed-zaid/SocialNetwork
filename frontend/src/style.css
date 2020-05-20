@@ -785,6 +785,5 @@ div.content {
   margin-right: 33%;
 }
 
-tr{
-  /* line-height: 1; */
-}
+::-moz-selection { background: #ffc107;color:black; }
+::selection { background: #ffc107;;color:black; }

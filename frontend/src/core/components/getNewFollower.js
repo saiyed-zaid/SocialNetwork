@@ -41,11 +41,11 @@ const Follow = (props) => {
       {props.newComments &&
         props.newComments.map((comment, i) => (
           <li className="noti w-100" style={{ height: "50px" }} key={i}>
-            <strong className="mr-auto">
+            <small className="mr-auto">
               <Link to={`/post/${comment.postId}`}>
                 {comment.name} Commented On Your Post.{" "}
               </Link>
-            </strong>
+            </small>
             <small>
               &nbsp;&nbsp;
               {comment.commentedFrom ? (

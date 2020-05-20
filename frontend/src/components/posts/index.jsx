@@ -157,7 +157,7 @@ export default class PostCard extends Component {
 
             {isAuthenticated() ? (
               <>
-                <div className="row justify-content-md-center">
+                <div className="row justify-content-center">
                   <button
                     className="btn"
                     style={{

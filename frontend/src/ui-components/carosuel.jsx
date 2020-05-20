@@ -12,7 +12,7 @@ export default class carosuel extends Component {
         <OwlCarousel items={1} className="owl-theme" loop mergeFit="false">
           {this.props.images.map((image, index) => (
             <img
-              id={index}
+              id={index+"sd"}
               src={image}
               className="d-block w-100"
               alt="post "

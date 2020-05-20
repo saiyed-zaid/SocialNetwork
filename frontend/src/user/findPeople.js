@@ -72,14 +72,17 @@ class FindPeople extends Component {
     <div className="row m-0">
       {users.map((user, i) =>
         user.role === "subscriber" ? (
-          <div className="card text-light bg-dark" key={i} style={{
-            transition: "unset",
-            transform: "unset",
-            animation: "unset",
-            width:'15rem',
-            margin:'1rem'
-          }}>
-
+          <div
+            className="card text-light bg-dark"
+            key={i}
+            style={{
+              transition: "unset",
+              transform: "unset",
+              animation: "unset",
+              width: "15rem",
+              margin: "1rem",
+            }}
+          >
             <img
               className="img-thumbnail"
               src={`${process.env.REACT_APP_API_URL}/user/photo/${user._id}`}
@@ -88,8 +91,7 @@ class FindPeople extends Component {
             />
             <div className="card-body">
               <h6 className="card-title">{user.name}</h6>
-              <p  className="text-light">
-
+              <p className="text-light">
                 <span>Following ({user.following.length}) </span>
                 <span>Followers ({user.followers.length}) </span>
               </p>
@@ -163,8 +165,13 @@ class FindPeople extends Component {
             type="text"
             value={this.state.search}
             onChange={this.updateSearch}
-            style={{ border: "1px solid black" }}
-            className="form-control col-md-2 "
+            style={{
+              backgroundColor: "#023340",
+              borderTop: "none",
+              borderLeft: "none",
+              borderRight: "none",
+            }}
+            className="form-control col-md-2  text-light"
             placeholder="Live Search..."
           />
         </div>

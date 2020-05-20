@@ -62,14 +62,10 @@ router.post(
   "/api/post/:userId",
   auth_check,
   multer({
-    storage: multer.diskStorage({
-      destination: (req, file, cb) => {
-        cb(null, path.join("upload", "users", req.auth._id, "posts"));
-      },
-      filename: (req, file, cb) => {
-        cb(null, Date.now() + file.originalname);
-      },
-    }),
+    storage: multer.memoryStorage(),
+    limits: {
+      fileSize: 5 * 1024 * 1024, // keep images size < 5 MB
+    },
     fileFilter: (req, file, cb) => {
       if (
         file.mimetype == "image/jpg" ||
