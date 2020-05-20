@@ -55,8 +55,8 @@ class ForgotPassword extends Component {
 
   render() {
     return (
-      <div className="container d-flex justify-content-center">
-        <div className="card col-md-4 mt-3">
+      <div className="container d-flex justify-content-center ">
+        <div className="card col-md-4 mt-3 m-5">
           <h2 className="mt-5 ">Reset Password</h2>
           <h3 id="t"> </h3>
           {this.state.message && (
@@ -66,7 +66,7 @@ class ForgotPassword extends Component {
             <Alert message={this.state.error} type="danger" />
           )}
 
-          <form>
+          <form className="mb-5">
             <div className="form-group mt-5">
               <input
                 type="email"

@@ -3,6 +3,7 @@ import DefaultProfile from "../../images/avatar.jpg";
 import Timeago from "react-timeago";
 import { Link } from "react-router-dom";
 import { isAuthenticated } from "../../auth/index";
+import Alert from "../../ui-components/Alert";
 
 export default class commentList extends Component {
   constructor() {
@@ -11,7 +12,9 @@ export default class commentList extends Component {
       commentReply: "",
     };
   }
-
+  componentWillReceiveProps() {
+    this.setState({ commentReply: "" });
+  }
   handleReplyInput = (event) => {
     this.setState({ commentReply: event.target.value });
   };
@@ -32,7 +35,6 @@ export default class commentList extends Component {
         console.log(response.error);
       } else {
         this.setState({ commentReply: "" });
-        this.props.updateComments(response.comments);
       }
     } catch (error) {
       console.log(error);

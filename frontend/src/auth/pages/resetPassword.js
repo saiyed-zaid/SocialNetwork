@@ -38,7 +38,7 @@ class ResetPassword extends Component {
         )}
         {this.state.error && <Alert message={this.state.error} type="danger" />}
 
-        <form>
+        <form className>
           <div className="form-group mt-5">
             <input
               type="password"

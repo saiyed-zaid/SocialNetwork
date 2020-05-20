@@ -1,6 +1,8 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import Recaptcha from "react-recaptcha";
 import Alert from "../../ui-components/Alert";
+import moment from "moment";
 
 class Signup extends React.Component {
   constructor(props) {
@@ -16,6 +18,9 @@ class Signup extends React.Component {
       year: 0,
       errors: {},
       responseError: null,
+      recatcha: false,
+      error: "",
+      dob: "",
     };
 
     this.postData = new FormData();
@@ -28,24 +33,40 @@ class Signup extends React.Component {
       [event.target.name]: event.target.value,
     });
   };
+  diff_years = (dt2, dt1) => {
+    var diff = (dt2.getTime() - dt1.getTime()) / 1000;
+    diff /= 60 * 60 * 24;
+    return Math.abs(Math.round(diff / 365.25));
+  };
 
   handleSubmit = async (event) => {
     event.preventDefault();
+    // console.log(this.state.dob);
 
-    try {
-      this.setState({ errors: {} });
+    const date1 = new Date();
+    const date2 = new Date(this.state.dob);
+    const dobValidate = this.diff_years(date1, date2);
 
-      await this.props.registerUser(this.state);
-
-      this.props.history.push("/signin");
-    } catch (errors) {
-      this.setState({
-        errors,
-      });
+    if (dobValidate > 18) {
+      if (this.state.recatcha) {
+        try {
+          this.setState({ errors: {}, error: "" });
+          await this.props.registerUser(this.state);
+          this.props.history.push("/signin");
+        } catch (errors) {
+          this.setState({
+            errors,
+          });
+        }
+      } else {
+        this.setState({ errors: { captcha: "Captcha Invalid" } });
+      }
+    } else {
+      this.setState({ errors: { dob: "User  Must Be Atleast 18 Years Old" } });
     }
   };
 
-  getYearDropList = () => {
+  /*  getYearDropList = () => {
     const year = new Date().getFullYear();
     return Array.from(new Array(50), (v, i) => (
       <option key={i} value={year - i}>
@@ -82,11 +103,20 @@ class Signup extends React.Component {
         {i + 1}
       </option>
     ));
+  }; */
+
+  callback = () => {};
+
+  verifyCallback = (response) => {
+    this.setState({ recatcha: true });
   };
 
   render() {
     return (
-      <div className="container col-md-4 my-3" style={{backgroundColor: '#343a40'}}>
+      <div
+        className="container col-md-4 my-3"
+        style={{ backgroundColor: "#343a40" }}
+      >
         <div className="jumbotron text-light">
           {this.state.responseError && (
             <Alert message={this.state.responseError} type="danger" />
@@ -175,8 +205,7 @@ class Signup extends React.Component {
               <label htmlFor="inputCity">Birthday</label>
             </div>
             <div className="form-row">
-              <div className="form-group col-md-4">
-                {/* <label htmlFor="inputCity">Day</label> */}
+              {/* <div className="form-group col-md-4">
                 <select
                   id="inputState"
                   className="form-control"
@@ -190,7 +219,6 @@ class Signup extends React.Component {
                 </select>
               </div>
               <div className="form-group col-md-4">
-                {/* <label htmlFor="inputState">Month</label> */}
                 <select
                   id="inputState"
                   className="form-control"
@@ -204,7 +232,6 @@ class Signup extends React.Component {
                 </select>
               </div>
               <div className="form-group col-md-4">
-                {/* <label htmlFor="inputZip">Year</label> */}
                 <select
                   id="inputState"
                   className="form-control"
@@ -216,6 +243,46 @@ class Signup extends React.Component {
                   </option>
                   {this.getYearDropList()}
                 </select>
+              </div> */}
+              <div className="form-group col-md-12">
+                <input
+                  className={`form-control ${
+                    this.state.errors.dob && "is-invalid"
+                  }`}
+                  type="date"
+                  name="dob"
+                  id="dob"
+                  onChange={this.handleInputChange}
+                />
+
+                {this.state.errors.dob && (
+                  <div className="invalid-feedback">
+                    {this.state.errors.dob}
+                  </div>
+                )}
+              </div>
+            </div>
+            <div className="row justify-content-md-start m-1">
+              <div className="col">
+                <Recaptcha
+                  sitekey="6LeOafkUAAAAANf_yLofQU5wx-hiEarcQbrgniO5"
+                  render="explicit"
+                  onloadCallback={this.callback}
+                  verifyCallback={this.verifyCallback}
+                  theme="dark"
+                  size="normal"
+                />
+                <span
+                  className={` ${this.state.errors.captcha && "is-invalid"}`}
+                ></span>
+                {this.state.errors.captcha && (
+                  <div className="invalid-feedback">
+                    {this.state.errors.captcha}
+                  </div>
+                )}
+                {/* {this.state.error ? (
+                <Alert type="danger" message={this.state.error} />
+              ) : null} */}
               </div>
             </div>
 

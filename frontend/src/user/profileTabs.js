@@ -56,7 +56,10 @@ class ProfileTabs extends Component {
 
     return (
       <div>
-        <ul className="nav nav-tabs" style={{ backgroundColor: "#bdbdbd" }}>
+        <ul
+          className="nav nav-tabs bg-light"
+          style={{ backgroundColor: "#bdbdbd" }}
+        >
           <li className="nav-item col-md-6 pl-0 pr-0">
             <a
               className="nav-link active"
@@ -86,7 +89,7 @@ class ProfileTabs extends Component {
         </ul>
         <div className="tab-content" id="myTabContent">
           <div
-            className="tab-pane fade show bg-dark active"
+            className="tab-pane fade show bg-light active"
             id="following"
             role="tabpanel"
             aria-labelledby="following-tab"
@@ -172,7 +175,7 @@ class ProfileTabs extends Component {
             )}
           </div>
           <div
-            className="tab-pane fade  bg-dark"
+            className="tab-pane fade  bg-light"
             id="followers"
             role="tabpanel"
             aria-labelledby="followers-tab"
@@ -183,20 +186,17 @@ class ProfileTabs extends Component {
             ) : (
               followers.map((follower, i) => {
                 const imgPath = follower.user.photo
-                  ? process.env.REACT_APP_API_URL +
-                    "/" +
-                    follower.user.photo.path
+                  ? follower.user.photo
                   : DefaultProfile;
                 return (
                   <div
                     key={i}
-                    className=""
                     style={{
                       borderRadius: "0px",
                       display: "flex",
                       justifyContent: "space-between",
                       alignItems: "center",
-                      width: "300px",
+                      width: "100%",
                     }}
                   >
                     <Link
@@ -221,7 +221,7 @@ class ProfileTabs extends Component {
                           e.target.src = DefaultProfile;
                         }}
                       />
-                      <h4 className="lead text-light"> {follower.user.name}</h4>
+                      <h4 className="lead text-dark"> {follower.user.name}</h4>
                     </Link>
                   </div>
                 );

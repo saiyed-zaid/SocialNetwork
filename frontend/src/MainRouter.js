@@ -115,23 +115,57 @@ const Navbar = withRouter(({ history, authUser, handleLogout, signout }) => {
                 )}
               </li>
             </ul>
-            <ul className="ml-auto mb-0 mr-2 pt-0">
-              <li
-                className="nav-item "
-                style={{
-                  listStyleType: "none",
-                }}
-              >
-                <img
-                  style={{
-                    borderRadius: "50%",
-                  }}
-                  className="nav-link  p-0 m-0 "
-                  src={authUser ? authUser.photo : avatar}
-                  height="30px"
-                  alt="user "
-                  onError={(e) => (e.target.src = avatar)}
-                />
+            <ul className="navbar-nav ml-auto ">
+              <li className="nav-item dropdown profile-btn ">
+                <a
+                  className="nav-link d-flex align-items-center"
+                  href="/"
+                  id="navbarDropdownMenuLink"
+                  role="button"
+                  data-toggle="dropdown"
+                  aria-haspopup="true"
+                  aria-expanded="false"
+                >
+                  <img
+                    style={{
+                      borderRadius: "50%",
+                    }}
+                    className="nav-link  p-0 m-0 ml-1 img-circle float-right "
+                    src={authUser.photo}
+                    height="30px"
+                    onError={(e) => (e.target.src = avatar)}
+                    alt="user "
+                  />
+                  <span>&nbsp;{authUser.name.toUpperCase()}</span>
+                </a>
+                <div
+                  className="dropdown-menu  dropdown-menu-right"
+                  aria-labelledby="navbarDropdownMenuLink"
+                >
+                  <Link
+                    className="dropdown-item"
+                    to={`/user/edit/${authUser._id}`}
+                  >
+                    Manage Profile
+                  </Link>
+                  <Link
+                    className="dropdown-item"
+                    to={`/user/changepassword/${authUser._id}`}
+                  >
+                    Change Password
+                  </Link>
+                  <Link
+                    className="dropdown-item"
+                    to="/signin"
+                    onClick={() =>
+                      signout(() => {
+                        handleLogout();
+                      })
+                    }
+                  >
+                    Logout
+                  </Link>
+                </div>
               </li>
             </ul>
           </>

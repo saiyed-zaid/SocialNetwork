@@ -79,7 +79,7 @@ export default class Authservice {
         name: data.name,
         email: data.email,
         password: data.password,
-        dob: new Date(data.year, data.month - 1, data.day + 1),
+        dob: data.dob /*  new Date(data.year, data.month - 1, data.day + 1), */,
       };
 
       try {

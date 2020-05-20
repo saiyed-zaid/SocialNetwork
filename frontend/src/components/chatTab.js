@@ -189,14 +189,14 @@ export default class chatTab extends Component {
         <div className="card-header text-left text-light bg-dark">
           <span>{this.props.senderName}</span>
           <span style={{ marginLeft: "10px" }}>
-            <i className="fas fa-video"></i>
+            {/* <i className="fas fa-video"></i> */}
           </span>
           <span className="float-right">
             <button
               type="button"
               className="close text-light"
               aria-label="Close"
-              onClick={this.handleClose}
+              onClick={this.props.handleChatBoxDisplay}
             >
               <span aria-hidden="true">&times;</span>
             </button>

@@ -475,6 +475,10 @@ a:hover {
     border-collapse: collapse;
     border-color: transparent transparent #343a40 transparent;
   }
+  .carosuel-height{
+    margin: 0 !important;
+    width: 100% !important;
+  }
 }
 
 .badge-light {
@@ -773,4 +777,14 @@ div.content {
 .profile-btn:hover {
   background-color: #191c23;
   color: white;
+}
+
+.carosuel-height{
+  width: 50%;
+  margin-left: 25%;
+  margin-right: 33%;
+}
+
+tr{
+  /* line-height: 1; */
 }

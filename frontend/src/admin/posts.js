@@ -4,7 +4,7 @@ import { list, remove, update } from "../post/apiPost";
 import { Link } from "react-router-dom";
 import DefaultPost from "../images/post.jpg";
 import Avatar from "../components/Avatar";
-import Toast from "../components/Toast";
+import Spinner from "../ui-components/Spinner";
 import "../../node_modules/react-toggle-switch/dist/css/switch.min.css";
 import Modal from "../components/modal/modal";
 
@@ -20,24 +20,26 @@ class Posts extends Component {
       checkBox: [],
       deleteId: "",
       search: "",
+      isLoading: true,
     };
   }
 
   componentDidMount() {
     const token = isAuthenticated().user.token;
-
-    list(true, token)
-      .then((data) => {
-        if (data.error) {
-          console.log(data.error);
-        } else {
-          this.setState({ posts: data.posts });
-          const script = document.createElement("script");
-          script.src = "/js/dataTables.js";
-          document.body.appendChild(script);
-        }
-      })
-      .catch();
+    setTimeout(async () => {
+      list(true, token)
+        .then((data) => {
+          if (data.error) {
+            console.log(data.error);
+          } else {
+            this.setState({ posts: data.posts, isLoading: false });
+            const script = document.createElement("script");
+            script.src = "/js/dataTables.js";
+            document.body.appendChild(script);
+          }
+        })
+        .catch();
+    }, 1000);
   }
 
   deletePost = (postId) => {
@@ -48,11 +50,11 @@ class Posts extends Component {
       } else {
         this.setState({
           redirectToHome: true,
-          toastPopup: true,
-          toastType: "Success",
-          toastMsg: "Record deleted successfully.",
+          // toastPopup: true,
+          // toastType: "Success",
+          // toastMsg: "Record deleted successfully.",
         });
-        setTimeout(this.toastPopupEnable, 8000);
+        // setTimeout(this.toastPopupEnable, 8000);
         document.getElementById("deleteprofile").style.display = "none";
         document.getElementById("deleteprofile").classList.remove("show");
       }
@@ -92,7 +94,6 @@ class Posts extends Component {
     this.setState({ checkBox: arr });
   };
 
-  
   handleSingleCheckBox = (event) => {
     let selectAllCheckbox = document.getElementsByName("selectall")[0];
     let Checkboxes = document.getElementsByName("childchk");
@@ -205,6 +206,9 @@ class Posts extends Component {
 
   render() {
     const { posts } = this.state;
+    if (posts.length < 0 || this.state.isLoading) {
+      return this.state.isLoading && <Spinner />;
+    }
     return (
       <div className="container-fluid m-0 p-0">
         <div className="jumbotron p-3 m-0">
@@ -232,7 +236,7 @@ class Posts extends Component {
             zIndex: "111",
           }}
         >
-          <Toast
+          {/*  <Toast
             status={
               this.state.toastPopup ? "toast fade show" : "toast fade hide"
             }
@@ -244,7 +248,7 @@ class Posts extends Component {
             msg={
               this.state.toastPopup ? this.state.toastMsg : this.state.toastMsg
             }
-          />
+          /> */}
         </div>
         {/* Toast / */}
         {this.state.posts.length > 0 ? (

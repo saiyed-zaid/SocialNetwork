@@ -1,15 +1,18 @@
 import React from "react";
 import TimeAgo from "react-timeago";
+import { Link } from "react-router-dom";
 
 const Follow = (props) => {
   return (
-    props.newFollowers && (
-      <div>
-        {props.newFollowers.map((follower, i) => (
+    <div>
+      {props.newFollowers &&
+        props.newFollowers.map((follower, i) => (
           <li className="noti w-100" style={{ height: "50px" }} key={i}>
-            <strong className="mr-auto">
-              {follower.name} Started Following You.
-            </strong>
+            <small className="mr-auto">
+              <Link to={`/user/${follower.id}`}>
+                {follower.name} Started Following You.
+              </Link>
+            </small>
             <small>
               &nbsp;&nbsp;
               {follower.followedFrom ? (
@@ -19,9 +22,15 @@ const Follow = (props) => {
             <div className="dropdown-divider" />
           </li>
         ))}
-        {props.newLikes.map((like, i) => (
+
+      {props.newLikes &&
+        props.newLikes.map((like, i) => (
           <li className="noti w-100" style={{ height: "50px" }} key={i}>
-            <strong className="mr-auto"> {like.name} Liked Your Post.</strong>
+            <small className="mr-auto">
+              <Link to={`/post/${like.postId}`}>
+                {like.name} Liked Your Post.{" "}
+              </Link>
+            </small>
             <small>
               &nbsp;&nbsp;
               {like.likedFrom ? <TimeAgo date={like.likedFrom} /> : null}
@@ -29,10 +38,13 @@ const Follow = (props) => {
             <div className="dropdown-divider" />
           </li>
         ))}
-        {props.newComments.map((comment, i) => (
+      {props.newComments &&
+        props.newComments.map((comment, i) => (
           <li className="noti w-100" style={{ height: "50px" }} key={i}>
             <strong className="mr-auto">
-              {comment.name} Commented On Your Post.
+              <Link to={`/post/${comment.postId}`}>
+                {comment.name} Commented On Your Post.{" "}
+              </Link>
             </strong>
             <small>
               &nbsp;&nbsp;
@@ -43,8 +55,7 @@ const Follow = (props) => {
             <div className="dropdown-divider" />
           </li>
         ))}
-      </div>
-    )
+    </div>
   );
 };
 export default Follow;

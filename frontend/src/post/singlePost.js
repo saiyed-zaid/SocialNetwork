@@ -118,31 +118,19 @@ class SinglePost extends Component {
       <div>
         <div>
           {post.photo.length > 1 ? (
-            <div style={{ height: "100px !important" }}>
-              <Carousel images={post.photo} />
+            <div
+              style={{
+                display: "block",
+              }}
+            >
+              <div className="carosuel-height">
+                <Carousel images={post.photo} />
+              </div>
             </div>
           ) : (
-            /*  {post.photo && post.photo.mimetype === "video/mp4" ? (
-            <div
-              className="embed-responsive embed-responsive-21by9"
-              style={{ height: "500px" }}
-            >
-              <video controls className="embed-responsive-item">
-                <source
-                  src={`${process.env.REACT_APP_API_URL}/${
-                    post.photo ? post.photo.path : DefaultPost
-                  }`}
-                  type="video/mp4"
-                />
-                Unsupported Browser.
-              </video>
-            </div>
-          ) : ( */
             <img
               className="img-thumbnail p-0 rounded-0"
-              src={`${process.env.REACT_APP_API_URL}/${
-                post.photo ? post.photo.path : DefaultPost
-              }`}
+              src={post.photo ? post.photo : DefaultPost}
               alt={post.title}
               style={{
                 height: "400px",

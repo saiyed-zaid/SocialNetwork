@@ -2,7 +2,6 @@ import React, { Component } from "react";
 import MainRouter from "./mainRouter";
 import { BrowserRouter as Router, Redirect } from "react-router-dom";
 import { signout, isAuthenticated } from "./auth/index";
-
 import Authservice from "./services/auth";
 import Postservice from "./services/post";
 import Userservice from "./services/user";
@@ -36,7 +35,6 @@ export default class App extends Component {
     this.setTimeout();
   }
 
-  
   clearTimeout() {
     if (this.warnTimeout) clearTimeout(this.warnTimeout);
     if (this.logoutTimeout) clearTimeout(this.logoutTimeout);
@@ -61,7 +59,7 @@ export default class App extends Component {
   logout() {
     // Send a logout request to the API
     if (isAuthenticated()) {
-      alert('logout timeout');
+      alert("logout timeout");
       signout(() => {});
       this.setState({ logginStatus: false });
     }
@@ -77,14 +75,13 @@ export default class App extends Component {
   render() {
     return (
       <Router>
-        {!this.state.logginStatus && <Redirect to="/signin" />}
         <MainRouter
           Authservice={new Authservice()}
           Postservice={new Postservice()}
           Userservice={new Userservice()}
           {...this.props}
         />
-        {this.state.warn && <Redirect to="/lockscreen" />}
+        {/* {this.state.warn && <Redirect to="/lockscreen" />} */}
         {!this.state.logginStatus ? <Redirect to="/signin" /> : null}
       </Router>
     );

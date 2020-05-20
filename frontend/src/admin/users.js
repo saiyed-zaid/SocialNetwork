@@ -6,7 +6,7 @@ import "../../node_modules/react-toggle-switch/dist/css/switch.min.css";
 import Avatar from "../components/Avatar";
 import Toast from "../components/Toast";
 import Modal from "../components/modal/modal";
-// import EditProfile from "../user/editProfile";
+import Spinner from "../ui-components/Spinner";
 
 class Users extends Component {
   constructor(props) {
@@ -24,21 +24,24 @@ class Users extends Component {
       deleteId: "",
       search: "",
       editId: "",
+      isLoading: true,
     };
     this.index = undefined;
   }
 
   async componentDidMount() {
-    const response = await this.props.list(isAuthenticated().user.token);
-    if (response.error) {
-      console.log(response.error);
-    } else {
-      this.setState({ users: response.users });
+    setTimeout(async () => {
+      const response = await this.props.list(isAuthenticated().user.token);
+      if (response.error) {
+        console.log(response.error);
+      } else {
+        this.setState({ users: response.users, isLoading: false });
 
-      const script = document.createElement("script");
-      script.src = "/js/dataTables.js";
-      document.body.appendChild(script);
-    }
+        const script = document.createElement("script");
+        script.src = "/js/dataTables.js";
+        document.body.appendChild(script);
+      }
+    }, 1000);
   }
 
   deleteAccount = async (userId) => {
@@ -208,6 +211,9 @@ class Users extends Component {
   render() {
     const { users } = this.state;
     // return 0;
+    if (users.length < 0 || this.state.isLoading) {
+      return this.state.isLoading && <Spinner />;
+    }
 
     return (
       <div className="container-fluid m-0 p-0">
@@ -218,13 +224,14 @@ class Users extends Component {
         <div className="d-flex m-1">
           <button
             className="btn btn-danger m-2 "
-            onClick={this.deleteMultiple}
+            onClick={this.hanldeMultipleDeleteModal}
             data-toggle="modal"
             // data-target="#exampleModalCenter"
           >
             <i className="fas fa-trash"></i> Delete Selected
           </button>
         </div>
+        {/*
         <div
           style={{
             display: "flex",
@@ -235,7 +242,7 @@ class Users extends Component {
             zIndex: "111",
           }}
         >
-          <Toast
+            <Toast
             status={
               this.state.toastPopup ? "toast fade show" : "toast fade hide"
             }
@@ -247,8 +254,9 @@ class Users extends Component {
             msg={
               this.state.toastPopup ? this.state.toastMsg : this.state.toastMsg
             }
-          />
+          /> 
         </div>
+          */}
         {users.length > 0 ? (
           <table className="table table-hover text-light" id="userstable">
             <thead>

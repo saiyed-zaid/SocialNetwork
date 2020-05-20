@@ -14,10 +14,7 @@ export default class lockScreen extends Component {
       loading: false,
     };
   }
-  componentDidMount() {
-    /*  let header = document.getElementsByTagName("nav")[0];
-    return header ? header.remove() : null; */
-  }
+  componentDidMount() {}
   checkPassword = (event) => {
     event.preventDefault();
     this.setState({ loading: true });

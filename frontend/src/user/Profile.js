@@ -11,6 +11,7 @@ import Modal from "../components/modal/modal";
 import EditProfile from "./editProfile";
 import Postcard from "../components/posts/index";
 import GoToTop from "../ui-components/goToTop";
+import ProfileTabs from "./profileTabs";
 
 class Profile extends Component {
   constructor(props) {
@@ -125,6 +126,7 @@ class Profile extends Component {
           console.log("Error=> ", result.err);
         } else {
           this.setState({ post: dataToUpdate });
+          this.init(post.postedBy._id);
         }
       })
       .catch((err) => {
@@ -186,6 +188,11 @@ class Profile extends Component {
       });
     } */
   };
+  showFollowList = () => {
+    let getModal = document.getElementById("followersmodal");
+    getModal.style.display = "block";
+    getModal.classList.add("show");
+  };
 
   render() {
     const { redirectToSignin, user, posts } = this.state;
@@ -200,7 +207,7 @@ class Profile extends Component {
 
     return (
       <div
-        className=" bg-dark position-relative rounded"
+        className="bg-dark position-relative rounded"
         style={{ margin: "80px auto 10px auto" }}
       >
         {/* DISPLAY CHATBOX */}
@@ -216,7 +223,7 @@ class Profile extends Component {
               receiverId={this.state.user._id}
               receiverName={this.state.user.name}
               messages={this.state.messages}
-              handleChatBoxDisplay={this.handleChatClose}
+              handleChatBoxDisplay={this.handleChatBoxDisplay}
               fetchMessage={this.props.fetchMessage}
             />
           </div>
@@ -234,7 +241,6 @@ class Profile extends Component {
               style={{ width: "150px" }}
             />
           </div>
-
         </div>
 
         <div className="jumbotron text-center">
@@ -243,9 +249,11 @@ class Profile extends Component {
             {this.state.user.about}
           </p>
           <hr className="my-4"></hr>
-
           {/* Follow/Following Details */}
-          <div className="d-flex justify-content-center m-3 text-center">
+          <div
+            className="d-flex justify-content-center m-3 text-center"
+            onClick={this.showFollowList}
+          >
             <p className="lead ml-2">
               <h5 className="card-subtitle mb-2 text-muted">Follower</h5>
               <h6 className="card-title text-warning">
@@ -268,7 +276,6 @@ class Profile extends Component {
             </p>
           </div>
           {/* End Follow/Following Details */}
-
           {
             this.props.authUser._id !== this.state.user._id && (
               <FollowProfileButton
@@ -290,11 +297,8 @@ class Profile extends Component {
             </div>
           ) */
           }
-
           <hr className="my-4" />
-
           {/* Display Posts */}
-
           <div className="row justify-content-md-center">
             {posts.map((post, i) => (
               <Postcard
@@ -318,6 +322,21 @@ class Profile extends Component {
             }
             title="Edit Profile"
           />
+          {isAuthenticated() ? (
+            <Modal
+              id="followersmodal"
+              body={
+                <ProfileTabs
+                  followers={user.followers}
+                  following={user.following}
+                  hasPostStatusUpdated={this.init}
+                  hasChatBoxDisplay={this.handleChatBoxDisplay}
+                />
+              }
+              title="Following And Followers"
+              style={{padding: "0 !important"} }
+            />
+          ) : null}
         </div>
         <GoToTop />
       </div>

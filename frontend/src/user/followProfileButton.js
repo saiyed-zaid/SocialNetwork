@@ -39,22 +39,6 @@ class FollowProfileButton extends Component {
         </div>
       </div>
     );
-
-    /* <button
-            onClick={this.followClick}
-            className="btn btn-raised btn-success mr-5"
-          >
-            <i className="fas fa-user-plus"></i>
-          </button>
-        ) : (
-          <button
-            onClick={this.unfollowClick}
-            className="btn btn-raised btn-danger mr-5"
-          >
-            <i className="fas fa-user-minus"></i>
-          </button>
-        )}
-    ); */
   }
 }
 export default FollowProfileButton;
