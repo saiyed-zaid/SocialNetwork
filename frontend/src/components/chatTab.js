@@ -26,7 +26,7 @@ export default class chatTab extends Component {
     this.masterUl.style.listStyle = "none"; */
 
     /* INVOKED WHENEVER SOMEONE MESSAGE YOU -BEGIN*/
-    this.socket = openSocket("http://localhost:5000");
+    this.socket = openSocket("https://retwit-backend.herokuapp.com");
     this.socket.on(this.props.senderId, (data) => {
       const li = this.appendReceivedMsg(data);
       let myMsg = document.querySelector("#myMsg");

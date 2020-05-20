@@ -343,7 +343,7 @@ exports.userOnlineNow = async (req, res, next) => {
 };
 
 //image upload
-uploadFile = (file) => {
+const uploadFile = (file) => {
   const storage = new Storage({
     projectId: process.env.GCLOUD_PROJECT_ID,
     keyFilename: process.env.GCLOUD_APPLICATION_CREDENTIALS,

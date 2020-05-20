@@ -215,7 +215,7 @@ exports.updatePost = async (req, res, next) => {
   let tags = [];
   const reqFiles = [];
   let post = req.post;
-  const url = req.protocol + "://" + req.get("host");
+  //const url = req.protocol + "://" + req.get("host");
 
   if (req.body.tags) {
     reqTags = JSON.parse(req.body.tags);
@@ -430,7 +430,7 @@ exports.commentPostReply = async (req, res, next) => {
   }
 };
 
-uploadFile = (file) => {
+const uploadFile = (file) => {
   const storage = new Storage({
     projectId: process.env.GCLOUD_PROJECT_ID,
     keyFilename: process.env.GCLOUD_APPLICATION_CREDENTIALS,
@@ -446,7 +446,7 @@ uploadFile = (file) => {
 
   try {
     const blob = bucket.file(`posts/${file.originalname}`);
-
+    console.log("bucket__name__", bucket.name);
     const blobStream = blob.createWriteStream({
       metadata: {
         contentType: file.mimetype,
