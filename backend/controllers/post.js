@@ -232,9 +232,9 @@ exports.updatePost = async (req, res, next) => {
     //req.files = post.photo;
     if (req.files.length > 0) {
       for (var i = 0; i < req.files.length; i++) {
-        reqFiles.push(
-          `${url}/upload/users/${req.auth._id}/posts/${req.files[i].filename}`
-        );
+        var fileUrl = uploadFile(req.files[i]);
+        console.log("URL", fileUrl);
+        reqFiles.push(fileUrl);
       }
       req.body.photo = reqFiles;
     } else {
@@ -445,19 +445,7 @@ uploadFile = (file) => {
   let publicUrl;
 
   try {
-    console.log("file ", file);
-
     const blob = bucket.file(`posts/${file.originalname}`);
-
-    blob
-      .getSignedUrl({
-        action: "read",
-        expires: "03-09-2491",
-      })
-      .then((signedUrls) => {
-        console.log("signed URL__", signedUrls);
-        // signedUrls[0] contains the file's public URL
-      });
 
     const blobStream = blob.createWriteStream({
       metadata: {

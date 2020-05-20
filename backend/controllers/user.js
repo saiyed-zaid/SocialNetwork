@@ -2,6 +2,7 @@ const User = require("../models/user");
 const _ = require("lodash");
 const fs = require("fs");
 const md5 = require("md5");
+const { Storage } = require("@google-cloud/storage");
 
 exports.userById = async (req, res, next, id) => {
   try {
@@ -77,7 +78,7 @@ exports.getUser = async (req, res, next) => {
  */
 exports.updateUser = async (req, res, next) => {
 
-  const url = req.protocol + "://" + req.get("host");
+  //const url = req.protocol + "://" + req.get("host");
   var reqFilePath;
 
   let user = req.profile;
@@ -87,13 +88,15 @@ exports.updateUser = async (req, res, next) => {
 
     reqFilePath = user.photo;
   } else {
-    reqFilePath = `${url}/upload/users/${req.auth._id}/profile/${req.file.filename}`;
-
-    if (user.photo) {
+    //reqFilePath = `${url}/upload/users/${req.auth._id}/profile/${req.file.filename}`;
+    var reqFilePath = uploadFile(req.file);
+    console.log("URL", reqFilePath);
+//    reqFiles.push(reqFilePath);
+    /* if (user.photo) {
       fs.unlink(user.photo, (err) => {
         console.log("Error while unlink user image", err);
       });
-    }
+    } */
   }
 
   /* if (req.body.password) {
@@ -336,5 +339,54 @@ exports.userOnlineNow = async (req, res, next) => {
     return await res.json(users);
   } catch (error) {
     res.status(400).json({ err: error });
+  }
+};
+
+//image upload
+uploadFile = (file) => {
+  const storage = new Storage({
+    projectId: process.env.GCLOUD_PROJECT_ID,
+    keyFilename: process.env.GCLOUD_APPLICATION_CREDENTIALS,
+  });
+
+  //social-network-48b35.appspot.com
+
+  //const bucket = storage.bucket("posts");
+  //const file = bucket.file('my-existing-file.png');
+
+  const bucket = storage.bucket(`${process.env.GCLOUD_STORAGE_BUCKET_URL}`);
+  let publicUrl;
+
+  try {
+    const blob = bucket.file(`profile/${file.originalname}`);
+
+    const blobStream = blob.createWriteStream({
+      metadata: {
+        contentType: file.mimetype,
+      },
+    });
+
+    // If there's an error
+    blobStream.on("error", (err) => console.log("err while uploading+ " + err));
+
+    // If all is good and done
+    blobStream.on("finish", () => {
+      // Assemble the file public URL
+      /* publicUrl = `https://firebasestorage.googleapis.com/v0/b/${
+        bucket.name
+      }/o/${encodeURI(blob.name)}?alt=media`; */
+      //console.log("public url", publicUrl);
+      // Return the file name and its public URL
+      // for you to store in your own database
+    });
+    publicUrl = `https://firebasestorage.googleapis.com/v0/b/${
+      bucket.name
+    }/o/${encodeURIComponent(blob.name)}?alt=media`;
+
+    blobStream.end(file.buffer);
+    return publicUrl;
+    // When there is no more data to be consumed from the stream the end event gets emitted
+  } catch (error) {
+    return error;
   }
 };

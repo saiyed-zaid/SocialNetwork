@@ -48,7 +48,6 @@ router.put(
   userController.newFollowerStatusChagne
 );
 
-
 /**
  * @function put
  * @description Handling put request which Update user follow and add followers
@@ -75,7 +74,7 @@ router.put(
  * @param {String} path of router
  * @param {middleware} property getUsers
  */
-router.get("/api/users", auth_check,userController.getUsers);
+router.get("/api/users", auth_check, userController.getUsers);
 
 /**
  * @function get
@@ -96,14 +95,10 @@ router.put(
   auth_check,
   userController.hasAuthorization,
   multer({
-    storage: multer.diskStorage({
-      destination: (req, file, cb) => {
-        cb(null, path.join("upload", "users", req.auth._id, "profile"));
-      },
-      filename: (req, file, cb) => {
-        cb(null, Date.now() + file.originalname);
-      },
-    }),
+    storage: multer.memoryStorage(),
+    limits: {
+      fileSize: 5 * 1024 * 1024, // keep images size < 5 MB
+    },
     fileFilter: (req, file, cb) => {
       if (file.mimetype == "image/jpg" || file.mimetype == "image/jpeg") {
         cb(null, true);
