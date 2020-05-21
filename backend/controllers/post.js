@@ -3,6 +3,9 @@ const fs = require("fs");
 const { validationResult } = require("express-validator");
 const _ = require("lodash");
 const { Storage } = require("@google-cloud/storage");
+const cron = require("node-cron");
+const PostSchedule = require("../models/postSchedules");
+const { uploadImageToFirebase } = require("../helper/uploadFile");
 
 /**
  * @function middleware
@@ -147,7 +150,7 @@ exports.createPost = async (req, res, next) => {
 
   //const url = req.protocol + "://" + req.get("host");
   for (var i = 0; i < req.files.length; i++) {
-    var fileUrl = uploadFile(req.files[i]);
+    var fileUrl = uploadImageToFirebase(req.files[i]);
     console.log("path", fileUrl);
     reqFiles.push(fileUrl);
 
@@ -177,6 +180,89 @@ exports.createPost = async (req, res, next) => {
   } catch (err) {
     console.log("Error while Creating Post", err);
   }
+};
+
+/**
+ * @function middleware
+ * @description Handling post request which create new Schedule Post in database
+ */
+exports.createPostSchedule = async (req, res, next) => {
+  if (req.body.isSchedule) {
+    const reqScheduleTime = new Date(req.body.postScheduleTime);
+
+    const scheduleTime = {
+      minute: reqScheduleTime.getMinutes(),
+      hour: reqScheduleTime.getHours(),
+      day: reqScheduleTime.getDate(),
+      month: reqScheduleTime.getMonth() + 1,
+      dayOfMonth: reqScheduleTime.getDay(),
+    };
+
+    const task = cron.schedule(
+      `${scheduleTime.minute} ${scheduleTime.hour} ${scheduleTime.day} ${scheduleTime.month} ${scheduleTime.dayOfMonth}`,
+      async () => {
+        try {
+          const postToPublic = await PostSchedule.find({
+            scheduleTime: reqScheduleTime,
+          });
+          if (postToPublic) {
+            //console.log("___Post To Public___", postToPublic);//
+            const postPubliced = await Post.insertMany(postToPublic);
+            //console.log("POST PUBLICED", doc);
+            if (postPubliced) {
+              await PostSchedule.deleteMany({
+                scheduleTime: reqScheduleTime,
+              });
+            }
+          }
+        } catch (error) {
+          console.log("error while find", error);
+        }
+
+        console.log("Congrats post public.");
+
+        task.destroy();
+      }
+    );
+    task.start();
+
+    const tags = JSON.parse(req.body.tags);
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      const allErrors = errors.array();
+      return res.status(422).json({
+        errors: allErrors,
+      });
+    }
+    const reqFiles = [];
+
+    //const url = req.protocol + "://" + req.get("host");
+    for (var i = 0; i < req.files.length; i++) {
+      var fileUrl = uploadImageToFirebase(req.files[i]);
+      console.log("path", fileUrl);
+      reqFiles.push(fileUrl);
+    }
+
+    const post = new PostSchedule({
+      title: req.body.title,
+      body: req.body.body,
+      postedBy: req.auth._id,
+      photo: reqFiles,
+      tags: tags,
+      scheduleTime: reqScheduleTime,
+    });
+
+    try {
+      const result = await post.save();
+
+      res.json({ result });
+    } catch (err) {
+      console.log("Error while Creating Post", err);
+    }
+  } else {
+    next();
+  }
+  //return res.json(req.body);
 };
 
 /**
@@ -232,7 +318,7 @@ exports.updatePost = async (req, res, next) => {
     //req.files = post.photo;
     if (req.files.length > 0) {
       for (var i = 0; i < req.files.length; i++) {
-        var fileUrl = uploadFile(req.files[i]);
+        var fileUrl = uploadImageToFirebase(req.files[i]);
         console.log("URL", fileUrl);
         reqFiles.push(fileUrl);
       }

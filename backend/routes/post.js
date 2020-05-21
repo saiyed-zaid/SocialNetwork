@@ -91,7 +91,7 @@ router.post(
       .isLength({ min: 10, max: 2000 })
       .withMessage("Body length must between 5 to 2000."),
   ],
-
+  postController.createPostSchedule,
   postController.createPost
 );
 
