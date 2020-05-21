@@ -784,6 +784,9 @@ div.content {
   margin-left: 25%;
   margin-right: 33%;
 }
+.searchBox{
+  color: #ffff;
+}
 
 ::-moz-selection { background: #ffc107;color:black; }
 ::selection { background: #ffc107;;color:black; }

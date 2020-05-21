@@ -1,5 +1,7 @@
 import React from "react";
 import { Multiselect } from "multiselect-react-dropdown";
+import DateTimePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
 
 class NewPost extends React.Component {
   constructor(props) {
@@ -9,6 +11,8 @@ class NewPost extends React.Component {
       title: "",
       body: "",
       photo: "",
+      isSchedule: false,
+      postScheduleTime: "",
       fileSizes: [],
       errors: {},
     };
@@ -56,10 +60,33 @@ class NewPost extends React.Component {
 
       this.postData.set(event.target.name, value);
 
-      this.setState({
-        [event.target.name]: event.target.value,
-      });
+      if (event.target.name !== "isSchedule") {
+        this.setState({
+          [event.target.name]: event.target.value,
+        });
+      } else if (event.target.name === "isSchedule") {
+        Boolean(event.target.value) &&
+          this.setState({
+            [event.target.name]: event.target.value,
+          });
+
+        !Boolean(event.target.value) &&
+          this.setState({
+            [event.target.name]: event.target.value,
+            postScheduleTime: "",
+          });
+      }
     }
+  };
+
+  handleScheduleChange = (event) => {
+    console.log(event);
+
+    this.postData.set("postScheduleTime", event);
+
+    this.setState({
+      postScheduleTime: event,
+    });
   };
 
   handleSubmit = async (event) => {
@@ -102,7 +129,10 @@ class NewPost extends React.Component {
 
   render() {
     return (
-      <div className="container p-3 my-3 col-md-6" style={{backgroundColor:'#343a40',color: "#c0c8d0",}}>
+      <div
+        className="container p-3 my-3 col-md-6"
+        style={{ backgroundColor: "#343a40", color: "#c0c8d0" }}
+      >
         <form onSubmit={this.handleSubmit}>
           <div className="form-group">
             <label for="photo">Photo</label>
@@ -153,6 +183,7 @@ class NewPost extends React.Component {
               </div>
             )}
           </div>
+
           <div className="form-group">
             <Multiselect
               id="tags"
@@ -167,6 +198,54 @@ class NewPost extends React.Component {
               emptyRecordMsg="No People Found"
             />
           </div>
+
+          <div className="form-group">
+            <label htmlFor="">Schedule Post</label>
+            <div>
+              <div className="form-check form-check-inline">
+                <input
+                  className="form-check-input"
+                  type="radio"
+                  name="isSchedule"
+                  id="isSchedule"
+                  value="true"
+                  onChange={this.handleInputChange}
+                />
+                <label className="form-check-label" htmlFor="isSchedule">
+                  Yes
+                </label>
+              </div>
+              <div className="form-check form-check-inline">
+                <input
+                  className="form-check-input"
+                  type="radio"
+                  name="isSchedule"
+                  id="isSchedule"
+                  value={null}
+                  onChange={this.handleInputChange}
+                />
+                <label className="form-check-label" htmlFor="isSchedule">
+                  No
+                </label>
+              </div>
+            </div>
+          </div>
+          {Boolean(this.state.isSchedule) && (
+            <div className="form-group">
+              <label htmlFor="">Set Schedule</label>
+              <DateTimePicker
+                selected={this.state.postScheduleTime}
+                onChange={this.handleScheduleChange}
+                showTimeSelect
+                timeFormat="HH:mm"
+                timeIntervals={5}
+                timeCaption="time"
+                dateFormat="MMMM d, yyyy h:mm aa"
+                key="schedulePost"
+              />
+            </div>
+          )}
+
           <button className="btn btn-primary">Create</button>
         </form>
       </div>
