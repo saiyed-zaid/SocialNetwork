@@ -3,7 +3,6 @@ import DefaultProfile from "../images/avatar.jpg";
 import openSocket from "socket.io-client";
 import "emoji-mart/css/emoji-mart.css";
 import { Picker } from "emoji-mart";
-// import { fetchMessage } from "../user/apiUser";
 
 export default class chatTab extends Component {
   handleClose = () => {

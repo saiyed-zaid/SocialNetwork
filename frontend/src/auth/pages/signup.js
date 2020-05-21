@@ -2,7 +2,6 @@ import React from "react";
 import { Link } from "react-router-dom";
 import Recaptcha from "react-recaptcha";
 import Alert from "../../ui-components/Alert";
-import moment from "moment";
 
 class Signup extends React.Component {
   constructor(props) {

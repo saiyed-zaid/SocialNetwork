@@ -1,12 +1,11 @@
 import React, { Component } from "react";
-import { follow, unfollow } from "./apiUser";
 
 class FollowProfileButton extends Component {
   followClick = () => {
-    this.props.onButtonClick(follow);
+    this.props.onButtonClick(this.props.follow);
   };
   unfollowClick = () => {
-    this.props.onButtonClick(unfollow);
+    this.props.onButtonClick(this.props.unfollow);
   };
   render() {
     return (

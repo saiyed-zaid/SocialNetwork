@@ -1,6 +1,5 @@
 import React from "react";
-import { read } from "../user/apiUser";
-import { singlePost } from "../post/apiPost";
+
 import { Multiselect } from "multiselect-react-dropdown";
 import DefaultPost from "../images/post.jpg";
 
@@ -22,7 +21,7 @@ class EditPost extends React.Component {
     this.selectedopt = [];
   }
 
-  componentDidMount() {
+  async componentDidMount() {
     const userId = this.props.authUser._id;
     const token = this.props.authUser.token;
 
@@ -30,8 +29,8 @@ class EditPost extends React.Component {
       this.props.postId == null
         ? this.props.match.params.postId
         : this.props.postId;
-
-    singlePost(postId).then((data) => {
+    try {
+      const data = await this.props.fetchPost(postId);
       if (data.error) {
         this.setState({ redirectToProfile: true });
       } else {
@@ -40,26 +39,25 @@ class EditPost extends React.Component {
           title: data.title,
           body: data.body,
           error: "",
-          photo: data.photo ? data.photo.path : DefaultPost,
+          photo: data.photo ? data.photo : DefaultPost,
           user: this.props.authUser,
           selectedTags: data.tags,
         });
       }
-    });
+    } catch (error) {
+      console.log(error);
+    }
 
-    read(userId, token)
-      .then((data) => {
-        if (data.err) {
-          this.setState({ options: [] });
-        } else {
-          this.setState({ options: data.following });
-        }
-      })
-      .catch((err) => {
-        if (err) {
-          console.log(err);
-        }
-      });
+    try {
+      const data = await this.props.read(userId, token);
+      if (data.err) {
+        this.setState({ options: [] });
+      } else {
+        this.setState({ options: data.following });
+      }
+    } catch (error) {
+      console.log(error);
+    }
   }
 
   handleInputChange = (event) => {

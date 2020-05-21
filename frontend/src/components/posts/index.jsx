@@ -48,6 +48,7 @@ export default class PostCard extends Component {
                 <div className="btn-group ">
                   <a
                     // type="button"
+                    href="/"
                     style={{ boxShadow: "none", cursor: "pointer" }}
                     // className="btn"
                     data-toggle="dropdown"

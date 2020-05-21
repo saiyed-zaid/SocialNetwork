@@ -20,6 +20,10 @@ const PrivateRoute = ({
   updateUser,
   changePassword,
   replyComment,
+  editPost,
+  updatePost,
+  unfollow,
+  follow,
   ...rest
 }) => {
   return (
@@ -40,6 +44,10 @@ const PrivateRoute = ({
             updateUser={updateUser}
             changePassword={changePassword}
             replyComment={replyComment}
+            editPost={editPost}
+            updatePost={updatePost}
+            unfollow={unfollow}
+            follow={follow}
           />
         ) : (
           <Redirect

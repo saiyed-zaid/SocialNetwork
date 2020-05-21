@@ -3,7 +3,7 @@ import DefaultProfile from "../../images/avatar.jpg";
 import Timeago from "react-timeago";
 import { Link } from "react-router-dom";
 import { isAuthenticated } from "../../auth/index";
-import Alert from "../../ui-components/Alert";
+// import Alert from "../../ui-components/Alert";
 
 export default class commentList extends Component {
   constructor() {
@@ -48,7 +48,6 @@ export default class commentList extends Component {
       replybox.style.display = "flex";
       replybox.style.alignItems = "baseline";
       replybox.style.justifyContent = "space-between";
-
     } else {
       replybox.style.display = "none";
     }

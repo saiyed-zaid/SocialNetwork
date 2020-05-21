@@ -1,6 +1,6 @@
 import React from "react";
 import TimeAgo from "react-timeago";
-import { Link } from "react-router-dom";
+import { Link, withRouter } from "react-router-dom";
 
 const Follow = (props) => {
   return (
@@ -58,4 +58,4 @@ const Follow = (props) => {
     </div>
   );
 };
-export default Follow;
+export default withRouter(Follow);

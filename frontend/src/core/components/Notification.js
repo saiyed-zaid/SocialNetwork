@@ -1,5 +1,8 @@
 import React from "react";
-import { read, isFollowStatusChange, readPost } from "../api/getNotification";
+import {
+  read,
+  /* isFollowStatusChange */ readPost,
+} from "../api/getNotification";
 
 import Follow from "./getNewFollower";
 import { isAuthenticated } from "../../auth";

@@ -4,7 +4,7 @@ import DefaultProfile from "../../images/avatar.jpg";
 
 export default class index extends Component {
   render() {
-    const { user, authUser, history } = this.props;
+    const { user, authUser } = this.props;
     return user.role === "subscriber" && user.name !== authUser.name ? (
       <div
         className="card"
@@ -12,17 +12,15 @@ export default class index extends Component {
           transition: "unset",
           transform: "unset",
           animation: "unset",
-          width:'15rem',
-          margin:'1rem'
+          width: "15rem",
+          margin: "1rem",
         }}
       >
         <div className="card-body box-profile">
           <div className="text-center">
             <img
               className="profile-user-img img-fluid img-circle"
-              src={`${process.env.REACT_APP_API_URL}/${
-                user.photo ? user.photo.path : DefaultProfile
-              }`}
+              src={user.photo ? user.photo : DefaultProfile}
               onError={(i) => (i.target.src = `${DefaultProfile}`)}
               alt={user.name}
             />

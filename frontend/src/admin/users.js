@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 import DefaultProfile from "../images/avatar.jpg";
 import "../../node_modules/react-toggle-switch/dist/css/switch.min.css";
 import Avatar from "../components/Avatar";
-import Toast from "../components/Toast";
+// import Toast from "../components/Toast";
 import Modal from "../components/modal/modal";
 import Spinner from "../ui-components/Spinner";
 

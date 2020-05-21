@@ -497,6 +497,8 @@ class MainRouter extends React.Component {
             exact
             component={EditPost}
             authUser={this.state.authUser}
+            editPost={this.props.Postservice.editPost}
+            fetchPost={this.props.Postservice.fetchPost}
           />
           <Route
             path="/users"
@@ -545,6 +547,7 @@ class MainRouter extends React.Component {
             exact
             component={FindPeople}
             findPeople={this.props.Userservice.findPeople}
+            follow={this.props.Userservice.follow}
           />
 
           <PrivateRoute
@@ -558,6 +561,10 @@ class MainRouter extends React.Component {
             remove={this.props.Userservice.remove}
             fetchMessage={this.props.Userservice.fetchMessage}
             updateUser={this.props.Userservice.updateUser}
+            listByUser={this.props.Postservice.listByUser}
+            updatePost={this.props.Postservice.update}
+            unfollow={this.props.Userservice.unfollow}
+            follow={this.props.Userservice.follow}
           />
           <Route path="/lockscreen" exact component={LockScreen} />
           <PrivateRoute

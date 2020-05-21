@@ -2,33 +2,27 @@ import React, { Component } from "react";
 import { Link, withRouter } from "react-router-dom";
 import DefaultProfile from "../images/avatar.jpg";
 import { isAuthenticated } from "../auth/index";
-import { update } from "../post/apiPost";
-import { unfollow } from "../user/apiUser";
-// import Toast from "../components/Toast";
 
 class ProfileTabs extends Component {
-  handleUserUnfollow = (e) => {
+  handleUserUnfollow = async (e) => {
     const unfollowId = e.target.getAttribute("data-userId");
-    if (unfollowId) {
-      unfollow(
-        isAuthenticated().user._id,
-        isAuthenticated().user.token,
-        unfollowId
-      )
-        .then((result) => {
-          if (result) {
-            this.props.hasPostStatusUpdated(isAuthenticated().user._id);
-          }
-        })
-        .catch((err) => {
-          if (err) {
-            console.log(err);
-          }
-        });
+    try {
+      if (unfollowId) {
+        const result = await this.props.unfollow(
+          isAuthenticated().user._id,
+          isAuthenticated().user.token,
+          unfollowId
+        );
+        if (result) {
+          this.props.hasPostStatusUpdated(isAuthenticated().user._id);
+        }
+      }
+    } catch (error) {
+      console.log(error);
     }
   };
 
-  handlePostStatus = (e) => {
+  handlePostStatus = async (e) => {
     const formData = new FormData();
     const postId = e.target.getAttribute("data-post-id");
     const postStatus = e.target.getAttribute("data-post-status");
@@ -39,16 +33,18 @@ class ProfileTabs extends Component {
       formData.set("status", true);
       formData.append("disabledBy", "");
     }
-
-    update(postId, isAuthenticated().user.token, formData)
-      .then((result) => {
+    try {
+      const result = await this.props.ipdatePost(
+        postId,
+        isAuthenticated().user.token,
+        formData
+      );
+      if (result) {
         this.props.hasPostStatusUpdated(isAuthenticated().user._id);
-      })
-      .catch((err) => {
-        if (err) {
-          alert(err);
-        }
-      });
+      }
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   render() {
