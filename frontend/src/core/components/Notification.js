@@ -63,52 +63,54 @@ class Notification extends React.Component {
         let newLikesList = [];
         let newCommentsList = [];
         // console.log("test");
-
-        data.posts.forEach((post) => {
-          //Likes Notification
-          if (post.likes.length > 0) {
-            post.likes.forEach((like, i) => {
-              if (like.isNewLike) {
-                if (like.user._id !== isAuthenticated().user._id) {
-                  newLikesList.push({
-                    id: like.user._id,
-                    postId: post._id,
-                    name: like.user.name,
-                    likedFrom: like.likedFrom,
-                  });
+        if (data.posts) {
+          data.posts.forEach((post) => {
+            //Likes Notification
+            if (post.likes.length > 0) {
+              post.likes.forEach((like, i) => {
+                if (like.isNewLike) {
+                  if (like.user._id !== isAuthenticated().user._id) {
+                    newLikesList.push({
+                      id: like.user._id,
+                      postId: post._id,
+                      name: like.user.name,
+                      likedFrom: like.likedFrom,
+                    });
+                  }
                 }
-              }
-            });
-            if (newLikesList.length > 0) {
-              this.setState({
-                hasNewLikes: true,
-                newLikesList: newLikesList,
               });
-            }
-          }
 
-          //Comment Notification
-          if (post.comments.length > 0) {
-            post.comments.forEach((comment, i) => {
-              if (comment.isNewComment) {
-                if (comment.postedBy._id !== isAuthenticated().user._id) {
-                  newCommentsList.push({
-                    id: comment.postedBy._id,
-                    postId: post._id,
-                    name: comment.postedBy.name,
-                    commentedFrom: comment.created,
-                  });
-                }
+              if (newLikesList.length > 0) {
+                this.setState({
+                  hasNewLikes: true,
+                  newLikesList: newLikesList,
+                });
               }
-            });
-            if (newCommentsList.length > 0) {
-              this.setState({
-                hasNewComment: true,
-                newCommentList: newCommentsList,
-              });
             }
-          }
-        });
+
+            //Comment Notification
+            if (post.comments.length > 0) {
+              post.comments.forEach((comment, i) => {
+                if (comment.isNewComment) {
+                  if (comment.postedBy._id !== isAuthenticated().user._id) {
+                    newCommentsList.push({
+                      id: comment.postedBy._id,
+                      postId: post._id,
+                      name: comment.postedBy.name,
+                      commentedFrom: comment.created,
+                    });
+                  }
+                }
+              });
+              if (newCommentsList.length > 0) {
+                this.setState({
+                  hasNewComment: true,
+                  newCommentList: newCommentsList,
+                });
+              }
+            }
+          });
+        }
       });
     } catch (error) {
       console.log(error);

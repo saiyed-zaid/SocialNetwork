@@ -106,31 +106,7 @@ class FindPeople extends Component {
 
               <div>
                 {/*
-                {this.state.isProcessing === i ? (
-                  <button
-                    className="btn btn-outline-info mr-1"
-                    type="button"
-                    disabled
-                  >
-                    <span
-                      className="spinner-border spinner-border-sm m-1"
-                      role="status"
-                      aria-hidden="true"
-                    />
-                    Loading...
-                  </button>
-                ) : (
-                  <button
-                    onClick={() => this.clickFollow(user, i)}
-                    className="btn btn-outline-info mr-1"
-                    style={{
-                      flex: "1",
-                      margin: "1px",
-                    }}
-                  >
-                    &nbsp; Follow
-                  </button>
-                )}
+                
 
               <div className="d-flex flex-column">
                 { <button
@@ -145,16 +121,9 @@ class FindPeople extends Component {
                   {this.state.isProcessing && <Spinner />}
                   &nbsp; Follow
                 </button>} */}
-                <Link
-                  to={`/user/${user._id}`}
-                  className="btn btn-info w-100"
-                  /* style={{
-                    flex: "1",
-                    border: "none !important",
-                    margin: "1px",
-                  }} */
-                >
-                  View Profile
+
+                <Link to={`/user/${user._id}`} className="btn btn-info">
+                  >>>>>>> 952d26fe27d9186ff2020c5597c8ec471b0c6bd2 View Profile
                 </Link>
               </div>
             </div>

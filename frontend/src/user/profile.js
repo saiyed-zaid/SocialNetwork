@@ -32,8 +32,6 @@ class Profile extends Component {
   }
 
   componentDidMount() {
-    console.log(this.props);
-
     const userId = this.props.match.params.userId;
     this.init(userId);
   }
@@ -43,7 +41,8 @@ class Profile extends Component {
     const data = await this.props.read(userId, token);
 
     if (data.err) {
-      signout(() => {});
+      alert("logout from profile");
+      /* signout(() => {}); */
       this.setState({ redirectToSignin: true });
     } else {
       let following = this.checkFollow(data);
@@ -199,7 +198,9 @@ class Profile extends Component {
 
   render() {
     const { redirectToSignin, user, posts } = this.state;
-    const photoUrl = user._id && user.photo ? user.photo : DefaultProfile;
+
+    const photoUrl =
+      user._id && user.photo ? `${user.photo.photoURI}` : DefaultProfile;
 
     if (redirectToSignin) {
       return <Redirect to="/signin" />;

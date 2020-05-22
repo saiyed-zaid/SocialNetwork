@@ -57,6 +57,37 @@ exports.getPosts = async (req, res, next) => {
 
 /**
  * @function middleware
+ * @description Handling get request which fetch all schedule posts by user
+ */
+exports.getScheduledPost = async (req, res, next) => {
+  try {
+    const posts = await PostSchedule.find({
+      postedBy: req.profile._id,
+      status: true,
+    })
+      .populate("postedBy", "_id name role photo")
+      .populate("comments.postedBy", "_id name")
+      .populate("likes.user", "_id name")
+      .select("_id title body created likes replies comments status photo tags")
+      .sort("_created");
+    if (posts.length == 0) {
+      return res.json({
+        msg: "There is no schedule posts by this user",
+        posts: [],
+      });
+    }
+    return res.json({
+      posts,
+    });
+  } catch (error) {
+    return res.json({
+      msg: "Error while fetching Posts",
+    });
+  }
+};
+
+/**
+ * @function middleware
  * @description Handling get request which fetch all posts FOR ADMIN
  */
 exports.getPostsForAdmin = async (req, res, next) => {

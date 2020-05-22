@@ -14,9 +14,11 @@ exports.userById = async (req, res, next, id) => {
     if (!user) {
       return next(new Error("User not Found."));
     }
+    console.log("USER DATA__", user);
     req.profile = user;
     next();
   } catch (error) {
+    console.log("ERROR_", error);
     return next(new Error("User not Found."));
   }
 };
@@ -88,14 +90,48 @@ exports.updateUser = async (req, res, next) => {
     reqFilePath = user.photo;
   } else {
     //reqFilePath = `${url}/upload/users/${req.auth._id}/profile/${req.file.filename}`;
-    var reqFilePath = uploadFile(req.file);
-    console.log("URL", reqFilePath);
-    //    reqFiles.push(reqFilePath);
+    //Remove Previous Photo From Firebase
+    if (user.photo) {
+      const storage = new Storage({
+        projectId: process.env.GCLOUD_PROJECT_ID,
+        keyFilename: process.env.GCLOUD_APPLICATION_CREDENTIALS,
+      });
+      const bucket = storage.bucket(`${process.env.GCLOUD_STORAGE_BUCKET_URL}`);
+      const file = bucket.file(
+        `profile/${decodeURIComponent(user.photo.photoID)}`
+      );
+      file
+        .delete()
+        .then((response) => {
+          console.log("response", response);
+        })
+        .catch((err) => {
+          console.log("err", err);
+        });
+    }
+
+    /* bucket.deleteFiles(
+      {
+        directory: user.photo,
+      },
+      (err, data) => {
+        if (data) {
+          console.log(`${user.photo} REMOVED.`);
+        }
+        if (err) {
+          console.log("ERR WHILE REMOVING FILE. " + err);
+        }
+      }
+    ); */
     /* if (user.photo) {
       fs.unlink(user.photo, (err) => {
         console.log("Error while unlink user image", err);
       });
     } */
+
+    var reqFilePath = uploadFile(req.file);
+    console.log("PROFILE IMAGE URL", reqFilePath);
+    //    reqFiles.push(reqFilePath);
   }
 
   /* if (req.body.password) {
@@ -206,6 +242,7 @@ exports.removeFollowing = async (req, res, next) => {
     });
   }
 };
+
 /**
  * @function middleware
  * @description Handling put request which remove followers
@@ -350,15 +387,12 @@ const uploadFile = (file) => {
 
   //social-network-48b35.appspot.com
 
-  //const bucket = storage.bucket("posts");
-  //const file = bucket.file('my-existing-file.png');
-
   const bucket = storage.bucket(`${process.env.GCLOUD_STORAGE_BUCKET_URL}`);
   let publicUrl;
 
   try {
-    const blob = bucket.file(`profile/${md5(Date.now()) + file.originalname}`);
-
+    const photoID = md5(Date.now()) + file.originalname;
+    const blob = bucket.file(`profile/${photoID}`);
     const blobStream = blob.createWriteStream({
       metadata: {
         contentType: file.mimetype,
@@ -378,12 +412,18 @@ const uploadFile = (file) => {
       // Return the file name and its public URL
       // for you to store in your own database
     });
+
     publicUrl = `https://firebasestorage.googleapis.com/v0/b/${
       bucket.name
     }/o/${encodeURIComponent(blob.name)}?alt=media`;
 
+    const photoData = {
+      photoID,
+      photoURI: publicUrl,
+    };
+
     blobStream.end(file.buffer);
-    return publicUrl;
+    return photoData;
     // When there is no more data to be consumed from the stream the end event gets emitted
   } catch (error) {
     return error;
