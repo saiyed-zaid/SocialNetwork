@@ -637,13 +637,13 @@ div.content {
   height: 40px;
   width: 40px;
 }
-.img-circle {
+/* .img-circle {
   border-radius: 50%;
-}
-.img-bordered-sm {
+} */
+/* .img-bordered-sm {
   border: 2px solid #adb5bd;
   padding: 2px;
-}
+} */
 .user-block .description {
   color: #6c757d;
   font-size: 13px;
@@ -656,16 +656,16 @@ div.content {
   margin-left: 50px;
 }
 
-.profile-user-img {
+/* .profile-user-img {
   border: 3px solid #adb5bd;
   margin: 0 auto;
   padding: 3px;
   width: 100px;
-}
-.img-fluid {
+} */
+/* .img-fluid {
   max-width: 100%;
   height: auto;
-}
+} */
 .profile-username {
   font-size: 21px;
   margin-top: 5px;

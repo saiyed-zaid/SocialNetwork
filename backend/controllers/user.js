@@ -77,7 +77,6 @@ exports.getUser = async (req, res, next) => {
  * @description Handling put request which Update single user
  */
 exports.updateUser = async (req, res, next) => {
-
   //const url = req.protocol + "://" + req.get("host");
   var reqFilePath;
 
@@ -91,7 +90,7 @@ exports.updateUser = async (req, res, next) => {
     //reqFilePath = `${url}/upload/users/${req.auth._id}/profile/${req.file.filename}`;
     var reqFilePath = uploadFile(req.file);
     console.log("URL", reqFilePath);
-//    reqFiles.push(reqFilePath);
+    //    reqFiles.push(reqFilePath);
     /* if (user.photo) {
       fs.unlink(user.photo, (err) => {
         console.log("Error while unlink user image", err);
@@ -358,7 +357,7 @@ const uploadFile = (file) => {
   let publicUrl;
 
   try {
-    const blob = bucket.file(`profile/${file.originalname}`);
+    const blob = bucket.file(`profile/${md5(Date.now()) + file.originalname}`);
 
     const blobStream = blob.createWriteStream({
       metadata: {

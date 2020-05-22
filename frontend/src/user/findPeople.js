@@ -73,7 +73,7 @@ class FindPeople extends Component {
       {users.map((user, i) =>
         user.role === "subscriber" ? (
           <div
-            className="card text-light bg-dark"
+            className="card"
             key={i}
             style={{
               transition: "unset",
@@ -85,21 +85,31 @@ class FindPeople extends Component {
           >
             <img
               className="img-thumbnail"
-              src={`${process.env.REACT_APP_API_URL}/user/photo/${user._id}`}
+              src={user.photo}
               onError={(i) => (i.target.src = `${DefaultProfile}`)}
               alt={user.name}
             />
-            <div className="card-body">
-              <h6 className="card-title">{user.name}</h6>
-              <p className="text-light">
-                <span>Following ({user.following.length}) </span>
-                <span>Followers ({user.followers.length}) </span>
-              </p>
+            <div className="card-body" style={{padding:'0'}}>
+            <h3 className="profile-username text-center">{user.name}</h3>
+              <ul className="list-group list-group-unbordered text-dark">
+                <li className="list-group-item">
+                  <small>Followers</small>{" "}
+                  <small className="float-right text-dark">
+                    {user.followers.length}
+                  </small>
+                </li>
+                <li className="list-group-item">
+                  <small>Following</small>{" "}
+                  <small className="float-right text-dark">
+                    {user.following.length}
+                  </small>
+                </li>
+              </ul>
 
-              <div>
-                <button
+              <div className="d-flex flex-column">
+               {/* { <button
                   onClick={() => this.clickFollow(user, i)}
-                  className="btn btn-outline-info mr-1"
+                  className="btn btn-outline-info"
                   style={{
                     flex: "1",
                     margin: "1px",
@@ -108,15 +118,15 @@ class FindPeople extends Component {
                 >
                   {this.state.isProcessing && <Spinner />}
                   &nbsp; Follow
-                </button>
+                </button>} */}
                 <Link
                   to={`/user/${user._id}`}
-                  className="btn btn-outline-info"
-                  style={{
+                  className="btn btn-info"
+                  /* style={{
                     flex: "1",
                     border: "none !important",
                     margin: "1px",
-                  }}
+                  }} */
                 >
                   View Profile
                 </Link>
