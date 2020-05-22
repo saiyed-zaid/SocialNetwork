@@ -58,7 +58,7 @@ const Navbar = withRouter(({ history, authUser, handleLogout, signout }) => {
         aria-expanded="false"
         aria-label="Toggle navigation"
       >
-        <span className="navbar-toggler-icon" />
+        <span className="navbar-toggler-icon toggler" />
       </button>
 
       <div className="collapse navbar-collapse" id="navbarColor01">
