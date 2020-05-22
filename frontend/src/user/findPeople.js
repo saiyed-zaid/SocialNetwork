@@ -89,8 +89,8 @@ class FindPeople extends Component {
               onError={(i) => (i.target.src = `${DefaultProfile}`)}
               alt={user.name}
             />
-            <div className="card-body" style={{padding:'0'}}>
-            <h3 className="profile-username text-center">{user.name}</h3>
+            <div className="card-body" style={{ padding: "0" }}>
+              <h3 className="profile-username text-center">{user.name}</h3>
               <ul className="list-group list-group-unbordered text-dark">
                 <li className="list-group-item">
                   <small>Followers</small>{" "}
@@ -107,27 +107,7 @@ class FindPeople extends Component {
               </ul>
 
               <div className="d-flex flex-column">
-               {/* { <button
-                  onClick={() => this.clickFollow(user, i)}
-                  className="btn btn-outline-info"
-                  style={{
-                    flex: "1",
-                    margin: "1px",
-                  }}
-                  disabled={this.state.isProcessing}
-                >
-                  {this.state.isProcessing && <Spinner />}
-                  &nbsp; Follow
-                </button>} */}
-                <Link
-                  to={`/user/${user._id}`}
-                  className="btn btn-info"
-                  /* style={{
-                    flex: "1",
-                    border: "none !important",
-                    margin: "1px",
-                  }} */
-                >
+                <Link to={`/user/${user._id}`} className="btn btn-info">
                   View Profile
                 </Link>
               </div>

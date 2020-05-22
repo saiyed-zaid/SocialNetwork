@@ -131,7 +131,7 @@ const Navbar = withRouter(({ history, authUser, handleLogout, signout }) => {
                       borderRadius: "50%",
                     }}
                     className="nav-link  p-0 m-0 ml-1 img-circle float-right "
-                    src={authUser.photo}
+                    src={authUser.photo.photoURI}
                     height="30px"
                     onError={(e) => (e.target.src = avatar)}
                     alt="user "
@@ -269,7 +269,7 @@ const Navbar = withRouter(({ history, authUser, handleLogout, signout }) => {
                         borderRadius: "50%",
                       }}
                       className="nav-link  p-0 m-0 ml-1 img-circle float-right "
-                      src={authUser.photo}
+                      src={authUser.photo.photoURI}
                       height="30px"
                       /* onError={(e) => (e.target.src = avatar)} */
                       alt="user "

@@ -43,7 +43,7 @@ exports.getPost = async (req, res, next) => {
 exports.getPosts = async (req, res, next) => {
   try {
     const posts = await Post.find({ status: true })
-      .populate("postedBy", "_id name photo")
+      .populate("postedBy", "_id name photo.photoURI")
       .populate("comments.postedBy", "_id name")
       .populate("tags", "_id name")
       .select("_id title body created comments likes photo status tags")
@@ -52,6 +52,37 @@ exports.getPosts = async (req, res, next) => {
   } catch (error) {
     console.log("Error while fetching posts", error);
     res.status(422).json({ msg: "Error while fetching posts" });
+  }
+};
+
+/**
+ * @function middleware
+ * @description Handling get request which fetch all schedule posts by user
+ */
+exports.getScheduledPost = async (req, res, next) => {
+  try {
+    const posts = await PostSchedule.find({
+      postedBy: req.profile._id,
+      status: true,
+    })
+      .populate("postedBy", "_id name role photo")
+      .populate("comments.postedBy", "_id name")
+      .populate("likes.user", "_id name")
+      .select("_id title body created likes replies comments status photo tags")
+      .sort("_created");
+    if (posts.length == 0) {
+      return res.json({
+        msg: "There is no schedule posts by this user",
+        posts: [],
+      });
+    }
+    return res.json({
+      posts,
+    });
+  } catch (error) {
+    return res.json({
+      msg: "Error while fetching Posts",
+    });
   }
 };
 

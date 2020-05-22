@@ -43,7 +43,7 @@ class Profile extends Component {
 
     if (data.err) {
       alert("logout from profile");
-      signout(() => {});
+      /* signout(() => {}); */
       this.setState({ redirectToSignin: true });
     } else {
       let following = this.checkFollow(data);
@@ -196,7 +196,7 @@ class Profile extends Component {
 
   render() {
     const { redirectToSignin, user, posts } = this.state;
-    const photoUrl = user._id && user.photo ? `${user.photo}` : DefaultProfile;
+    const photoUrl = user._id && user.photo ? `${user.photo.photoURI}` : DefaultProfile;
 
     if (redirectToSignin) {
       return <Redirect to="/signin" />;

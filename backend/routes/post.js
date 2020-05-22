@@ -7,6 +7,7 @@ const auth_check = require("../middleware/auth-check");
 var multer = require("multer");
 const path = require("path");
 const Post = require("../models/posts");
+const PostSchedule = require("../models/postSchedules");
 
 /**
  * @function get
@@ -49,6 +50,18 @@ router.get(
  * @param {property} property getPostsByUser
  */
 router.get("/api/post/by/:userId", auth_check, postController.getPostsByUser);
+
+/**
+ * @function get
+ * @description Handling get request which fetch all Scheduled posts by userId
+ * @param {String} path of router
+ * @param {property} property getPostsByUser
+ */
+router.get(
+  "/api/post/schedule/by/:userId",
+  auth_check,
+  postController.getScheduledPost
+);
 
 /**
  * @function post
