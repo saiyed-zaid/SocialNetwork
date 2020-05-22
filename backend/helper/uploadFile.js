@@ -1,4 +1,6 @@
 const { Storage } = require("@google-cloud/storage");
+const md5 = require("md5");
+
 exports.uploadImageToFirebase = (file) => {
   const storage = new Storage({
     projectId: process.env.GCLOUD_PROJECT_ID,
@@ -14,8 +16,8 @@ exports.uploadImageToFirebase = (file) => {
   let publicUrl;
 
   try {
-    const blob = bucket.file(`posts/${file.originalname}`);
-    console.log("bucket__name__", bucket.name);
+    const blob = bucket.file(`posts/${md5(Date.now()) + file.originalname}`);
+
     const blobStream = blob.createWriteStream({
       metadata: {
         contentType: file.mimetype,

@@ -100,9 +100,7 @@ class ProfileTabs extends Component {
               </div>
             ) : (
               following.map((person, i) => {
-                const imgPath = person.photo
-                  ? process.env.REACT_APP_API_URL + "/" + person.photo.path
-                  : DefaultProfile;
+                const imgPath = person.photo ? person.photo : DefaultProfile;
                 return (
                   <div
                     key={i}
@@ -112,7 +110,6 @@ class ProfileTabs extends Component {
                       display: "flex",
                       justifyContent: "space-between",
                       alignItems: "center",
-                      backgroundColor: "#2b3035",
                     }}
                   >
                     <Link

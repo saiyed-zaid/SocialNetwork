@@ -7,7 +7,7 @@ const Follow = (props) => {
     <div>
       {props.newFollowers &&
         props.newFollowers.map((follower, i) => (
-          <li className="noti w-100" style={{ height: "50px" }} key={i}>
+          <li className="noti w-100" key={i}>
             <small className="mr-auto">
               <Link to={`/user/${follower.id}`}>
                 {follower.name} Started Following You.
@@ -25,7 +25,7 @@ const Follow = (props) => {
 
       {props.newLikes &&
         props.newLikes.map((like, i) => (
-          <li className="noti w-100" style={{ height: "50px" }} key={i}>
+          <li className="noti w-100" key={i}>
             <small className="mr-auto">
               <Link to={`/post/${like.postId}`}>
                 {like.name} Liked Your Post.{" "}
@@ -40,7 +40,7 @@ const Follow = (props) => {
         ))}
       {props.newComments &&
         props.newComments.map((comment, i) => (
-          <li className="noti w-100" style={{ height: "50px" }} key={i}>
+          <li className="noti w-100" key={i}>
             <small className="mr-auto">
               <Link to={`/post/${comment.postId}`}>
                 {comment.name} Commented On Your Post.{" "}

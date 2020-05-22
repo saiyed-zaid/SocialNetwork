@@ -476,6 +476,13 @@ a {
     margin: 0 !important;
     width: 100% !important;
   }
+
+.noti-toggle{
+  left: 0 !important;
+}
+.owl-carousel{
+  max-width: 319px;
+}
 }
 
 .badge-light {
@@ -813,4 +820,8 @@ div.content {
 
 .dropdown-item .text-muted{
   display: contents;
+}
+
+.table-row:hover{
+  color: #191c23 !important;
 }

@@ -159,7 +159,7 @@ class Notification extends React.Component {
           ) : null}
         </a>
 
-        <div className="dropdown-menu dropdown-menu-right">
+        <div className="dropdown-menu dropdown-menu-lg-right noti-toggle">
           {(this.state.newFollowerList.length > 0 && (
             <>
               <a
@@ -167,7 +167,7 @@ class Notification extends React.Component {
                 className="dropdown-item "
                 style={{ display: "flex", justifyContent: " center" }}
               >
-                <span className="float-right text-muted text-sm">
+                <span className=" text-muted text-sm">
                   <Follow
                     newFollowers={this.state.newFollowerList}
                     newLikes={this.state.newLikesList}
@@ -181,7 +181,6 @@ class Notification extends React.Component {
               No Notifications
             </span>
           )}
-          <div className="dropdown-divider" />
         </div>
       </li>
     );

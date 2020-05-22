@@ -29,6 +29,7 @@ import ReactNotifications from "react-notifications-component";
 import "react-notifications-component/dist/theme.css";
 import { Link } from "react-router-dom";
 import ChangePassword from "./auth/pages/changePassword";
+import ScheduledPost from "./post/scheduledPosts";
 
 const isActive = (history, path) => {
   if (history.location.pathname === path) {
@@ -277,7 +278,7 @@ const Navbar = withRouter(({ history, authUser, handleLogout, signout }) => {
                 className="nav-link  p-0 m-0 ml-1 img-circle float-right "
                 src={authUser.photo}
                 height="30px"
-                onError={(e) => (e.target.src = avatar)}
+                /* onError={(e) => (e.target.src = avatar)} */
                 alt="user "
               />
               <span>&nbsp;{authUser.name.toUpperCase()}</span>
@@ -294,6 +295,12 @@ const Navbar = withRouter(({ history, authUser, handleLogout, signout }) => {
                 to={`/user/changepassword/${authUser._id}`}
               >
                 Change Password
+              </Link>
+              <Link
+                className="dropdown-item"
+                to={`/post/scheduledposts/${authUser._id}`}
+              >
+                Scheduled Posts
               </Link>
               <Link
                 className="dropdown-item"
@@ -581,6 +588,11 @@ class MainRouter extends React.Component {
             component={ChangePassword}
             read={this.props.Userservice.read}
             changePassword={this.props.Authservice.changePassword}
+          />
+          <Route
+            path="/post/scheduledposts/:userId"
+            exact
+            component={ScheduledPost}
           />
         </Switch>
       </div>

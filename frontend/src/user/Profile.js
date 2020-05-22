@@ -347,8 +347,6 @@ class Profile extends Component {
                   unfollow={this.props.unfollow}
                 />
               }
-              title="Following And Followers"
-              style={{ padding: "0 !important" }}
             />
           ) : null}
         </div>
