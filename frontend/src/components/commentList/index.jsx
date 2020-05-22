@@ -54,7 +54,7 @@ export default class commentList extends Component {
   };
   render() {
     const { data } = this.props;
-    const photoUrl = data.postedBy.photo ? data.postedBy.photo : DefaultProfile;
+    // const photoUrl = data.postedBy.photo ? data.postedBy.photo : DefaultProfile;
     return (
       <div
         key={this.props.i + "asdsd"}
@@ -66,7 +66,11 @@ export default class commentList extends Component {
             <img
               className="float-left mr-2 rounded"
               height="30px"
-              src={photoUrl}
+              src={
+                data.postedBy.photo.photoURI
+                  ? data.postedBy.photo.photoURI
+                  : DefaultProfile
+              }
               alt={data.postedBy.name}
               onError={(e) => {
                 e.target.src = DefaultProfile;

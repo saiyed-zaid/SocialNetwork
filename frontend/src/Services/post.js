@@ -119,6 +119,7 @@ export default class Postservice {
   }
 
   async editPost(post, postId, token) {
+    console.log("aaaaaaaaaaaaaa", postId, token);
     const postData = await fetch(
       `${process.env.REACT_APP_API_URL}/api/post/${postId}`,
       {

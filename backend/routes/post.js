@@ -196,6 +196,7 @@ router.patch(
   }).array("photo"),
   postController.updatePost
 );
+
 router.get(
   "/api/post/newpost/:userId",
   auth_check,

@@ -43,7 +43,7 @@ exports.getPost = async (req, res, next) => {
 exports.getPosts = async (req, res, next) => {
   try {
     const posts = await Post.find({ status: true })
-      .populate("postedBy", "_id name photo")
+      .populate("postedBy", "_id name photo.photoURI")
       .populate("comments.postedBy", "_id name")
       .populate("tags", "_id name")
       .select("_id title body created comments likes photo status tags")
@@ -150,7 +150,7 @@ exports.createPost = async (req, res, next) => {
 
   //const url = req.protocol + "://" + req.get("host");
   for (var i = 0; i < req.files.length; i++) {
-    var fileUrl = uploadFile(req.files[i]);
+    var fileUrl = uploadImageToFirebase(req.files[i]);
     console.log("path", fileUrl);
     reqFiles.push(fileUrl);
 
@@ -318,7 +318,7 @@ exports.updatePost = async (req, res, next) => {
     //req.files = post.photo;
     if (req.files.length > 0) {
       for (var i = 0; i < req.files.length; i++) {
-        var fileUrl = uploadFile(req.files[i]);
+        var fileUrl = uploadImageToFirebase(req.files[i]);
         console.log("URL", fileUrl);
         reqFiles.push(fileUrl);
       }

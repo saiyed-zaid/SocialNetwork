@@ -25,7 +25,7 @@ export default class PostCard extends Component {
           <div className="user-block">
             <img
               className="rounded-circle"
-              src={post.postedBy.photo ? post.postedBy.photo : DefaultProfile}
+              src={post.postedBy.photo.photoURI}
               alt={posterName}
               onError={(event) => (event.target.src = DefaultProfile)}
             />
@@ -73,7 +73,7 @@ export default class PostCard extends Component {
                       type="button"
                       onClick={() => this.props.handlePostStatusChange(post)}
                     >
-                      Make Post {!post.status ? "Public" : " Private"}
+                      Make Post {!post.status ? "Public" : "Private"}
                     </button>
                   </div>
                 </div>

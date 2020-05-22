@@ -83,7 +83,7 @@ class FindPeople extends Component {
           >
             <img
               className="img-thumbnail"
-              src={user.photo}
+              src={user.photo.photoURI ? user.photo.photoURI : DefaultProfile}
               onError={(i) => (i.target.src = `${DefaultProfile}`)}
               alt={user.name}
             />

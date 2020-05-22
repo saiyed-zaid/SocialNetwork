@@ -32,6 +32,8 @@ class Profile extends Component {
   }
 
   componentDidMount() {
+    console.log(this.props);
+
     const userId = this.props.match.params.userId;
     this.init(userId);
   }
@@ -115,14 +117,17 @@ class Profile extends Component {
     const postId = post._id;
     let dataToUpdate = post;
     const data = new FormData();
+    console.log(postId, isAuthenticated().user.token, data);
 
     data.append("status", !dataToUpdate.status);
     try {
       const result = await this.props.updatePost(
+        data,
         postId,
-        isAuthenticated().user.token,
-        data
+        isAuthenticated().user.token
       );
+      console.log(result);
+
       if (result.err) {
         console.log("Error=> ", result.err);
       } else {
@@ -194,7 +199,7 @@ class Profile extends Component {
 
   render() {
     const { redirectToSignin, user, posts } = this.state;
-    const photoUrl = user._id && user.photo ? `${user.photo}` : DefaultProfile;
+    const photoUrl = user._id && user.photo ? user.photo : DefaultProfile;
 
     if (redirectToSignin) {
       return <Redirect to="/signin" />;

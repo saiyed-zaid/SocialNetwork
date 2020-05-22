@@ -576,7 +576,7 @@ class MainRouter extends React.Component {
             fetchMessage={this.props.Userservice.fetchMessage}
             updateUser={this.props.Userservice.updateUser}
             listByUser={this.props.Postservice.listByUser}
-            updatePost={this.props.Postservice.update}
+            updatePost={this.props.Postservice.editPost}
             unfollow={this.props.Userservice.unfollow}
             follow={this.props.Userservice.follow}
           />
