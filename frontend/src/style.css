@@ -801,29 +801,6 @@ div.content {
   color: black;
 }
 
-.navbar-toggler > .close {
-  /* display: inline; */
-}
-
-
-/* .navbar-toggler.collapsed > .close, */
-.navbar-toggler:not(.collapsed) > .navbar-toggler-icon {
-  display: inline;
-}
-
-
-.nav-mobile{
-  display: contents;
-}
-
-.nav-mobile .dropdown-menu{
-  position: absolute;
-  
-}
-
-.dropdown-item .text-muted{
-  display: contents;
-}
 
 .table-row:hover{
   color: #191c23 !important;

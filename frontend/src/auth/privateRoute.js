@@ -48,6 +48,7 @@ const PrivateRoute = ({
             updatePost={updatePost}
             unfollow={unfollow}
             follow={follow}
+            
           />
         ) : (
           <Redirect

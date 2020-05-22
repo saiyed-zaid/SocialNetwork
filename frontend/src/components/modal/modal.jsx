@@ -43,7 +43,7 @@ export default class modal extends Component {
               </button>
             </div>
             <div
-              className="modal-body bg-dark"
+              className="modal-body bg-dark p-0 m-0"
               style={this.props.style}
               id="modal-body"
               /* style={{ background: "#7d99a3" }} */

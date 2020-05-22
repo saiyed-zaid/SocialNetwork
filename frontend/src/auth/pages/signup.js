@@ -40,7 +40,6 @@ class Signup extends React.Component {
 
   handleSubmit = async (event) => {
     event.preventDefault();
-    // console.log(this.state.dob);
 
     const date1 = new Date();
     const date2 = new Date(this.state.dob);
@@ -65,45 +64,7 @@ class Signup extends React.Component {
     }
   };
 
-  /*  getYearDropList = () => {
-    const year = new Date().getFullYear();
-    return Array.from(new Array(50), (v, i) => (
-      <option key={i} value={year - i}>
-        {year - i}
-      </option>
-    ));
-  };
-  getMonthDropList = () => {
-    const mlist = [
-      "January",
-      "February",
-      "March",
-      "April",
-      "May",
-      "June",
-      "July",
-      "August",
-      "September",
-      "October",
-      "November",
-      "December",
-    ];
-    return Array.from(new Array(12), (v, i) => (
-      <option key={i} value={i + 1}>
-        {mlist[i]}
-      </option>
-    ));
-  };
-
-  getDayDropList = () => {
-    //const year = new Date().getFullYear();
-    return Array.from(new Array(31), (v, i) => (
-      <option key={i} value={i + 1}>
-        {i + 1}
-      </option>
-    ));
-  }; */
-
+  
   callback = () => {};
 
   verifyCallback = (response) => {
@@ -279,9 +240,6 @@ class Signup extends React.Component {
                     {this.state.errors.captcha}
                   </div>
                 )}
-                {/* {this.state.error ? (
-                <Alert type="danger" message={this.state.error} />
-              ) : null} */}
               </div>
             </div>
 

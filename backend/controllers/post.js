@@ -68,7 +68,7 @@ exports.getScheduledPost = async (req, res, next) => {
       .populate("postedBy", "_id name role photo")
       .populate("comments.postedBy", "_id name")
       .populate("likes.user", "_id name")
-      .select("_id title body created likes replies comments status photo tags")
+      .select("_id title body scheduleTime created  status photo tags")
       .sort("_created");
     if (posts.length == 0) {
       return res.json({

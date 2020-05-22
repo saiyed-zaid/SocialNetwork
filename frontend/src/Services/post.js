@@ -229,4 +229,18 @@ export default class Postservice {
       return Promise.reject(error);
     }
   }
+  async fetchScheduledPosts(userId, token) {
+    const posts = await fetch(
+      `${process.env.REACT_APP_API_URL}/api/post/schedule/by/${userId}`,
+      {
+        method: "GET",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "Application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    return await posts.json({ posts });
+  }
 }

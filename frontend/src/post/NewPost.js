@@ -2,6 +2,8 @@ import React from "react";
 import { Multiselect } from "multiselect-react-dropdown";
 import DateTimePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
+import setMinutes from "date-fns/setMinutes";
+import setHours from "date-fns/setHours";
 
 class NewPost extends React.Component {
   constructor(props) {
@@ -78,12 +80,19 @@ class NewPost extends React.Component {
       }
     }
   };
+  diff_years = (dt2, dt1) => {
+    var diff = (dt2.getTime() - dt1.getTime()) / 1000;
+    diff /= 60 * 60 * 24;
+    return Math.abs(Math.round(diff));
+  };
 
   handleScheduleChange = (event) => {
-    console.log(event);
+    const date1 = new Date();
+    const date2 = new Date(event);
+    const dobValidate = this.diff_years(date1, date2);
+    console.log(dobValidate);
 
     this.postData.set("postScheduleTime", event);
-
     this.setState({
       postScheduleTime: event,
     });
@@ -120,14 +129,20 @@ class NewPost extends React.Component {
     this.selectedopt.push(selectedItem._id);
   };
 
-  onRemove(selectedList, removedItem) {
+  onRemove = (selectedList, removedItem) => {
     this.setState(
       { tags: selectedList },
       this.postData.set("tags", selectedList.name)
     );
-  }
+  };
 
   render() {
+    let cdate = new Date();
+    let checkDate = setHours(
+      setMinutes(cdate, cdate.getMinutes()),
+      cdate.getHours()
+    );
+
     return (
       <div
         className="container p-3 my-3 col-md-6"
@@ -242,6 +257,9 @@ class NewPost extends React.Component {
                 timeCaption="time"
                 dateFormat="MMMM d, yyyy h:mm aa"
                 key="schedulePost"
+                minTime={checkDate}
+                minDate={new Date()}
+                maxTime={setHours(setMinutes(new Date(), 30), 20)}
               />
             </div>
           )}

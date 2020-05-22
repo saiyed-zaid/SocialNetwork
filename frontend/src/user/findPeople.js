@@ -122,8 +122,8 @@ class FindPeople extends Component {
                   &nbsp; Follow
                 </button>} */}
 
-                <Link to={`/user/${user._id}`} className="btn btn-info">
-                  >>>>>>> 952d26fe27d9186ff2020c5597c8ec471b0c6bd2 View Profile
+                <Link to={`/user/${user._id}`} className="btn btn-info w-100">
+                  View Profile
                 </Link>
               </div>
             </div>
