@@ -150,7 +150,7 @@ exports.createPost = async (req, res, next) => {
 
   //const url = req.protocol + "://" + req.get("host");
   for (var i = 0; i < req.files.length; i++) {
-    var fileUrl = uploadImageToFirebase(req.files[i]);
+    var fileUrl = uploadFile(req.files[i]);
     console.log("path", fileUrl);
     reqFiles.push(fileUrl);
 
@@ -318,7 +318,7 @@ exports.updatePost = async (req, res, next) => {
     //req.files = post.photo;
     if (req.files.length > 0) {
       for (var i = 0; i < req.files.length; i++) {
-        var fileUrl = uploadImageToFirebase(req.files[i]);
+        var fileUrl = uploadFile(req.files[i]);
         console.log("URL", fileUrl);
         reqFiles.push(fileUrl);
       }

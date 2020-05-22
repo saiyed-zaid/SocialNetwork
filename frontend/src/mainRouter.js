@@ -59,6 +59,7 @@ const Navbar = withRouter(({ history, authUser, handleLogout, signout }) => {
         aria-label="Toggle navigation"
       >
         <span className="navbar-toggler-icon" />
+        <span class="my-1 mx-2 close">X</span>
       </button>
 
       <div className="collapse navbar-collapse" id="navbarColor01">
@@ -115,6 +116,7 @@ const Navbar = withRouter(({ history, authUser, handleLogout, signout }) => {
                 )}
               </li>
             </ul>
+
             <ul className="navbar-nav ml-auto ">
               <li className="nav-item dropdown profile-btn ">
                 <a
@@ -129,6 +131,7 @@ const Navbar = withRouter(({ history, authUser, handleLogout, signout }) => {
                   <img
                     style={{
                       borderRadius: "50%",
+                      width: "30px !important",
                     }}
                     className="nav-link  p-0 m-0 ml-1 img-circle float-right "
                     src={authUser.photo}
@@ -249,67 +252,64 @@ const Navbar = withRouter(({ history, authUser, handleLogout, signout }) => {
                 </>
               )}
             </ul>
-            {authUser ? (
-              <ul className="navbar-nav ml-auto ">
-                {authUser && authUser.roll !== "admin" && (
-                  <Notification authUser={authUser} />
-                )}
-                <li className="nav-item dropdown profile-btn ">
-                  <a
-                    className="nav-link d-flex align-items-center"
-                    href="/"
-                    id="navbarDropdownMenuLink"
-                    role="button"
-                    data-toggle="dropdown"
-                    aria-haspopup="true"
-                    aria-expanded="false"
-                  >
-                    <img
-                      style={{
-                        borderRadius: "50%",
-                      }}
-                      className="nav-link  p-0 m-0 ml-1 img-circle float-right "
-                      src={authUser.photo}
-                      height="30px"
-                      /* onError={(e) => (e.target.src = avatar)} */
-                      alt="user "
-                    />
-                    <span>&nbsp;{authUser.name.toUpperCase()}</span>
-                  </a>
-                  <div
-                    className="dropdown-menu  dropdown-menu-right"
-                    aria-labelledby="navbarDropdownMenuLink"
-                  >
-                    <Link
-                      className="dropdown-item"
-                      to={`/user/edit/${authUser._id}`}
-                    >
-                      Manage Profile
-                    </Link>
-                    <Link
-                      className="dropdown-item"
-                      to={`/user/changepassword/${authUser._id}`}
-                    >
-                      Change Password
-                    </Link>
-                    <Link
-                      className="dropdown-item"
-                      to="/signin"
-                      onClick={() =>
-                        signout(() => {
-                          handleLogout();
-                        })
-                      }
-                    >
-                      Logout
-                    </Link>
-                  </div>
-                </li>
-              </ul>
-            ) : null}
           </>
         )}
       </div>
+      {authUser ? (
+        <ul className="navbar-nav ml-auto nav-mobile ">
+          {authUser && authUser.roll !== "admin" && (
+            <Notification authUser={authUser} />
+          )}
+          <li className="nav-item dropdown profile-btn ">
+            <a
+              className="nav-link "
+              href="/"
+              id="navbarDropdownMenuLink"
+              role="button"
+              data-toggle="dropdown"
+              aria-haspopup="true"
+              aria-expanded="false"
+            >
+              <img
+                style={{
+                  borderRadius: "50%",
+                }}
+                className="nav-link  p-0 m-0 ml-1 img-circle float-right "
+                src={authUser.photo}
+                height="30px"
+                onError={(e) => (e.target.src = avatar)}
+                alt="user "
+              />
+              <span>&nbsp;{authUser.name.toUpperCase()}</span>
+            </a>
+            <div
+              className="dropdown-menu  dropdown-menu-right"
+              aria-labelledby="navbarDropdownMenuLink"
+            >
+              <Link className="dropdown-item" to={`/user/edit/${authUser._id}`}>
+                Manage Profile
+              </Link>
+              <Link
+                className="dropdown-item"
+                to={`/user/changepassword/${authUser._id}`}
+              >
+                Change Password
+              </Link>
+              <Link
+                className="dropdown-item"
+                to="/signin"
+                onClick={() =>
+                  signout(() => {
+                    handleLogout();
+                  })
+                }
+              >
+                Logout
+              </Link>
+            </div>
+          </li>
+        </ul>
+      ) : null}
     </nav>
   );
 });
@@ -464,7 +464,12 @@ class MainRouter extends React.Component {
           <Route
             exact
             path="/reset-password/:resetPasswordToken"
-            component={ResetPassword}
+            // component={ResetPassword}
+            render={() => (
+              <ResetPassword
+                resetPassword={this.props.Authservice.resetPassword}
+              />
+            )}
           />
           <PrivateRoute
             path="/post/create"
@@ -530,6 +535,8 @@ class MainRouter extends React.Component {
                 handleAuthUserUpdate={this.handleAuthUserUpdate}
                 {...this.props}
                 loginUser={this.props.Authservice.loginUser}
+                socialLogin={this.props.Authservice.socialLogin}
+                authenticate={this.props.Authservice.authenticate}
               />
             )}
           />

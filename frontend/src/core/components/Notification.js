@@ -137,11 +137,14 @@ class Notification extends React.Component {
 
   render() {
     return (
-      <li className="nav-item dropdown">
+      <li className="nav-item dropdown float-right">
         <a
-          className="nav-link"
-          data-toggle="dropdown"
+          className="nav-link "
           href="/"
+          id="navbarDropdownMenuLink"
+          role="button"
+          data-toggle="dropdown"
+          aria-haspopup="true"
           aria-expanded="false"
         >
           <i className="far fa-bell text-light" />
@@ -156,10 +159,14 @@ class Notification extends React.Component {
           ) : null}
         </a>
 
-        <div className="dropdown-menu dropdown-menu-lg dropdown-menu-right">
+        <div className="dropdown-menu dropdown-menu-right">
           {(this.state.newFollowerList.length > 0 && (
             <>
-              <a href="/" className="dropdown-item">
+              <a
+                href="/"
+                className="dropdown-item "
+                style={{ display: "flex", justifyContent: " center" }}
+              >
                 <span className="float-right text-muted text-sm">
                   <Follow
                     newFollowers={this.state.newFollowerList}

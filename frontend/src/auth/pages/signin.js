@@ -2,6 +2,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 import SocialLogin from "./socialLogin";
 import Alert from "../../ui-components/Alert";
+import { socialLogin } from "..";
 
 class Signin extends React.Component {
   constructor(props) {
@@ -53,7 +54,10 @@ class Signin extends React.Component {
 
   render() {
     return (
-      <div className="container col-md-4 my-3" style={{backgroundColor: '#343a40'}}>
+      <div
+        className="container col-md-4 my-3"
+        style={{ backgroundColor: "#343a40" }}
+      >
         <div className="jumbotron text-light">
           {this.state.responseError && (
             <Alert type="danger" message={this.state.responseError} />
@@ -134,7 +138,10 @@ class Signin extends React.Component {
 
             <hr className="my-4" />
             <div className="form-group">
-              <SocialLogin />
+              <SocialLogin
+                socialLogin={this.props.socialLogin}
+                authenticate={this.props.authenticate}
+              />
             </div>
           </form>
         </div>

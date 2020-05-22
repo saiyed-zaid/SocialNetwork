@@ -183,4 +183,55 @@ export default class Authservice {
       return Promise.reject(formattedErrors);
     }
   }
+
+  /**
+   * Function For Authenticating User
+   *
+   * @param {Token} jwt
+   * @param {function} next
+   */
+  async authenticate(jwt, next) {
+    if (typeof window !== "undefined") {
+      localStorage.setItem("jwt", JSON.stringify(jwt));
+      next();
+    }
+  }
+  /**
+   * Api For Resetting Or Updating The Password
+   *
+   * @param {json} resetInfo
+   */
+  async resetPassword(resetInfo) {
+    const resetData = await fetch(
+      `${process.env.REACT_APP_API_URL}/api/reset-password/`,
+      {
+        method: "PUT",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(resetInfo),
+      }
+    );
+    return await resetData.json();
+  }
+
+  /**
+   * Login With Google Api
+   * @param {} user
+   */
+  async socialLogin(user) {
+    const loginData = await fetch(
+      `${process.env.REACT_APP_API_URL}/api/social-login/`,
+      {
+        method: "POST",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(user),
+      }
+    );
+    return await loginData.json();
+  }
 }
