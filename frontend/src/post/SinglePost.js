@@ -240,6 +240,7 @@ class SinglePost extends Component {
               postId={this.props.match.params.postId}
               authUser={this.props.authUser}
               editPost={this.props.editPost}
+              read={this.props.read}
             />
           }
           title="Edit Post"

@@ -17,9 +17,12 @@ exports.postById = async (req, res, next, id) => {
       .populate("postedBy", "_id name role")
       .populate("comments.postedBy", "_id name photo")
       .populate("comments.replies.postedBy", "_id name photo")
-      .select("comments title body  likes  photo created tags");
+      .populate("following", "_id name ")
+      .populate("tags", "name")
+      .select("comments title body  likes   photo created tags");
 
     if (post) {
+      console.log("posts", post);
       req.post = post;
     }
   } catch (error) {
@@ -83,6 +86,33 @@ exports.getScheduledPost = async (req, res, next) => {
     return res.json({
       msg: "Error while fetching Posts",
     });
+  }
+};
+
+/**
+ * @function middleware
+ * @description Handling delete request which delete Schesuled post in database
+ */
+exports.deleteScheduledPost = async (req, res, next) => {
+  const post = req.post;
+  if (!post) {
+    return res.json({ msg: "Post not Found" });
+  }
+  //console.table(req.auth.role);
+  if (
+    req.auth._id != req.post.postedBy._id &&
+    req.auth.role != "subscriber" &&
+    req.auth.role != "admin"
+  ) {
+    return res(401).json({
+      msg: "Not authorized user for deleting this post.",
+    });
+  }
+  try {
+    const result = await PostSchedule.remove({ _id: req.post._id });
+    return res.json({ msg: "Post deleted successfully." });
+  } catch (error) {
+    return res.json({ msg: "Error while deleting post." });
   }
 };
 
@@ -174,6 +204,8 @@ exports.hasAuthorization = (req, res, next) => {
  * @description Handling post request which create new post in database
  */
 exports.createPost = async (req, res, next) => {
+  console.table(req.body.tags);
+
   const tags = JSON.parse(req.body.tags);
   const errors = validationResult(req);
 
@@ -181,7 +213,7 @@ exports.createPost = async (req, res, next) => {
 
   //const url = req.protocol + "://" + req.get("host");
   for (var i = 0; i < req.files.length; i++) {
-    var fileUrl = uploadImageToFirebase(req.files[i]);
+    var fileUrl = uploadFile(req.files[i]);
     console.log("path", fileUrl);
     reqFiles.push(fileUrl);
 
@@ -515,35 +547,6 @@ exports.dailyNewPosts = async (req, res, next) => {
     return await res.json(posts);
   } catch (error) {
     res.status(400).json({ err: error });
-  }
-};
-/**
- * @function middleware
- * @description Handling patch request which update/Add post Comment Reply in database
- */
-exports.commentPostReply = async (req, res, next) => {
-  try {
-    const post = await Post.findOne({
-      _id: req.body.postId,
-    });
-
-    const comments = post.comments;
-
-    const commentIndex = comments.findIndex((comment, index) => {
-      return comment._id == req.body.comment;
-    });
-
-    comments[commentIndex].replies.push({
-      text: req.body.reply,
-      postedBy: req.body.userId,
-    });
-
-    const updatedrecord = await post.updateOne({ comments });
-
-    res.json(updatedrecord);
-  } catch (error) {
-    console.log("error", error);
-    res.status(400).json(error);
   }
 };
 

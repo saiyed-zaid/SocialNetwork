@@ -3,6 +3,7 @@ import DefaultProfile from "../images/avatar.jpg";
 import openSocket from "socket.io-client";
 import "emoji-mart/css/emoji-mart.css";
 import { Picker } from "emoji-mart";
+import moment from "moment";
 
 export default class chatTab extends Component {
   handleClose = () => {
@@ -89,6 +90,8 @@ export default class chatTab extends Component {
   }
 
   appendReceivedMsg = (data) => {
+    // console.log(data);
+
     /* if (data.msg.length === 0) {
       return alert("Please enter msg");
     } */
@@ -98,12 +101,15 @@ export default class chatTab extends Component {
 
     //add new message
     if (data.sender === this.props.senderId) {
-      appendLi.classList.add("text-right", "P-1");
-      appendMsg.innerHTML = data.message + " (" + this.props.senderName + ")";
+      appendLi.classList.add("text-right", "P-1", "msg-right");
+      appendMsg.innerHTML =
+        data.message +
+        " <br/><span>( " +
+        moment(data.created).format("LLL") +
+        ") </span>";
     } else {
       appendLi.classList.add("text-left", "P-1");
-      appendMsg.innerHTML =
-        " (" + this.props.receiverName + ") " + data.message;
+      appendMsg.innerHTML = data.created + data.message;
     }
     appendMsg.classList.add("p-1");
 
@@ -142,7 +148,7 @@ export default class chatTab extends Component {
     const personImg = document.createElement("img");
 
     //add new message
-    appendLi.classList.add("text-right", "P-1");
+    appendLi.classList.add("text-right", "p-1");
 
     appendMsg.classList.add("p-1");
     appendMsg.innerHTML =

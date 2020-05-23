@@ -805,3 +805,34 @@ div.content {
 .table-row:hover{
   color: #191c23 !important;
 }
+.msg-right{
+  background:cornflowerblue;  
+  border-radius: 5px;
+  padding: 2px;
+  position: relative;
+  color: black;
+
+}
+
+.msg-right>span{
+  background-color: none !important;
+  position: relative;
+  right: 15px;
+  top:0;
+  font-size: 10px;
+  
+}
+.msg-right>span>span{
+  font-size: 5px;
+  position: relative;
+  bottom: 0;
+  right: 0;
+  
+}
+
+.msg-right>img{
+  position: absolute;
+  right: 0;
+  top: 0;
+}
+

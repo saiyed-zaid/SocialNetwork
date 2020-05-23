@@ -126,13 +126,15 @@ class NewPost extends React.Component {
   };
 
   onSelect = (selectedList, selectedItem) => {
-    this.selectedopt.push(selectedItem._id);
+    // console.log(selectedItem);
+
+    this.selectedopt.push(selectedItem);
   };
 
   onRemove = (selectedList, removedItem) => {
     this.setState(
       { tags: selectedList },
-      this.postData.set("tags", selectedList.name)
+      this.postData.set("tags", selectedList)
     );
   };
 

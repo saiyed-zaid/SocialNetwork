@@ -52,6 +52,7 @@ const PostSchema = new Schema({
       ref: "User",
     },
   ],
+
   comments: [
     {
       text: String,

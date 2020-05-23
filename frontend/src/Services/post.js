@@ -243,4 +243,23 @@ export default class Postservice {
     );
     return await posts.json({ posts });
   }
+
+  async deleteScheduledPost(postId, token) {
+    try {
+      const response = await fetch(
+        `${process.env.REACT_APP_API_URL}/api/scheculed/post/${postId}`,
+        {
+          method: "DELETE",
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "Application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      return await response.json();
+    } catch (error) {
+      return Promise.reject(error);
+    }
+  }
 }

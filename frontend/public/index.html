@@ -79,9 +79,24 @@
     <script>
       $(document).ready(function () {
         $("body").tooltip({ selector: "[data-toggle=tooltip]" });
-        // $('.carousel-item').addClass('active');
         $(".carousel-item").first().addClass("active");
-       
+
+        const navbarToggle = document.querySelector(".navbar-toggler");
+        navbarToggle.addEventListener("click", () => {
+          const toggleIcon = document.querySelector(".toggler");
+
+          $(".toggler").toggleClass("navbar-toggler-icon");
+          const currentAtr = navbarToggle.getAttribute("aria-expanded");
+          if (currentAtr === "true") {
+            toggleIcon.innerText = "";
+          } else {
+            toggleIcon.style.display = "inline-block";
+            toggleIcon.style.verticalAlign = "sub";
+            toggleIcon.style.width = "1.5em";
+            toggleIcon.style.height = "1.5em";
+            toggleIcon.innerText = "X";
+          }
+        });
       });
     </script>
     <!--/. Bootstrap OVER -->

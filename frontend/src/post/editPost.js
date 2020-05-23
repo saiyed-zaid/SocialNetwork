@@ -29,11 +29,13 @@ class EditPost extends React.Component {
       this.props.postId == null
         ? this.props.match.params.postId
         : this.props.postId;
+
     try {
       const data = await this.props.fetchPost(postId);
       if (data.error) {
         this.setState({ redirectToProfile: true });
       } else {
+        console.log("post data", data);
         this.setState({
           id: data._id,
           title: data.title,
@@ -41,6 +43,7 @@ class EditPost extends React.Component {
           error: "",
           photo: data.photo ? data.photo : DefaultPost,
           user: this.props.authUser,
+          options: data.following,
           selectedTags: data.tags,
         });
       }
@@ -53,6 +56,8 @@ class EditPost extends React.Component {
       if (data.err) {
         this.setState({ options: [] });
       } else {
+        console.log("etst", data.following);
+
         this.setState({ options: data.following });
       }
     } catch (error) {
@@ -113,18 +118,22 @@ class EditPost extends React.Component {
 
   onSelect = (selectedList, selectedItem) => {
     this.selectedopt.push({ id: selectedItem._id });
+    console.log("test", this.selectedopt);
   };
 
   onRemove = (selectedList, removedItem) => {
-    this.setState(
-      { tags: selectedList },
-      this.postData.set("tags", selectedList.name)
-    );
+    var removeIndex = this.selectedopt
+      .map((item) => {
+        return item.id;
+      })
+      .indexOf(removedItem._id);
+    this.selectedopt.splice(removeIndex);
   };
 
   render() {
     return (
       <div className="container">
+        {console.log(this.state.options)}
         <form onSubmit={this.handleSubmit}>
           <div className="form-group text-light">
             <label for="photo">Photo</label>
@@ -188,6 +197,7 @@ class EditPost extends React.Component {
               displayValue="name" // Property name to display in the dropdown options
               placeholder="Select Peoples To Tag"
               emptyRecordMsg="No People Found"
+              selectedValues={this.state.selectedTags}
             />
           </div>
           <button className="btn btn-primary">Edit</button>
