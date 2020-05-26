@@ -11,8 +11,8 @@ class Avatar extends React.Component {
       >
         <img
           src={this.props.src}
-          onError={(e) => (e.target.src = `${DefaultProfile}`)}
-          alt="zaid"
+          onError={(e) => (e.target.src = DefaultProfile)}
+          alt="user "
           style={{ height: "100%", width: "100%" }}
         />
       </div>

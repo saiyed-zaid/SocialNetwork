@@ -1,8 +1,6 @@
 import React, { Component } from "react";
-import { isAuthenticated, signout } from "../auth/index";
+import { isAuthenticated } from "../auth/index";
 import { Redirect } from "react-router-dom";
-import { update } from "./apiUser";
-import { update as updatePost } from "../post/apiPost";
 import DefaultProfile from "../images/avatar.jpg";
 import FollowProfileButton from "./followProfileButton";
 import Spinner from "../ui-components/Spinner";
@@ -29,6 +27,7 @@ class Profile extends Component {
       messages: null,
       isLoading: true,
       post: "",
+      isUpdated: true,
     };
   }
 
@@ -42,13 +41,11 @@ class Profile extends Component {
     const data = await this.props.read(userId, token);
 
     if (data.err) {
-      alert("logout from profile");
-      /* signout(() => {}); */
       this.setState({ redirectToSignin: true });
     } else {
       let following = this.checkFollow(data);
       this.setState({ user: data, following, isLoading: false });
-      this.loadPosts(data._id);
+      this.loadPosts(userId);
     }
   };
 
@@ -89,7 +86,7 @@ class Profile extends Component {
     document.getElementById("followersModal").classList.add("show");
   };
 
-  handleUserStatusChange = (user) => {
+  /* handleUserStatusChange = (user) => {
     const userId = user._id;
     let dataToUpdate = user;
     const data = new FormData();
@@ -111,29 +108,29 @@ class Profile extends Component {
           console.log("ERR IN UPDATING", err);
         }
       });
-  };
+  }; */
 
-  handlePostStatusChange = (post) => {
+  handlePostStatusChange = async (post) => {
     const postId = post._id;
     let dataToUpdate = post;
     const data = new FormData();
 
     data.append("status", !dataToUpdate.status);
-
-    updatePost(postId, isAuthenticated().user.token, data)
-      .then((result) => {
-        if (result.err) {
-          console.log("Error=> ", result.err);
-        } else {
-          this.setState({ post: dataToUpdate });
-          this.init(post.postedBy._id);
-        }
-      })
-      .catch((err) => {
-        if (err) {
-          console.log("ERR IN UPDATING", err);
-        }
-      });
+    try {
+      const result = await this.props.updatePost(
+        data,
+        postId,
+        isAuthenticated().user.token
+      );
+      if (result.err) {
+        console.log("Error=> ", result.err);
+      } else {
+        this.setState({ post: dataToUpdate });
+        this.init(post.postedBy._id);
+      }
+    } catch (error) {
+      console.log("ERR IN UPDATING", error);
+    }
   };
 
   loadPosts = async (userId) => {
@@ -166,27 +163,6 @@ class Profile extends Component {
     this.setState({
       hasChatBoxDisplay: !this.state.hasChatBoxDisplay,
     });
-    /* if (!this.state.hasChatBoxDisplay) {
-      const token = this.props.authUser.token;
-      fetchMessage(this.props.authUser._id, this.state.user._id, token)
-        .then((result) => {
-          this.setState({
-            hasChatBoxDisplay: true,
-            receiverId: this.state.authUser._id,
-            receiverName: this.state.authUser.name,
-            messages: result,
-          });
-        })
-        .catch((err) => {
-          if (err) {
-            console.log("Error while fetching record");
-          }
-        });
-    } else {
-      this.setState({
-        hasChatBoxDisplay: false,
-      });
-    } */
   };
   showFollowList = () => {
     let getModal = document.getElementById("followersmodal");
@@ -196,7 +172,9 @@ class Profile extends Component {
 
   render() {
     const { redirectToSignin, user, posts } = this.state;
-    const photoUrl = user._id && user.photo ? `${user.photo.photoURI}` : DefaultProfile;
+
+    const photoUrl =
+      user._id && user.photo ? `${user.photo.photoURI}` : DefaultProfile;
 
     if (redirectToSignin) {
       return <Redirect to="/signin" />;
@@ -251,7 +229,6 @@ class Profile extends Component {
               >
                 &nbsp;
               </span>
-              
             )}
           </div>
         </div>
@@ -295,6 +272,8 @@ class Profile extends Component {
                 following={this.state.following}
                 onButtonClick={this.clickFollowButton}
                 handleChatBoxDisplay={this.handleChatBoxDisplay}
+                unfollow={this.props.unfollow}
+                follow={this.props.follow}
               />
             ) /* || (
             <div className="row justify-content-center">
@@ -313,13 +292,14 @@ class Profile extends Component {
           <hr className="my-4" />
           {/* Display Posts */}
           <div className="row justify-content-md-center">
-            {posts.map((post, i) => (
-              <Postcard
-                post={post}
-                profile
-                handlePostStatusChange={this.handlePostStatusChange}
-              />
-            ))}
+            {posts &&
+              posts.map((post, i) => (
+                <Postcard
+                  post={post}
+                  profile
+                  handlePostStatusChange={this.handlePostStatusChange}
+                />
+              ))}
           </div>
           {/*END POST RENDER */}
           <Modal
@@ -344,10 +324,10 @@ class Profile extends Component {
                   following={user.following}
                   hasPostStatusUpdated={this.init}
                   hasChatBoxDisplay={this.handleChatBoxDisplay}
+                  updatePost={this.props.updatePost}
+                  unfollow={this.props.unfollow}
                 />
               }
-              title="Following And Followers"
-              style={{padding: "0 !important"} }
             />
           ) : null}
         </div>

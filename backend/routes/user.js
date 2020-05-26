@@ -42,6 +42,7 @@ router.post("/api/user/messages", auth_check, (req, res, next) => {
  * @param {middleware} Checking Authorization
  * @param {middleware} findPeople
  */
+     
 router.get("/api/user/messages/:userId", auth_check, (req, res, next) => {
   Message.aggregate()
     .match({ receiver: req.profile._id })
@@ -52,15 +53,16 @@ router.get("/api/user/messages/:userId", auth_check, (req, res, next) => {
       foreignField: "_id",
       as: "users",
     })
+    .unwind("$users")
     .project("users.name count")
     .then((response) => {
+      console.log(response);
       res.json(response);
     })
     .catch((error) => {
       console.log("err", error);
     });
 });
-
 /**
  * @function put
  * @description Handling put request which Update isNewUser status false

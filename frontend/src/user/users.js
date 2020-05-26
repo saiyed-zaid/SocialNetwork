@@ -1,8 +1,6 @@
 import React, { Component } from "react";
-import { getOnlineUsers, fetchMessage } from "./apiUser";
 import GoToTop from "../ui-components/goToTop";
 import Spinner from "../ui-components/Spinner";
-import { isAuthenticated } from "../auth";
 import ChatBar from "../components/chatBar/chatbar";
 import Chattab from "../components/chatTab";
 import UsersList from "../components/users/index";
@@ -26,7 +24,7 @@ class Users extends Component {
     /**
      * Function For Getting Online Users
      */
-    if (this.props.authUser) {
+  /*   if (this.props.authUser) {
       getOnlineUsers(this.props.authUser._id, this.props.authUser.token)
         .then((data) => {
           if (data.error) {
@@ -37,7 +35,7 @@ class Users extends Component {
         })
         .catch((error) => this.setState({ error: error }));
     }
-  }
+   */}
 
   async componentWillMount() {
     try {
@@ -58,13 +56,13 @@ class Users extends Component {
     }
   }
 
-  onMsg = () => {
+  /* onMsg = () => {
     let chatbar = document.getElementById("chatbar");
     chatbar.style.display = "block";
     chatbar.classList.remove("close-chatbar");
     document.getElementById("floating-btn").style.display = "none";
   };
-
+ */
   /**
    * Function For Creating Controls For  Users Page
    *
@@ -83,7 +81,7 @@ class Users extends Component {
     </>
   );
 
-  handleChatBoxDisplay = (e) => {
+  /* handleChatBoxDisplay = (e) => {
     e.persist();
     if (!this.state.hasChatBoxDisplay) {
       const token = isAuthenticated().user.token;
@@ -110,7 +108,7 @@ class Users extends Component {
         hasChatBoxDisplay: false,
       });
     }
-  };
+  }; */
 
   render() {
     const { users, onlineUsers, error } = this.state;

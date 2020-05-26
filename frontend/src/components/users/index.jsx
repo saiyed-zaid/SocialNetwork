@@ -4,7 +4,7 @@ import DefaultProfile from "../../images/avatar.jpg";
 
 export default class index extends Component {
   render() {
-    const { user, authUser, history } = this.props;
+    const { user, authUser } = this.props;
     return user.role === "subscriber" && user.name !== authUser.name ? (
       <div
         className="card"
@@ -23,8 +23,10 @@ export default class index extends Component {
           <div className="d-flex">
             <img
               className="img-thumbnail flex-fill"
-              src={`${user.photo ? user.photo : DefaultProfile}`}
-              onError={(i) => (i.target.src = `${DefaultProfile}`)}
+              src={`${
+                user.photo.photoURI ? user.photo.photoURI : DefaultProfile
+              }`}
+              onError={(i) => (i.target.src = `${DefaultProfile}`)} 
               alt={user.name}
             />
           </div>
@@ -32,11 +34,15 @@ export default class index extends Component {
           <ul className="list-group list-group-unbordered text-dark">
             <li className="list-group-item">
               <small>Followers</small>{" "}
-              <small className="float-right text-dark">{user.followers.length}</small>
+              <small className="float-right text-dark">
+                {user.followers.length}
+              </small>
             </li>
             <li className="list-group-item">
               <small>Following</small>{" "}
-              <small className="float-right text-dark">{user.following.length}</small>
+              <small className="float-right text-dark">
+                {user.following.length}
+              </small>
             </li>
           </ul>
           <Link to={`/user/${user._id}`} className="btn btn-info">

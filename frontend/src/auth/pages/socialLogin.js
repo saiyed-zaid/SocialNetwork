@@ -11,7 +11,7 @@ class SocialLogin extends Component {
     };
   }
 
-  responseGoogle = (response) => {
+  responseGoogle = async (response) => {
     if (response.error) {
       return console.log(response.error);
     }
@@ -23,16 +23,14 @@ class SocialLogin extends Component {
       imageUrl: imageUrl,
     };
 
-    socialLogin(user).then((data) => {
-      if (data.error) {
-        console.log("Error Login. Please try again..");
-      } else {
-        console.log("signin success - setting jwt: ", data);
-        authenticate(data, () => {
-          this.setState({ redirectToReferrer: true });
-        });
-      }
-    });
+    const data = await this.props.socialLogin(user);
+    if (data.error) {
+      console.log("Error Login. Please try again..");
+    } else {
+      this.props.authenticate(data, () => {
+        this.setState({ redirectToReferrer: true });
+      });
+    }
   };
 
   render() {

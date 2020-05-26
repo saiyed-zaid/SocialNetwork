@@ -123,8 +123,9 @@ export default class user extends Component {
     };
     console.log(user);  */
 
+    /*
     try {
-      /* try {
+       try {
         const response = await fetch(
           `${process.env.REACT_APP_API_URL}/api/user/${userId}`,
           {
@@ -144,8 +145,9 @@ export default class user extends Component {
         }
       } catch (error) {
         return Promise.reject(error);
-      } */
+      }
     } catch (errors) {}
+      */
   }
 
   /**

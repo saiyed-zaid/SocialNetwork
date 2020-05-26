@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-import { resetPassword } from "../index";
 import Alert from "../../ui-components/Alert";
 
 class ResetPassword extends Component {
@@ -12,20 +11,22 @@ class ResetPassword extends Component {
     };
   }
 
-  resetPassword = (e) => {
+  resetPassword = async (e) => {
     e.preventDefault();
     this.setState({ message: "", error: "" });
-
-    resetPassword({
-      newPassword: this.state.newPassword,
-      resetPasswordLink: this.props.match.params.resetPasswordToken,
-    }).then((data) => {
+    try {
+      const data = await this.props.resetPassword({
+        newPassword: this.state.newPassword,
+        resetPasswordLink: this.props.match.params.resetPasswordToken,
+      });
       if (data.message) {
         this.setState({ error: data.message });
       } else {
         this.setState({ message: data.message, newPassword: "" });
       }
-    });
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   render() {

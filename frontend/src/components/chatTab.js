@@ -3,7 +3,7 @@ import DefaultProfile from "../images/avatar.jpg";
 import openSocket from "socket.io-client";
 import "emoji-mart/css/emoji-mart.css";
 import { Picker } from "emoji-mart";
-// import { fetchMessage } from "../user/apiUser";
+import moment from "moment";
 
 export default class chatTab extends Component {
   handleClose = () => {
@@ -61,14 +61,15 @@ export default class chatTab extends Component {
         this.props.receiverId,
         this.props.authUser.token
       );
+
       this.setState(
         {
           hasNewMsg: true,
           receiverId: this.props.senderId,
           receiverName: this.props.senderName,
           messages: result,
-        },
-        () => {
+        }
+        /*  () => {
           let myMsg = document.querySelector("#myMsg");
           const chatBox = document.querySelector("#chatBox");
 
@@ -78,7 +79,7 @@ export default class chatTab extends Component {
             const li = this.appendReceivedMsg(message);
             myMsg.appendChild(li);
           });
-        }
+        } */
       );
     } catch (error) {
       console.log(error);
@@ -88,8 +89,34 @@ export default class chatTab extends Component {
 
     chatBox.scrollTo(0, chatBox.scrollHeight);
   }
+  async componentDidUpdate(prevProps, prevState) {
+    if (prevProps.receiverId != this.props.receiverId) {
+      try {
+        const result = await this.props.fetchMessage(
+          this.props.senderId,
+          this.props.receiverId,
+          this.props.authUser.token
+        );
+
+        this.setState({
+          hasNewMsg: true,
+          receiverId: this.props.senderId,
+          receiverName: this.props.senderName,
+          messages: result,
+        });
+      } catch (error) {
+        console.log(error);
+      }
+
+      const chatBox = document.querySelector("#chatBox");
+
+      chatBox.scrollTo(0, chatBox.scrollHeight);
+    }
+  }
 
   appendReceivedMsg = (data) => {
+    // console.log(data);
+
     /* if (data.msg.length === 0) {
       return alert("Please enter msg");
     } */
@@ -100,11 +127,10 @@ export default class chatTab extends Component {
     //add new message
     if (data.sender === this.props.senderId) {
       appendLi.classList.add("text-right", "P-1");
-      appendMsg.innerHTML = data.message + " (" + this.props.senderName + ")";
+      appendMsg.innerHTML = data.message;
     } else {
       appendLi.classList.add("text-left", "P-1");
-      appendMsg.innerHTML =
-        " (" + this.props.receiverName + ") " + data.message;
+      appendMsg.innerHTML = data.message;
     }
     appendMsg.classList.add("p-1");
 
@@ -143,9 +169,10 @@ export default class chatTab extends Component {
     const personImg = document.createElement("img");
 
     //add new message
-    appendLi.classList.add("text-right", "P-1");
+    appendLi.classList.add("text-right", "p-1");
 
     appendMsg.classList.add("p-1");
+
     appendMsg.innerHTML =
       msg.value + this.state.emoji + " (" + this.props.senderName + ")";
 
@@ -174,6 +201,7 @@ export default class chatTab extends Component {
     this.setState({ displayEmoji: !this.state.displayEmoji });
   };
   render() {
+    const { messages } = this.state;
     return (
       <div
         id="chattab"
@@ -187,10 +215,8 @@ export default class chatTab extends Component {
         }}
       >
         <div className="card-header text-left text-light bg-dark">
-          <span>{this.props.senderName}</span>
-          <span style={{ marginLeft: "10px" }}>
-            {/* <i className="fas fa-video"></i> */}
-          </span>
+          <span>{this.props.receiverName}</span>
+          <span style={{ marginLeft: "10px" }}></span>
           <span className="float-right">
             <button
               type="button"
@@ -203,11 +229,53 @@ export default class chatTab extends Component {
           </span>
         </div>
         <div
-          className="card-body chat-text bg-secondary text-light"
+          className="card-body chat-text bg-secondary text-light "
           id="chatBox"
-          style={{ height: "200px", overflowY: "scroll" }}
+          style={{ height: "200px", overflowY: "scroll", padding: "5px" }}
         >
-          <ul className="p-0 m-0" id="myMsg" style={{ listStyle: "none" }}></ul>
+          <ul className="p-0 m-0" id="myMsg" style={{ listStyle: "none" }}>
+            {messages &&
+              messages.map((msg, i) =>
+                msg.sender === this.props.authUser._id ? (
+                  <div className="bubbleWrapper">
+                    <div className="inlineContainer own">
+                      <img
+                        className="inlineIcon"
+                        src={
+                          this.props.authUser
+                            ? this.props.authUser.photo.photoURI
+                            : DefaultProfile
+                        }
+                        alt="user"
+                      />
+                      <div className="ownBubble own">{msg.message}</div>
+                    </div>
+                    <span className="own text-dark">
+                      {moment(msg.created).format("LT")}
+                    </span>
+                  </div>
+                ) : (
+                  <div className="bubbleWrapper">
+                    <div className="inlineContainer">
+                      <img
+                        className="inlineIcon"
+                        src={
+                          msg.receiver.photo
+                            ? msg.receiver.photo.photoURI
+                            : DefaultProfile
+                        }
+                        alt="user"
+                      />
+
+                      <div className="otherBubble other">{msg.message}</div>
+                    </div>
+                    <span className="other text-dark text-sm">
+                      {moment(msg.created).format("LT")}
+                    </span>
+                  </div>
+                )
+              )}
+          </ul>
         </div>
         <div className="card-footer bg-dark">
           <div className="input-group">

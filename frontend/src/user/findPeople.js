@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-import { follow } from "./apiUser";
 import { Link } from "react-router-dom";
 import DefaultProfile from "../images/avatar.jpg";
 import { isAuthenticated } from "../auth/index";
@@ -17,7 +16,7 @@ class FindPeople extends Component {
       error: "",
       open: false,
       isLoading: true,
-      isProcessing: false,
+      isProcessing: "",
       search: "",
       networkError: false,
     };
@@ -42,25 +41,24 @@ class FindPeople extends Component {
     }, 1000);
   }
 
-  clickFollow = (user, i) => {
+  clickFollow = async (user, i) => {
     const userId = isAuthenticated().user._id;
     const token = isAuthenticated().user.token;
-    this.setState({ isProcessing: true });
+    this.setState({ isProcessing: i });
 
-    follow(userId, token, user._id).then((data) => {
-      if (data.err) {
-        this.setState({ error: data.err });
-      } else {
-        let toFollow = this.state.users;
-        toFollow.splice(i, 1);
-        this.setState({
-          users: toFollow,
-          open: true,
-          notify: `Started Following ${user.name}`,
-          isProcessing: false,
-        });
-      }
-    });
+    const data = await this.props.follow(userId, token, user._id);
+    if (data.err) {
+      this.setState({ error: data.err });
+    } else {
+      let toFollow = this.state.users;
+      toFollow.splice(i, 1);
+      this.setState({
+        users: toFollow,
+        open: true,
+        notify: `Started Following ${user.name}`,
+        isProcessing: "",
+      });
+    }
   };
 
   /**
@@ -85,7 +83,7 @@ class FindPeople extends Component {
           >
             <img
               className="img-thumbnail"
-              src={user.photo}
+              src={user.photo.photoURI ? user.photo.photoURI : DefaultProfile}
               onError={(i) => (i.target.src = `${DefaultProfile}`)}
               alt={user.name}
             />
@@ -106,8 +104,25 @@ class FindPeople extends Component {
                 </li>
               </ul>
 
+              <div>
+                {/*
+                
+
               <div className="d-flex flex-column">
-                <Link to={`/user/${user._id}`} className="btn btn-info">
+                { <button
+                  onClick={() => this.clickFollow(user, i)}
+                  className="btn btn-outline-info"
+                  style={{
+                    flex: "1",
+                    margin: "1px",
+                  }}
+                  disabled={this.state.isProcessing}
+                >
+                  {this.state.isProcessing && <Spinner />}
+                  &nbsp; Follow
+                </button>} */}
+
+                <Link to={`/user/${user._id}`} className="btn btn-info w-100">
                   View Profile
                 </Link>
               </div>

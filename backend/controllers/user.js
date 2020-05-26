@@ -14,7 +14,6 @@ exports.userById = async (req, res, next, id) => {
     if (!user) {
       return next(new Error("User not Found."));
     }
-    console.log("USER DATA__", user);
     req.profile = user;
     next();
   } catch (error) {

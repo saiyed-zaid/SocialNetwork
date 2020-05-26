@@ -17,9 +17,12 @@ exports.postById = async (req, res, next, id) => {
       .populate("postedBy", "_id name role")
       .populate("comments.postedBy", "_id name photo")
       .populate("comments.replies.postedBy", "_id name photo")
-      .select("comments title body  likes  photo created tags");
+      .populate("following", "_id name ")
+      .populate("tags", "name")
+      .select("comments title body  likes   photo created tags");
 
     if (post) {
+      console.log("posts", post);
       req.post = post;
     }
   } catch (error) {
@@ -68,7 +71,7 @@ exports.getScheduledPost = async (req, res, next) => {
       .populate("postedBy", "_id name role photo")
       .populate("comments.postedBy", "_id name")
       .populate("likes.user", "_id name")
-      .select("_id title body created likes replies comments status photo tags")
+      .select("_id title body scheduleTime created  status photo tags")
       .sort("_created");
     if (posts.length == 0) {
       return res.json({
@@ -83,6 +86,33 @@ exports.getScheduledPost = async (req, res, next) => {
     return res.json({
       msg: "Error while fetching Posts",
     });
+  }
+};
+
+/**
+ * @function middleware
+ * @description Handling delete request which delete Schesuled post in database
+ */
+exports.deleteScheduledPost = async (req, res, next) => {
+  const post = req.post;
+  if (!post) {
+    return res.json({ msg: "Post not Found" });
+  }
+  //console.table(req.auth.role);
+  if (
+    req.auth._id != req.post.postedBy._id &&
+    req.auth.role != "subscriber" &&
+    req.auth.role != "admin"
+  ) {
+    return res(401).json({
+      msg: "Not authorized user for deleting this post.",
+    });
+  }
+  try {
+    const result = await PostSchedule.remove({ _id: req.post._id });
+    return res.json({ msg: "Post deleted successfully." });
+  } catch (error) {
+    return res.json({ msg: "Error while deleting post." });
   }
 };
 
@@ -133,6 +163,7 @@ exports.getPostsByUser = async (req, res, next) => {
       .populate("postedBy", "_id name role photo")
       .populate("comments.postedBy", "_id name")
       .populate("likes.user", "_id name")
+      .populate("tags", "_id name")
       .select("_id title body created likes replies comments status photo tags")
       .sort("_created");
     if (posts.length == 0) {
@@ -174,6 +205,8 @@ exports.hasAuthorization = (req, res, next) => {
  * @description Handling post request which create new post in database
  */
 exports.createPost = async (req, res, next) => {
+  console.table(req.body.tags);
+
   const tags = JSON.parse(req.body.tags);
   const errors = validationResult(req);
 
@@ -181,7 +214,7 @@ exports.createPost = async (req, res, next) => {
 
   //const url = req.protocol + "://" + req.get("host");
   for (var i = 0; i < req.files.length; i++) {
-    var fileUrl = uploadImageToFirebase(req.files[i]);
+    var fileUrl = uploadFile(req.files[i]);
     console.log("path", fileUrl);
     reqFiles.push(fileUrl);
 

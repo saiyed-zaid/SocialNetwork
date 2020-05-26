@@ -1,6 +1,5 @@
 import React from "react";
-import { read } from "../user/apiUser";
-import { singlePost } from "../post/apiPost";
+
 import { Multiselect } from "multiselect-react-dropdown";
 import DefaultPost from "../images/post.jpg";
 
@@ -22,16 +21,16 @@ class EditPost extends React.Component {
     this.selectedopt = [];
   }
 
-  componentDidMount() {
+  async componentDidMount() {
     const userId = this.props.authUser._id;
     const token = this.props.authUser.token;
 
-    const postId =
-      this.props.postId == null
-        ? this.props.match.params.postId
-        : this.props.postId;
+    const postId = !this.props.postId
+      ? this.props.match.params.postId
+      : this.props.postId;
 
-    singlePost(postId).then((data) => {
+    try {
+      const data = await this.props.fetchPost(postId);
       if (data.error) {
         this.setState({ redirectToProfile: true });
       } else {
@@ -40,26 +39,26 @@ class EditPost extends React.Component {
           title: data.title,
           body: data.body,
           error: "",
-          photo: data.photo ? data.photo.path : DefaultPost,
+          photo: data.photo ? data.photo : DefaultPost,
           user: this.props.authUser,
+          options: data.following,
           selectedTags: data.tags,
         });
       }
-    });
+    } catch (error) {
+      console.log(error);
+    }
 
-    read(userId, token)
-      .then((data) => {
-        if (data.err) {
-          this.setState({ options: [] });
-        } else {
-          this.setState({ options: data.following });
-        }
-      })
-      .catch((err) => {
-        if (err) {
-          console.log(err);
-        }
-      });
+    try {
+      const data = await this.props.read(userId, token);
+      if (data.err) {
+        this.setState({ options: [] });
+      } else {
+        this.setState({ options: data.following });
+      }
+    } catch (error) {
+      console.log(error);
+    }
   }
 
   handleInputChange = (event) => {
@@ -118,18 +117,21 @@ class EditPost extends React.Component {
   };
 
   onRemove = (selectedList, removedItem) => {
-    this.setState(
-      { tags: selectedList },
-      this.postData.set("tags", selectedList.name)
-    );
+    var removeIndex = this.selectedopt
+      .map((item) => {
+        return item.id;
+      })
+      .indexOf(removedItem._id);
+    this.selectedopt.splice(removeIndex);
   };
 
   render() {
     return (
       <div className="container">
+        {console.log(this.state.options)}
         <form onSubmit={this.handleSubmit}>
           <div className="form-group text-light">
-            <label for="photo">Photo</label>
+            <label htmlFor="photo">Photo</label>
             <input
               type="file"
               onChange={this.handleInputChange}
@@ -190,6 +192,7 @@ class EditPost extends React.Component {
               displayValue="name" // Property name to display in the dropdown options
               placeholder="Select Peoples To Tag"
               emptyRecordMsg="No People Found"
+              selectedValues={this.state.selectedTags}
             />
           </div>
           <button className="btn btn-primary">Edit</button>

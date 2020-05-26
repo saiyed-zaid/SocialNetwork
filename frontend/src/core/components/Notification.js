@@ -1,5 +1,9 @@
 import React from "react";
-import { read, isFollowStatusChange, readPost } from "../api/getNotification";
+import {
+  read,
+  /* isFollowStatusChange */ readPost,
+} from "../api/getNotification";
+import { Link } from "react-router-dom";
 
 import Follow from "./getNewFollower";
 import { isAuthenticated } from "../../auth";
@@ -23,8 +27,6 @@ class Notification extends React.Component {
       .then((data) => {
         var newFollowerList = [];
         if (data.followers.length > 0) {
-          //this.setState({ newFollower: new Array(data.followers.length) });
-
           data.followers.forEach((follower, i) => {
             if (follower.isNewUser) {
               if (follower.user._id !== isAuthenticated().user._id) {
@@ -136,18 +138,21 @@ class Notification extends React.Component {
 
   render() {
     return (
-      <li className="nav-item dropdown">
+      <li className="nav-item dropdown float-right">
         <a
-          className="nav-link"
-          data-toggle="dropdown"
+          className="nav-link "
           href="/"
+          id="navbarDropdownMenuLink"
+          role="button"
+          data-toggle="dropdown"
+          aria-haspopup="true"
           aria-expanded="false"
         >
-          <i className="far fa-bell text-light" />
+          <i className="far fa-bell text-light " />
           {this.state.newFollowerList.length > 0 ||
           this.state.newLikesList.length > 0 ||
           this.state.newCommentList.length > 0 ? (
-            <span className="badge badge-warning navbar-badge">
+            <span className="badge badge-warning ml-1">
               {this.state.newFollowerList.length +
                 this.state.newLikesList.length +
                 this.state.newCommentList.length}
@@ -155,25 +160,28 @@ class Notification extends React.Component {
           ) : null}
         </a>
 
-        <div className="dropdown-menu dropdown-menu-lg dropdown-menu-right">
+        <div className="dropdown-menu dropdown-menu-lg-right noti-toggle">
           {(this.state.newFollowerList.length > 0 && (
             <>
-              <a href="/" className="dropdown-item">
-                <span className="float-right text-muted text-sm">
+              <span
+                // to="/"
+                className="dropdown-item "
+                style={{ display: "flex", justifyContent: " center" }}
+              >
+                <span className=" text-muted text-sm">
                   <Follow
                     newFollowers={this.state.newFollowerList}
                     newLikes={this.state.newLikesList}
                     newComments={this.state.newCommentList}
                   />
                 </span>
-              </a>
+              </span>
             </>
           )) || (
             <span className="dropdown-item dropdown-header">
               No Notifications
             </span>
           )}
-          <div className="dropdown-divider" />
         </div>
       </li>
     );

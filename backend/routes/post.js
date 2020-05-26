@@ -162,18 +162,24 @@ router.patch("/api/post/uncomment", auth_check, postController.uncommentPost);
  * @param {router} auth_check for checking authorization
  * @param {property} property deletePost
  */
-
-router.patch(
-  "/api/post/comment/reply",
-  auth_check,
-  postController.commentPostReply
-);
-
 router.delete(
   "/api/post/:postId",
   auth_check,
   postController.hasAuthorization,
   postController.deletePost
+);
+
+/**
+ * @function patch
+ * @description Handling patch request which Add comment reply  in post database
+ * @param {String} path of router
+ * @param {router} auth_check for checking authorization
+ * @param {property} property commentreply
+ */
+router.patch(
+  "/api/post/comment/reply",
+  auth_check,
+  postController.commentPostReply
 );
 
 /**
@@ -209,6 +215,7 @@ router.patch(
   }).array("photo"),
   postController.updatePost
 );
+
 router.get(
   "/api/post/newpost/:userId",
   auth_check,
@@ -225,6 +232,20 @@ router.put(
   "/api/post/newLikesStatusChange/:postId",
   auth_check,
   userController.newFollowerStatusChagne
+);
+
+/**
+ * @function delete
+ * @description Handling delete request which delete post in database
+ * @param {String} path of router
+ * @param {router} auth_check for checking authorization
+ * @param {property} property deletePost
+ */
+router.delete(
+  "/api/scheduled/post/:postId",
+  auth_check,
+  postController.hasAuthorization,
+  postController.deleteScheduledPost
 );
 
 /**

@@ -119,6 +119,7 @@ export default class Postservice {
   }
 
   async editPost(post, postId, token) {
+    console.log("aaaaaaaaaaaaaa", postId, token);
     const postData = await fetch(
       `${process.env.REACT_APP_API_URL}/api/post/${postId}`,
       {
@@ -215,18 +216,48 @@ export default class Postservice {
   }
   async commentReply(userId, token, postId, reply, comment) {
     try {
-      const commentData = await fetch(
-        `${process.env.REACT_APP_API_URL}/api/post/comment/reply`,
+      await fetch(`${process.env.REACT_APP_API_URL}/api/post/comment/reply`, {
+        method: "PATCH",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "Application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({ userId, postId, reply, comment }),
+      });
+    } catch (error) {
+      return Promise.reject(error);
+    }
+  }
+  async fetchScheduledPosts(userId, token) {
+    const posts = await fetch(
+      `${process.env.REACT_APP_API_URL}/api/post/schedule/by/${userId}`,
+      {
+        method: "GET",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "Application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    return await posts.json({ posts });
+  }
+
+  async deleteScheduledPost(postId, token) {
+    try {
+      const response = await fetch(
+        `${process.env.REACT_APP_API_URL}/api/scheculed/post/${postId}`,
         {
-          method: "PATCH",
+          method: "DELETE",
           headers: {
             Accept: "application/json",
             "Content-Type": "Application/json",
             Authorization: `Bearer ${token}`,
           },
-          body: JSON.stringify({ userId, postId, reply, comment }),
         }
       );
+      return await response.json();
     } catch (error) {
       return Promise.reject(error);
     }

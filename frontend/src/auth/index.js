@@ -1,4 +1,4 @@
-export const signin = (user) => {
+/* export const signin = (user) => {
   return fetch(`${process.env.REACT_APP_API_URL}/api/signin`, {
     method: "POST",
     headers: {
@@ -14,7 +14,7 @@ export const signin = (user) => {
       return err;
     });
 };
-
+ */
 /**
  * Function For Authenticating User
  *

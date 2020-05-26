@@ -25,11 +25,7 @@ export default class PostCard extends Component {
           <div className="user-block">
             <img
               className="rounded-circle"
-              src={
-                post.postedBy.photo
-                  ? post.postedBy.photo.photoURI
-                  : DefaultProfile
-              }
+              src={post.postedBy.photo.photoURI}
               alt={posterName}
               onError={(event) => (event.target.src = DefaultProfile)}
             />
@@ -52,6 +48,7 @@ export default class PostCard extends Component {
                 <div className="btn-group ">
                   <a
                     // type="button"
+                    href="/"
                     style={{ boxShadow: "none", cursor: "pointer" }}
                     // className="btn"
                     data-toggle="dropdown"

@@ -8,6 +8,7 @@
     "@testing-library/user-event": "^7.2.1",
     "animate.css": "^3.7.2",
     "datatables.net": "^1.10.20",
+    "date-fns": "^2.14.0",
     "emoji-mart": "^3.0.0",
     "indicative": "^7.4.4",
     "moment": "^2.26.0",

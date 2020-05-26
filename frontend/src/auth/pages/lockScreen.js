@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+/* import React, { Component } from "react";
 import { Link, Redirect } from "react-router-dom";
 import DefaultProfile from "../../images/avatar.jpg";
 import { isAuthenticated, signin, authenticate } from "../index";
@@ -53,25 +53,19 @@ export default class lockScreen extends Component {
     }
     return (
       <div className="container-fluid p-0 m-0">
-        {/* Automatic element centering */}
         <div className="lockscreen">
           <div className="lockscreen-logo">
             <Link style={{ color: "rgb(61, 97, 251)" }} to="">
               <b>Social Network</b>
             </Link>
           </div>
-          {/* User name */}
           <div className="lockscreen-name text-light">
             {isAuthenticated().user.name}
           </div>
-          {/* START LOCK SCREEN ITEM */}
           <div className="lockscreen-item">
-            {/* lockscreen image */}
             <div className="lockscreen-image">
               <img src={DefaultProfile} alt="user" />
             </div>
-            {/* /.lockscreen-image */}
-            {/* lockscreen credentials (contains the form) */}
             <form className="lockscreen-credentials">
               <div className="input-group">
                 <input
@@ -91,9 +85,7 @@ export default class lockScreen extends Component {
                 </div>
               </div>
             </form>
-            {/* /.lockscreen credentials */}
           </div>
-          {/* /.lockscreen-item */}
           <div className="help-block text-center text-danger">
             Enter your password to retrieve your session
           </div>
@@ -107,3 +99,4 @@ export default class lockScreen extends Component {
     );
   }
 }
+ */
