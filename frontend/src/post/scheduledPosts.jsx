@@ -48,7 +48,6 @@ export default class scheduledPosts extends Component {
                 {posts &&
                   posts.map((post, i) => (
                     <tr className="table-row">
-                      {console.log(post)}
                       <th scope="row">{i}</th>
                       <td>{post.title}</td>
                       <td>

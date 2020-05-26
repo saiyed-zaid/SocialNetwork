@@ -380,7 +380,6 @@ class MainRouter extends React.Component {
         Date.now()
       );
       if (hourDiff >= 1) {
-        alert("1 hour complted");
         this.setState({ authUser: null, isAuthorized: false }, () => {
           localStorage.removeItem("jwt");
           this.props.history.push("/signin");
@@ -395,8 +394,8 @@ class MainRouter extends React.Component {
   handleChatOpen = (user) => {
     this.setState({
       hasNewMsg: true,
-      receiverId: user.sender._id,
-      receiverName: user.sender.name,
+      receiverId: user._id,
+      receiverName: user.users.name,
     });
   };
 
@@ -488,16 +487,16 @@ class MainRouter extends React.Component {
           <Route
             exact
             path="/admin/users"
-            // component={AdminUsers}
             render={() => (
               <AdminUsers
                 remove={this.props.Userservice.remove}
                 list={this.props.Userservice.list}
+                update={this.props.Userservice.update}
               />
             )}
           />
-          <Route exact path="/admin/home" component={AdminHome} />
-          <Route exact path="/admin" component={Admin} />
+          <PrivateRoute exact path="/admin/home" component={AdminHome} />
+          <PrivateRoute exact path="/admin" component={Admin} />
           <Route exact path="/forgot-password" component={ForgotPassword} />
           <Route
             exact
@@ -543,6 +542,7 @@ class MainRouter extends React.Component {
             authUser={this.state.authUser}
             editPost={this.props.Postservice.editPost}
             fetchPost={this.props.Postservice.fetchPost}
+            read={this.props.Userservice.read}
           />
           <Route
             path="/users"
@@ -612,7 +612,7 @@ class MainRouter extends React.Component {
             unfollow={this.props.Userservice.unfollow}
             follow={this.props.Userservice.follow}
           />
-          <Route path="/lockscreen" exact component={LockScreen} />
+          {/* <Route path="/lockscreen" exact render={() => <LockScreen />} /> */}
           <PrivateRoute
             path="/user/changepassword/:userId"
             authUser={this.state.authUser}

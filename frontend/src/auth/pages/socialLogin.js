@@ -27,7 +27,6 @@ class SocialLogin extends Component {
     if (data.error) {
       console.log("Error Login. Please try again..");
     } else {
-      console.log("signin success - setting jwt: ", data);
       this.props.authenticate(data, () => {
         this.setState({ redirectToReferrer: true });
       });

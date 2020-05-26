@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-import { resetPassword } from "../index";
 import Alert from "../../ui-components/Alert";
 
 class ResetPassword extends Component {

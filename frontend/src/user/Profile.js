@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { isAuthenticated, signout } from "../auth/index";
+import { isAuthenticated } from "../auth/index";
 import { Redirect } from "react-router-dom";
 import DefaultProfile from "../images/avatar.jpg";
 import FollowProfileButton from "./followProfileButton";
@@ -41,8 +41,6 @@ class Profile extends Component {
     const data = await this.props.read(userId, token);
 
     if (data.err) {
-      alert("logout from profile");
-      /* signout(() => {}); */
       this.setState({ redirectToSignin: true });
     } else {
       let following = this.checkFollow(data);

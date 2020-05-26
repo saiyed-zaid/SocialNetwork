@@ -111,6 +111,7 @@ class Comment extends Component {
               <CommentList
                 data={comment}
                 i={i}
+                key={i}
                 deleteClick={() => this.deleteConfirmed(comment)}
                 postId={this.props.postId}
                 replyComment={this.props.replyComment}

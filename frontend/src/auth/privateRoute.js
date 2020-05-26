@@ -24,6 +24,7 @@ const PrivateRoute = ({
   updatePost,
   unfollow,
   follow,
+  fetchPost,
   ...rest
 }) => {
   return (
@@ -31,25 +32,28 @@ const PrivateRoute = ({
       {...rest}
       render={(props) =>
         isAuthenticated() ? (
-          <Component
-            {...props}
-            authUser={authUser}
-            addPost={addPost}
-            fetchPostsByUser={fetchPostsByUser}
-            findPeople={findPeople}
-            update={update}
-            read={read}
-            remove={remove}
-            fetchMessage={fetchMessage}
-            updateUser={updateUser}
-            changePassword={changePassword}
-            replyComment={replyComment}
-            editPost={editPost}
-            updatePost={updatePost}
-            unfollow={unfollow}
-            follow={follow}
-            
-          />
+          <>
+            {console.log(fetchPost)}
+            <Component
+              {...props}
+              authUser={authUser}
+              addPost={addPost}
+              fetchPostsByUser={fetchPostsByUser}
+              findPeople={findPeople}
+              update={update}
+              read={read}
+              remove={remove}
+              fetchMessage={fetchMessage}
+              updateUser={updateUser}
+              changePassword={changePassword}
+              replyComment={replyComment}
+              editPost={editPost}
+              updatePost={updatePost}
+              unfollow={unfollow}
+              follow={follow}
+              fetchPost={fetchPost}
+            />
+          </>
         ) : (
           <Redirect
             to={{ pathname: "/signin", state: { from: props.location } }}

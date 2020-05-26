@@ -25,17 +25,15 @@ class EditPost extends React.Component {
     const userId = this.props.authUser._id;
     const token = this.props.authUser.token;
 
-    const postId =
-      this.props.postId == null
-        ? this.props.match.params.postId
-        : this.props.postId;
+    const postId = !this.props.postId
+      ? this.props.match.params.postId
+      : this.props.postId;
 
     try {
       const data = await this.props.fetchPost(postId);
       if (data.error) {
         this.setState({ redirectToProfile: true });
       } else {
-        console.log("post data", data);
         this.setState({
           id: data._id,
           title: data.title,
@@ -56,8 +54,6 @@ class EditPost extends React.Component {
       if (data.err) {
         this.setState({ options: [] });
       } else {
-        console.log("etst", data.following);
-
         this.setState({ options: data.following });
       }
     } catch (error) {
@@ -118,7 +114,6 @@ class EditPost extends React.Component {
 
   onSelect = (selectedList, selectedItem) => {
     this.selectedopt.push({ id: selectedItem._id });
-    console.log("test", this.selectedopt);
   };
 
   onRemove = (selectedList, removedItem) => {
@@ -136,7 +131,7 @@ class EditPost extends React.Component {
         {console.log(this.state.options)}
         <form onSubmit={this.handleSubmit}>
           <div className="form-group text-light">
-            <label for="photo">Photo</label>
+            <label htmlFor="photo">Photo</label>
             <input
               type="file"
               onChange={this.handleInputChange}

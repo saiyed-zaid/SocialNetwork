@@ -25,7 +25,6 @@ class Posts extends Component {
   }
 
   async componentDidMount() {
-    console.log(this.props);
 
     const token = isAuthenticated().user.token;
     setTimeout(async () => {

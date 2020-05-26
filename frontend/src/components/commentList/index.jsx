@@ -101,7 +101,7 @@ export default class commentList extends Component {
                   }}
                   onClick={(e) => this.showReplyBox(e)}
                 >
-                  <i class="fas fa-reply"></i>&nbsp; Reply
+                  <i className="fas fa-reply"></i>&nbsp; Reply
                 </button>
               )}
               <br />
@@ -123,8 +123,8 @@ export default class commentList extends Component {
             </h6>
           </div>
         </div>
-        {data.replies.map((reply) => (
-          <div className="comment-block ml-5">
+        {data.replies.map((reply, i) => (
+          <div className="comment-block ml-5" key={i + "xqf"}>
             <Link to={`/user/${reply.postedBy._id}`}>
               <img
                 style={{
@@ -134,7 +134,7 @@ export default class commentList extends Component {
                 className="float-left mr-2"
                 height="20px"
                 width="20px"
-                src={reply.postedBy.photo}
+                src={reply.postedBy.photo.photoURI}
                 alt={reply.postedBy.name}
                 onError={(e) => {
                   e.target.src = DefaultProfile;

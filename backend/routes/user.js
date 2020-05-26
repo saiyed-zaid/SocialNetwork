@@ -15,6 +15,7 @@ const Message = require("../models/messages");
  * @param {middleware} findPeople
  */
 router.post("/api/user/messages", auth_check, (req, res, next) => {
+  console.log("+___api invoked___+", req.body);
   Message.find({
     $or: [{ sender: req.body.sender }, { sender: req.body.receiver }],
     $and: [
@@ -41,18 +42,27 @@ router.post("/api/user/messages", auth_check, (req, res, next) => {
  * @param {middleware} Checking Authorization
  * @param {middleware} findPeople
  */
+
 router.get("/api/user/messages/:userId", auth_check, (req, res, next) => {
-  Message.find({ receiver: req.profile._id, isNewMessage: true })
-    .populate("sender", "name")
-    .select("sender")
+  Message.aggregate()
+    .match({ receiver: req.profile._id })
+    .group({ _id: "$sender", count: { $sum: 1 } })
+    .lookup({
+      from: "users",
+      localField: "_id",
+      foreignField: "_id",
+      as: "users",
+    })
+    .unwind("$users")
+    .project("users.name count")
     .then((response) => {
+      console.log(response);
       res.json(response);
     })
     .catch((error) => {
       console.log("err", error);
     });
 });
-
 /**
  * @function put
  * @description Handling put request which Update isNewUser status false

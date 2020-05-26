@@ -14,7 +14,7 @@ export default class messageNotification extends Component {
       if (data.error) {
         console.log(data.error);
       } else {
-        console.log("msg noti___", data);
+        console.log(data);
 
         this.setState({ messages: data });
       }
@@ -25,8 +25,6 @@ export default class messageNotification extends Component {
     const { messages } = this.state;
     return (
       <li className="nav-item dropdown">
-        {console.log(this.props)}
-
         <a
           className="nav-link   "
           href="/"
@@ -37,7 +35,7 @@ export default class messageNotification extends Component {
           aria-expanded="false"
         >
           <i className="far fa-comments" />
-          <span class="badge badge-danger ml-1">{messages.length}</span>
+          <span className="badge badge-danger ml-1">{messages.length}</span>
         </a>
         <div
           className="dropdown-menu dropdown-menu-lg-right"
@@ -49,8 +47,9 @@ export default class messageNotification extends Component {
               onClick={() => this.props.handleOpen(user)}
               key={i}
             >
+              {console.log(user)}
               <p className="text-dark">
-                You Have New Message From {user.sender.name}
+                You Have New Message From {user.users.name}
               </p>
             </button>
           ))}

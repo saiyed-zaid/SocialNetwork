@@ -466,9 +466,7 @@ a {
   .noti-toggle {
     left: 0 !important;
   }
-  .owl-carousel {
-    max-width: 319px;
-  }
+  
 }
 
 /* .badge-light {
@@ -723,6 +721,12 @@ div.content {
     text-align: center;
   }
 }
+@media only screen and (max-width: 600px) {
+  .owl-carousel {
+    /* max-width: 319px; */
+  }
+}
+
 
 .notify-custom {
   z-index: 9999;
@@ -859,4 +863,8 @@ span.other {
 
 .dropdown-item:active {
   color: white !important;
+}
+
+.dropdown-item.active, .dropdown-item:active {
+  background-color: white !important;
 }

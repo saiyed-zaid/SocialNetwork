@@ -13,6 +13,7 @@ export default class carosuel extends Component {
           {this.props.images.map((image, index) => (
             <img
               id={index + "sdf"}
+              key={index + "sdf"}
               src={image}
               className="d-block w-100"
               alt="post "

@@ -3,6 +3,7 @@ import {
   read,
   /* isFollowStatusChange */ readPost,
 } from "../api/getNotification";
+import { Link } from "react-router-dom";
 
 import Follow from "./getNewFollower";
 import { isAuthenticated } from "../../auth";
@@ -162,8 +163,8 @@ class Notification extends React.Component {
         <div className="dropdown-menu dropdown-menu-lg-right noti-toggle">
           {(this.state.newFollowerList.length > 0 && (
             <>
-              <a
-                href="/"
+              <span
+                // to="/"
                 className="dropdown-item "
                 style={{ display: "flex", justifyContent: " center" }}
               >
@@ -174,7 +175,7 @@ class Notification extends React.Component {
                     newComments={this.state.newCommentList}
                   />
                 </span>
-              </a>
+              </span>
             </>
           )) || (
             <span className="dropdown-item dropdown-header">
