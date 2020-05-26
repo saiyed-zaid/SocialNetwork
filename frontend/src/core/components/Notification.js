@@ -26,8 +26,6 @@ class Notification extends React.Component {
       .then((data) => {
         var newFollowerList = [];
         if (data.followers.length > 0) {
-          //this.setState({ newFollower: new Array(data.followers.length) });
-
           data.followers.forEach((follower, i) => {
             if (follower.isNewUser) {
               if (follower.user._id !== isAuthenticated().user._id) {
@@ -149,11 +147,11 @@ class Notification extends React.Component {
           aria-haspopup="true"
           aria-expanded="false"
         >
-          <i className="far fa-bell text-light" />
+          <i className="far fa-bell text-light " />
           {this.state.newFollowerList.length > 0 ||
           this.state.newLikesList.length > 0 ||
           this.state.newCommentList.length > 0 ? (
-            <span className="badge badge-warning navbar-badge">
+            <span className="badge badge-warning ml-1">
               {this.state.newFollowerList.length +
                 this.state.newLikesList.length +
                 this.state.newCommentList.length}

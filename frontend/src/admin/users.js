@@ -217,10 +217,7 @@ class Users extends Component {
 
     return (
       <div className="container-fluid m-0 p-0">
-        <div className="jumbotron p-3 m-0">
-          <h4>Users</h4>
-          Total Users: {users.length}
-        </div>
+        <div className="jumbotron p-3 m-0">Total Users: {users.length}</div>
         <div className="d-flex m-1">
           <button
             className="btn btn-danger m-2 "
@@ -258,8 +255,8 @@ class Users extends Component {
         </div>
           */}
         {users.length > 0 ? (
-          <table className="table table-hover text-light" id="userstable">
-            <thead>
+          <table className="table table-hover" id="userstable">
+            <thead className="thead-dark">
               <tr>
                 <th>
                   <input
@@ -288,7 +285,7 @@ class Users extends Component {
                 </th>
               </tr>
             </thead>
-            <tbody style={{ color: "#fff" }}>
+            <tbody className="bg-light">
               {users.map((user, i) => {
                 return (
                   <tr
@@ -296,6 +293,7 @@ class Users extends Component {
                     id={user._id}
                     style={{ cursor: "pointer" }}
                     data-index={i}
+                    className="table-row"
                   >
                     <th>
                       <input
@@ -308,9 +306,7 @@ class Users extends Component {
                     <th scope="row">{i + 1}</th>
                     <td width="5%">
                       <Avatar
-                        src={`${process.env.REACT_APP_API_URL}/${
-                          user.photo ? user.photo.path : DefaultProfile
-                        }`}
+                        src={user.photo ? user.photo.photoURI : DefaultProfile}
                       />
                     </td>
                     <td width="15%">{user.name}</td>
@@ -318,7 +314,7 @@ class Users extends Component {
                     <td width="10%">{user.role}</td>
                     <td width="15%">
                       <a
-                        style={{ color: "#fff" }}
+                        // style={{ color: "#fff" }}
                         href={`mailto:${user.email}`}
                       >
                         {user.email}
@@ -344,16 +340,17 @@ class Users extends Component {
                         to={`/user/edit/${user._id}`}
                         style={{ boxShadow: "unset" }}
                       >
-                        <i className="fas fa-edit"></i>
+                        <i className="fas fa-edit text-primary"></i>
                       </Link>
                     </td>
                     <td width="1%">
                       <button
                         className="btn btn-sm"
+                        style={{ boxShadow: "none" }}
                         disabled={isAuthenticated().user._id === user._id}
                         onClick={() => this.handleDeleteModal(user._id)}
                       >
-                        <i className="fas fa-trash"> </i>
+                        <i className="fas fa-trash text-danger"> </i>
                       </button>
                     </td>
                   </tr>
@@ -375,12 +372,6 @@ class Users extends Component {
               : () => this.deleteConfirmed(this.state.deleteId)
           }
         />
-
-        {/* // {<Modal
-        //   id="editprofile"
-        //   title="Edit Profile"
-        //   body={<EditProfile userId={this.state.editId} />}
-        // />} */}
       </div>
     );
   }

@@ -113,20 +113,6 @@ div.like-box:hover .likes {
     transform: translateY(0);
   }
 }
-/* 
-.nav-tabs .nav-item.show .nav-link,
-.nav-tabs .nav-link.active {
-  border: none;
-  background-color: #dddddd;
-}
-.nav-tabs .nav-link.active,
-.nav-tabs .nav-link.active:focus,
-.nav-tabs .nav-link.active:hover {
-  border: none;
-}
-.nav-tabs .nav-link {
-  border: none;
-} */
 
 .btn {
   box-shadow: 0.1em 0.1em 0.3em rgba(0, 0, 0, 0.7);
@@ -477,15 +463,15 @@ a {
     width: 100% !important;
   }
 
-.noti-toggle{
-  left: 0 !important;
-}
-.owl-carousel{
-  max-width: 319px;
-}
+  .noti-toggle {
+    left: 0 !important;
+  }
+  .owl-carousel {
+    max-width: 319px;
+  }
 }
 
-.badge-light {
+/* .badge-light {
   background: #4cd964;
   position: relative;
   top: -10px;
@@ -495,7 +481,7 @@ a {
   padding: 0;
   border-radius: 50%;
 }
-
+ */
 .post-box {
   border-radius: 2%;
   border: 1px solid rgba(0, 0, 0, 0.12);
@@ -801,38 +787,76 @@ div.content {
   color: black;
 }
 
-
-.table-row:hover{
+.table-row:hover {
   color: #191c23 !important;
 }
-.msg-right{
-  background:cornflowerblue;  
-  border-radius: 5px;
-  padding: 2px;
-  position: relative;
-  color: black;
 
+
+tr {
+  line-height: 1;
 }
 
-.msg-right>span{
-  background-color: none !important;
-  position: relative;
-  right: 15px;
-  top:0;
-  font-size: 10px;
+i.text-primary {
+  color: royalblue !important;
+}
+
+i.text-danger {
+  color: red !important;
+}
+
+/*Chat Box Css*/
+
+
+.bubbleWrapper {
+  padding: 0;
+  display: flex;
+  justify-content: flex-end;
+  flex-direction: column;
+  align-self: flex-end;
+  color: #fff;
+  line-height: 1;
+}
+.inlineContainer {
+  display: inline-flex;
+}
+.inlineContainer.own {
+  flex-direction: row-reverse;
+}
+.inlineIcon {
+  width: 20px;
+  object-fit: contain;
   
 }
-.msg-right>span>span{
-  font-size: 5px;
-  position: relative;
-  bottom: 0;
-  right: 0;
-  
+.ownBubble {
+  min-width: 60px;
+  max-width: 700px;
+  padding: 5px 15px;
+  margin: 6px 8px;
+  background-color: #5b5377;
+  border-radius: 16px 16px 0 16px;
+  border: 1px solid #443f56;
+}
+.otherBubble {
+  min-width: 60px;
+  max-width: 700px;
+  padding: 5px 15px;
+  margin: 6px 8px;
+  background-color: #6c8ea4;
+  border-radius: 16px 16px 16px 0;
+  border: 1px solid #54788e;
+}
+.own {
+  align-self: flex-end;
+}
+.other {
+  align-self: flex-start;
+}
+span.own,
+span.other {
+  font-size: 14px;
+  color: grey;
 }
 
-.msg-right>img{
-  position: absolute;
-  right: 0;
-  top: 0;
+.dropdown-item:active {
+  color: white !important;
 }
-

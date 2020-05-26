@@ -61,14 +61,16 @@ export default class chatTab extends Component {
         this.props.receiverId,
         this.props.authUser.token
       );
+      console.log(this.props);
+
       this.setState(
         {
           hasNewMsg: true,
           receiverId: this.props.senderId,
           receiverName: this.props.senderName,
           messages: result,
-        },
-        () => {
+        }
+        /*  () => {
           let myMsg = document.querySelector("#myMsg");
           const chatBox = document.querySelector("#chatBox");
 
@@ -78,7 +80,7 @@ export default class chatTab extends Component {
             const li = this.appendReceivedMsg(message);
             myMsg.appendChild(li);
           });
-        }
+        } */
       );
     } catch (error) {
       console.log(error);
@@ -101,7 +103,7 @@ export default class chatTab extends Component {
 
     //add new message
     if (data.sender === this.props.senderId) {
-      appendLi.classList.add("text-right", "P-1", "msg-right");
+      appendLi.classList.add("text-right", "P-1");
       appendMsg.innerHTML =
         data.message +
         " <br/><span>( " +
@@ -109,7 +111,11 @@ export default class chatTab extends Component {
         ") </span>";
     } else {
       appendLi.classList.add("text-left", "P-1");
-      appendMsg.innerHTML = data.created + data.message;
+      appendMsg.innerHTML =
+        data.message +
+        " <br/><span> " +
+        moment(data.created).format("LL") +
+        " </span>";
     }
     appendMsg.classList.add("p-1");
 
@@ -151,6 +157,8 @@ export default class chatTab extends Component {
     appendLi.classList.add("text-right", "p-1");
 
     appendMsg.classList.add("p-1");
+    console.log(msg.value);
+
     appendMsg.innerHTML =
       msg.value + this.state.emoji + " (" + this.props.senderName + ")";
 
@@ -179,6 +187,7 @@ export default class chatTab extends Component {
     this.setState({ displayEmoji: !this.state.displayEmoji });
   };
   render() {
+    const { messages } = this.state;
     return (
       <div
         id="chattab"
@@ -192,10 +201,8 @@ export default class chatTab extends Component {
         }}
       >
         <div className="card-header text-left text-light bg-dark">
-          <span>{this.props.senderName}</span>
-          <span style={{ marginLeft: "10px" }}>
-            {/* <i className="fas fa-video"></i> */}
-          </span>
+          <span>{this.props.receiverName}</span>
+          <span style={{ marginLeft: "10px" }}></span>
           <span className="float-right">
             <button
               type="button"
@@ -208,11 +215,65 @@ export default class chatTab extends Component {
           </span>
         </div>
         <div
-          className="card-body chat-text bg-secondary text-light"
+          className="card-body chat-text bg-secondary text-light "
           id="chatBox"
-          style={{ height: "200px", overflowY: "scroll" }}
+          style={{ height: "200px", overflowY: "scroll", padding: "5px" }}
         >
-          <ul className="p-0 m-0" id="myMsg" style={{ listStyle: "none" }}></ul>
+          <ul className="p-0 m-0" id="myMsg" style={{ listStyle: "none" }}>
+            {messages &&
+              messages.map((msg, i) =>
+                msg.sender === this.props.authUser._id ? (
+                  <div className="bubbleWrapper">
+                    <div className="inlineContainer own">
+                      <img className="inlineIcon" src={DefaultProfile} />
+                      <div className="ownBubble own">{msg.message}</div>
+                    </div>
+                    <span className="own text-dark">
+                      {moment(msg.created).format("LT")}
+                    </span>
+                  </div>
+                ) : (
+                  <div className="bubbleWrapper">
+                    <div className="inlineContainer">
+                      <img className="inlineIcon" src={DefaultProfile} />
+                      <div className="otherBubble other">{msg.message}</div>
+                    </div>
+                    <span className="other text-dark text-sm">
+                      {moment(msg.created).format("LT")}
+                    </span>
+                  </div>
+                )
+              )}
+
+            {/*  {messages &&
+              messages.map((msg, i) =>
+                msg.sender === this.props.authUser._id ? (
+                  <li
+                    className="text-right bg-dark mb-4 rounded"
+                    style={{ position: "relative" }}
+                  >
+                    <span className="sender-img">
+                      <img src={DefaultProfile} alt="abc" height="20px" />
+                    </span>
+                    <span className="sender-name">{this.props.senderName}</span>
+                    <span className="pt-3 pb-3 text-right">{msg.message} </span>
+                  </li>
+                ) : (
+                  <li
+                    className="text-left bg-success  mb-4 rounded"
+                    style={{ position: "relative" }}
+                  >
+                    <span className="sender-img">
+                      <img src={DefaultProfile} alt="abc" height="20px" />
+                    </span>
+                    <span className="receiver-name">
+                      {this.props.receiverName}
+                    </span>
+                    <span className="pt-3 pb-3 msg">{msg.message}</span>
+                  </li>
+                )
+              )} */}
+          </ul>
         </div>
         <div className="card-footer bg-dark">
           <div className="input-group">

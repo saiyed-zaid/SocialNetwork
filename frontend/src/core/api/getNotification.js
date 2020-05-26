@@ -23,6 +23,7 @@ export const read = async () => {
 
   return await user.json({ user });
 };
+
 export const isFollowStatusChange = async () => {
   const userData = await fetch(
     `${process.env.REACT_APP_API_URL}/api/user/newFollowerStatusChange/${
@@ -70,4 +71,31 @@ export const readPost = async () => {
     }
   );
   return await posts.json({ posts });
+};
+
+/**
+ * Api For Reading Data From Database
+ *
+ * @param {string} userId   User Id Of The Logged In User
+ * @param {string} token    token Of The Logged In User
+ *
+ * @returns {json}
+ */
+//userId, token
+export const fetchNewMessage = async () => {
+  const user = await fetch(
+    `${process.env.REACT_APP_API_URL}/api/user/messages/${
+      isAuthenticated().user._id
+    }`,
+    {
+      method: "GET",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "Application/json",
+        Authorization: `Bearer ${isAuthenticated().user.token}`,
+      },
+    }
+  );
+
+  return await user.json({ user });
 };

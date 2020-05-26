@@ -163,6 +163,7 @@ exports.getPostsByUser = async (req, res, next) => {
       .populate("postedBy", "_id name role photo")
       .populate("comments.postedBy", "_id name")
       .populate("likes.user", "_id name")
+      .populate("tags", "_id name")
       .select("_id title body created likes replies comments status photo tags")
       .sort("_created");
     if (posts.length == 0) {

@@ -116,7 +116,6 @@ class Profile extends Component {
     const postId = post._id;
     let dataToUpdate = post;
     const data = new FormData();
-    console.log(postId, isAuthenticated().user.token, data);
 
     data.append("status", !dataToUpdate.status);
     try {
@@ -125,8 +124,6 @@ class Profile extends Component {
         postId,
         isAuthenticated().user.token
       );
-      console.log(result);
-
       if (result.err) {
         console.log("Error=> ", result.err);
       } else {
@@ -168,27 +165,6 @@ class Profile extends Component {
     this.setState({
       hasChatBoxDisplay: !this.state.hasChatBoxDisplay,
     });
-    /* if (!this.state.hasChatBoxDisplay) {
-      const token = this.props.authUser.token;
-      fetchMessage(this.props.authUser._id, this.state.user._id, token)
-        .then((result) => {
-          this.setState({
-            hasChatBoxDisplay: true,
-            receiverId: this.state.authUser._id,
-            receiverName: this.state.authUser.name,
-            messages: result,
-          });
-        })
-        .catch((err) => {
-          if (err) {
-            console.log("Error while fetching record");
-          }
-        });
-    } else {
-      this.setState({
-        hasChatBoxDisplay: false,
-      });
-    } */
   };
   showFollowList = () => {
     let getModal = document.getElementById("followersmodal");
@@ -318,13 +294,14 @@ class Profile extends Component {
           <hr className="my-4" />
           {/* Display Posts */}
           <div className="row justify-content-md-center">
-            {posts.map((post, i) => (
-              <Postcard
-                post={post}
-                profile
-                handlePostStatusChange={this.handlePostStatusChange}
-              />
-            ))}
+            {posts &&
+              posts.map((post, i) => (
+                <Postcard
+                  post={post}
+                  profile
+                  handlePostStatusChange={this.handlePostStatusChange}
+                />
+              ))}
           </div>
           {/*END POST RENDER */}
           <Modal
