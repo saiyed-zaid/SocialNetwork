@@ -60,6 +60,7 @@ export default class App extends Component {
     // Send a logout request to the API
     if (isAuthenticated()) {
       alert("logout timeout");
+      document.location.reload();
       signout(() => {});
       this.setState({ logginStatus: false });
     }

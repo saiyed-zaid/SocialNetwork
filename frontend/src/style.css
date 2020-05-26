@@ -475,7 +475,7 @@ a:hover {
     border-collapse: collapse;
     border-color: transparent transparent #343a40 transparent;
   }
-  .carosuel-height{
+  .carosuel-height {
     margin: 0 !important;
     width: 100% !important;
   }
@@ -737,13 +737,13 @@ div.content {
 .notify-custom {
   z-index: 9999;
 }
-.wrapper{
-  height:30px;
-  display:flex;
+.wrapper {
+  height: 30px;
+  display: flex;
 }
 
 .profile-photo {
-  margin:auto;
+  margin: auto;
   top: 0%;
   left: 50%;
   transform: translate(-50%, -50%);
@@ -779,14 +779,20 @@ div.content {
   color: white;
 }
 
-.carosuel-height{
+.carosuel-height {
   width: 50%;
   margin-left: 25%;
   margin-right: 33%;
 }
-.searchBox{
+.searchBox {
   color: #ffff;
 }
 
-::-moz-selection { background: #ffc107;color:black; }
-::selection { background: #ffc107;;color:black; }
+::-moz-selection {
+  background: #ffc107;
+  color: black;
+}
+::selection {
+  background: #ffc107;
+  color: black;
+}

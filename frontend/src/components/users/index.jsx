@@ -12,7 +12,7 @@ export default class index extends Component {
           transition: "unset",
           transform: "unset",
           animation: "unset",
-          width: "15rem",
+          minWidth: "15rem",
           margin: "1rem",
         }}
       >

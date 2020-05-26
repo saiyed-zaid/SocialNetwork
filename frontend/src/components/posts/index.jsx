@@ -70,14 +70,16 @@ export default class PostCard extends Component {
                       </>
                     )}
                   </a>
-                  <div className="dropdown-menu dropdown-menu-right bg-secondary">
-                    <button
-                      className="dropdown-item"
-                      type="button"
-                      onClick={() => this.props.handlePostStatusChange(post)}
-                    >
-                      Make Post {!post.status ? "Public" : " Private"}
-                    </button>
+                  <div className="dropdown">
+                    <div className="dropdown-menu dropdown-menu-right bg-secondary">
+                      <button
+                        className="dropdown-item"
+                        type="button"
+                        onClick={() => this.props.handlePostStatusChange(post)}
+                      >
+                        {!post.status ? "Public" : " Private"}
+                      </button>
+                    </div>
                   </div>
                 </div>
                 &nbsp;&nbsp;

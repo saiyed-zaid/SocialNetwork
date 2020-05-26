@@ -131,7 +131,7 @@ const Navbar = withRouter(({ history, authUser, handleLogout, signout }) => {
                       borderRadius: "50%",
                     }}
                     className="nav-link  p-0 m-0 ml-1 img-circle float-right "
-                    src={authUser.photo.photoURI}
+                    src={authUser.photo}
                     height="30px"
                     onError={(e) => (e.target.src = avatar)}
                     alt="user "
@@ -254,7 +254,7 @@ const Navbar = withRouter(({ history, authUser, handleLogout, signout }) => {
                 {authUser && authUser.roll !== "admin" && (
                   <Notification authUser={authUser} />
                 )}
-                <li className="nav-item dropdown profile-btn ">
+                <li className="nav-item dropdown profile-btn">
                   <a
                     className="nav-link d-flex align-items-center"
                     href="/"

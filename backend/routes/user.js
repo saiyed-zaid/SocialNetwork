@@ -37,6 +37,31 @@ router.post("/api/user/messages", auth_check, (req, res, next) => {
 });
 
 /**
+ * @function get
+ * @description Handling get request which fetch new messages for user
+ * @param {middleware} Checking Authorization
+ * @param {middleware} findPeople
+ */
+router.get("/api/user/messages/:userId", auth_check, (req, res, next) => {
+  Message.aggregate()
+    .match({ receiver: req.profile._id })
+    .group({ _id: "$sender", count: { $sum: 1 } })
+    .lookup({
+      from: "users",
+      localField: "_id",
+      foreignField: "_id",
+      as: "users",
+    })
+    .project("users.name count")
+    .then((response) => {
+      res.json(response);
+    })
+    .catch((error) => {
+      console.log("err", error);
+    });
+});
+
+/**
  * @function put
  * @description Handling put request which Update isNewUser status false
  * @param {middleware} Checking Authorization

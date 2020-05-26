@@ -517,35 +517,6 @@ exports.dailyNewPosts = async (req, res, next) => {
     res.status(400).json({ err: error });
   }
 };
-/**
- * @function middleware
- * @description Handling patch request which update/Add post Comment Reply in database
- */
-exports.commentPostReply = async (req, res, next) => {
-  try {
-    const post = await Post.findOne({
-      _id: req.body.postId,
-    });
-
-    const comments = post.comments;
-
-    const commentIndex = comments.findIndex((comment, index) => {
-      return comment._id == req.body.comment;
-    });
-
-    comments[commentIndex].replies.push({
-      text: req.body.reply,
-      postedBy: req.body.userId,
-    });
-
-    const updatedrecord = await post.updateOne({ comments });
-
-    res.json(updatedrecord);
-  } catch (error) {
-    console.log("error", error);
-    res.status(400).json(error);
-  }
-};
 
 const uploadFile = (file) => {
   const storage = new Storage({
