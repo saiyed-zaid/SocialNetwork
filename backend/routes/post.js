@@ -216,6 +216,40 @@ router.patch(
   postController.updatePost
 );
 
+/**
+ * @function patch
+ * @description Handling patch request which update schedule post in database
+ * @param {String} path of router
+ * @param {router} auth_check for checking authorization
+ * @param {property} property update Schedule Post
+ */
+router.patch(
+  "/api/post/schedule/:postId",
+  auth_check,
+  postController.hasAuthorization,
+  multer({
+    storage: multer.memoryStorage(),
+    limits: {
+      fileSize: 5 * 1024 * 1024, // keep images size < 5 MB
+    },
+    fileFilter: (req, file, cb) => {
+      if (
+        file.mimetype == "image/jpg" ||
+        file.mimetype == "image/jpeg" ||
+        file.mimetype == "video/mp4"
+      ) {
+        cb(null, true);
+      } else {
+        cb(
+          new Error("File type is invalid, allowed types [jpeg, jpg]."),
+          false
+        );
+      }
+    },
+  }).array("photo"),
+  postController.updateSchedulePost
+);
+
 router.get(
   "/api/post/newpost/:userId",
   auth_check,
