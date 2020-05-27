@@ -247,7 +247,7 @@ export default class Postservice {
   async deleteScheduledPost(postId, token) {
     try {
       const response = await fetch(
-        `${process.env.REACT_APP_API_URL}/api/scheculed/post/${postId}`,
+        `${process.env.REACT_APP_API_URL}/api/scheduled/post/${postId}`,
         {
           method: "DELETE",
           headers: {

@@ -35,7 +35,14 @@ class Profile extends Component {
     const userId = this.props.match.params.userId;
     this.init(userId);
   }
+  /*  componentDidUpdate(prevProps, prevState) {
+    console.log(prevProps.match.params.userId);
 
+    if (prevProps.match.params.userId != this.props.match.params.userId) {
+      const userId = this.props.match.params.userId;
+      this.loadPosts(userId);
+    }
+  } */
   init = async (userId) => {
     const token = this.props.authUser.token;
     const data = await this.props.read(userId, token);

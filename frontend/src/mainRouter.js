@@ -568,7 +568,6 @@ class MainRouter extends React.Component {
               />
             )}
           />
-
           <Route
             path="/signin"
             exact
@@ -590,7 +589,6 @@ class MainRouter extends React.Component {
             read={this.props.Userservice.read}
             updateUser={this.props.Userservice.updateUser}
           />
-
           <PrivateRoute
             path="/findpeople/:userId"
             exact
@@ -598,7 +596,6 @@ class MainRouter extends React.Component {
             findPeople={this.props.Userservice.findPeople}
             follow={this.props.Userservice.follow}
           />
-
           <PrivateRoute
             path="/user/:userId"
             authUser={this.state.authUser}
@@ -624,15 +621,13 @@ class MainRouter extends React.Component {
             read={this.props.Userservice.read}
             changePassword={this.props.Authservice.changePassword}
           />
-          <Route
+          <PrivateRoute
             path="/post/scheduledposts/:userId"
             exact
-            render={(props) => (
-              <ScheduledPost
-                fetchScheduledPosts={this.props.Postservice.fetchScheduledPosts}
-                authUser={this.state.authUser}
-              />
-            )}
+            component={ScheduledPost}
+            fetchScheduledPosts={this.props.Postservice.fetchScheduledPosts}
+            authUser={this.state.authUser}
+            deleteScheduledPost={this.props.Postservice.deleteScheduledPost}
           />
         </Switch>
       </div>

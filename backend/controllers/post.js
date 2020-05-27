@@ -69,10 +69,8 @@ exports.getScheduledPost = async (req, res, next) => {
       status: true,
     })
       .populate("postedBy", "_id name role photo")
-      .populate("comments.postedBy", "_id name")
-      .populate("likes.user", "_id name")
-      .select("_id title body scheduleTime created  status photo tags")
-      .sort("_created");
+      .select("_id title body scheduleTime  status photo tags")
+      // .sort("_created");
     if (posts.length == 0) {
       return res.json({
         msg: "There is no schedule posts by this user",
@@ -95,10 +93,11 @@ exports.getScheduledPost = async (req, res, next) => {
  */
 exports.deleteScheduledPost = async (req, res, next) => {
   const post = req.post;
+  console.log("New Post", req.post);
+
   if (!post) {
     return res.json({ msg: "Post not Found" });
   }
-  //console.table(req.auth.role);
   if (
     req.auth._id != req.post.postedBy._id &&
     req.auth.role != "subscriber" &&

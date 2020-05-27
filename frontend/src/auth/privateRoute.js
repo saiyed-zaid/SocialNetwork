@@ -25,6 +25,8 @@ const PrivateRoute = ({
   unfollow,
   follow,
   fetchPost,
+  fetchScheduledPosts,
+  deleteScheduledPost,
   ...rest
 }) => {
   return (
@@ -52,6 +54,8 @@ const PrivateRoute = ({
               unfollow={unfollow}
               follow={follow}
               fetchPost={fetchPost}
+              fetchScheduledPosts={fetchScheduledPosts}
+              deleteScheduledPost={deleteScheduledPost}
             />
           </>
         ) : (

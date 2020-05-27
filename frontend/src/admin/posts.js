@@ -25,7 +25,6 @@ class Posts extends Component {
   }
 
   async componentDidMount() {
-
     const token = isAuthenticated().user.token;
     setTimeout(async () => {
       try {
@@ -47,16 +46,11 @@ class Posts extends Component {
   deletePost = async (postId) => {
     const token = isAuthenticated().user.token;
     try {
-      const data = await remove(postId, token);
+      const data = await this.props.remove(postId, token);
       if (data.error) {
         console.log(data.error);
       } else {
-        this.setState({
-          redirectToHome: true,
-          // toastPopup: true,
-          // toastType: "Success",
-          // toastMsg: "Record deleted successfully.",
-        });
+        this.setState({ redirectToHome: true });
         // setTimeout(this.toastPopupEnable, 8000);
         document.getElementById("deleteprofile").style.display = "none";
         document.getElementById("deleteprofile").classList.remove("show");
@@ -201,6 +195,7 @@ class Posts extends Component {
 
     document.getElementById("deleteprofile").style.display = "block";
     document.getElementById("deleteprofile").classList.add("show");
+    
   };
 
   render() {
