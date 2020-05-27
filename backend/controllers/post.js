@@ -13,16 +13,25 @@ const { uploadImageToFirebase } = require("../helper/uploadFile");
  */
 exports.postById = async (req, res, next, id) => {
   try {
-    const post = await Post.findOne({ _id: id })
-      .populate("postedBy", "_id name role")
-      .populate("comments.postedBy", "_id name photo")
-      .populate("comments.replies.postedBy", "_id name photo")
-      .populate("following", "_id name ")
-      .populate("tags", "name")
-      .select("comments title body  likes   photo created tags");
+    let post = null;
+    console.log("__PATH__", req.route.path);
+    if (req.route.path !== "/api/post/schedule/:postId") {
+      post = await Post.findOne({ _id: id })
+        .populate("postedBy", "_id name role")
+        .populate("comments.postedBy", "_id name photo")
+        .populate("comments.replies.postedBy", "_id name photo")
+        .populate("following", "_id name ")
+        .populate("tags", "name")
+        .select("comments title body  likes   photo created tags");
+    } else {
+      post = await PostSchedule.findOne({ _id: req.params.postId })
+        .populate("postedBy", "_id name role")
+        .populate("tags", "name")
+        .select("comments title body likes photo created tags");
+    }
 
     if (post) {
-      console.log("posts", post);
+      //console.log("__postsByID__", post);
       req.post = post;
     }
   } catch (error) {
@@ -399,14 +408,54 @@ exports.updatePost = async (req, res, next) => {
 
   try {
     const result = await post.save();
-    //prevPostPhoto
-    /*  if (result) {
-      if (prevPostPhoto) {
-        fs.unlink(prevPostPhoto, (err) => {
-          console.log("Error while unlink user image", err);
-        });
+    res.json({ post });
+  } catch (error) {
+    res.json({
+      msg: "Error while updating profile " + error,
+    });
+  }
+};
+
+exports.updateSchedulePost = async (req, res, next) => {
+  let reqTags;
+  let tags = [];
+  const reqFiles = [];
+
+  let post = req.post;
+  //const url = req.protocol + "://" + req.get("host");
+
+  if (req.body.tags) {
+    reqTags = JSON.parse(req.body.tags);
+
+    for (let index = 0; index < reqTags.length; index++) {
+      tags.push(reqTags[index].id);
+    }
+    req.body.tags = tags;
+  } else {
+    req.body.tags = post.tags;
+  }
+
+  if (req.files) {
+    //req.files = post.photo;
+    if (req.files.length > 0) {
+      for (var i = 0; i < req.files.length; i++) {
+        var fileUrl = uploadImageToFirebase(req.files[i]);
+        reqFiles.push(fileUrl);
       }
-    } */
+      req.body.photo = reqFiles;
+    } else {
+      req.body.photo = post.photo;
+    }
+    //const prevPostPhoto = post.photo;
+    console.log("photos", req.body.photo);
+    console.log("files path", reqFiles);
+  }
+
+  post = _.extend(post, req.body);
+  post.updated = Date.now();
+
+  try {
+    const result = await post.save();
     res.json({ post });
   } catch (error) {
     res.json({
