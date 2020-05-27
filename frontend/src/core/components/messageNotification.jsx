@@ -14,8 +14,6 @@ export default class messageNotification extends Component {
       if (data.error) {
         console.log(data.error);
       } else {
-        console.log(data);
-
         this.setState({ messages: data });
       }
     });
@@ -47,8 +45,7 @@ export default class messageNotification extends Component {
               onClick={() => this.props.handleOpen(user)}
               key={i}
             >
-              {console.log(user)}
-              <p className="text-dark">
+              <p className=" text-primary">
                 You Have New Message From {user.users.name}
               </p>
             </button>

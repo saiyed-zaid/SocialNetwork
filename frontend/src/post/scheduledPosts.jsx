@@ -1,4 +1,6 @@
 import React, { Component } from "react";
+import { Link } from "react-router-dom";
+
 import moment from "moment";
 import Modal from "../components/modal/modal";
 
@@ -91,9 +93,12 @@ export default class scheduledPosts extends Component {
                         )}
                       </td>
                       <td>
-                        <button className="btn btn-info">Edit</button>
+                        <Link to={`/post/scheduledpost/edit/${post._id}`}>
+                          Edit
+                        </Link>
+                        &nbsp;&nbsp;&nbsp;{" "}
                         <button
-                          className="btn btn-info"
+                          className="btn"
                           onClick={() => this.handleDeleteModal(post._id)}
                         >
                           <i className="fas fa-trash text-danger"></i>

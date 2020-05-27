@@ -27,6 +27,8 @@ const PrivateRoute = ({
   fetchPost,
   fetchScheduledPosts,
   deleteScheduledPost,
+  fetchScheduledPost,
+  editScheduledPost,
   ...rest
 }) => {
   return (
@@ -35,7 +37,6 @@ const PrivateRoute = ({
       render={(props) =>
         isAuthenticated() ? (
           <>
-            {console.log(fetchPost)}
             <Component
               {...props}
               authUser={authUser}
@@ -56,6 +57,8 @@ const PrivateRoute = ({
               fetchPost={fetchPost}
               fetchScheduledPosts={fetchScheduledPosts}
               deleteScheduledPost={deleteScheduledPost}
+              fetchScheduledPost={fetchScheduledPost}
+              editScheduledPost={editScheduledPost}
             />
           </>
         ) : (

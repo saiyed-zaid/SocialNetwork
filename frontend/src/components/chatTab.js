@@ -90,7 +90,7 @@ export default class chatTab extends Component {
     chatBox.scrollTo(0, chatBox.scrollHeight);
   }
   async componentDidUpdate(prevProps, prevState) {
-    if (prevProps.receiverId != this.props.receiverId) {
+    if (prevProps.receiverId !== this.props.receiverId) {
       try {
         const result = await this.props.fetchMessage(
           this.props.senderId,

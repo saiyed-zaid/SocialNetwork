@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { isAuthenticated } from "../auth/index";
-import { list, remove, update } from "../post/apiPost";
+import { remove, update } from "../post/apiPost";
 import { Link } from "react-router-dom";
 import DefaultPost from "../images/post.jpg";
 import Avatar from "../components/Avatar";
@@ -195,7 +195,6 @@ class Posts extends Component {
 
     document.getElementById("deleteprofile").style.display = "block";
     document.getElementById("deleteprofile").classList.add("show");
-    
   };
 
   render() {

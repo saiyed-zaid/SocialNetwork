@@ -247,7 +247,7 @@ export default class Postservice {
   async deleteScheduledPost(postId, token) {
     try {
       const response = await fetch(
-        `${process.env.REACT_APP_API_URL}/api/scheduled/post/${postId}`,
+        `${process.env.REACT_APP_API_URL}/api/post/schedule/${postId}`,
         {
           method: "DELETE",
           headers: {
@@ -260,6 +260,73 @@ export default class Postservice {
       return await response.json();
     } catch (error) {
       return Promise.reject(error);
+    }
+  }
+  async fetchScheduledPost(postId) {
+    var post;
+    try {
+      post = await fetch(
+        `${process.env.REACT_APP_API_URL}/api/post/schedule/edit/${postId}`,
+        {
+          method: "GET",
+        }
+      );
+      return await post.json({ post });
+    } catch (error) {
+      return Promise.reject(error);
+    }
+  }
+
+  async editScheduledPost(data, post, postId, token) {
+    const rules = {
+      title: "required|string|max:120|min:5",
+      body: "required|string|max:2000",
+    };
+
+    const messages = {
+      required: "{{field}} field is required",
+    };
+
+    try {
+      await validateAll(data, rules, messages);
+
+      try {
+        const response = await fetch(
+          `${process.env.REACT_APP_API_URL}/api/post/schedule/${postId}`,
+          {
+            method: "PATCH",
+            headers: {
+              Accept: "application/json",
+              Authorization: `Bearer ${token}`,
+            },
+            body: post,
+          }
+        );
+
+        // return await postData.json();
+
+        if (response.errors) {
+          const formattedErrors = {};
+          response.errors.forEach((error) => {
+            if (!formattedErrors.hasOwnProperty(error.param)) {
+              formattedErrors[error.param] = error.msg;
+            }
+          });
+          return Promise.reject(formattedErrors);
+        } else {
+          return await response.json();
+        }
+      } catch (errors) {
+        //SERVER ERROR
+        return Promise.reject(errors);
+      }
+    } catch (errors) {
+      var formattedErrors = {};
+      errors.forEach((error) => {
+        formattedErrors[error.field] = error.message;
+      });
+
+      return Promise.reject(formattedErrors);
     }
   }
 }

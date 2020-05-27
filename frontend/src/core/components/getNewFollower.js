@@ -10,7 +10,10 @@ const Follow = (props) => {
           <span className="noti w-100" key={i}>
             <small className="mr-auto">
               <Link to={`/user/${follower.id}`}>
-                {follower.name} Started Following You.
+                <i class="fas fa-user text-primary"></i>
+                &nbsp; &nbsp; &nbsp;
+                <span className="font-weight-bold"> {follower.name}</span>
+                &nbsp; Started Following You.
               </Link>
             </small>
             <small>
@@ -28,7 +31,10 @@ const Follow = (props) => {
           <span className="noti w-100" key={i}>
             <small className="mr-auto">
               <Link to={`/post/${like.postId}`}>
-                {like.name} Liked Your Post.{" "}
+                <i class="fas fa-heart text-danger icon-heart"></i>
+                &nbsp; &nbsp; &nbsp;
+                <span className="font-weight-bold">{like.name}</span> Liked Your
+                Post.
               </Link>
             </small>
             <small>
@@ -43,7 +49,10 @@ const Follow = (props) => {
           <span className="noti w-100" key={i}>
             <small className="mr-auto">
               <Link to={`/post/${comment.postId}`}>
-                {comment.name} Commented On Your Post.{" "}
+                <i class="fas fa-comment-dots text-secondary"></i>
+                &nbsp; &nbsp; &nbsp;
+                <span className="font-weight-bold">{comment.name}</span>{" "}
+                Commented On Your Post.
               </Link>
             </small>
             <small>

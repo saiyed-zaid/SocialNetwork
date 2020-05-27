@@ -13,9 +13,14 @@ const { uploadImageToFirebase } = require("../helper/uploadFile");
  */
 exports.postById = async (req, res, next, id) => {
   try {
+    console.log(req.params);
     let post = null;
-    console.log("__PATH__", req.route.path);
-    if (req.route.path !== "/api/post/schedule/:postId") {
+    if (
+      req.route.path !== "/api/post/schedule/:postId" &&
+      req.route.path !== "/api/post/schedule/edit/:postId"
+    ) {
+      console.log("test1");
+
       post = await Post.findOne({ _id: id })
         .populate("postedBy", "_id name role")
         .populate("comments.postedBy", "_id name photo")
@@ -24,14 +29,16 @@ exports.postById = async (req, res, next, id) => {
         .populate("tags", "name")
         .select("comments title body  likes   photo created tags");
     } else {
+      console.log("test2");
+
       post = await PostSchedule.findOne({ _id: req.params.postId })
         .populate("postedBy", "_id name role")
         .populate("tags", "name")
-        .select("comments title body likes photo created tags");
+        .select("scheduleTime  title body photo  tags");
     }
 
     if (post) {
-      //console.log("__postsByID__", post);
+      console.log("__postsByID__", post);
       req.post = post;
     }
   } catch (error) {
@@ -55,7 +62,7 @@ exports.getPost = async (req, res, next) => {
 exports.getPosts = async (req, res, next) => {
   try {
     const posts = await Post.find({ status: true })
-      .populate("postedBy", "_id name photo.photoURI")
+      .populate("postedBy", "_id name photo")
       .populate("comments.postedBy", "_id name")
       .populate("tags", "_id name")
       .select("_id title body created comments likes photo status tags")
@@ -78,8 +85,8 @@ exports.getScheduledPost = async (req, res, next) => {
       status: true,
     })
       .populate("postedBy", "_id name role photo")
-      .select("_id title body scheduleTime  status photo tags")
-      // .sort("_created");
+      .select("_id title body scheduleTime  status photo tags");
+    // .sort("_created");
     if (posts.length == 0) {
       return res.json({
         msg: "There is no schedule posts by this user",
@@ -102,7 +109,6 @@ exports.getScheduledPost = async (req, res, next) => {
  */
 exports.deleteScheduledPost = async (req, res, next) => {
   const post = req.post;
-  console.log("New Post", req.post);
 
   if (!post) {
     return res.json({ msg: "Post not Found" });
@@ -117,7 +123,7 @@ exports.deleteScheduledPost = async (req, res, next) => {
     });
   }
   try {
-    const result = await PostSchedule.remove({ _id: req.post._id });
+    const result = await post.remove({ _id: req.post._id });
     return res.json({ msg: "Post deleted successfully." });
   } catch (error) {
     return res.json({ msg: "Error while deleting post." });
@@ -417,6 +423,7 @@ exports.updatePost = async (req, res, next) => {
 };
 
 exports.updateSchedulePost = async (req, res, next) => {
+
   let reqTags;
   let tags = [];
   const reqFiles = [];

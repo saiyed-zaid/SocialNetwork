@@ -23,10 +23,9 @@ export default class index extends Component {
           <div className="d-flex">
             <img
               className="img-thumbnail flex-fill"
-              src={`${
-                user.photo.photoURI ? user.photo.photoURI : DefaultProfile
-              }`}
-              onError={(i) => (i.target.src = `${DefaultProfile}`)} 
+              style={{ maxWidth: "238px" }}
+              src={user.photo ? user.photo.photoURI : DefaultProfile}
+              onError={(e) => (e.target.src = DefaultProfile)}
               alt={user.name}
             />
           </div>

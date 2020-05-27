@@ -19,7 +19,7 @@ import AdminUsers from "./admin/users";
 import AdminPosts from "./admin/posts";
 import AdminHome from "./admin/admin";
 import PrivateRoute from "./auth/privateRoute";
-import LockScreen from "./auth/pages/lockScreen";
+import { messageStatusChange } from "./core/api/getNotification";
 import openSocket from "socket.io-client";
 import { isAuthenticated } from "./auth/index";
 import avatar from "./images/avatar.jpg";
@@ -31,7 +31,7 @@ import { Link } from "react-router-dom";
 import ChangePassword from "./auth/pages/changePassword";
 import ScheduledPost from "./post/scheduledPosts";
 import MsgNotification from "./core/components/messageNotification";
-
+import EditScheduledPost from "./post/editScheduledPost";
 const isActive = (history, path) => {
   if (history.location.pathname === path) {
     return { color: "#e6cf23" };
@@ -400,6 +400,9 @@ class MainRouter extends React.Component {
       receiverId: user._id,
       receiverName: user.users.name,
     });
+    messageStatusChange()
+      .then((data) => console.log(data))
+      .catch();
   };
 
   handleLogout = () => {
@@ -628,6 +631,15 @@ class MainRouter extends React.Component {
             fetchScheduledPosts={this.props.Postservice.fetchScheduledPosts}
             authUser={this.state.authUser}
             deleteScheduledPost={this.props.Postservice.deleteScheduledPost}
+          />
+          <PrivateRoute
+            path="/post/scheduledpost/edit/:postId"
+            exact
+            component={EditScheduledPost}
+            authUser={this.state.authUser}
+            editScheduledPost={this.props.Postservice.editScheduledPost}
+            fetchScheduledPost={this.props.Postservice.fetchScheduledPost}
+            read={this.props.Userservice.read}
           />
         </Switch>
       </div>

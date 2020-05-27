@@ -247,18 +247,15 @@ class Profile extends Component {
           </p>
           <hr className="my-4"></hr>
           {/* Follow/Following Details */}
-          <div
-            className="d-flex justify-content-center m-3 text-center"
-            onClick={this.showFollowList}
-          >
-            <p className="lead ml-2">
+          <div className="d-flex justify-content-center m-3 text-center">
+            <p className="lead ml-2" onClick={this.showFollowList}>
               <h5 className="card-subtitle mb-2 text-muted">Follower</h5>
               <h6 className="card-title text-warning">
                 {this.state.user.followers.length}
               </h6>
             </p>
 
-            <p className="lead ml-2">
+            <p className="lead ml-2" onClick={this.showFollowList}>
               <h5 className="card-subtitle mb-2 text-muted">Following</h5>
               <h6 className="card-title text-warning">
                 {this.state.user.following.length}
@@ -335,6 +332,7 @@ class Profile extends Component {
                   unfollow={this.props.unfollow}
                 />
               }
+              classes="m-0 p-0"
             />
           ) : null}
         </div>

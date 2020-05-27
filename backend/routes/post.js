@@ -63,6 +63,8 @@ router.get(
   postController.getScheduledPost
 );
 
+router.get("/api/post/schedule/edit/:postId", postController.getPost);
+
 /**
  * @function post
  * @description Handling post request which create new post in database
@@ -276,7 +278,7 @@ router.put(
  * @param {property} property deletePost
  */
 router.delete(
-  "/api/scheduled/post/:postId",
+  "/api/post/schedule/:postId",
   auth_check,
   postController.hasAuthorization,
   postController.deleteScheduledPost

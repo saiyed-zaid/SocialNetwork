@@ -3,7 +3,6 @@ import {
   read,
   /* isFollowStatusChange */ readPost,
 } from "../api/getNotification";
-import { Link } from "react-router-dom";
 
 import Follow from "./getNewFollower";
 import { isAuthenticated } from "../../auth";

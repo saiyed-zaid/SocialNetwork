@@ -2,7 +2,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 import SocialLogin from "./socialLogin";
 import Alert from "../../ui-components/Alert";
-import { socialLogin } from "..";
+
 
 class Signin extends React.Component {
   constructor(props) {
