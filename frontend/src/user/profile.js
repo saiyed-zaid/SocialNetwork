@@ -223,7 +223,7 @@ class Profile extends Component {
               }}
               alt={user.name}
               className="rounded-circle"
-              style={{ width: "150px" }}
+              style={{ width: "150px", height: "150px" }}
             />
             {this.state.user.isLoggedIn && (
               <span
@@ -299,6 +299,7 @@ class Profile extends Component {
             {posts &&
               posts.map((post, i) => (
                 <Postcard
+                  key={i}
                   post={post}
                   profile
                   handlePostStatusChange={this.handlePostStatusChange}

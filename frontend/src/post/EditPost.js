@@ -31,7 +31,6 @@ class EditPost extends React.Component {
 
     try {
       const data = await this.props.fetchPost(postId);
-      console.log("test", data);
 
       if (data.error) {
         this.setState({ redirectToProfile: true });
@@ -104,7 +103,12 @@ class EditPost extends React.Component {
     try {
       this.setState({ errors: {} });
 
-      await this.props.editPost(this.postData, this.state.id, token);
+      await this.props.editPost(
+        this.state,
+        this.postData,
+        this.state.id,
+        token
+      );
       this.props.history.push(`/user/${userId}`);
     } catch (errors) {
       this.setState({

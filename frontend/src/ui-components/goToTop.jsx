@@ -1,4 +1,6 @@
 import React, { Component } from "react";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faArrowUp } from "@fortawesome/free-solid-svg-icons";
 
 export default class goToTop extends Component {
   scrollFunction = () => {
@@ -33,7 +35,7 @@ export default class goToTop extends Component {
         data-placement="top"
         title="Jump To Top "
       >
-        <i class="fas fa-arrow-up"></i>
+        <FontAwesomeIcon icon={faArrowUp} />
       </button>
     );
   }

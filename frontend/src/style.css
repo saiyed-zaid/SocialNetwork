@@ -176,16 +176,16 @@ a {
     transform: translateY(0);
   }
 }
-.fa-edit {
+/* .fa-edit {
   color: #fff !important;
   font-size: 15px;
   transition: 0.2s ease-in;
-}
-.fa-trash {
+} */
+/* .fa-trash {
   color: #fff !important;
   font-size: 15px;
   transition: 0.2s ease-in;
-}
+} */
 .btn-primary:hover .fa-edit {
   color: #0073ff !important;
 }
@@ -466,7 +466,6 @@ a {
   .noti-toggle {
     left: 0 !important;
   }
-  
 }
 
 /* .badge-light {
@@ -727,7 +726,6 @@ div.content {
   }
 }
 
-
 .notify-custom {
   z-index: 9999;
 }
@@ -795,7 +793,6 @@ div.content {
   color: #191c23 !important;
 }
 
-
 tr {
   line-height: 1;
 }
@@ -809,7 +806,6 @@ i.text-danger {
 }
 
 /*Chat Box Css*/
-
 
 .bubbleWrapper {
   padding: 0;
@@ -829,7 +825,6 @@ i.text-danger {
 .inlineIcon {
   width: 20px;
   object-fit: contain;
-  
 }
 .ownBubble {
   min-width: 60px;
@@ -865,16 +860,44 @@ span.other {
   color: white !important;
 }
 
-.dropdown-item.active, .dropdown-item:active {
+.dropdown-item.active,
+.dropdown-item:active {
   background-color: white !important;
 }
 
-
-.icon-heart{
-animation: icon-pulse 1s ease-in infinite;
+.icon-heart {
+  animation: icon-pulse 1s ease-in infinite;
 }
-@keyframes icon-pulse{
-  0% { transform: scale(1); }
-  50% { transform: scale(1.3); }
-  100% { transform: scale(1); }
+@keyframes icon-pulse {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.3);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+/* .icon-like {
+  animation: icon-big 1s ease-in ;
+}
+@keyframes icon-big {
+  0% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(4);
+    opacity: 0;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+} */
+
+.post-video {
+  width: 500px;
+  height: 300px;
 }

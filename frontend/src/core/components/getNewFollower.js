@@ -1,7 +1,12 @@
 import React from "react";
 import TimeAgo from "react-timeago";
 import { Link, withRouter } from "react-router-dom";
-
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  faUser,
+  faHeart,
+  faCommentDots,
+} from "@fortawesome/free-solid-svg-icons";
 const Follow = (props) => {
   return (
     <div>
@@ -10,7 +15,7 @@ const Follow = (props) => {
           <span className="noti w-100" key={i}>
             <small className="mr-auto">
               <Link to={`/user/${follower.id}`}>
-                <i class="fas fa-user text-primary"></i>
+                <FontAwesomeIcon icon={faUser} className="text-primary" />
                 &nbsp; &nbsp; &nbsp;
                 <span className="font-weight-bold"> {follower.name}</span>
                 &nbsp; Started Following You.
@@ -31,10 +36,13 @@ const Follow = (props) => {
           <span className="noti w-100" key={i}>
             <small className="mr-auto">
               <Link to={`/post/${like.postId}`}>
-                <i class="fas fa-heart text-danger icon-heart"></i>
+                <FontAwesomeIcon
+                  icon={faHeart}
+                  className="text-danger icon-heart"
+                />
                 &nbsp; &nbsp; &nbsp;
-                <span className="font-weight-bold">{like.name}</span> Liked Your
-                Post.
+                <span className="font-weight-bold">{like.name}</span>{" "}
+                &nbsp;Liked Your Post.
               </Link>
             </small>
             <small>
@@ -49,10 +57,13 @@ const Follow = (props) => {
           <span className="noti w-100" key={i}>
             <small className="mr-auto">
               <Link to={`/post/${comment.postId}`}>
-                <i class="fas fa-comment-dots text-secondary"></i>
+                <FontAwesomeIcon
+                  icon={faCommentDots}
+                  className="text-secondary"
+                />
                 &nbsp; &nbsp; &nbsp;
-                <span className="font-weight-bold">{comment.name}</span>{" "}
-                Commented On Your Post.
+                <span className="font-weight-bold">{comment.name}</span>&nbsp;
+                &nbsp; Commented On Your Post.
               </Link>
             </small>
             <small>

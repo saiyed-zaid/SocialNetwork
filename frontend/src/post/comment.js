@@ -2,6 +2,8 @@ import React, { Component } from "react";
 import { isAuthenticated } from "../auth/index";
 import CommentList from "../components/commentList/index";
 import Alert from "../ui-components/Alert";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faPlus } from "@fortawesome/free-solid-svg-icons";
 
 class Comment extends Component {
   state = {
@@ -140,7 +142,7 @@ class Comment extends Component {
               className="btn btn-raised btn-primary"
               style={{ flex: 1 }}
             >
-              Add Comment <i className="fas fa-plus"></i>
+              Add Comment <FontAwesomeIcon icon={faPlus} />
             </button>
           </form>
         </div>

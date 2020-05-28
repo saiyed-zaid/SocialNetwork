@@ -7,6 +7,8 @@ import Avatar from "../components/Avatar";
 import Spinner from "../ui-components/Spinner";
 import "../../node_modules/react-toggle-switch/dist/css/switch.min.css";
 import Modal from "../components/modal/modal";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faTrash, faEdit } from "@fortawesome/free-solid-svg-icons";
 
 class Posts extends Component {
   constructor() {
@@ -212,7 +214,7 @@ class Posts extends Component {
             className="btn btn-danger m-2"
             onClick={this.handleMulltipleDeleteModal}
           >
-            <i className="fas fa-trash "></i> Delete Selected
+            <FontAwesomeIcon icon={faTrash} /> Delete Selected
             {/*  */}
           </button>
         </div>
@@ -320,7 +322,7 @@ class Posts extends Component {
                       style={{ boxShadow: "unset" }}
                       to={`/post/edit/${post._id}`}
                     >
-                      <i className="fas fa-edit text-primary"></i>
+                      <FontAwesomeIcon icon={faEdit} className="text-primary" />
                     </Link>
                   </td>
                   <td>
@@ -329,7 +331,11 @@ class Posts extends Component {
                       onClick={() => this.handleDeleteModal(post._id)}
                       style={{ boxShadow: "none" }}
                     >
-                      <i className="fas fa-trash text-danger"></i>
+                      <FontAwesomeIcon
+                        icon={faTrash}
+                        className="text-danger"
+                        color="green"
+                      />
                     </button>
                   </td>
                 </tr>

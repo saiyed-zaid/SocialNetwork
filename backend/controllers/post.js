@@ -219,8 +219,6 @@ exports.hasAuthorization = (req, res, next) => {
  * @description Handling post request which create new post in database
  */
 exports.createPost = async (req, res, next) => {
-  console.table(req.body.tags);
-
   const tags = JSON.parse(req.body.tags);
   const errors = validationResult(req);
 
@@ -423,7 +421,6 @@ exports.updatePost = async (req, res, next) => {
 };
 
 exports.updateSchedulePost = async (req, res, next) => {
-
   let reqTags;
   let tags = [];
   const reqFiles = [];

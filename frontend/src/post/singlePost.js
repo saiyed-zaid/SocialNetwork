@@ -7,6 +7,14 @@ import Spinner from "../ui-components/Spinner";
 import Modal from "../components/modal/modal";
 import EditPost from "./editPost";
 import Carousel from "../ui-components/carosuel";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  faHeart,
+  faArrowLeft,
+  faEdit,
+  faTrash,
+} from "@fortawesome/free-solid-svg-icons";
+
 class SinglePost extends Component {
   state = {
     post: null,
@@ -84,7 +92,9 @@ class SinglePost extends Component {
     this.setState({ comments });
   };
 
-  likeToggle = async () => {
+  likeToggle = async (e) => {
+    e.target.classList.add("icon-like");
+
     if (!isAuthenticated()) {
       this.setState({ redirectToSignin: true });
       return false;
@@ -109,7 +119,9 @@ class SinglePost extends Component {
       console.log(error);
     }
   };
-
+  getExt = (filepath) => {
+    return filepath.split("?")[0].split("#")[0].split(".").pop();
+  };
   renderPost = (post) => {
     const posterId = post.postedBy ? `/user/${post.postedBy._id}` : "";
     const posterName = post.postedBy ? post.postedBy.name : "Unknown";
@@ -123,6 +135,11 @@ class SinglePost extends Component {
                 <Carousel key={post._id} images={post.photo} />
               </div>
             </div>
+          ) : this.getExt(post.photo[0]) === "mp4" ? (
+            <video controls className="carosuel-height">
+              <source src={post.photo[0]} type="video/mp4" />
+              Your browser does not support the video tag.
+            </video>
           ) : (
             <img
               className="img-thumbnail p-0 rounded-0"
@@ -143,20 +160,17 @@ class SinglePost extends Component {
         <div className="card-body text-light">
           {like ? (
             <h5 onClick={this.likeToggle} className="text-light">
-              <i
-                className="fas fa-heart text-danger"
+              <FontAwesomeIcon
+                icon={faHeart}
+                className=" text-danger"
                 style={{ cursor: "pointer" }}
-              >
-                {" "}
-              </i>
+              />
               &nbsp; {likes}
               &nbsp; {likes > 1 ? "likes" : "like"}
             </h5>
           ) : (
             <h5 onClick={this.likeToggle} style={{ color: "#ffff" }}>
-              <i className="far fa-heart" style={{ cursor: "pointer" }}>
-                {" "}
-              </i>
+              <FontAwesomeIcon icon={faHeart} style={{ cursor: "pointer" }} />
               &nbsp;{likes}&nbsp;{likes > 1 ? "likes" : "like"}
             </h5>
           )}
@@ -178,7 +192,11 @@ class SinglePost extends Component {
 
           <div className="d-inline-block">
             <Link to="/" className="btn btn-raised btn-primary mr-1">
-              <i className="fas fa-arrow-left"></i> Back
+              <FontAwesomeIcon
+                icon={faArrowLeft}
+                style={{ cursor: "pointer" }}
+              />
+              Back
             </Link>
 
             {isAuthenticated().user &&
@@ -189,13 +207,19 @@ class SinglePost extends Component {
                     data-toggle="modal"
                     onClick={this.handleEditPost}
                   >
-                    <i className="fas fa-edit"></i>
+                    <FontAwesomeIcon
+                      icon={faEdit}
+                      style={{ cursor: "pointer" }}
+                    />
                   </button>
                   <button
                     onClick={this.deleteConfirmed}
                     className="btn btn-raised btn-primary mr-1 bg-dark"
                   >
-                    <i className="fas fa-trash"></i>
+                    <FontAwesomeIcon
+                      icon={faTrash}
+                      style={{ cursor: "pointer" }}
+                    />
                   </button>
                 </>
               )}

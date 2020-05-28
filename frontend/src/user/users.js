@@ -5,6 +5,8 @@ import ChatBar from "../components/chatBar/chatbar";
 import Chattab from "../components/chatTab";
 import UsersList from "../components/users/index";
 import Alert from "../ui-components/Alert";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faPaperPlane } from "@fortawesome/free-solid-svg-icons";
 
 class Users extends Component {
   constructor(props) {

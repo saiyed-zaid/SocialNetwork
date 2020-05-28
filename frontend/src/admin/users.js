@@ -4,7 +4,8 @@ import { Link } from "react-router-dom";
 import DefaultProfile from "../images/avatar.jpg";
 import "../../node_modules/react-toggle-switch/dist/css/switch.min.css";
 import Avatar from "../components/Avatar";
-// import Toast from "../components/Toast";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faTrash, faEdit } from "@fortawesome/free-solid-svg-icons";
 import Modal from "../components/modal/modal";
 import Spinner from "../ui-components/Spinner";
 
@@ -225,35 +226,10 @@ class Users extends Component {
             data-toggle="modal"
             // data-target="#exampleModalCenter"
           >
-            <i className="fas fa-trash"></i> Delete Selected
+            <FontAwesomeIcon icon={faTrash} /> Delete Selected
           </button>
         </div>
-        {/*
-        <div
-          style={{
-            display: "flex",
-            flexDirection: "column",
-            position: "fixed",
-            bottom: "0",
-            right: "0",
-            zIndex: "111",
-          }}
-        >
-            <Toast
-            status={
-              this.state.toastPopup ? "toast fade show" : "toast fade hide"
-            }
-            type={
-              this.state.toastPopup
-                ? this.state.toastType
-                : this.state.toastType
-            }
-            msg={
-              this.state.toastPopup ? this.state.toastMsg : this.state.toastMsg
-            }
-          /> 
-        </div>
-          */}
+
         {users.length > 0 ? (
           <table className="table table-hover" id="userstable">
             <thead className="thead-dark">
@@ -340,7 +316,10 @@ class Users extends Component {
                         to={`/user/edit/${user._id}`}
                         style={{ boxShadow: "unset" }}
                       >
-                        <i className="fas fa-edit text-primary"></i>
+                        <FontAwesomeIcon
+                          icon={faEdit}
+                          className="text-primary"
+                        />
                       </Link>
                     </td>
                     <td width="1%">
@@ -350,7 +329,10 @@ class Users extends Component {
                         disabled={isAuthenticated().user._id === user._id}
                         onClick={() => this.handleDeleteModal(user._id)}
                       >
-                        <i className="fas fa-trash text-danger"> </i>
+                        <FontAwesomeIcon
+                          icon={faTrash}
+                          className=" text-danger"
+                        />
                       </button>
                     </td>
                   </tr>

@@ -1,6 +1,8 @@
 import React, { Component } from "react";
 import { isAuthenticated, signout } from "../auth/index";
 import { Redirect } from "react-router-dom";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faTrash } from "@fortawesome/free-solid-svg-icons";
 
 class DeleteUser extends Component {
   state = {
@@ -55,7 +57,7 @@ class DeleteUser extends Component {
         className="btn btn-outline-secondary btn-custom"
       >
         Delete Profile &nbsp;
-        <i className="fas fa-trash"></i>
+        <FontAwesomeIcon icon={faTrash} />
       </button>
     );
   }

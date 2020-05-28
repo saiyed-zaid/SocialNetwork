@@ -2,7 +2,7 @@ import React from "react";
 import { Route, Switch, withRouter } from "react-router-dom";
 import Home from "./core/home";
 // /import Menu from "./core/menu";
-import Notification from "./core/components/Notification";
+import Notification from "./core/components/notification";
 import Signup from "./auth/pages/signup";
 import Signin from "./auth/pages/signin";
 import Profile from "./user/profile";

@@ -1,5 +1,7 @@
 import React, { Component } from "react";
 import { fetchNewMessage } from "../api/getNotification";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faComments, faCommentAlt } from "@fortawesome/free-solid-svg-icons";
 
 export default class messageNotification extends Component {
   constructor() {
@@ -32,7 +34,7 @@ export default class messageNotification extends Component {
           aria-haspopup="true"
           aria-expanded="false"
         >
-          <i className="far fa-comments" />
+          <FontAwesomeIcon icon={faComments} />
           <span className="badge badge-danger ml-1">{messages.length}</span>
         </a>
         <div
@@ -46,7 +48,8 @@ export default class messageNotification extends Component {
               key={i}
             >
               <p className=" text-primary">
-                You Have New Message From {user.users.name}
+                <FontAwesomeIcon icon={faCommentAlt} /> &nbsp;&nbsp; You Have
+                New Message From {user.users.name}
               </p>
             </button>
           ))}

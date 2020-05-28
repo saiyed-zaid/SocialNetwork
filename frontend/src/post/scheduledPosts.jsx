@@ -3,6 +3,8 @@ import { Link } from "react-router-dom";
 
 import moment from "moment";
 import Modal from "../components/modal/modal";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faTrash } from "@fortawesome/free-solid-svg-icons";
 
 export default class scheduledPosts extends Component {
   constructor() {
@@ -66,8 +68,8 @@ export default class scheduledPosts extends Component {
     const { posts } = this.state;
     return (
       <>
-        <div class="jumbotron-fluid m-4">
-          <h1 class="display-5 text-light">Scheduled Posts</h1>
+        <div className="jumbotron-fluid m-4">
+          <h1 className="display-5 text-light">Scheduled Posts</h1>
         </div>
         <div className="container-fluid">
           <div>
@@ -101,7 +103,10 @@ export default class scheduledPosts extends Component {
                           className="btn"
                           onClick={() => this.handleDeleteModal(post._id)}
                         >
-                          <i className="fas fa-trash text-danger"></i>
+                          <FontAwesomeIcon
+                            icon={faTrash}
+                            className=" text-danger"
+                          />
                         </button>
                       </td>
                     </tr>
