@@ -45,25 +45,23 @@ class Profile extends Component {
   } */
   init = async (userId) => {
     const token = this.props.authUser.token;
-    try {
-      const response = await this.props.read(userId, token);
-      if (response.status === 200) {
-        let following = this.checkFollow(response.data);
-        this.setState({
-          user: response.data,
-          following: response.data.following,
-          isLoading: false,
-        });
-        this.loadPosts(userId);
+    const response = await this.props.read(userId, token);
+    if (response.status === 401) {
+      localStorage.removeItem("jwt");
+      return this.props.history.push("/signin");
+    } else {
+      if (response.data.err) {
+        this.setState({ redirectToSignin: true });
       } else {
-        return Promise.reject(response.error);
+        let following = this.checkFollow(response.data);
+        this.setState({ user: response.data, following, isLoading: false });
+        this.loadPosts(userId);
       }
-    } catch (error) {
-      console.log(error);
     }
   };
 
   checkFollow = (user) => {
+    console.log("user", user);
     const jwt = isAuthenticated();
     const match = user.followers.find((follower) => {
       return follower.user._id === jwt.user._id;
@@ -127,12 +125,7 @@ class Profile extends Component {
     const token = isAuthenticated().user.token;
     try {
       const response = await this.props.fetchPostsByUser(userId, token);
-
-      if (response.status === 200) {
-        this.setState({ posts: response.posts });
-      } else {
-        return Promise.reject(response.error);
-      }
+      this.setState({ posts: response.data.posts });
     } catch (error) {
       console.log(error);
     }

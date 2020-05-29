@@ -4,8 +4,8 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faComments, faCommentAlt } from "@fortawesome/free-solid-svg-icons";
 
 export default class messageNotification extends Component {
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
     this.state = {
       messages: [],
     };
@@ -13,8 +13,12 @@ export default class messageNotification extends Component {
 
   componentDidMount() {
     fetchNewMessage().then((data) => {
-      if (data.error) {
-        console.log(data.error);
+      if (data.status === 401) {
+        localStorage.removeItem("jwt");
+        this.props.history.push("/signin");
+      }
+      if (data.err) {
+        console.log(data.err);
       } else {
         this.setState({ messages: data });
       }
@@ -41,18 +45,19 @@ export default class messageNotification extends Component {
           className="dropdown-menu dropdown-menu-lg-right"
           aria-labelledby="navbarDropdownMenuLink"
         >
-          {messages.map((user, i) => (
-            <button
-              className="dropdown-item"
-              onClick={() => this.props.handleOpen(user)}
-              key={i}
-            >
-              <p className=" text-primary">
-                <FontAwesomeIcon icon={faCommentAlt} /> &nbsp;&nbsp; You Have
-                New Message From {user.users.name}
-              </p>
-            </button>
-          ))}
+          {messages.length > 0 &&
+            messages.map((user, i) => (
+              <button
+                className="dropdown-item"
+                onClick={() => this.props.handleOpen(user)}
+                key={i}
+              >
+                <p className=" text-primary">
+                  <FontAwesomeIcon icon={faCommentAlt} /> &nbsp;&nbsp; You Have
+                  New Message From {user.users.name}
+                </p>
+              </button>
+            ))}
           {messages.length === 0 && (
             <button className="dropdown-item">
               <p className="text-dark">No Messages</p>

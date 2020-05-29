@@ -1,4 +1,5 @@
 import { validateAll } from "indicative/validator";
+import axios from "axios";
 
 export default class Postservice {
   /**
@@ -21,33 +22,30 @@ export default class Postservice {
     try {
       await validateAll(data, rules, messages);
 
-      try {
-        const response = await fetch(
-          `${process.env.REACT_APP_API_URL}/api/post/${userId}`,
-          {
-            method: "POST",
-            headers: {
-              Accept: "application/json",
-              Authorization: `Bearer ${token}`,
-            },
-            body: formData,
-          }
-        );
-
-        if (response.errors) {
-          const formattedErrors = {};
-          response.errors.forEach((error) => {
-            if (!formattedErrors.hasOwnProperty(error.param)) {
-              formattedErrors[error.param] = error.msg;
-            }
-          });
-          return Promise.reject(formattedErrors);
-        } else {
-          return await response.json();
+      const response = await axios(
+        `${process.env.REACT_APP_API_URL}/api/post/${userId}`,
+        {
+          method: "POST",
+          headers: {
+            Accept: "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          data: formData,
         }
-      } catch (errors) {
-        //SERVER ERROR
-        return Promise.reject(errors);
+      );
+
+      if (response.errors) {
+        const formattedErrors = {};
+
+        response.errors.forEach((error) => {
+          if (!formattedErrors.hasOwnProperty(error.param)) {
+            formattedErrors[error.param] = error.msg;
+          }
+        });
+
+        return Promise.reject(formattedErrors);
+      } else {
+        return response;
       }
     } catch (errors) {
       var formattedErrors = {};
@@ -69,7 +67,7 @@ export default class Postservice {
       url = `${process.env.REACT_APP_API_URL}/api/admin/posts`;
     }
 
-    const posts = await fetch(url, {
+    const response = await axios(url, {
       method: "GET",
       headers: {
         Accept: "application/json",
@@ -77,7 +75,7 @@ export default class Postservice {
         Authorization: `Bearer ${token}`,
       },
     });
-    return await posts.json({ posts });
+    return response;
   }
   /**
    * Fetch SIngle Post by post id
@@ -85,15 +83,15 @@ export default class Postservice {
    * @param {*} postId Post Id to Fetch
    */
   async fetchPost(postId) {
-    var post;
     try {
-      post = await fetch(
+      const response = await axios(
         `${process.env.REACT_APP_API_URL}/api/post/${postId}`,
         {
           method: "GET",
         }
       );
-      return await post.json({ post });
+
+      return response;
     } catch (error) {
       return Promise.reject(error);
     }
@@ -105,7 +103,7 @@ export default class Postservice {
    * @param {*} token  Authectication Token
    */
   async fetchPostsByUser(userId, token) {
-    const posts = await fetch(
+    const response = await axios(
       `${process.env.REACT_APP_API_URL}/api/post/by/${userId}`,
       {
         method: "GET",
@@ -116,7 +114,7 @@ export default class Postservice {
         },
       }
     );
-    return await posts.json({ posts });
+    return response;
   }
   /**
    * Api for Delteing post by postid
@@ -126,7 +124,7 @@ export default class Postservice {
    */
   async deletePost(postId, token) {
     try {
-      const response = await fetch(
+      const response = await axios(
         `${process.env.REACT_APP_API_URL}/api/post/${postId}`,
         {
           method: "DELETE",
@@ -137,7 +135,7 @@ export default class Postservice {
           },
         }
       );
-      return await response.json();
+      return response;
     } catch (error) {
       return Promise.reject(error);
     }
@@ -163,33 +161,23 @@ export default class Postservice {
     try {
       await validateAll(data, rules, messages);
 
-      try {
-        const response = await fetch(
-          `${process.env.REACT_APP_API_URL}/api/post/${postId}`,
-          {
-            method: "PATCH",
-            headers: {
-              Accept: "application/json",
-              Authorization: `Bearer ${token}`,
-            },
-            body: post,
-          }
-        );
-
-        if (response.errors) {
-          const formattedErrors = {};
-          response.errors.forEach((error) => {
-            if (!formattedErrors.hasOwnProperty(error.param)) {
-              formattedErrors[error.param] = error.msg;
-            }
-          });
-          return Promise.reject(formattedErrors);
-        } else {
-          return await response.json();
+      const response = await axios(
+        `${process.env.REACT_APP_API_URL}/api/post/${postId}`,
+        {
+          method: "PATCH",
+          headers: {
+            Accept: "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          data: post,
         }
-      } catch (errors) {
-        //SERVER ERROR
-        return Promise.reject(errors);
+      );
+      if (response.status === 200) {
+        return response;
+      } else if (response.status === 401) {
+        alert("please Login First...");
+      } else {
+        return Promise.reject(formattedErrors);
       }
     } catch (errors) {
       var formattedErrors = {};
@@ -208,7 +196,7 @@ export default class Postservice {
    */
   async likePost(userId, token, postId) {
     try {
-      const postData = await fetch(
+      const response = await axios(
         `${process.env.REACT_APP_API_URL}/api/post/like`,
         {
           method: "PATCH",
@@ -217,10 +205,10 @@ export default class Postservice {
             "Content-Type": "Application/json",
             Authorization: `Bearer ${token}`,
           },
-          body: JSON.stringify({ userId, postId }),
+          data: JSON.stringify({ userId, postId }),
         }
       );
-      return await postData.json();
+      return response;
     } catch (error) {
       return Promise.reject(error);
     }
@@ -235,7 +223,7 @@ export default class Postservice {
    */
   async unlikePost(userId, token, postId) {
     try {
-      const postData = await fetch(
+      const response = await axios(
         `${process.env.REACT_APP_API_URL}/api/post/unlike`,
         {
           method: "PATCH",
@@ -244,10 +232,10 @@ export default class Postservice {
             "Content-Type": "Application/json",
             Authorization: `Bearer ${token}`,
           },
-          body: JSON.stringify({ userId, postId }),
+          data: JSON.stringify({ userId, postId }),
         }
       );
-      return await postData.json();
+      return response;
     } catch (error) {
       return Promise.reject(error);
     }
@@ -263,7 +251,7 @@ export default class Postservice {
    */
   async addComment(userId, token, postId, comment) {
     try {
-      const commentData = await fetch(
+      const resonse = await axios(
         `${process.env.REACT_APP_API_URL}/api/post/comment`,
         {
           method: "PATCH",
@@ -272,10 +260,11 @@ export default class Postservice {
             "Content-Type": "Application/json",
             Authorization: `Bearer ${token}`,
           },
-          body: JSON.stringify({ userId, postId, comment }),
+          data: JSON.stringify({ userId, postId, comment }),
         }
       );
-      return await commentData.json();
+
+      return resonse;
     } catch (error) {
       return Promise.reject(error);
     }
@@ -291,7 +280,7 @@ export default class Postservice {
    */
   async removeComment(userId, token, postId, comment) {
     try {
-      const commentData = await fetch(
+      const response = await axios(
         `${process.env.REACT_APP_API_URL}/api/post/uncomment`,
         {
           method: "PATCH",
@@ -300,10 +289,11 @@ export default class Postservice {
             "Content-Type": "Application/json",
             Authorization: `Bearer ${token}`,
           },
-          body: JSON.stringify({ userId, postId, comment }),
+          data: JSON.stringify({ userId, postId, comment }),
         }
       );
-      return await commentData.json();
+
+      return response;
     } catch (error) {
       return Promise.reject(error);
     }
@@ -320,14 +310,14 @@ export default class Postservice {
 
   async commentReply(userId, token, postId, reply, comment) {
     try {
-      await fetch(`${process.env.REACT_APP_API_URL}/api/post/comment/reply`, {
+      await axios(`${process.env.REACT_APP_API_URL}/api/post/comment/reply`, {
         method: "PATCH",
         headers: {
           Accept: "application/json",
           "Content-Type": "Application/json",
           Authorization: `Bearer ${token}`,
         },
-        body: JSON.stringify({ userId, postId, reply, comment }),
+        data: JSON.stringify({ userId, postId, reply, comment }),
       });
     } catch (error) {
       return Promise.reject(error);
@@ -340,7 +330,7 @@ export default class Postservice {
    * @param {*} token Token for authentication
    */
   async fetchScheduledPosts(userId, token) {
-    const posts = await fetch(
+    const response = await axios(
       `${process.env.REACT_APP_API_URL}/api/post/schedule/by/${userId}`,
       {
         method: "GET",
@@ -351,7 +341,7 @@ export default class Postservice {
         },
       }
     );
-    return await posts.json({ posts });
+    return response;
   }
 
   /**
@@ -362,7 +352,7 @@ export default class Postservice {
    */
   async deleteScheduledPost(postId, token) {
     try {
-      const response = await fetch(
+      var response = await axios(
         `${process.env.REACT_APP_API_URL}/api/post/schedule/${postId}`,
         {
           method: "DELETE",
@@ -373,7 +363,7 @@ export default class Postservice {
           },
         }
       );
-      return await response.json();
+      return response;
     } catch (error) {
       return Promise.reject(error);
     }
@@ -384,15 +374,14 @@ export default class Postservice {
    * @param {*} postId post id which post user needs to fetch
    */
   async fetchScheduledPost(postId) {
-    var post;
     try {
-      post = await fetch(
+      var response = await axios(
         `${process.env.REACT_APP_API_URL}/api/post/schedule/edit/${postId}`,
         {
           method: "GET",
         }
       );
-      return await post.json({ post });
+      return response;
     } catch (error) {
       return Promise.reject(error);
     }
@@ -420,7 +409,7 @@ export default class Postservice {
       await validateAll(data, rules, messages);
 
       try {
-        const response = await fetch(
+        const response = await axios(
           `${process.env.REACT_APP_API_URL}/api/post/schedule/${postId}`,
           {
             method: "PATCH",
@@ -428,22 +417,22 @@ export default class Postservice {
               Accept: "application/json",
               Authorization: `Bearer ${token}`,
             },
-            body: post,
+            data: post,
           }
         );
 
         // return await postData.json();
 
-        if (response.errors) {
+        if (response.data.errors) {
           const formattedErrors = {};
-          response.errors.forEach((error) => {
+          response.data.errors.forEach((error) => {
             if (!formattedErrors.hasOwnProperty(error.param)) {
               formattedErrors[error.param] = error.msg;
             }
           });
           return Promise.reject(formattedErrors);
         } else {
-          return await response.json();
+          return response;
         }
       } catch (errors) {
         //SERVER ERROR

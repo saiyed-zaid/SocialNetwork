@@ -13,14 +13,10 @@ router.get("/api/newFollowers/user/:userId", authCheck, (req, res, next) => {
       "followers.isNewUser": true,
     },
     (err, result) => {
-      if (err) {
-        return next(new Error("User Not Found"));
-      }
       if (result) {
-        if(result[0]){
-        console.log("NEW FOLLOWE_", result[0].followers);
-
-        return res.status(200).json(result[0].followers);}
+        if (result[0]) {
+          return res.status(200).json(result[0].followers);
+        }
       }
     }
   )
@@ -34,6 +30,7 @@ router.get(
   (req, res, next) => {
     Post.find(
       {
+        postedBy: req.auth._id,
         $or: [
           {
             "likes.isNewLike": true,

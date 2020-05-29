@@ -32,22 +32,22 @@ export default class editScheduledPost extends Component {
       : this.props.postId;
 
     try {
-      const data = await this.props.fetchScheduledPost(postId);
+      const response = await this.props.fetchScheduledPost(postId);
 
-      if (data.error) {
-        this.setState({ redirectToProfile: true });
-      } else {
+      if (response.status === 200) {
         this.setState({
-          id: data._id,
-          title: data.title,
-          body: data.body,
+          id: response.data._id,
+          title: response.data.title,
+          body: response.data.body,
           error: "",
-          photo: data.photo ? data.photo : DefaultPost,
+          photo: response.data.photo ? response.data.photo : DefaultPost,
           user: this.props.authUser,
-          options: data.following,
-          selectedTags: data.tags,
-          postScheduleTime: data.scheduleTime,
+          options: response.data.following,
+          selectedTags: response.data.tags,
+          postScheduleTime: response.data.scheduleTime,
         });
+      } else {
+        this.setState({ redirectToProfile: true });
       }
     } catch (error) {
       console.log(error);
@@ -120,7 +120,7 @@ export default class editScheduledPost extends Component {
         token
       );
 
-      // this.props.history.push(`/user/${userId}`);
+       //this.props.history.push(`/user/${userId}`);
     } catch (errors) {
       this.setState({
         errors,

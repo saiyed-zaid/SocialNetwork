@@ -69,7 +69,7 @@ export default class commentList extends Component {
               height="30px"
               width="30px"
               src={
-                data.postedBy.photo.photoURI
+                data.postedBy.photo
                   ? data.postedBy.photo.photoURI
                   : DefaultProfile
               }

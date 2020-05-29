@@ -26,27 +26,26 @@ class SinglePost extends Component {
     comments: [],
   };
 
-  componentDidMount() {
+  async componentDidMount() {
     const postId = this.props.match.params.postId;
-    setTimeout(async () => {
-      try {
-        const response = await this.props.fetchPost(postId);
-
+    try {
+      const response = await this.props.fetchPost(postId);
+      if (response.status === 200) {
         if (response.error) {
           console.log(response.error);
         } else {
           this.setState({
-            post: response,
-            likes: response.likes.length,
-            like: this.checkLike(response.likes),
-            comments: response.comments,
+            post: response.data,
+            likes: response.data.likes.length,
+            like: this.checkLike(response.data.likes),
+            comments: response.data.comments,
             isLoading: false,
           });
         }
-      } catch (error) {
-        console.log(error);
       }
-    }, 500);
+    } catch (error) {
+      console.log(error);
+    }
   }
 
   /**
@@ -61,10 +60,10 @@ class SinglePost extends Component {
       try {
         const response = await this.props.deletePost(postId, token);
 
-        if (response.error) {
-          return Promise.reject(response.error);
-        } else {
+        if (response.status === 200) {
           this.setState({ redirectToHome: true });
+        } else {
+          return Promise.reject(response.error);
         }
       } catch (error) {
         console.log(error);
@@ -107,18 +106,17 @@ class SinglePost extends Component {
     try {
       const response = await callApi(userId, token, postId);
 
-      if (response.error) {
-        console.log(response.error);
-      } else {
+      if (response.status === 200) {
         this.setState({
           like: !this.state.like,
-          likes: response.likes.length,
+          likes: response.data.likes.length,
         });
       }
     } catch (error) {
       console.log(error);
     }
   };
+  
   getExt = (filepath) => {
     return filepath.split("?")[0].split("#")[0].split(".").pop();
   };

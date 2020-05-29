@@ -42,11 +42,11 @@ class Comment extends Component {
         const response = await this.props.addComment(userId, token, postId, {
           text: this.state.text,
         });
-        if (response.error) {
-          console.log(response.error);
-        } else {
+        if (response.status === 200) {
           this.setState({ text: "" });
-          this.props.updateComments(response.comments);
+          this.props.updateComments(response.data.comments);
+        } else {
+          console.log(response.error);
         }
       } catch (error) {
         console.log(error);
@@ -66,10 +66,10 @@ class Comment extends Component {
         postId,
         comment
       );
-      if (response.error) {
-        console.log(response.error);
+      if (response.status === 200) {
+        this.props.updateComments(response.data.comments);
       } else {
-        this.props.updateComments(response.comments);
+        console.log(response.error);
       }
     } catch (error) {
       console.log(error);

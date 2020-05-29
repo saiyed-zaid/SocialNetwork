@@ -25,17 +25,22 @@ class Notification extends React.Component {
 
   async componentDidMount() {
     //New Follower List
-    const response = await newFollowersList();
-    const data = response.data;
-    var newFollowerList = [];
-    if (data.length > 0) {
-      data.forEach((follower, i) => {
-        newFollowerList.push({
-          id: follower.user._id,
-          name: follower.user.name,
-          followedFrom: follower.followedFrom,
+
+    newFollowersList().then((response) => {
+      if (response.status === 401) {
+        alert("401 notification");
+        localStorage.removeItem("jwt");
+      }
+      var newFollowerList = [];
+      if (response.data.length > 0) {
+        response.data.forEach((follower, i) => {
+          newFollowerList.push({
+            id: follower.user._id,
+            name: follower.user.name,
+            followedFrom: follower.followedFrom,
+          });
         });
-      });
+      }
 
       if (newFollowerList.length > 0) {
         this.setState({
@@ -43,18 +48,21 @@ class Notification extends React.Component {
           newFollowerList: newFollowerList,
         });
       }
-
-      if (this.state.hasNewFollow) {
-        //setTimeout(this.followStatusChange, 16000);
-      }
-    }
+    });
 
     try {
-      readPost().then((data) => {
+      readPost().then((response) => {
+        console.log("data_", response);
         let newLikesList = [];
         let newCommentsList = [];
-        if (data.length > 0) {
-          data.forEach((post) => {
+        if (response.status === 401) {
+          alert("401 notification");
+          localStorage.removeItem("jwt");
+
+          return;
+        }
+        if (response.data.length > 0) {
+          response.data.forEach((post) => {
             //Likes Notification
             post.likes.forEach((like, i) => {
               if (like.user._id !== isAuthenticated().user._id) {
@@ -79,7 +87,7 @@ class Notification extends React.Component {
               }
             });
 
-            if (newCommentsList.length > 0 || newCommentsList.length > 0) {
+            if (newLikesList.length > 0 || newCommentsList.length > 0) {
               this.setState({
                 hasNewComment: true,
                 newCommentList: newCommentsList,
@@ -140,7 +148,9 @@ class Notification extends React.Component {
         </a>
 
         <div className="dropdown-menu dropdown-menu-lg-right noti-toggle">
-          {(this.state.newFollowerList.length > 0 && (
+          {((this.state.newFollowerList.length > 0 ||
+            this.state.newLikesList.length > 0 ||
+            this.state.newCommentList.length > 0 > 0) && (
             <>
               <span
                 // to="/"

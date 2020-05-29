@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { validateAll } from "indicative/validator";
 import axios from "axios";
+
 export default class user extends Component {
   /**
    * Api For Reading Data From Database
@@ -31,7 +32,7 @@ export default class user extends Component {
    *
    * @returns {json}
    */
-  async list(token) {
+  async getAll(token) {
     const response = await axios(`${process.env.REACT_APP_API_URL}/api/users`, {
       method: "GET",
       headers: {

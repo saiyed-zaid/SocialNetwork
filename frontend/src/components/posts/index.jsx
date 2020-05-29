@@ -31,7 +31,9 @@ export default class PostCard extends Component {
             <img
               className="rounded-circle"
               src={
-                post.postedbt ? post.postedBy.photo.photoURI : DefaultProfile
+                post.postedBy.photo
+                  ? post.postedBy.photo.photoURI
+                  : DefaultProfile
               }
               alt={posterName}
               onError={(event) => (event.target.src = DefaultProfile)}

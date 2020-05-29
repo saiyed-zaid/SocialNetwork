@@ -41,12 +41,14 @@ class Users extends Component {
   async componentWillMount() {
     try {
       if (this.props.authUser) {
-        const response = await this.props.getUsers(this.props.authUser.token);
+        const response = await this.props.getAll(this.props.authUser.token);
 
         if (response.status === 200) {
-          this.setState({ users: response.data.users, isLoading: false });
-        } else {
-          return Promise.reject(response.error);
+          if (response.data.error) {
+            console.log(response.error);
+          } else {
+            this.setState({ users: response.data.users, isLoading: false });
+          }
         }
       } else {
         this.props.history.push("/signin");
