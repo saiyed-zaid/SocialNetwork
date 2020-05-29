@@ -2,6 +2,8 @@ import React, { Component } from "react";
 import { Link, withRouter } from "react-router-dom";
 import DefaultProfile from "../images/avatar.jpg";
 import { isAuthenticated } from "../auth/index";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faUserMinus, faPaperPlane } from "@fortawesome/free-solid-svg-icons";
 
 class ProfileTabs extends Component {
   handleUserUnfollow = async (e) => {
@@ -150,7 +152,7 @@ class ProfileTabs extends Component {
                           data-userId={person._id}
                           onClick={this.handleUserUnfollow}
                         >
-                          <i className="fas fa-user-minus"></i>
+                          <FontAwesomeIcon icon={faUserMinus} />
                         </button>
                         <button
                           className="btn btn-primary"
@@ -158,7 +160,7 @@ class ProfileTabs extends Component {
                           data-name={person.name}
                           onClick={this.props.hasChatBoxDisplay}
                         >
-                          <i className="fas fa-paper-plane"></i>
+                          <FontAwesomeIcon icon={faPaperPlane} />
                         </button>
                       </>
                     ) : null}

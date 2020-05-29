@@ -35,7 +35,14 @@ class Profile extends Component {
     const userId = this.props.match.params.userId;
     this.init(userId);
   }
+  /*  componentDidUpdate(prevProps, prevState) {
+    console.log(prevProps.match.params.userId);
 
+    if (prevProps.match.params.userId != this.props.match.params.userId) {
+      const userId = this.props.match.params.userId;
+      this.loadPosts(userId);
+    }
+  } */
   init = async (userId) => {
     const token = this.props.authUser.token;
     const data = await this.props.read(userId, token);
@@ -219,7 +226,7 @@ class Profile extends Component {
               }}
               alt={user.name}
               className="rounded-circle"
-              style={{ width: "150px" }}
+              style={{ width: "150px", height: "150px" }}
             />
             {this.state.user.isLoggedIn && (
               <span
@@ -243,18 +250,15 @@ class Profile extends Component {
           </p>
           <hr className="my-4"></hr>
           {/* Follow/Following Details */}
-          <div
-            className="d-flex justify-content-center m-3 text-center"
-            onClick={this.showFollowList}
-          >
-            <p className="lead ml-2">
+          <div className="d-flex justify-content-center m-3 text-center">
+            <p className="lead ml-2" onClick={this.showFollowList}>
               <h5 className="card-subtitle mb-2 text-muted">Follower</h5>
               <h6 className="card-title text-warning">
                 {this.state.user.followers.length}
               </h6>
             </p>
 
-            <p className="lead ml-2">
+            <p className="lead ml-2" onClick={this.showFollowList}>
               <h5 className="card-subtitle mb-2 text-muted">Following</h5>
               <h6 className="card-title text-warning">
                 {this.state.user.following.length}
@@ -298,6 +302,7 @@ class Profile extends Component {
             {posts &&
               posts.map((post, i) => (
                 <Postcard
+                  key={i}
                   post={post}
                   profile
                   handlePostStatusChange={this.handlePostStatusChange}
@@ -331,6 +336,7 @@ class Profile extends Component {
                   unfollow={this.props.unfollow}
                 />
               }
+              classes="m-0 p-0"
             />
           ) : null}
         </div>

@@ -63,6 +63,8 @@ router.get(
   postController.getScheduledPost
 );
 
+router.get("/api/post/schedule/edit/:postId", postController.getPost);
+
 /**
  * @function post
  * @description Handling post request which create new post in database
@@ -80,6 +82,8 @@ router.post(
       fileSize: 5 * 1024 * 1024, // keep images size < 5 MB
     },
     fileFilter: (req, file, cb) => {
+      console.log("_Photot", req.file);
+
       if (
         file.mimetype == "image/jpg" ||
         file.mimetype == "image/jpeg" ||
@@ -88,7 +92,7 @@ router.post(
         cb(null, true);
       } else {
         cb(
-          new Error("File type is invalid, allowed types [jpeg, jpg]."),
+          new Error("File type is invalid, allowed types [jpeg, jpg ,mp4]."),
           false
         );
       }

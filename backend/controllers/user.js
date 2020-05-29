@@ -3,6 +3,7 @@ const _ = require("lodash");
 const fs = require("fs");
 const md5 = require("md5");
 const { Storage } = require("@google-cloud/storage");
+const Message = require("../models/messages");
 
 exports.userById = async (req, res, next, id) => {
   try {
@@ -425,4 +426,25 @@ const uploadFile = (file) => {
   } catch (error) {
     return error;
   }
+};
+
+exports.messageStatusChange = (req, res, next) => {
+  console.log("BODY__", req.auth._id);
+  Message.updateMany(
+    { receiver: req.auth._id },
+    {
+      $set: {
+        isNewMessage: false,
+      },
+    },
+    { multi: true }
+  )
+    .then((result) => {
+      console.log("result", result);
+    })
+    .catch((err) => {
+      if (err) {
+        console.error(err);
+      }
+    });
 };

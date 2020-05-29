@@ -87,11 +87,6 @@ class NewPost extends React.Component {
   };
 
   handleScheduleChange = (event) => {
-    const date1 = new Date();
-    const date2 = new Date(event);
-    const dobValidate = this.diff_years(date1, date2);
-    console.log(dobValidate);
-
     this.postData.set("postScheduleTime", event);
     this.setState({
       postScheduleTime: event,
@@ -117,7 +112,7 @@ class NewPost extends React.Component {
         this.props.authUser.token
       );
 
-      this.props.history.push(`/user/${this.props.authUser._id}`);
+      // this.props.history.push(`/user/${this.props.authUser._id}`);
     } catch (errors) {
       this.setState({
         errors,

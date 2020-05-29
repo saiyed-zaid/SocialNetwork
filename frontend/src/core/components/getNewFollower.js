@@ -1,7 +1,12 @@
 import React from "react";
 import TimeAgo from "react-timeago";
 import { Link, withRouter } from "react-router-dom";
-
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  faUser,
+  faHeart,
+  faCommentDots,
+} from "@fortawesome/free-solid-svg-icons";
 const Follow = (props) => {
   return (
     <div>
@@ -10,7 +15,10 @@ const Follow = (props) => {
           <span className="noti w-100" key={i}>
             <small className="mr-auto">
               <Link to={`/user/${follower.id}`}>
-                {follower.name} Started Following You.
+                <FontAwesomeIcon icon={faUser} className="text-primary" />
+                &nbsp; &nbsp; &nbsp;
+                <span className="font-weight-bold"> {follower.name}</span>
+                &nbsp; Started Following You.
               </Link>
             </small>
             <small>
@@ -28,7 +36,13 @@ const Follow = (props) => {
           <span className="noti w-100" key={i}>
             <small className="mr-auto">
               <Link to={`/post/${like.postId}`}>
-                {like.name} Liked Your Post.{" "}
+                <FontAwesomeIcon
+                  icon={faHeart}
+                  className="text-danger icon-heart"
+                />
+                &nbsp; &nbsp; &nbsp;
+                <span className="font-weight-bold">{like.name}</span>{" "}
+                &nbsp;Liked Your Post.
               </Link>
             </small>
             <small>
@@ -43,7 +57,13 @@ const Follow = (props) => {
           <span className="noti w-100" key={i}>
             <small className="mr-auto">
               <Link to={`/post/${comment.postId}`}>
-                {comment.name} Commented On Your Post.{" "}
+                <FontAwesomeIcon
+                  icon={faCommentDots}
+                  className="text-secondary"
+                />
+                &nbsp; &nbsp; &nbsp;
+                <span className="font-weight-bold">{comment.name}</span>&nbsp;
+                &nbsp; Commented On Your Post.
               </Link>
             </small>
             <small>

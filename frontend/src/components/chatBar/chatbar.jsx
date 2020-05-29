@@ -1,5 +1,7 @@
 import React, { Component } from "react";
 import defaultProfile from "../../images/avatar.jpg";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faCaretRight} from "@fortawesome/free-solid-svg-icons";
 
 // import classes from "./chatbar.css";
 
@@ -25,10 +27,11 @@ export default class chatbar extends Component {
             cursor: "pointer",
           }}
         >
-          <i
+          <FontAwesomeIcon
+            icon={faCaretRight}
             onClick={this.OnClose}
-            className="fas fa-caret-right text-danger col-sm-2"
-          ></i>
+            className="text-danger col-sm-2"
+          />
           <span className="col-sm-10 text-center text-light">Online</span>
         </div>
         <ul className="text-light p-0 m-0" style={{ listStyleType: "none" }}>

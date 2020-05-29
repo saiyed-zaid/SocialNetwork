@@ -3,7 +3,8 @@ import DefaultProfile from "../../images/avatar.jpg";
 import Timeago from "react-timeago";
 import { Link } from "react-router-dom";
 import { isAuthenticated } from "../../auth/index";
-// import Alert from "../../ui-components/Alert";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faTrash, faReply } from "@fortawesome/free-solid-svg-icons";
 
 export default class commentList extends Component {
   constructor() {
@@ -66,6 +67,7 @@ export default class commentList extends Component {
             <img
               className="float-left mr-2 rounded"
               height="30px"
+              width="30px"
               src={
                 data.postedBy.photo.photoURI
                   ? data.postedBy.photo.photoURI
@@ -91,7 +93,7 @@ export default class commentList extends Component {
                   onClick={() => this.props.deleteClick(data)}
                   className="btn text-danger float-right btn-delete"
                 >
-                  <i className="fas fa-trash" style={{ color: "none" }}></i>
+                  <FontAwesomeIcon icon={faTrash} style={{ color: "none" }} />
                 </button>
               ) : (
                 <button
@@ -101,7 +103,8 @@ export default class commentList extends Component {
                   }}
                   onClick={(e) => this.showReplyBox(e)}
                 >
-                  <i className="fas fa-reply"></i>&nbsp; Reply
+                  <FontAwesomeIcon icon={faReply} />
+                  &nbsp; Reply
                 </button>
               )}
               <br />
@@ -128,13 +131,17 @@ export default class commentList extends Component {
             <Link to={`/user/${reply.postedBy._id}`}>
               <img
                 style={{
-                  borderRadius: "50%",
+                  // borderRadius: "50%",
                   border: "1px solid black",
                 }}
                 className="float-left mr-2"
-                height="20px"
-                width="20px"
-                src={reply.postedBy.photo.photoURI}
+                height="30px"
+                width="30px"
+                src={
+                  reply.postedBy.photo
+                    ? reply.postedBy.photo.photoURI
+                    : DefaultProfile
+                }
                 alt={reply.postedBy.name}
                 onError={(e) => {
                   e.target.src = DefaultProfile;
@@ -147,11 +154,11 @@ export default class commentList extends Component {
                 &nbsp;
                 {isAuthenticated().user &&
                   isAuthenticated().user._id === data.postedBy._id && (
-                    <i
-                      className="fas fa-trash float-right"
+                    <FontAwesomeIcon
+                      className="float-right"
                       onClick={() => this.props.deleteClick(data)}
                       style={{ color: "none", cursor: "pointer" }}
-                    ></i>
+                    />
                   )}
                 <div
                   style={{

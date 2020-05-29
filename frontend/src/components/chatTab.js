@@ -4,6 +4,9 @@ import openSocket from "socket.io-client";
 import "emoji-mart/css/emoji-mart.css";
 import { Picker } from "emoji-mart";
 import moment from "moment";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faSmile, faPaperPlane } from "@fortawesome/free-solid-svg-icons";
+import Draggable, { DraggableCore } from "react-draggable"; // Both at the same time
 
 export default class chatTab extends Component {
   handleClose = () => {
@@ -90,7 +93,7 @@ export default class chatTab extends Component {
     chatBox.scrollTo(0, chatBox.scrollHeight);
   }
   async componentDidUpdate(prevProps, prevState) {
-    if (prevProps.receiverId != this.props.receiverId) {
+    if (prevProps.receiverId !== this.props.receiverId) {
       try {
         const result = await this.props.fetchMessage(
           this.props.senderId,
@@ -203,118 +206,133 @@ export default class chatTab extends Component {
   render() {
     const { messages } = this.state;
     return (
-      <div
-        id="chattab"
-        className="card"
-        style={{
-          display: "block",
-          transform: "none",
-          animation: "none",
-          transition: "none",
-          maxWidth: "283px",
-        }}
+      <Draggable
+        axis="both"
+        handle=".handle"
+        defaultPosition={{ x: 0, y: 0 }}
+        position={null}
+        grid={[25, 25]}
+        scale={1}
+        onStart={this.handleStart}
+        onDrag={this.handleDrag}
+        onStop={this.handleStop}
       >
-        <div className="card-header text-left text-light bg-dark">
-          <span>{this.props.receiverName}</span>
-          <span style={{ marginLeft: "10px" }}></span>
-          <span className="float-right">
-            <button
-              type="button"
-              className="close text-light"
-              aria-label="Close"
-              onClick={this.props.handleChatBoxDisplay}
+        <div>
+          <div className="handle">Drag from here</div>
+          <div
+            id="chattab"
+            className="card"
+            style={{
+              display: "block",
+              transform: "none",
+              animation: "none",
+              transition: "none",
+              maxWidth: "283px",
+            }}
+          >
+            <div className="card-header text-left text-light bg-dark">
+              <span>{this.props.receiverName}</span>
+              <span style={{ marginLeft: "10px" }}></span>
+              <span className="float-right">
+                <button
+                  type="button"
+                  className="close text-light"
+                  aria-label="Close"
+                  onClick={this.props.handleChatBoxDisplay}
+                >
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </span>
+            </div>
+            <div
+              className="card-body chat-text bg-secondary text-light "
+              id="chatBox"
+              style={{ height: "200px", overflowY: "scroll", padding: "5px" }}
             >
-              <span aria-hidden="true">&times;</span>
-            </button>
-          </span>
-        </div>
-        <div
-          className="card-body chat-text bg-secondary text-light "
-          id="chatBox"
-          style={{ height: "200px", overflowY: "scroll", padding: "5px" }}
-        >
-          <ul className="p-0 m-0" id="myMsg" style={{ listStyle: "none" }}>
-            {messages &&
-              messages.map((msg, i) =>
-                msg.sender === this.props.authUser._id ? (
-                  <div className="bubbleWrapper">
-                    <div className="inlineContainer own">
-                      <img
-                        className="inlineIcon"
-                        src={
-                          this.props.authUser.phoo
-                            ? this.props.authUser.photo.photoURI
-                            : DefaultProfile
-                        }
-                        alt="user"
-                      />
-                      <div className="ownBubble own">{msg.message}</div>
-                    </div>
-                    <span className="own text-dark">
-                      {moment(msg.created).format("LT")}
-                    </span>
-                  </div>
-                ) : (
-                  <div className="bubbleWrapper">
-                    <div className="inlineContainer">
-                      <img
-                        className="inlineIcon"
-                        src={
-                          msg.receiver.photo
-                            ? msg.receiver.photo.photoURI
-                            : DefaultProfile
-                        }
-                        alt="user"
-                      />
+              <ul className="p-0 m-0" id="myMsg" style={{ listStyle: "none" }}>
+                {messages &&
+                  messages.map((msg, i) =>
+                    msg.sender === this.props.authUser._id ? (
+                      <div className="bubbleWrapper">
+                        <div className="inlineContainer own">
+                          <img
+                            className="inlineIcon"
+                            src={
+                              this.props.authUser
+                                ? this.props.authUser.photo.photoURI
+                                : DefaultProfile
+                            }
+                            alt="user"
+                          />
+                          <div className="ownBubble own">{msg.message}</div>
+                        </div>
+                        <span className="own text-dark">
+                          {moment(msg.created).format("LT")}
+                        </span>
+                      </div>
+                    ) : (
+                      <div className="bubbleWrapper">
+                        <div className="inlineContainer">
+                          <img
+                            className="inlineIcon"
+                            src={
+                              msg.receiver.photo
+                                ? msg.receiver.photo.photoURI
+                                : DefaultProfile
+                            }
+                            alt="user"
+                          />
 
-                      <div className="otherBubble other">{msg.message}</div>
-                    </div>
-                    <span className="other text-dark text-sm">
-                      {moment(msg.created).format("LT")}
-                    </span>
-                  </div>
-                )
-              )}
-          </ul>
-        </div>
-        <div className="card-footer bg-dark">
-          <div className="input-group">
-            <input
-              id="btn-input"
-              type="text"
-              className="form-control input-sm"
-              placeholder="Enter Message..."
-            />
-            <span className="input-group-btn">
-              <button className="btn" onClick={this.showEmoji}>
-                <i className="fas fa-smile text-warning"></i>
-              </button>
-              <button
-                className="btn text-light bg-dark"
-                style={{
-                  border: "1px solid #1a1d24",
-                  borderTopLeftRadius: "0",
-                  borderBottomLeftRadius: "0",
-                }}
-                onClick={this.handleSend}
-              >
-                <i className="fa fa-send"></i>
-              </button>
-            </span>
+                          <div className="otherBubble other">{msg.message}</div>
+                        </div>
+                        <span className="other text-dark text-sm">
+                          {moment(msg.created).format("LT")}
+                        </span>
+                      </div>
+                    )
+                  )}
+              </ul>
+            </div>
+            <div className="card-footer bg-dark">
+              <div className="input-group">
+                <input
+                  id="btn-input"
+                  type="text"
+                  className="form-control input-sm"
+                  placeholder="Enter Message..."
+                />
+                <span className="input-group-btn">
+                  <button className="btn" onClick={this.showEmoji}>
+                    <FontAwesomeIcon icon={faSmile} className=" text-warning" />
+                  </button>
+                  <button
+                    className="btn text-light bg-dark"
+                    style={{
+                      border: "1px solid #1a1d24",
+                      borderTopLeftRadius: "0",
+                      borderBottomLeftRadius: "0",
+                    }}
+                    onClick={this.handleSend}
+                  >
+                    <FontAwesomeIcon icon={faPaperPlane} />
+                  </button>
+                </span>
+              </div>
+            </div>
+            {this.state.displayEmoji ? (
+              <span>
+                <Picker
+                  onSelect={this.addEmoji}
+                  perLine="7"
+                  showPreview="FALSE"
+                  theme="dark"
+                  // native
+                />
+              </span>
+            ) : null}
           </div>
         </div>
-        {this.state.displayEmoji ? (
-          <span>
-            <Picker
-              onSelect={this.addEmoji}
-              perLine="7"
-              showPreview="FALSE"
-              theme="dark"
-              // native
-            />
-          </span>
-        ) : null}
-      </div>
+      </Draggable>
     );
   }
 }

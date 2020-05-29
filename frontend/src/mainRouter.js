@@ -2,7 +2,7 @@ import React from "react";
 import { Route, Switch, withRouter } from "react-router-dom";
 import Home from "./core/home";
 // /import Menu from "./core/menu";
-import Notification from "./core/components/Notification";
+import Notification from "./core/components/notification";
 import Signup from "./auth/pages/signup";
 import Signin from "./auth/pages/signin";
 import Profile from "./user/profile";
@@ -19,7 +19,7 @@ import AdminUsers from "./admin/users";
 import AdminPosts from "./admin/posts";
 import AdminHome from "./admin/admin";
 import PrivateRoute from "./auth/privateRoute";
-import LockScreen from "./auth/pages/lockScreen";
+import { messageStatusChange } from "./core/api/getNotification";
 import openSocket from "socket.io-client";
 import { isAuthenticated } from "./auth/index";
 import avatar from "./images/avatar.jpg";
@@ -31,7 +31,7 @@ import { Link } from "react-router-dom";
 import ChangePassword from "./auth/pages/changePassword";
 import ScheduledPost from "./post/scheduledPosts";
 import MsgNotification from "./core/components/messageNotification";
-
+import EditScheduledPost from "./post/editScheduledPost";
 const isActive = (history, path) => {
   if (history.location.pathname === path) {
     return { color: "#e6cf23" };
@@ -400,6 +400,9 @@ class MainRouter extends React.Component {
       receiverId: user._id,
       receiverName: user.users.name,
     });
+    messageStatusChange()
+      .then((data) => console.log(data))
+      .catch();
   };
 
   handleLogout = () => {
@@ -568,7 +571,6 @@ class MainRouter extends React.Component {
               />
             )}
           />
-
           <Route
             path="/signin"
             exact
@@ -590,7 +592,6 @@ class MainRouter extends React.Component {
             read={this.props.Userservice.read}
             updateUser={this.props.Userservice.updateUser}
           />
-
           <PrivateRoute
             path="/findpeople/:userId"
             exact
@@ -598,7 +599,6 @@ class MainRouter extends React.Component {
             findPeople={this.props.Userservice.findPeople}
             follow={this.props.Userservice.follow}
           />
-
           <PrivateRoute
             path="/user/:userId"
             authUser={this.state.authUser}
@@ -624,15 +624,22 @@ class MainRouter extends React.Component {
             read={this.props.Userservice.read}
             changePassword={this.props.Authservice.changePassword}
           />
-          <Route
+          <PrivateRoute
             path="/post/scheduledposts/:userId"
             exact
-            render={(props) => (
-              <ScheduledPost
-                fetchScheduledPosts={this.props.Postservice.fetchScheduledPosts}
-                authUser={this.state.authUser}
-              />
-            )}
+            component={ScheduledPost}
+            fetchScheduledPosts={this.props.Postservice.fetchScheduledPosts}
+            authUser={this.state.authUser}
+            deleteScheduledPost={this.props.Postservice.deleteScheduledPost}
+          />
+          <PrivateRoute
+            path="/post/scheduledpost/edit/:postId"
+            exact
+            component={EditScheduledPost}
+            authUser={this.state.authUser}
+            editScheduledPost={this.props.Postservice.editScheduledPost}
+            fetchScheduledPost={this.props.Postservice.fetchScheduledPost}
+            read={this.props.Userservice.read}
           />
         </Switch>
       </div>

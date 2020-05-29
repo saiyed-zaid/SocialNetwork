@@ -1,12 +1,14 @@
 import React, { Component } from "react";
 import { isAuthenticated } from "../auth/index";
-import { list, remove, update } from "../post/apiPost";
+import { remove, update } from "../post/apiPost";
 import { Link } from "react-router-dom";
 import DefaultPost from "../images/post.jpg";
 import Avatar from "../components/Avatar";
 import Spinner from "../ui-components/Spinner";
 import "../../node_modules/react-toggle-switch/dist/css/switch.min.css";
 import Modal from "../components/modal/modal";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faTrash, faEdit } from "@fortawesome/free-solid-svg-icons";
 
 class Posts extends Component {
   constructor() {
@@ -25,7 +27,6 @@ class Posts extends Component {
   }
 
   async componentDidMount() {
-
     const token = isAuthenticated().user.token;
     setTimeout(async () => {
       try {
@@ -47,16 +48,11 @@ class Posts extends Component {
   deletePost = async (postId) => {
     const token = isAuthenticated().user.token;
     try {
-      const data = await remove(postId, token);
+      const data = await this.props.remove(postId, token);
       if (data.error) {
         console.log(data.error);
       } else {
-        this.setState({
-          redirectToHome: true,
-          // toastPopup: true,
-          // toastType: "Success",
-          // toastMsg: "Record deleted successfully.",
-        });
+        this.setState({ redirectToHome: true });
         // setTimeout(this.toastPopupEnable, 8000);
         document.getElementById("deleteprofile").style.display = "none";
         document.getElementById("deleteprofile").classList.remove("show");
@@ -218,7 +214,7 @@ class Posts extends Component {
             className="btn btn-danger m-2"
             onClick={this.handleMulltipleDeleteModal}
           >
-            <i className="fas fa-trash "></i> Delete Selected
+            <FontAwesomeIcon icon={faTrash} /> Delete Selected
             {/*  */}
           </button>
         </div>
@@ -326,7 +322,7 @@ class Posts extends Component {
                       style={{ boxShadow: "unset" }}
                       to={`/post/edit/${post._id}`}
                     >
-                      <i className="fas fa-edit text-primary"></i>
+                      <FontAwesomeIcon icon={faEdit} className="text-primary" />
                     </Link>
                   </td>
                   <td>
@@ -335,7 +331,11 @@ class Posts extends Component {
                       onClick={() => this.handleDeleteModal(post._id)}
                       style={{ boxShadow: "none" }}
                     >
-                      <i className="fas fa-trash text-danger"></i>
+                      <FontAwesomeIcon
+                        icon={faTrash}
+                        className="text-danger"
+                        color="green"
+                      />
                     </button>
                   </td>
                 </tr>

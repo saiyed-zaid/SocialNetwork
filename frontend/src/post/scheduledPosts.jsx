@@ -1,11 +1,17 @@
 import React, { Component } from "react";
+import { Link } from "react-router-dom";
+
 import moment from "moment";
+import Modal from "../components/modal/modal";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faTrash } from "@fortawesome/free-solid-svg-icons";
 
 export default class scheduledPosts extends Component {
   constructor() {
     super();
     this.state = {
       posts: "",
+      deleteId: "",
     };
   }
   async componentDidMount() {
@@ -24,13 +30,46 @@ export default class scheduledPosts extends Component {
       console.log(error);
     }
   }
+  handleDeleteModal = (postId) => {
+    this.setState({ deleteId: postId });
+
+    document.getElementById("deletepost").style.display = "block";
+    document.getElementById("deletepost").classList.add("show");
+  };
+
+  deleteConfirmed = (postId) => {
+    this.deletePost(postId);
+    /*  let getRow = document.getElementById(postId);
+    getRow.addEventListener("animationend", () => {
+      getRow.parentNode.removeChild(getRow);
+      getRow.classList.remove("row-remove");
+    });
+    getRow.classList.toggle("row-remove"); */
+  };
+
+  deletePost = async (postId) => {
+    const token = this.props.authUser.token;
+    try {
+      const data = await this.props.deleteScheduledPost(postId, token);
+      if (data.error) {
+        console.log(data.error);
+      } else {
+        this.setState({});
+        // setTimeout(this.toastPopupEnable, 8000);
+        document.getElementById("deletepost").style.display = "none";
+        document.getElementById("deletepost").classList.remove("show");
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   render() {
     const { posts } = this.state;
     return (
       <>
-        <div class="jumbotron-fluid m-4">
-          <h1 class="display-5 text-light">Scheduled Posts</h1>
+        <div className="jumbotron-fluid m-4">
+          <h1 className="display-5 text-light">Scheduled Posts</h1>
         </div>
         <div className="container-fluid">
           <div>
@@ -56,14 +95,33 @@ export default class scheduledPosts extends Component {
                         )}
                       </td>
                       <td>
-                        <button className="btn btn-info">Edit</button>
-                        <button className="btn btn-info">Delete</button>
+                        <Link to={`/post/scheduledpost/edit/${post._id}`}>
+                          Edit
+                        </Link>
+                        &nbsp;&nbsp;&nbsp;{" "}
+                        <button
+                          className="btn"
+                          onClick={() => this.handleDeleteModal(post._id)}
+                        >
+                          <FontAwesomeIcon
+                            icon={faTrash}
+                            className=" text-danger"
+                          />
+                        </button>
                       </td>
                     </tr>
                   ))}
               </tbody>
             </table>
           </div>
+          <Modal
+            id="deletepost"
+            title="Delete Scheduled Post"
+            body="Are Your Sure You Want To Delete ?"
+            buttonText="Delete"
+            buttonClick={() => this.deleteConfirmed(this.state.deleteId)}
+            show
+          />
         </div>
       </>
     );

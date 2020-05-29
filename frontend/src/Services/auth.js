@@ -2,6 +2,11 @@ import { validateAll } from "indicative/validator";
 import { isAuthenticated } from "../auth/index";
 
 export default class Authservice {
+  /**
+   * APi for logging in user
+   *
+   * @param {json} data USer Data
+   */
   async loginUser(data) {
     const rules = {
       email: "required|email|string",
@@ -56,6 +61,11 @@ export default class Authservice {
     }
   }
 
+  /**
+   * Api for registring User
+   *
+   * @param {json} data  user data
+   */
   async registerUser(data) {
     const rules = {
       name: "required|alpha",
@@ -113,6 +123,11 @@ export default class Authservice {
     }
   }
 
+  /**
+   * APi for Siging Out User
+   *
+   * @param {function} next
+   */
   async signout(next) {
     const token = isAuthenticated().user.token;
     return fetch(`${process.env.REACT_APP_API_URL}/api/signout`, {
@@ -134,6 +149,12 @@ export default class Authservice {
       .catch((err) => console.log(err));
   }
 
+  /**
+   * APi for Changing Password Of the User
+   *
+   * @param {json} data Password data
+   * @param {Token} token authentication token
+   */
   async changePassword(data, token) {
     const rules = {
       oldPassword: "required|string",

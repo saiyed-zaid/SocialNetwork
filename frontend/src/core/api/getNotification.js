@@ -102,3 +102,20 @@ export const fetchNewMessage = async () => {
 
   return await user.json({ user });
 };
+
+export const messageStatusChange = async () => {
+  const userData = await fetch(
+    `${process.env.REACT_APP_API_URL}/api/user/messageStatusChange/${
+      isAuthenticated().user._id
+    }`,
+    {
+      method: "PUT",
+      headers: {
+        Accept: "application/json",
+        Authorization: `Bearer ${isAuthenticated().user.token}`,
+      },
+    }
+  );
+
+  return await userData.json();
+};

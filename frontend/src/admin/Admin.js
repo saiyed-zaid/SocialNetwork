@@ -7,7 +7,13 @@ import {
   getDailyActiveUsers,
   getUsersOnlineNow,
 } from "./apiAdmin";
-
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  faUser,
+  faUserCheck,
+  faListAlt,
+  faEye,
+} from "@fortawesome/free-solid-svg-icons";
 class Admin extends Component {
   state = {
     redirectToHome: false,
@@ -87,7 +93,7 @@ class Admin extends Component {
                 {newUsers.length}
                 &nbsp;
               </h1>
-              <i className="fas fa-user dash-icon"></i>
+              <FontAwesomeIcon icon={faUser} className="dash-icon" />
             </div>
             <div className="dash-card bg-warning p-3">
               <h3>New Posts</h3>
@@ -95,7 +101,7 @@ class Admin extends Component {
                 {newPosts.length}
                 &nbsp;
               </h1>
-              <i className="fas fa-list-alt dash-icon"></i>
+              <FontAwesomeIcon icon={faListAlt} className="dash-icon" />
             </div>
             <div
               className="dash-card p-3"
@@ -106,12 +112,12 @@ class Admin extends Component {
                 {dailyActiveUsers.length}
                 &nbsp;
               </h1>
-              <i className="fas fa-user-check dash-icon"></i>
+              <FontAwesomeIcon icon={faUserCheck} className="dash-icon" />
             </div>
             <div className="dash-card bg-danger p-3">
               <h3>Active Now</h3>
               <h1>{usersOnline.length}&nbsp;</h1>
-              <i className="fas fa-eye dash-icon"></i>
+              <FontAwesomeIcon icon={faEye} className="dash-icon" />
             </div>
           </div>
         </div>

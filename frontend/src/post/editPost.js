@@ -31,6 +31,7 @@ class EditPost extends React.Component {
 
     try {
       const data = await this.props.fetchPost(postId);
+
       if (data.error) {
         this.setState({ redirectToProfile: true });
       } else {
@@ -91,7 +92,6 @@ class EditPost extends React.Component {
 
   handleSubmit = async (event) => {
     event.preventDefault();
-    console.log("tags", this.selectedopt);
 
     const userId = this.props.authUser._id;
     const token = this.props.authUser.token;
@@ -103,7 +103,12 @@ class EditPost extends React.Component {
     try {
       this.setState({ errors: {} });
 
-      await this.props.editPost(this.postData, this.state.id, token);
+      await this.props.editPost(
+        this.state,
+        this.postData,
+        this.state.id,
+        token
+      );
       this.props.history.push(`/user/${userId}`);
     } catch (errors) {
       this.setState({
@@ -128,7 +133,6 @@ class EditPost extends React.Component {
   render() {
     return (
       <div className="container">
-        {console.log(this.state.options)}
         <form onSubmit={this.handleSubmit}>
           <div className="form-group text-light">
             <label htmlFor="photo">Photo</label>

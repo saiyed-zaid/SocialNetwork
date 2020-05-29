@@ -1,9 +1,10 @@
-import React from "react";
-
+import React, { Component } from "react";
 import { Multiselect } from "multiselect-react-dropdown";
 import DefaultPost from "../images/post.jpg";
+import DateTimePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
 
-class EditPost extends React.Component {
+export default class editScheduledPost extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -15,6 +16,7 @@ class EditPost extends React.Component {
       errors: {},
       options: [],
       selectedTags: [],
+      postScheduleTime: "",
     };
     this.postData = new FormData();
     this.multiselectRef = React.createRef();
@@ -30,7 +32,7 @@ class EditPost extends React.Component {
       : this.props.postId;
 
     try {
-      const data = await this.props.fetchPost(postId);
+      const data = await this.props.fetchScheduledPost(postId);
 
       if (data.error) {
         this.setState({ redirectToProfile: true });
@@ -44,6 +46,7 @@ class EditPost extends React.Component {
           user: this.props.authUser,
           options: data.following,
           selectedTags: data.tags,
+          postScheduleTime: data.scheduleTime,
         });
       }
     } catch (error) {
@@ -82,7 +85,7 @@ class EditPost extends React.Component {
     } else {
       value = event.target.value;
 
-      this.postData.append(event.target.name, value);
+      this.postData.set(event.target.name, value);
 
       this.setState({
         [event.target.name]: event.target.value,
@@ -90,10 +93,17 @@ class EditPost extends React.Component {
     }
   };
 
+  handleScheduleChange = (event) => {
+    const date2 = new Date(event);
+
+    this.postData.set("scheduleTime", date2);
+    this.setState({
+      postScheduleTime: date2,
+    });
+  };
   handleSubmit = async (event) => {
     event.preventDefault();
-
-    const userId = this.props.authUser._id;
+    let datas = this.state;
     const token = this.props.authUser.token;
 
     if (this.selectedopt.length > 0) {
@@ -103,13 +113,14 @@ class EditPost extends React.Component {
     try {
       this.setState({ errors: {} });
 
-      await this.props.editPost(
-        this.state,
+      await this.props.editScheduledPost(
+        datas,
         this.postData,
         this.state.id,
         token
       );
-      this.props.history.push(`/user/${userId}`);
+
+      // this.props.history.push(`/user/${userId}`);
     } catch (errors) {
       this.setState({
         errors,
@@ -199,11 +210,30 @@ class EditPost extends React.Component {
               selectedValues={this.state.selectedTags}
             />
           </div>
+
+          <div className="form-group text-light">
+            <label htmlFor="">Change Scheduled Time</label>
+            <br />
+            <DateTimePicker
+              className="form-control"
+              selected={
+                this.state.postScheduleTime &&
+                new Date(this.state.postScheduleTime)
+              }
+              onChange={this.handleScheduleChange}
+              showTimeSelect
+              timeIntervals={5}
+              timeCaption="time"
+              dateFormat="MMMM d, yyyy h:mm a"
+              key="schedulePost"
+              // minTime={checkDate}
+              /* minDate={new Date()} */
+              // maxTime={setHours(setMinutes(new Date(), 30), 20)}
+            />
+          </div>
           <button className="btn btn-primary">Edit</button>
         </form>
       </div>
     );
   }
 }
-
-export default EditPost;

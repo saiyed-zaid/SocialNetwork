@@ -3,10 +3,11 @@ import {
   newFollowersList,
   /* isFollowStatusChange */ readPost,
 } from "../api/getNotification";
-import { Link } from "react-router-dom";
 
 import Follow from "./getNewFollower";
 import { isAuthenticated } from "../../auth";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faBell } from "@fortawesome/free-solid-svg-icons";
 
 class Notification extends React.Component {
   constructor(props) {
@@ -132,7 +133,8 @@ class Notification extends React.Component {
           aria-haspopup="true"
           aria-expanded="false"
         >
-          <i className="far fa-bell text-light " />
+          
+          <FontAwesomeIcon icon={faBell} />
           {this.state.newFollowerList.length > 0 ||
           this.state.newLikesList.length > 0 ||
           this.state.newCommentList.length > 0 ? (

@@ -1,5 +1,7 @@
 import React, { Component } from "react";
 import { fetchNewMessage } from "../api/getNotification";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faComments, faCommentAlt } from "@fortawesome/free-solid-svg-icons";
 
 export default class messageNotification extends Component {
   constructor() {
@@ -14,8 +16,6 @@ export default class messageNotification extends Component {
       if (data.error) {
         console.log(data.error);
       } else {
-        console.log(data);
-
         this.setState({ messages: data });
       }
     });
@@ -34,7 +34,7 @@ export default class messageNotification extends Component {
           aria-haspopup="true"
           aria-expanded="false"
         >
-          <i className="far fa-comments" />
+          <FontAwesomeIcon icon={faComments} />
           <span className="badge badge-danger ml-1">{messages.length}</span>
         </a>
         <div
@@ -47,9 +47,9 @@ export default class messageNotification extends Component {
               onClick={() => this.props.handleOpen(user)}
               key={i}
             >
-              {console.log(user)}
-              <p className="text-dark">
-                You Have New Message From {user.users.name}
+              <p className=" text-primary">
+                <FontAwesomeIcon icon={faCommentAlt} /> &nbsp;&nbsp; You Have
+                New Message From {user.users.name}
               </p>
             </button>
           ))}

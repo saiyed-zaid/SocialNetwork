@@ -45,7 +45,7 @@ router.post("/api/user/messages", auth_check, (req, res, next) => {
 
 router.get("/api/user/messages/:userId", auth_check, (req, res, next) => {
   Message.aggregate()
-    .match({ receiver: req.profile._id })
+    .match({ receiver: req.profile._id, isNewMessage: true })
     .group({ _id: "$sender", count: { $sum: 1 } })
     .lookup({
       from: "users",
@@ -75,6 +75,11 @@ router.put(
   userController.newFollowerStatusChagne
 );
 
+router.put(
+  "/api/user/messageStatusChange/:userId",
+  auth_check,
+  userController.messageStatusChange
+);
 /**
  * @function put
  * @description Handling put request which Update user follow and add followers

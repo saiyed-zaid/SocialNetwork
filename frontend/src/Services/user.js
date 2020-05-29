@@ -265,6 +265,11 @@ export default class user extends Component {
     return await messages.json({ messages });
   }
 
+  /**
+   * Api for getting Online USers
+   * @param {*} userId
+   * @param {*} token
+   */
   async getOnlineUsers(userId, token) {
     const onlineUsers = await fetch(
       `${process.env.REACT_APP_API_URL}/api/user/getonline/${userId}`,
