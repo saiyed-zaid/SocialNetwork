@@ -242,7 +242,7 @@ export default class chatTab extends Component {
                       <img
                         className="inlineIcon"
                         src={
-                          this.props.authUser
+                          this.props.authUser.phoo
                             ? this.props.authUser.photo.photoURI
                             : DefaultProfile
                         }

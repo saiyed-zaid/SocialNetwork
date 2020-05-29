@@ -42,7 +42,7 @@ router.post("/api/user/messages", auth_check, (req, res, next) => {
  * @param {middleware} Checking Authorization
  * @param {middleware} findPeople
  */
-     
+
 router.get("/api/user/messages/:userId", auth_check, (req, res, next) => {
   Message.aggregate()
     .match({ receiver: req.profile._id })

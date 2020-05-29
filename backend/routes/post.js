@@ -270,13 +270,13 @@ router.put(
 
 /**
  * @function delete
- * @description Handling delete request which delete post in database
+ * @description Handling delete request which delete schedule post in database
  * @param {String} path of router
  * @param {router} auth_check for checking authorization
  * @param {property} property deletePost
  */
 router.delete(
-  "/api/scheduled/post/:postId",
+  "/api/post/schedule/:postId",
   auth_check,
   postController.hasAuthorization,
   postController.deleteScheduledPost

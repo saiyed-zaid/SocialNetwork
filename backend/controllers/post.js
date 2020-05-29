@@ -14,7 +14,6 @@ const { uploadImageToFirebase } = require("../helper/uploadFile");
 exports.postById = async (req, res, next, id) => {
   try {
     let post = null;
-    console.log("__PATH__", req.route.path);
     if (req.route.path !== "/api/post/schedule/:postId") {
       post = await Post.findOne({ _id: id })
         .populate("postedBy", "_id name role")
@@ -31,7 +30,6 @@ exports.postById = async (req, res, next, id) => {
     }
 
     if (post) {
-      //console.log("__postsByID__", post);
       req.post = post;
     }
   } catch (error) {
@@ -45,7 +43,7 @@ exports.postById = async (req, res, next, id) => {
  * @description Handling get request which fetch single post by postId
  */
 exports.getPost = async (req, res, next) => {
-  return res.json(req.post);
+  return res.status(200).json(req.post);
 };
 
 /**
@@ -60,9 +58,8 @@ exports.getPosts = async (req, res, next) => {
       .populate("tags", "_id name")
       .select("_id title body created comments likes photo status tags")
       .sort({ created: -1 });
-    res.json({ posts });
+    res.status(200).json({ posts });
   } catch (error) {
-    console.log("Error while fetching posts", error);
     res.status(422).json({ msg: "Error while fetching posts" });
   }
 };
@@ -88,11 +85,11 @@ exports.getScheduledPost = async (req, res, next) => {
         posts: [],
       });
     }
-    return res.json({
+    return res.status(200).json({
       posts,
     });
   } catch (error) {
-    return res.json({
+    return res.status(500).json({
       msg: "Error while fetching Posts",
     });
   }
@@ -107,21 +104,11 @@ exports.deleteScheduledPost = async (req, res, next) => {
   if (!post) {
     return res.json({ msg: "Post not Found" });
   }
-  //console.table(req.auth.role);
-  if (
-    req.auth._id != req.post.postedBy._id &&
-    req.auth.role != "subscriber" &&
-    req.auth.role != "admin"
-  ) {
-    return res(401).json({
-      msg: "Not authorized user for deleting this post.",
-    });
-  }
   try {
-    const result = await PostSchedule.remove({ _id: req.post._id });
+    const result = await post.remove({ _id: req.post._id });
     return res.json({ msg: "Post deleted successfully." });
   } catch (error) {
-    return res.json({ msg: "Error while deleting post." });
+    return res.status(500).json({ msg: "Something Went Wrong..." });
   }
 };
 
@@ -140,7 +127,7 @@ exports.getPostsForAdmin = async (req, res, next) => {
     res.json({ posts });
   } catch (error) {
     console.log("Error while fetching posts", error);
-    res.status(422).json({ msg: "Error while fetching posts" });
+    res.status(500).json({ msg: "Something Went Wrong..." });
   }
 };
 
@@ -185,15 +172,15 @@ exports.getPostsByUser = async (req, res, next) => {
       posts,
     });
   } catch (error) {
-    return res.json({
-      msg: "Error while fetching Posts",
+    return res.status(500).json({
+      msg: "Something Went Wrong...",
     });
   }
 };
 
 exports.hasAuthorization = (req, res, next) => {
   if (req.auth.role != "admin" && req.auth.role != "subscriber") {
-    return res.json({
+    return res.status(401).json({
       msg: "Not authorized user for this action on the post.",
     });
   }
@@ -202,7 +189,7 @@ exports.hasAuthorization = (req, res, next) => {
   }
 
   if (req.auth._id != req.post.postedBy._id) {
-    return res.json({
+    return res.status(401).json({
       msg: "Not authorized user for this action on the post.",
     });
   }
@@ -249,9 +236,9 @@ exports.createPost = async (req, res, next) => {
   try {
     const result = await post.save();
 
-    res.json({ result });
+    res.status(200).json({ result });
   } catch (err) {
-    console.log("Error while Creating Post", err);
+    res.status(500).json("Something Went Wrong...");
   }
 };
 
@@ -328,8 +315,9 @@ exports.createPostSchedule = async (req, res, next) => {
     try {
       const result = await post.save();
 
-      res.json({ result });
+      res.status(200).json({ result });
     } catch (err) {
+      return res.status(500).json("Something Went Wrong...");
       console.log("Error while Creating Post", err);
     }
   } else {
@@ -359,9 +347,9 @@ exports.deletePost = async (req, res, next) => {
   }
   try {
     const result = await Post.remove({ _id: req.post._id });
-    return res.json({ msg: "Post deleted successfully." });
+    return res.status(200).json({ msg: "Post deleted successfully." });
   } catch (error) {
-    return res.json({ msg: "Error while deleting post." });
+    return res.status(500).json({ msg: "Something Went Wrong." });
   }
 };
 
@@ -409,10 +397,10 @@ exports.updatePost = async (req, res, next) => {
 
   try {
     const result = await post.save();
-    res.json({ post });
+    res.status(200).json({ post });
   } catch (error) {
-    res.json({
-      msg: "Error while updating profile " + error,
+    res.status(500).json({
+      msg: "Something Went Wrong...",
     });
   }
 };
@@ -457,10 +445,10 @@ exports.updateSchedulePost = async (req, res, next) => {
 
   try {
     const result = await post.save();
-    res.json({ post });
+    res.status(200).json({ post });
   } catch (error) {
-    res.json({
-      msg: "Error while updating profile " + error,
+    res.status(500).json({
+      msg: "Something Went Wrong",
     });
   }
 };
@@ -483,9 +471,9 @@ exports.likePost = async (req, res, next) => {
       },
       { new: true }
     );
-    res.json(UpdatedLikePost);
+    res.status(200).json(UpdatedLikePost);
   } catch (error) {
-    res.status(400).json(error);
+    res.status(500).json(error);
   }
 };
 
@@ -502,9 +490,9 @@ exports.unlikePost = async (req, res, next) => {
       },
       { new: true }
     );
-    res.json(UpdatedLikePost);
+    res.status(200).json(UpdatedLikePost);
   } catch (error) {
-    res.status(400).json(error);
+    res.status(500).json(error);
   }
 };
 
@@ -526,9 +514,9 @@ exports.commentPost = async (req, res, next) => {
     )
       .populate("comments.postedBy", "_id name")
       .populate("postedBy", "_id name");
-    res.json(UpdatedCommentPost);
+    res.status(200).json(UpdatedCommentPost);
   } catch (error) {
-    res.status(400).json(error);
+    res.status(500).json(error);
   }
 };
 
@@ -549,9 +537,9 @@ exports.uncommentPost = async (req, res, next) => {
     )
       .populate("comments.postedBy", "_id name")
       .populate("postedBy", "_id name");
-    res.json(UpdatedCommentPost);
+    res.status(200).json(UpdatedCommentPost);
   } catch (error) {
-    res.status(400).json(error);
+    res.status(500).json(error);
   }
 };
 
@@ -578,10 +566,10 @@ exports.commentPostReply = async (req, res, next) => {
 
     const updatedrecord = await post.updateOne({ comments });
 
-    res.json(updatedrecord);
+    res.status(200).json(updatedrecord);
   } catch (error) {
     console.log("error", error);
-    res.status(400).json(error);
+    res.status(500).json(error);
   }
 };
 
@@ -594,9 +582,9 @@ exports.dailyNewPosts = async (req, res, next) => {
       created: { $gte: startDate.toDateString() },
     });
 
-    return await res.json(posts);
+    return await res.status(200).json(posts);
   } catch (error) {
-    res.status(400).json({ err: error });
+    res.status(500).json({ err: error });
   }
 };
 

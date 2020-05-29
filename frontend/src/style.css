@@ -6,6 +6,7 @@
   box-sizing: border-box;
   /* color: #e6cf23; */
 }
+
 body {
   min-height: 100vh;
   position: relative;
@@ -15,9 +16,9 @@ body {
 p {
   color: #d9d9d9;
 }
-.navbar {
+/* .navbar {
   padding: 0;
-}
+} */
 .mark {
   background-color: #e8e7e7 !important;
 }
@@ -229,7 +230,7 @@ a {
 }
 
 .bg-primary {
-  background-color: #01232c !important;
+  /* background-color: #01232c !important; */
 }
 
 .jumbotron {
@@ -466,7 +467,6 @@ a {
   .noti-toggle {
     left: 0 !important;
   }
-  
 }
 
 /* .badge-light {
@@ -727,7 +727,6 @@ div.content {
   }
 }
 
-
 .notify-custom {
   z-index: 9999;
 }
@@ -795,7 +794,6 @@ div.content {
   color: #191c23 !important;
 }
 
-
 tr {
   line-height: 1;
 }
@@ -809,7 +807,6 @@ i.text-danger {
 }
 
 /*Chat Box Css*/
-
 
 .bubbleWrapper {
   padding: 0;
@@ -829,7 +826,6 @@ i.text-danger {
 .inlineIcon {
   width: 20px;
   object-fit: contain;
-  
 }
 .ownBubble {
   min-width: 60px;
@@ -865,6 +861,7 @@ span.other {
   color: white !important;
 }
 
-.dropdown-item.active, .dropdown-item:active {
+.dropdown-item.active,
+.dropdown-item:active {
   background-color: white !important;
 }

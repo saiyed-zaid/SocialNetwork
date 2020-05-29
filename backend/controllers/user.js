@@ -9,7 +9,6 @@ exports.userById = async (req, res, next, id) => {
     const user = await User.findById(id)
       .populate("following", "_id name photo isLoggedIn lastLoggedIn")
       .populate("followers.user", "_id name photo");
-    // .populate("comments", "_id");
 
     if (!user) {
       return next(new Error("User not Found."));
@@ -17,8 +16,7 @@ exports.userById = async (req, res, next, id) => {
     req.profile = user;
     next();
   } catch (error) {
-    console.log("ERROR_", error);
-    return next(new Error("User not Found."));
+    return next(new Error("Something Went Wrong..."));
   }
 };
 
@@ -58,7 +56,7 @@ exports.getUsers = async (req, res, next) => {
     return res.json({ users, isAuthorized: req.auth.isAuthorized });
   } catch (error) {
     return res.status(404).json({
-      msg: "No User Found",
+      msg: "Something Whent Wrong...",
     });
   }
 };
@@ -165,8 +163,8 @@ exports.deleteUser = async (req, res, next) => {
     const result = await user.remove();
     res.json({ msg: "User Deleted succesfully", isDeleted: true });
   } catch (error) {
-    res.json({
-      msg: "Error while deleting profile",
+    res.status(400).json({
+      msg: "Something Went Wrong...",
       isDeleted: false,
     });
   }
@@ -213,11 +211,11 @@ exports.addFollower = async (req, res, next) => {
       }
     )
       .populate("following", "_id name")
-      .populate("followers", "_id name");
-    res.json(result);
+      .populate("followers.user", "_id name");
+    return res.json(result);
   } catch (error) {
     return res.status(400).json({
-      err: error,
+      err: "Something Went Wrong...",
     });
   }
 };
@@ -237,7 +235,7 @@ exports.removeFollowing = async (req, res, next) => {
     next();
   } catch (error) {
     return res.status(400).json({
-      err: error,
+      err: "Something Went Wrong",
     });
   }
 };

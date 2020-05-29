@@ -8,9 +8,12 @@ import { isAuthenticated } from "../../auth/index";
  * @returns {json}
  */
 //userId, token
-export const read = async () => {
+//New Follower List
+export const newFollowersList = async () => {
   const user = await fetch(
-    `${process.env.REACT_APP_API_URL}/api/user/${isAuthenticated().user._id}`,
+    `${process.env.REACT_APP_API_URL}/api/newFollowers/user/${
+      isAuthenticated().user._id
+    }`,
     {
       method: "GET",
       headers: {
@@ -58,7 +61,7 @@ export const isLikesStatusChange = async (postId) => {
 
 export const readPost = async () => {
   const posts = await fetch(
-    `${process.env.REACT_APP_API_URL}/api/post/by/${
+    `${process.env.REACT_APP_API_URL}/api/new/likeComments/post/by/${
       isAuthenticated().user._id
     }`,
     {

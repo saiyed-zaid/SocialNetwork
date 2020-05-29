@@ -24,7 +24,7 @@ export default class index extends Component {
             <img
               className="img-thumbnail flex-fill"
               src={`${
-                user.photo.photoURI ? user.photo.photoURI : DefaultProfile
+                user.photo ? user.photo.photoURI : DefaultProfile
               }`}
               onError={(i) => (i.target.src = `${DefaultProfile}`)} 
               alt={user.name}
