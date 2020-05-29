@@ -17,9 +17,10 @@ router.get("/api/newFollowers/user/:userId", authCheck, (req, res, next) => {
         return next(new Error("User Not Found"));
       }
       if (result) {
+        if(result[0]){
         console.log("NEW FOLLOWE_", result[0].followers);
 
-        return res.status(200).json(result[0].followers);
+        return res.status(200).json(result[0].followers);}
       }
     }
   )

@@ -32,6 +32,10 @@ import ChangePassword from "./auth/pages/changePassword";
 import ScheduledPost from "./post/scheduledPosts";
 import MsgNotification from "./core/components/messageNotification";
 import EditScheduledPost from "./post/editScheduledPost";
+import ChatBar from "./components/chatBar/chatbar";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faPaperPlane } from "@fortawesome/free-solid-svg-icons";
+
 const isActive = (history, path) => {
   if (history.location.pathname === path) {
     return { color: "#e6cf23" };
@@ -346,12 +350,13 @@ class MainRouter extends React.Component {
       messages: null,
       authUser: isAuthenticated().user || null,
       isAuthorized: null,
+      onlineUsers: [],
     };
 
     this.socket = openSocket("http://localhost:5000");
   }
 
-  componentDidMount() {
+  async componentDidMount() {
     if (this.state.authUser) {
       this.socket.on(this.state.authUser._id, (data) => {
         fetchMessage(
@@ -373,6 +378,21 @@ class MainRouter extends React.Component {
             }
           });
       });
+
+      try {
+        const response = await this.props.Userservice.getOnlineUsers(
+          this.state.authUser._id,
+          this.state.authUser.token
+        );
+
+        if (response.data.error) {
+          console.log(response.data.error);
+        } else {
+          this.setState({ onlineUsers: response.data[0].following });
+        }
+      } catch (error) {
+        this.setState({ error });
+      }
     }
   }
 
@@ -398,7 +418,7 @@ class MainRouter extends React.Component {
     this.setState({
       hasNewMsg: true,
       receiverId: user._id,
-      receiverName: user.users.name,
+      receiverName: user.users ? user.users.name : user.name,
     });
     messageStatusChange()
       .then((data) => console.log(data))
@@ -416,7 +436,12 @@ class MainRouter extends React.Component {
       authUser: isAuthenticated().user,
     });
   };
-
+  onMsg = () => {
+    let chatbar = document.getElementById("chatbar");
+    chatbar.style.display = "block";
+    chatbar.classList.remove("close-chatbar");
+    document.getElementById("floating-btn").style.display = "none";
+  };
   timeDiffCalc(dateFuture, dateNow) {
     let diffInMilliSeconds = Math.abs(dateFuture - dateNow) / 1000;
 
@@ -476,7 +501,14 @@ class MainRouter extends React.Component {
           signout={this.props.Authservice.signout}
           handleChatOpen={this.handleChatOpen}
         />
+        <ChatBar
+          data={this.state.onlineUsers}
+          handleOpen={this.handleChatOpen}
+        />
 
+        <button id="floating-btn" className="floating-btn" onClick={this.onMsg}>
+          <FontAwesomeIcon icon={faPaperPlane} className="anim-icon" />
+        </button>
         <Switch>
           <Route path="/" exact component={Home} />
           <Route

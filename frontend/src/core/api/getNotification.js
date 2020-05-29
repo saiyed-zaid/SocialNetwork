@@ -10,7 +10,7 @@ import { isAuthenticated } from "../../auth/index";
 //userId, token
 //New Follower List
 export const newFollowersList = async () => {
-  const user = await fetch(
+  const response = await fetch(
     `${process.env.REACT_APP_API_URL}/api/newFollowers/user/${
       isAuthenticated().user._id
     }`,
@@ -24,11 +24,11 @@ export const newFollowersList = async () => {
     }
   );
 
-  return await user.json({ user });
+  return response;
 };
 
 export const isFollowStatusChange = async () => {
-  const userData = await fetch(
+  const response = await fetch(
     `${process.env.REACT_APP_API_URL}/api/user/newFollowerStatusChange/${
       isAuthenticated().user._id
     }`,
@@ -41,11 +41,11 @@ export const isFollowStatusChange = async () => {
     }
   );
 
-  return await userData.json();
+  return response;
 };
 
 export const isLikesStatusChange = async (postId) => {
-  const userData = await fetch(
+  const response = await fetch(
     `${process.env.REACT_APP_API_URL}/api/post/newLikesStatusChange/${postId}`,
     {
       method: "PUT",
@@ -56,7 +56,7 @@ export const isLikesStatusChange = async (postId) => {
     }
   );
 
-  return await userData.json();
+  return response;
 };
 
 export const readPost = async () => {

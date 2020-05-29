@@ -70,7 +70,7 @@ export default class chatTab extends Component {
           hasNewMsg: true,
           receiverId: this.props.senderId,
           receiverName: this.props.senderName,
-          messages: result,
+          messages: result.data,
         }
         /*  () => {
           let myMsg = document.querySelector("#myMsg");
@@ -218,7 +218,6 @@ export default class chatTab extends Component {
         onStop={this.handleStop}
       >
         <div>
-          <div className="handle">Drag from here</div>
           <div
             id="chattab"
             className="card"
@@ -230,7 +229,7 @@ export default class chatTab extends Component {
               maxWidth: "283px",
             }}
           >
-            <div className="card-header text-left text-light bg-dark">
+            <div className="card-header text-left text-light bg-dark handle">
               <span>{this.props.receiverName}</span>
               <span style={{ marginLeft: "10px" }}></span>
               <span className="float-right">

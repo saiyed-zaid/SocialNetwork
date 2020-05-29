@@ -27,23 +27,26 @@ class EditProfile extends Component {
 
   init = async (userId) => {
     const token = isAuthenticated().user.token;
+    try {
+      const response = await this.props.read(userId, token);
 
-    const response = await this.props.read(userId, token);
-
-    if (response.error) {
-      this.setState({ redirectToProfile: true });
-    } else {
-      this.setState({
-        id: response._id,
-        name: response.name,
-        gender: response.gender,
-        dob: response.dob,
-        email: response.email,
-        error: "",
-        about: response.about,
-        photo: response.photo ? response.photo.path : DefaultProfile,
-      });
-    }
+      if (response.status === 200) {
+        this.setState({
+          id: response.data._id,
+          name: response.data.name,
+          gender: response.data.gender,
+          dob: response.data.dob,
+          email: response.data.email,
+          error: "",
+          about: response.data.about,
+          photo: response.data.photo
+            ? response.data.photo.photoURI
+            : DefaultProfile,
+        });
+      } else {
+        this.setState({ redirectToProfile: true });
+      }
+    } catch (error) {}
   };
 
   componentDidMount() {
@@ -112,7 +115,7 @@ class EditProfile extends Component {
           redirectToProfile: true,
         });
       } else {
-        await this.props.updateUser(response, () => {
+        await this.props.updateUser(response.data, () => {
           this.setState({
             redirectToProfile: true,
           });

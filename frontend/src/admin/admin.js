@@ -24,44 +24,43 @@ class Admin extends Component {
     usersOnline: [],
   };
 
-  getData = (userId, token) => {
-    getNewUsers(userId, token)
-      .then((data) => {
-        if (data.err) {
-          this.setState({ error: data.err });
-        } else {
-          this.setState({ newUsers: data });
-        }
-      })
-      .catch();
-    getNewPosts(userId, token)
-      .then((data) => {
-        if (data.err) {
-          this.setState({ error: data.err });
-        } else {
-          this.setState({ newPosts: data });
-        }
-      })
-      .catch();
-    getDailyActiveUsers(userId, token)
-      .then((data) => {
-        if (data.err) {
-          this.setState({ error: data.err });
-        } else {
-          this.setState({ dailyActiveUsers: data });
-        }
-      })
-      .catch();
+  getData = async (userId, token) => {
+    try {
+      const response = await getNewUsers(userId, token);
+      if (response.data.err) {
+        this.setState({ error: response.data.err });
+      } else {
+        this.setState({ newUsers: response.data });
+      }
+    } catch (error) {}
 
-    getUsersOnlineNow(userId, token)
-      .then((data) => {
-        if (data.err) {
-          this.setState({ error: data.err });
-        } else {
-          this.setState({ usersOnline: data });
-        }
-      })
-      .catch();
+    try {
+      const response = await getNewPosts(userId, token);
+      if (response.data.err) {
+        this.setState({ error: response.data.err });
+      } else {
+        this.setState({ newPosts: response.data });
+      }
+    } catch (error) {}
+
+    try {
+      const response = await getDailyActiveUsers(userId, token);
+      if (response.data.err) {
+        this.setState({ error: response.data.err });
+      } else {
+        this.setState({ dailyActiveUsers: response.data });
+      }
+    } catch (error) {}
+
+    try {
+      const response = await getUsersOnlineNow(userId, token);
+
+      if (response.data.err) {
+        this.setState({ error: response.data.err });
+      } else {
+        this.setState({ usersOnline: response.data });
+      }
+    } catch (error) {}
   };
   componentDidMount() {
     const userId = isAuthenticated().user._id;

@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { validateAll } from "indicative/validator";
-
+import axios from "axios";
 export default class user extends Component {
   /**
    * Api For Reading Data From Database
@@ -11,7 +11,7 @@ export default class user extends Component {
    * @returns {json}
    */
   async read(userId, token) {
-    const user = await fetch(
+    const response = await axios(
       `${process.env.REACT_APP_API_URL}/api/user/${userId}`,
       {
         method: "GET",
@@ -23,7 +23,7 @@ export default class user extends Component {
       }
     );
 
-    return await user.json({ user });
+    return response;
   }
 
   /**
@@ -32,13 +32,13 @@ export default class user extends Component {
    * @returns {json}
    */
   async list(token) {
-    const users = await fetch(`${process.env.REACT_APP_API_URL}/api/users`, {
+    const response = await axios(`${process.env.REACT_APP_API_URL}/api/users`, {
       method: "GET",
       headers: {
         Authorization: `Bearer ${token}`,
       },
     });
-    return await users.json({ users });
+    return response;
   }
 
   /**
@@ -48,7 +48,7 @@ export default class user extends Component {
    * @param {string} tokentoken     Of The Logged In User
    */
   async remove(userId, token) {
-    const deleteUser = await fetch(
+    const response = await axios(
       `${process.env.REACT_APP_API_URL}/api/user/${userId}`,
       {
         method: "DELETE",
@@ -59,7 +59,7 @@ export default class user extends Component {
         },
       }
     );
-    return await deleteUser.json();
+    return response;
   }
 
   /**
@@ -93,7 +93,7 @@ export default class user extends Component {
     try {
       await validateAll(fieldData, rules, messages);
 
-      const response = await fetch(
+      const response = await axios(
         `${process.env.REACT_APP_API_URL}/api/user/${userId}`,
         {
           method: "PUT",
@@ -108,7 +108,7 @@ export default class user extends Component {
       if (response.err) {
         return Promise.reject(response.err);
       } else {
-        return await response.json();
+        return response;
       }
     } catch (errors) {
       var formattedErrors = {};
@@ -117,37 +117,6 @@ export default class user extends Component {
       });
       return Promise.reject(formattedErrors);
     }
-
-    /*  const fields = {
-      name: user.get("name"),
-    };
-    console.log(user);  */
-
-    /*
-    try {
-       try {
-        const response = await fetch(
-          `${process.env.REACT_APP_API_URL}/api/user/${userId}`,
-          {
-            method: "PUT",
-            headers: {
-              Accept: "application/json",
-              Authorization: `Bearer ${token}`,
-            },
-            body: user,
-          }
-        );
-
-        if (response.err) {
-          return Promise.reject(response.err);
-        } else {
-          return await response.json();
-        }
-      } catch (error) {
-        return Promise.reject(error);
-      }
-    } catch (errors) {}
-      */
   }
 
   /**
@@ -175,7 +144,7 @@ export default class user extends Component {
    * @param  {string}  followId
    */
   async follow(userId, token, followId) {
-    const userData = await fetch(
+    const response = await axios(
       `${process.env.REACT_APP_API_URL}/api/user/follow/${userId}`,
       {
         method: "PUT",
@@ -188,7 +157,7 @@ export default class user extends Component {
       }
     );
 
-    return await userData.json();
+    return response;
   }
 
   /**
@@ -199,7 +168,7 @@ export default class user extends Component {
    * @param  {string}  followId
    */
   async unfollow(userId, token, unfollowId) {
-    const userData = await fetch(
+    const response = await axios(
       `${process.env.REACT_APP_API_URL}/api/user/unfollow/${userId}`,
       {
         method: "PUT",
@@ -212,7 +181,7 @@ export default class user extends Component {
       }
     );
 
-    return await userData.json();
+    return response;
   }
 
   /**
@@ -222,7 +191,7 @@ export default class user extends Component {
    * @param {string} token
    */
   async findPeople(userId, token) {
-    const user = await fetch(
+    const response = await axios(
       `${process.env.REACT_APP_API_URL}/api/user/findpeople/${userId}`,
       {
         method: "GET",
@@ -234,7 +203,7 @@ export default class user extends Component {
       }
     );
 
-    return await user.json();
+    return response;
   }
 
   /**
@@ -246,7 +215,7 @@ export default class user extends Component {
    * @returns {json}
    */
   async fetchMessage(senderId, receiverId, token) {
-    const messages = await fetch(
+    const response = await axios(
       `${process.env.REACT_APP_API_URL}/api/user/messages`,
       {
         method: "POST",
@@ -262,7 +231,7 @@ export default class user extends Component {
       }
     );
 
-    return await messages.json({ messages });
+    return response;
   }
 
   /**
@@ -271,7 +240,7 @@ export default class user extends Component {
    * @param {*} token
    */
   async getOnlineUsers(userId, token) {
-    const onlineUsers = await fetch(
+    const response = await axios(
       `${process.env.REACT_APP_API_URL}/api/user/getonline/${userId}`,
       {
         method: "get",
@@ -283,6 +252,6 @@ export default class user extends Component {
       }
     );
 
-    return await onlineUsers.json({ onlineUsers });
+    return response;
   }
 }

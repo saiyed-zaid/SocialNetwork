@@ -23,37 +23,31 @@ class Notification extends React.Component {
     };
   }
 
-  componentDidMount() {
+  async componentDidMount() {
     //New Follower List
-    newFollowersList()
-      .then((data) => {
-        var newFollowerList = [];
-        if (data.length > 0) {
-          data.forEach((follower, i) => {
-            newFollowerList.push({
-              id: follower.user._id,
-              name: follower.user.name,
-              followedFrom: follower.followedFrom,
-            });
-          });
-
-          if (newFollowerList.length > 0) {
-            this.setState({
-              hasNewFollow: true,
-              newFollowerList: newFollowerList,
-            });
-          }
-
-          if (this.state.hasNewFollow) {
-            //setTimeout(this.followStatusChange, 16000);
-          }
-        }
-      })
-      .catch((err) => {
-        if (err) {
-          console.log("Error while fetching new Followers", err);
-        }
+    const response = await newFollowersList();
+    const data = response.data;
+    var newFollowerList = [];
+    if (data.length > 0) {
+      data.forEach((follower, i) => {
+        newFollowerList.push({
+          id: follower.user._id,
+          name: follower.user.name,
+          followedFrom: follower.followedFrom,
+        });
       });
+
+      if (newFollowerList.length > 0) {
+        this.setState({
+          hasNewFollow: true,
+          newFollowerList: newFollowerList,
+        });
+      }
+
+      if (this.state.hasNewFollow) {
+        //setTimeout(this.followStatusChange, 16000);
+      }
+    }
 
     try {
       readPost().then((data) => {
@@ -133,7 +127,6 @@ class Notification extends React.Component {
           aria-haspopup="true"
           aria-expanded="false"
         >
-          
           <FontAwesomeIcon icon={faBell} />
           {this.state.newFollowerList.length > 0 ||
           this.state.newLikesList.length > 0 ||
