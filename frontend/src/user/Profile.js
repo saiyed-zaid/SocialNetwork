@@ -193,7 +193,10 @@ class Profile extends Component {
     return (
       <div
         className="bg-dark position-relative rounded"
-        style={{ margin: "80px auto 10px auto" }}
+        style={{
+          margin: "80px auto 10px auto",
+          minHeight: "calc(100vh - 22vh)",
+        }}
       >
         {/* DISPLAY CHATBOX */}
         {this.state.hasChatBoxDisplay && (

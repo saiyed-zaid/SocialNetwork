@@ -22,6 +22,7 @@ dotenv.config();
 const postRoutes = require("./routes/post");
 const authRoute = require("./routes/auth");
 const userRoutes = require("./routes/user");
+const notificationRoutes = require("./routes/notification");
 /* Importing Routes END*/
 
 //Make /upload folder public
@@ -31,11 +32,13 @@ app.use("/upload", express.static("upload"));
 app.use(cors());
 app.use(compression());
 app.use(bodyParser.json());
-//app.use(morgan("tiny"));
+app.use(morgan("dev"));
 /* Registering middleware END*/
 
 /* Handling Requests BEGIN */
+
 app.use(userRoutes);
+app.use(notificationRoutes);
 app.use(authRoute);
 app.use(postRoutes);
 /* Handling Requests END */

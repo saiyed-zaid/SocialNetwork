@@ -6,6 +6,7 @@
   box-sizing: border-box;
   /* color: #e6cf23; */
 }
+
 body {
   min-height: 100vh;
   position: relative;
@@ -15,9 +16,9 @@ body {
 p {
   color: #d9d9d9;
 }
-.navbar {
+/* .navbar {
   padding: 0;
-}
+} */
 .mark {
   background-color: #e8e7e7 !important;
 }
@@ -229,7 +230,7 @@ a {
 }
 
 .bg-primary {
-  background-color: #01232c !important;
+  /* background-color: #01232c !important; */
 }
 
 .jumbotron {

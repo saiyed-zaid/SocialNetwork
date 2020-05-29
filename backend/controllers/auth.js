@@ -10,7 +10,7 @@ const cookieParser = require("cookie-parser");
 
 /**
  * @function middleware
- * @description Handling post request for creating new post
+ * @description Handling post request for creating new USER
  */
 exports.postSignup = async (req, res, next) => {
   const errs = validationResult(req);
@@ -36,7 +36,7 @@ exports.postSignup = async (req, res, next) => {
     user
       .save()
       .then((result) => {
-        const destPosts = path.join(
+        /* const destPosts = path.join(
           __dirname,
           "..",
           "upload",
@@ -52,7 +52,7 @@ exports.postSignup = async (req, res, next) => {
           "profile"
         );
 
-        /* Creating Directory For This User BEGIN */
+        // Creating Directory For This User BEGIN
         if (!fs.existsSync(destPosts) && !fs.existsSync(destProfile)) {
           fs.mkdirSync(
             String(
@@ -78,7 +78,7 @@ exports.postSignup = async (req, res, next) => {
         } else {
           console.log("Directory Not created successfully");
         }
-        /* Creating Directory For This User OVER */
+         */ /* Creating Directory For This User OVER */
         res.status(200).json({ msg: "Signup successfully, proced to login!" });
       })
       .catch((err) => {
@@ -91,7 +91,7 @@ exports.postSignup = async (req, res, next) => {
 
 /**
  * @function middleware
- * @description Handling post request for handling login data
+ * @description Handling post request for handling LOGIN
  */
 exports.postSignin = async (req, res, next) => {
   const userExists = await User.findOne({ email: req.body.email });
@@ -125,8 +125,8 @@ exports.postSignin = async (req, res, next) => {
       }
     });
 
-  let token;
-  token = jwt.sign(
+    let token;
+    token = jwt.sign(
     {
       _id: userExists._id,
       name: userExists.name,
@@ -154,14 +154,6 @@ exports.postSignin = async (req, res, next) => {
 };
 
 exports.chnagePassword = async (req, res, next) => {
-  const errs = validationResult(req);
-
-  if (!errs.isEmpty()) {
-    const errors = errs.array();
-    return res.status(422).json({
-      errors,
-    });
-  }
 
   try {
     const user = await User.findOne({ password: md5(req.body.oldPassword) });

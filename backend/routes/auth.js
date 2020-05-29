@@ -61,8 +61,8 @@ router.post(
     body("password")
       .isLength({ min: 6 })
       .withMessage("Password must be 6 character long."),
-    body("password_confirmation").custom((value, { req }) => {
-      if (value !== req.body.password) {
+    body("password_confirmation").custom((password, { req }) => {
+      if (password !== req.body.password) {
         //return Promise.reject("Password confirmation does not match password");
         throw new Error("Password confirmation does not match password");
       }
@@ -70,6 +70,16 @@ router.post(
     }),
   ],
   auth_check,
+  (req, res, next) => {
+    const errs = validationResult(req);
+
+    if (!errs.isEmpty()) {
+      const errors = errs.array();
+      return res.status(422).json({
+        errors,
+      });
+    }
+  },
   authController.chnagePassword
 );
 
