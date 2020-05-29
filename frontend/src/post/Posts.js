@@ -17,22 +17,20 @@ class Posts extends Component {
   handleExpandClick = () => {
     this.setState({ expanded: !this.state.expanded });
   };
-  componentDidMount() {
+  async componentDidMount() {
     var postService = new Postservice();
 
-    setTimeout(async () => {
       try {
         const response = await postService.fetchPosts();
 
         if (response.error) {
           return Promise.reject(response.error);
         } else {
-          this.setState({ posts: response.posts, isLoading: false });
+          this.setState({ posts: response.data.posts, isLoading: false });
         }
       } catch (error) {
         return Promise.reject(error);
       }
-    }, 500);
   }
 
   render() {

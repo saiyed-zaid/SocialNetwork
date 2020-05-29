@@ -263,7 +263,10 @@ const Navbar = withRouter(
                 <ul className="navbar-nav ml-auto nav-mobile ">
                   {authUser && authUser.roll !== "admin" && (
                     <>
-                      <MsgNotification handleOpen={handleChatOpen} />
+                      <MsgNotification
+                        handleOpen={handleChatOpen}
+                        history={history}
+                      />
                       <Notification authUser={authUser} />
                     </>
                   )}
@@ -350,6 +353,7 @@ class MainRouter extends React.Component {
 
     this.socket = openSocket("http://localhost:5000");
   }
+  
 
   componentDidMount() {
     if (this.state.authUser) {
@@ -557,7 +561,7 @@ class MainRouter extends React.Component {
               <Users
                 {...props}
                 authUser={this.state.authUser}
-                getUsers={this.props.Userservice.list}
+                getAll={this.props.Userservice.getAll}
               />
             )}
           />

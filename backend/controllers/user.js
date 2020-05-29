@@ -45,7 +45,18 @@ exports.hasAuthorization = (req, res, next) => {
  */
 exports.getUsers = async (req, res, next) => {
   try {
-    const users = await User.find().select(
+    const users = await User.find({
+      $and: [
+        {
+          role: "subscriber",
+        },
+        {
+          _id: {
+            $ne: req.auth._id,
+          },
+        },
+      ],
+    }).select(
       "_id name email created about role updated photo status following followers"
     );
     if (!users) {
@@ -56,6 +67,7 @@ exports.getUsers = async (req, res, next) => {
 
     return res.json({ users, isAuthorized: req.auth.isAuthorized });
   } catch (error) {
+    console.log(error);
     return res.status(404).json({
       msg: "Something Whent Wrong...",
     });

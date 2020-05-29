@@ -1,4 +1,5 @@
 import { isAuthenticated } from "../../auth/index";
+import axios from "axios";
 /**
  * Api For Reading Data From Database
  *
@@ -7,10 +8,9 @@ import { isAuthenticated } from "../../auth/index";
  *
  * @returns {json}
  */
-//userId, token
-//New Follower List
+
 export const newFollowersList = async () => {
-  const user = await fetch(
+  const user = await axios(
     `${process.env.REACT_APP_API_URL}/api/newFollowers/user/${
       isAuthenticated().user._id
     }`,
@@ -23,12 +23,11 @@ export const newFollowersList = async () => {
       },
     }
   );
-
-  return await user.json({ user });
+  return user;
 };
 
 export const isFollowStatusChange = async () => {
-  const userData = await fetch(
+  const response = await axios(
     `${process.env.REACT_APP_API_URL}/api/user/newFollowerStatusChange/${
       isAuthenticated().user._id
     }`,
@@ -41,11 +40,11 @@ export const isFollowStatusChange = async () => {
     }
   );
 
-  return await userData.json();
+  return response;
 };
 
 export const isLikesStatusChange = async (postId) => {
-  const userData = await fetch(
+  const response = await axios(
     `${process.env.REACT_APP_API_URL}/api/post/newLikesStatusChange/${postId}`,
     {
       method: "PUT",
@@ -56,11 +55,11 @@ export const isLikesStatusChange = async (postId) => {
     }
   );
 
-  return await userData.json();
+  return response;
 };
 
 export const readPost = async () => {
-  const posts = await fetch(
+  const posts = await axios(
     `${process.env.REACT_APP_API_URL}/api/new/likeComments/post/by/${
       isAuthenticated().user._id
     }`,
@@ -73,7 +72,7 @@ export const readPost = async () => {
       },
     }
   );
-  return await posts.json({ posts });
+  return posts;
 };
 
 /**
@@ -86,7 +85,7 @@ export const readPost = async () => {
  */
 //userId, token
 export const fetchNewMessage = async () => {
-  const user = await fetch(
+  const response = await fetch(
     `${process.env.REACT_APP_API_URL}/api/user/messages/${
       isAuthenticated().user._id
     }`,
@@ -99,8 +98,9 @@ export const fetchNewMessage = async () => {
       },
     }
   );
+  console.log("RESPONSE__", response);
 
-  return await user.json({ user });
+  return response;
 };
 
 export const messageStatusChange = async () => {

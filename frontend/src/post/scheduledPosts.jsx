@@ -19,12 +19,12 @@ export default class scheduledPosts extends Component {
     const token = this.props.authUser.token;
 
     try {
-      const data = await this.props.fetchScheduledPosts(userId, token);
+      const response = await this.props.fetchScheduledPosts(userId, token);
 
-      if (data.error) {
-        this.setState({ error: data.error });
+      if (response.status === 200) {
+        this.setState({ posts: response.data.posts });
       } else {
-        this.setState({ posts: data.posts });
+        this.setState({ error: response.data.error });
       }
     } catch (error) {
       console.log(error);
@@ -50,14 +50,13 @@ export default class scheduledPosts extends Component {
   deletePost = async (postId) => {
     const token = this.props.authUser.token;
     try {
-      const data = await this.props.deleteScheduledPost(postId, token);
-      if (data.error) {
-        console.log(data.error);
-      } else {
+      const response = await this.props.deleteScheduledPost(postId, token);
+      if (response.status === 200) {
         this.setState({});
-        // setTimeout(this.toastPopupEnable, 8000);
         document.getElementById("deletepost").style.display = "none";
         document.getElementById("deletepost").classList.remove("show");
+      } else {
+        console.log(response.data.error);
       }
     } catch (error) {
       console.log(error);

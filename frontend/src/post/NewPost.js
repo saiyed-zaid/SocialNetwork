@@ -97,10 +97,9 @@ class NewPost extends React.Component {
     event.preventDefault();
 
     const data = this.state;
-    this.postData.append("tags", JSON.stringify(this.selectedopt));
-
-    /* const userId = this.props.authUser._id;
-    const token = this.props.authUser.token; */
+    if (this.selectedopt.length > 0) {
+      this.postData.append("tags", JSON.stringify(this.selectedopt));
+    }
 
     try {
       this.setState({ errors: {} });
@@ -112,7 +111,7 @@ class NewPost extends React.Component {
         this.props.authUser.token
       );
 
-      // this.props.history.push(`/user/${this.props.authUser._id}`);
+      this.props.history.push(`/user/${this.props.authUser._id}`);
     } catch (errors) {
       this.setState({
         errors,

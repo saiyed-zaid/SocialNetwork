@@ -5,7 +5,7 @@ import DefaultProfile from "../../images/avatar.jpg";
 export default class index extends Component {
   render() {
     const { user, authUser } = this.props;
-    return user.role === "subscriber" && user.name !== authUser.name ? (
+    return (
       <div
         className="card"
         style={{
@@ -50,6 +50,6 @@ export default class index extends Component {
         </div>
         {/* /.card-body */}
       </div>
-    ) : null;
+    );
   }
 }

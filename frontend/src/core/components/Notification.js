@@ -26,10 +26,16 @@ class Notification extends React.Component {
   componentDidMount() {
     //New Follower List
     newFollowersList()
-      .then((data) => {
+      .then((response) => {
+        if (response.status === 401) {
+          alert("401 notification");
+          localStorage.removeItem("jwt");
+
+          return;
+        }
         var newFollowerList = [];
-        if (data.length > 0) {
-          data.forEach((follower, i) => {
+        if (response.data.length > 0) {
+          response.data.forEach((follower, i) => {
             newFollowerList.push({
               id: follower.user._id,
               name: follower.user.name,
@@ -56,11 +62,18 @@ class Notification extends React.Component {
       });
 
     try {
-      readPost().then((data) => {
+      readPost().then((response) => {
+        console.log("data_", response);
         let newLikesList = [];
         let newCommentsList = [];
-        if (data.length > 0) {
-          data.forEach((post) => {
+        if (response.status === 401) {
+          alert("401 notification");
+          localStorage.removeItem("jwt");
+
+          return;
+        }
+        if (response.data.length > 0) {
+          response.data.forEach((post) => {
             //Likes Notification
             post.likes.forEach((like, i) => {
               if (like.user._id !== isAuthenticated().user._id) {
@@ -85,7 +98,7 @@ class Notification extends React.Component {
               }
             });
 
-            if (newCommentsList.length > 0 || newCommentsList.length > 0) {
+            if (newLikesList.length > 0 || newCommentsList.length > 0) {
               this.setState({
                 hasNewComment: true,
                 newCommentList: newCommentsList,
@@ -133,7 +146,6 @@ class Notification extends React.Component {
           aria-haspopup="true"
           aria-expanded="false"
         >
-          
           <FontAwesomeIcon icon={faBell} />
           {this.state.newFollowerList.length > 0 ||
           this.state.newLikesList.length > 0 ||
@@ -147,7 +159,9 @@ class Notification extends React.Component {
         </a>
 
         <div className="dropdown-menu dropdown-menu-lg-right noti-toggle">
-          {(this.state.newFollowerList.length > 0 && (
+          {((this.state.newFollowerList.length > 0 ||
+            this.state.newLikesList.length > 0 ||
+            this.state.newCommentList.length > 0 > 0) && (
             <>
               <span
                 // to="/"

@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { validateAll } from "indicative/validator";
+import axios from "axios";
 
 export default class user extends Component {
   /**
@@ -11,7 +12,7 @@ export default class user extends Component {
    * @returns {json}
    */
   async read(userId, token) {
-    const user = await fetch(
+    const user = await axios(
       `${process.env.REACT_APP_API_URL}/api/user/${userId}`,
       {
         method: "GET",
@@ -22,8 +23,7 @@ export default class user extends Component {
         },
       }
     );
-
-    return await user.json({ user });
+    return user;
   }
 
   /**
@@ -31,14 +31,14 @@ export default class user extends Component {
    *
    * @returns {json}
    */
-  async list(token) {
-    const users = await fetch(`${process.env.REACT_APP_API_URL}/api/users`, {
+  async getAll(token) {
+    const response = await axios(`${process.env.REACT_APP_API_URL}/api/users`, {
       method: "GET",
       headers: {
         Authorization: `Bearer ${token}`,
       },
     });
-    return await users.json({ users });
+    return response;
   }
 
   /**

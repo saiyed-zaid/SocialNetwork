@@ -45,18 +45,23 @@ class Profile extends Component {
   } */
   init = async (userId) => {
     const token = this.props.authUser.token;
-    const data = await this.props.read(userId, token);
-
-    if (data.err) {
-      this.setState({ redirectToSignin: true });
+    const response = await this.props.read(userId, token);
+    if (response.status === 401) {
+      localStorage.removeItem("jwt");
+      return this.props.history.push("/signin");
     } else {
-      let following = this.checkFollow(data);
-      this.setState({ user: data, following, isLoading: false });
-      this.loadPosts(userId);
+      if (response.data.err) {
+        this.setState({ redirectToSignin: true });
+      } else {
+        let following = this.checkFollow(response.data);
+        this.setState({ user: response.data, following, isLoading: false });
+        this.loadPosts(userId);
+      }
     }
   };
 
   checkFollow = (user) => {
+    console.log("user", user);
     const jwt = isAuthenticated();
     const match = user.followers.find((follower) => {
       return follower.user._id === jwt.user._id;
@@ -144,11 +149,7 @@ class Profile extends Component {
     const token = isAuthenticated().user.token;
     try {
       const response = await this.props.fetchPostsByUser(userId, token);
-      if (response.msg) {
-        this.setState({ error: response.msg });
-      } else {
-        this.setState({ posts: response.posts });
-      }
+      this.setState({ posts: response.data.posts });
     } catch (error) {
       console.log(error);
     }

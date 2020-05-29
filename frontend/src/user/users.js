@@ -26,7 +26,7 @@ class Users extends Component {
     /**
      * Function For Getting Online Users
      */
-  /*   if (this.props.authUser) {
+    /*   if (this.props.authUser) {
       getOnlineUsers(this.props.authUser._id, this.props.authUser.token)
         .then((data) => {
           if (data.error) {
@@ -37,17 +37,19 @@ class Users extends Component {
         })
         .catch((error) => this.setState({ error: error }));
     }
-   */}
+   */
+  }
 
   async componentWillMount() {
     try {
       if (this.props.authUser) {
-        const response = await this.props.getUsers(this.props.authUser.token);
-        if (response.isAuthorized) {
-          if (response.error) {
+        const response = await this.props.getAll(this.props.authUser.token);
+
+        if (response.status === 200) {
+          if (response.data.error) {
             console.log(response.error);
           } else {
-            this.setState({ users: response.users, isLoading: false });
+            this.setState({ users: response.data.users, isLoading: false });
           }
         }
       } else {

@@ -213,7 +213,10 @@ exports.hasAuthorization = (req, res, next) => {
  * @description Handling post request which create new post in database
  */
 exports.createPost = async (req, res, next) => {
-  const tags = JSON.parse(req.body.tags);
+  var tags = [];
+  if (req.body.tags) {
+    tags = JSON.parse(req.body.tags);
+  }
   const errors = validationResult(req);
 
   const reqFiles = [];
@@ -245,7 +248,6 @@ exports.createPost = async (req, res, next) => {
 
   try {
     const result = await post.save();
-
     res.status(200).json({ result });
   } catch (err) {
     res.status(500).json("Something Went Wrong...");
@@ -497,6 +499,7 @@ exports.unlikePost = async (req, res, next) => {
       req.body.postId,
       {
         $pull: { likes: { user: req.body.userId } },
+        // $set: { hasNewLike: false },
       },
       { new: true }
     );
