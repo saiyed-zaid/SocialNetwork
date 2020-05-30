@@ -33,6 +33,8 @@ class NewPost extends React.Component {
       );
       if (response.status === 200) {
         this.setState({ options: response.data.following });
+      } else {
+        this.setState({ options: [] });
       }
     } catch (errors) {
       this.setState({ errors });
@@ -103,14 +105,15 @@ class NewPost extends React.Component {
     try {
       this.setState({ errors: {} });
 
-      await this.props.addPost(
+      const response = await this.props.addPost(
         this.postData,
         data,
         this.props.authUser._id,
         this.props.authUser.token
       );
-
-      this.props.history.push(`/user/${this.props.authUser._id}`);
+      if (response.status === 200) {
+        this.props.history.push(`/user/${this.props.authUser._id}`);
+      }
     } catch (errors) {
       this.setState({
         errors,

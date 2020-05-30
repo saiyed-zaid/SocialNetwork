@@ -15,14 +15,15 @@ class ResetPassword extends Component {
     e.preventDefault();
     this.setState({ message: "", error: "" });
     try {
-      const data = await this.props.resetPassword({
+      const response = await this.props.resetPassword({
         newPassword: this.state.newPassword,
         resetPasswordLink: this.props.match.params.resetPasswordToken,
       });
-      if (data.message) {
-        this.setState({ error: data.message });
+
+      if (response.status === 200) {
+        this.setState({ message: response.data.message, newPassword: "" });
       } else {
-        this.setState({ message: data.message, newPassword: "" });
+        this.setState({ error: response.data.message });
       }
     } catch (error) {
       console.log(error);

@@ -15,7 +15,6 @@ const Message = require("../models/messages");
  * @param {middleware} findPeople
  */
 router.post("/api/user/messages", auth_check, (req, res, next) => {
-  console.log("+___api invoked___+", req.body);
   Message.find({
     $or: [{ sender: req.body.sender }, { sender: req.body.receiver }],
     $and: [
@@ -34,6 +33,7 @@ router.post("/api/user/messages", auth_check, (req, res, next) => {
         console.log("error while fetching messages", err);
       }
     });
+
 });
 
 /**

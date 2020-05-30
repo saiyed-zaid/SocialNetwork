@@ -28,29 +28,27 @@ class Posts extends Component {
 
   async componentDidMount() {
     const token = isAuthenticated().user.token;
-    setTimeout(async () => {
-      try {
-        const data = await this.props.list(true, token);
-        if (data.error) {
-          console.log(data.error);
-        } else {
-          this.setState({ posts: data.posts, isLoading: false });
-          const script = document.createElement("script");
-          script.src = "/js/dataTables.js";
-          document.body.appendChild(script);
-        }
-      } catch (error) {
-        console.log(error);
+    try {
+      const response = await this.props.list(true, token);
+      if (response.error) {
+        console.log(response.data.error);
+      } else {
+        this.setState({ posts: response.data.posts, isLoading: false });
+        const script = document.createElement("script");
+        script.src = "/js/dataTables.js";
+        document.body.appendChild(script);
       }
-    }, 1000);
+    } catch (error) {
+      console.log(error);
+    }
   }
 
   deletePost = async (postId) => {
     const token = isAuthenticated().user.token;
     try {
-      const data = await this.props.remove(postId, token);
-      if (data.error) {
-        console.log(data.error);
+      const response = await this.props.remove(postId, token);
+      if (response.data.error) {
+        console.log(response.data.error);
       } else {
         this.setState({ redirectToHome: true });
         // setTimeout(this.toastPopupEnable, 8000);

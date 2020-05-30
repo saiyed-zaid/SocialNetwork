@@ -36,13 +36,15 @@ class ProfileTabs extends Component {
       formData.append("disabledBy", "");
     }
     try {
-      const result = await this.props.ipdatePost(
+      const response = await this.props.updatePost(
         postId,
         isAuthenticated().user.token,
         formData
       );
-      if (result) {
+      if (response.status === 200) {
         this.props.hasPostStatusUpdated(isAuthenticated().user._id);
+      } else {
+        return Promise.reject(response.error);
       }
     } catch (error) {
       console.log(error);

@@ -45,26 +45,26 @@ class Signup extends React.Component {
     const date2 = new Date(this.state.dob);
     const dobValidate = this.diff_years(date1, date2);
 
-    if (dobValidate > 18) {
-      if (this.state.recatcha) {
-        try {
-          this.setState({ errors: {}, error: "" });
-          await this.props.registerUser(this.state);
-          this.props.history.push("/signin");
-        } catch (errors) {
-          this.setState({
-            errors,
-          });
-        }
-      } else {
-        this.setState({ errors: { captcha: "Captcha Invalid" } });
+    if (dobValidate > 18 && this.state.recatcha) {
+      try {
+        this.setState({ errors: {}, error: "" });
+        await this.props.registerUser(this.state);
+        this.props.history.push("/signin");
+      } catch (errors) {
+        this.setState({
+          errors,
+        });
       }
     } else {
-      this.setState({ errors: { dob: "User  Must Be Atleast 18 Years Old" } });
+      this.setState({
+        errors: {
+          captcha: "Captcha Invalid",
+          dob: "User  Must Be Atleast 18 Years Old",
+        },
+      });
     }
   };
 
-  
   callback = () => {};
 
   verifyCallback = (response) => {

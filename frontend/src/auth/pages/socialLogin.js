@@ -22,13 +22,13 @@ class SocialLogin extends Component {
       imageUrl: imageUrl,
     };
 
-    const data = await this.props.socialLogin(user);
-    if (data.error) {
-      console.log("Error Login. Please try again..");
-    } else {
-      this.props.authenticate(data, () => {
+    const responseApi = await this.props.socialLogin(user);
+    if (responseApi.status === 200) {
+      this.props.authenticate(responseApi.data, () => {
         this.setState({ redirectToReferrer: true });
       });
+    } else {
+      console.log("Error Login. Please try again..");
     }
   };
 

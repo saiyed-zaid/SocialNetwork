@@ -10,7 +10,7 @@ import axios from "axios";
  */
 
 export const newFollowersList = async () => {
-  const user = await axios(
+  const response = await axios(
     `${process.env.REACT_APP_API_URL}/api/newFollowers/user/${
       isAuthenticated().user._id
     }`,
@@ -23,7 +23,8 @@ export const newFollowersList = async () => {
       },
     }
   );
-  return user;
+
+  return response;
 };
 
 export const isFollowStatusChange = async () => {

@@ -66,7 +66,7 @@ export default class PostCard extends Component {
                   >
                     {post.status ? (
                       <>
-                        <FontAwesomeIcon icon={faGlobeAsia} /> &nbsp;
+                      <FontAwesomeIcon icon={faGlobeAsia} /> &nbsp;
                         <small>Public</small>&nbsp;
                       </>
                     ) : (
@@ -76,6 +76,9 @@ export default class PostCard extends Component {
                       </>
                     )}
                   </a>
+
+
+                  {post.postedBy._id===isAuthenticated().user._id &&
                   <div className="dropdown">
                     <div className="dropdown-menu dropdown-menu-right bg-secondary">
                       <button
@@ -83,10 +86,10 @@ export default class PostCard extends Component {
                         type="button"
                         onClick={() => this.props.handlePostStatusChange(post)}
                       >
-                        {!post.status ? "Public" : " Private"}
+                        {!post.status ?"Public" : " Private"} 
                       </button>
                     </div>
-                  </div>
+                  </div>}
                 </div>
                 &nbsp;&nbsp;
                 <TimeAgo date={post.created} />

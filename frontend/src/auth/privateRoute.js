@@ -17,7 +17,7 @@ const PrivateRoute = ({
   read,
   remove,
   fetchMessage,
-  updateUser,
+  updateLocalStorage,
   changePassword,
   replyComment,
   editPost,
@@ -47,7 +47,7 @@ const PrivateRoute = ({
               read={read}
               remove={remove}
               fetchMessage={fetchMessage}
-              updateUser={updateUser}
+              updateLocalStorage={updateLocalStorage}
               changePassword={changePassword}
               replyComment={replyComment}
               editPost={editPost}

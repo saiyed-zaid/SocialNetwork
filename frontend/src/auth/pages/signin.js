@@ -3,7 +3,6 @@ import { Link } from "react-router-dom";
 import SocialLogin from "./socialLogin";
 import Alert from "../../ui-components/Alert";
 
-
 class Signin extends React.Component {
   constructor(props) {
     super(props);
@@ -34,21 +33,18 @@ class Signin extends React.Component {
 
       const response = await this.props.loginUser(this.state);
 
-      localStorage.setItem("jwt", JSON.stringify(response));
-      this.props.handleAuthUserUpdate();
-      response.user.role === "admin"
-        ? this.props.history.push("/admin/home")
-        : this.props.history.push("/");
-    } catch (errors) {
-      if (errors.responseError) {
-        this.setState({
-          responseError: errors.responseError,
-        });
+      if (response.statusCode === 422) {
+        this.setState({ responseError: response.msg });
       } else {
-        this.setState({
-          errors,
-        });
+        localStorage.setItem("jwt", JSON.stringify(response.data));
+        this.props.handleAuthUserUpdate();
+
+        response.data.user.role === "admin"
+          ? this.props.history.push("/admin/home")
+          : this.props.history.push("/");
       }
+    } catch (errors) {
+      this.setState({ errors });
     }
   };
 

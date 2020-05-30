@@ -31,7 +31,6 @@ class EditPost extends React.Component {
 
     try {
       const response = await this.props.fetchPost(postId);
-      console.log("POST TO EDIT", response);
 
       if (response.status === 200) {
         this.setState({
@@ -53,10 +52,10 @@ class EditPost extends React.Component {
 
     try {
       const response = await this.props.read(userId, token);
-      if (response.data.err) {
-        this.setState({ options: [] });
-      } else {
+      if (response.status === 200) {
         this.setState({ options: response.data.following });
+      } else {
+        this.setState({ options: [] });
       }
     } catch (error) {
       console.log(error);
@@ -104,13 +103,17 @@ class EditPost extends React.Component {
     try {
       this.setState({ errors: {} });
 
-      await this.props.editPost(
+      const response = await this.props.editPost(
         this.state,
         this.postData,
         this.state.id,
         token
       );
-      this.props.history.push(`/user/${userId}`);
+      if (response.status === 200) {
+        this.props.history.push(`/user/${userId}`);
+      } else {
+        console.log("error");
+      }
     } catch (errors) {
       this.setState({
         errors,

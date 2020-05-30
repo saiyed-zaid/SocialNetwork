@@ -31,32 +31,38 @@ class Users extends Component {
   }
 
   async componentDidMount() {
-    setTimeout(async () => {
+    try {
       const response = await this.props.list(isAuthenticated().user.token);
-      if (response.error) {
+      if (response.data.error) {
         console.log(response.error);
       } else {
-        this.setState({ users: response.users, isLoading: false });
+        this.setState({ users: response.data.users, isLoading: false });
 
         const script = document.createElement("script");
         script.src = "/js/dataTables.js";
         document.body.appendChild(script);
       }
-    }, 1000);
+    } catch (error) {
+      console.log(error);
+    }
   }
 
   deleteAccount = async (userId) => {
     const token = isAuthenticated().user.token;
 
     if (isAuthenticated().user.role === "admin") {
-      const response = await this.props.remove(userId, token);
+      try {
+        const response = await this.props.remove(userId, token);
 
-      if (response.isDeleted) {
-        this.setState({ redirect: true });
-        document.getElementById("deleteprofile").style.display = "none";
-        document.getElementById("deleteprofile").classList.remove("show");
-      } else {
-        console.log(response.msg);
+        if (response.isDeleted) {
+          this.setState({ redirect: true });
+          document.getElementById("deleteprofile").style.display = "none";
+          document.getElementById("deleteprofile").classList.remove("show");
+        } else {
+          console.log(response.msg);
+        }
+      } catch (error) {
+        console.log(error);
       }
     }
   };
@@ -153,7 +159,7 @@ class Users extends Component {
             });
             getRow.classList.toggle("row-remove");
           } else {
-            console.log(response.msg);
+            console.log(response.data.msg);
           }
         } catch (error) {}
       });
@@ -190,7 +196,7 @@ class Users extends Component {
       data
     );
     try {
-      if (response.err) {
+      if (response.data.err) {
         console.log("Error=> ", response.err);
       } else {
         this.setState({

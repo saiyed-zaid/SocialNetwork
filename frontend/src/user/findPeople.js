@@ -28,36 +28,44 @@ class FindPeople extends Component {
     }
     return response;
   }; */
-  componentDidMount() {
+  async componentDidMount() {
     const userId = isAuthenticated().user._id;
     const token = isAuthenticated().user.token;
-    setTimeout(async () => {
+
+    try {
       const response = await this.props.findPeople(userId, token);
-      if (response.error) {
-        console.log(response.error);
+
+      if (response.status === 200) {
+        this.setState({ users: response.data, isLoading: false });
       } else {
-        this.setState({ users: response, isLoading: false });
+        return Promise.reject(response.error);
       }
-    }, 1000);
+    } catch (error) {
+      console.log(error);
+    }
   }
 
   clickFollow = async (user, i) => {
     const userId = isAuthenticated().user._id;
     const token = isAuthenticated().user.token;
     this.setState({ isProcessing: i });
+    try {
+      const response = await this.props.follow(userId, token, user._id);
 
-    const data = await this.props.follow(userId, token, user._id);
-    if (data.err) {
-      this.setState({ error: data.err });
-    } else {
-      let toFollow = this.state.users;
-      toFollow.splice(i, 1);
-      this.setState({
-        users: toFollow,
-        open: true,
-        notify: `Started Following ${user.name}`,
-        isProcessing: "",
-      });
+      if (response.status === 200) {
+        let toFollow = this.state.users;
+        toFollow.splice(i, 1);
+        this.setState({
+          users: toFollow,
+          open: true,
+          notify: `Started Following ${user.name}`,
+          isProcessing: "",
+        });
+      } else {
+        return Promise.reject(response.reject);
+      }
+    } catch (error) {
+      console.log(error);
     }
   };
 

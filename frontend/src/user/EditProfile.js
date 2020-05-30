@@ -27,25 +27,27 @@ class EditProfile extends Component {
 
   init = async (userId) => {
     const token = isAuthenticated().user.token;
+    try {
+      const response = await this.props.read(userId, token);
 
-    const response = await this.props.read(userId, token);
-
-    if (response.status === 200) {
-      this.setState({
-        id: response.data._id,
-        name: response.data.name,
-        gender: response.data.gender,
-        dob: response.data.dob,
-        email: response.data.email,
-        error: "",
-        about: response.data.about,
-        photo: response.data.photo ? response.data.photo.path : DefaultProfile,
-      });
-    } else {
-      this.setState({ redirectToProfile: true });
-    }
+      if (response.status === 200) {
+        this.setState({
+          id: response.data._id,
+          name: response.data.name,
+          gender: response.data.gender,
+          dob: response.data.dob,
+          email: response.data.email,
+          error: "",
+          about: response.data.about,
+          photo: response.data.photo
+            ? response.data.photo.photoURI
+            : DefaultProfile,
+        });
+      } else {
+        this.setState({ redirectToProfile: true });
+      }
+    } catch (error) {}
   };
-
   componentDidMount() {
     const userId = !this.props.authUser
       ? this.props.match.params.userId
@@ -112,15 +114,13 @@ class EditProfile extends Component {
           redirectToProfile: true,
         });
       } else {
-        await this.props.updateUser(response, () => {
+        await this.props.updateLocalStorage(response.data, () => {
           this.setState({
             redirectToProfile: true,
           });
         });
       }
     } catch (errors) {
-      //alert("asd");
-      console.log(errors);
       this.setState({
         errors,
       });

@@ -23,50 +23,37 @@ class Notification extends React.Component {
     };
   }
 
-  componentDidMount() {
+  async componentDidMount() {
     //New Follower List
-    newFollowersList()
-      .then((response) => {
-        if (response.status === 401) {
-          alert("401 notification");
-          localStorage.removeItem("jwt");
 
-          return;
-        }
-        var newFollowerList = [];
-        if (response.data.length > 0) {
-          response.data.forEach((follower, i) => {
-            newFollowerList.push({
-              id: follower.user._id,
-              name: follower.user.name,
-              followedFrom: follower.followedFrom,
-            });
+    newFollowersList().then((response) => {
+      if (response.status === 401) {
+        localStorage.removeItem("jwt");
+      }
+      var newFollowerList = [];
+      if (response.data.length > 0) {
+        response.data.forEach((follower, i) => {
+          newFollowerList.push({
+            id: follower.user._id,
+            name: follower.user.name,
+            followedFrom: follower.followedFrom,
           });
+        });
+      }
 
-          if (newFollowerList.length > 0) {
-            this.setState({
-              hasNewFollow: true,
-              newFollowerList: newFollowerList,
-            });
-          }
-
-          if (this.state.hasNewFollow) {
-            //setTimeout(this.followStatusChange, 16000);
-          }
-        }
-      })
-      .catch((err) => {
-        if (err) {
-          console.log("Error while fetching new Followers", err);
-        }
-      });
+      if (newFollowerList.length > 0) {
+        this.setState({
+          hasNewFollow: true,
+          newFollowerList: newFollowerList,
+        });
+      }
+    });
 
     try {
       readPost().then((response) => {
         let newLikesList = [];
         let newCommentsList = [];
         if (response.status === 401) {
-          alert("401 notification");
           localStorage.removeItem("jwt");
 
           return;
@@ -163,7 +150,6 @@ class Notification extends React.Component {
             this.state.newCommentList.length > 0 > 0) && (
             <>
               <span
-                // to="/"
                 className="dropdown-item "
                 style={{ display: "flex", justifyContent: " center" }}
               >

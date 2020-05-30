@@ -67,11 +67,11 @@ class Profile extends Component {
     return match;
   };
 
-  clickFollowButton = (callApi) => {
+  clickFollowButton = async (callApi) => {
     const userId = isAuthenticated().user._id;
     const token = isAuthenticated().user.token;
 
-    callApi(userId, token, this.state.user._id)
+    await callApi(userId, token, this.state.user._id)
       .then((data) => {
         if (data.error) {
           this.setState({ error: data.error });
@@ -96,30 +96,6 @@ class Profile extends Component {
     document.getElementById("followersModal").classList.add("show");
   };
 
-  /* handleUserStatusChange = (user) => {
-    const userId = user._id;
-    let dataToUpdate = user;
-    const data = new FormData();
-
-    data.append("status", !dataToUpdate.status);
-
-    update(userId, isAuthenticated().user.token, data)
-      .then((result) => {
-        if (result.err) {
-          console.log("Error=> ", result.err);
-        } else {
-          this.setState({ users: dataToUpdate });
-          document.getElementById("deleteAccount").style.display = "none";
-          document.getElementById("deleteAccount").classList.remove("show");
-        }
-      })
-      .catch((err) => {
-        if (err) {
-          console.log("ERR IN UPDATING", err);
-        }
-      });
-  }; */
-
   handlePostStatusChange = async (post) => {
     const postId = post._id;
     let dataToUpdate = post;
@@ -127,13 +103,13 @@ class Profile extends Component {
 
     data.append("status", !dataToUpdate.status);
     try {
-      const result = await this.props.updatePost(
+      const response = await this.props.updatePost(
         data,
         postId,
         isAuthenticated().user.token
       );
-      if (result.err) {
-        console.log("Error=> ", result.err);
+      if (response.data.err) {
+        console.log("Error=> ", response.data.err);
       } else {
         this.setState({ post: dataToUpdate });
         this.init(post.postedBy._id);
@@ -182,13 +158,13 @@ class Profile extends Component {
     const photoUrl =
       user._id && user.photo ? `${user.photo.photoURI}` : DefaultProfile;
 
-    if (redirectToSignin) {
+    /*  if (redirectToSignin) {
       return <Redirect to="/signin" />;
     }
     if (this.state.isLoading) {
       return this.state.isLoading && <Spinner />;
     }
-
+ */
     return (
       <div
         className="bg-dark position-relative rounded"
@@ -317,7 +293,7 @@ class Profile extends Component {
                 update={this.props.update}
                 read={this.props.read}
                 authUser={this.props.authUser}
-                updateUser={this.props.updateUser}
+                updateLocalStorage={this.props.updateLocalStorage}
               />
             }
             title="Edit Profile"

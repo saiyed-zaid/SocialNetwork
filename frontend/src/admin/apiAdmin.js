@@ -1,5 +1,7 @@
+import axios from "axios";
+
 export const getNewUsers = async (userId, token) => {
-  const newUsers = await fetch(
+  const response = await axios(
     `${process.env.REACT_APP_API_URL}/api/user/newusers/${userId}`,
     {
       method: "get",
@@ -11,11 +13,11 @@ export const getNewUsers = async (userId, token) => {
     }
   );
 
-  return await newUsers.json({ newUsers });
+  return response;
 };
 
 export const getNewPosts = async (userId, token) => {
-  const newPosts = await fetch(
+  const response = await axios(
     `${process.env.REACT_APP_API_URL}/api/post/newpost/${userId}`,
     {
       method: "get",
@@ -27,11 +29,11 @@ export const getNewPosts = async (userId, token) => {
     }
   );
 
-  return await newPosts.json({ newPosts });
+  return response;
 };
 
 export const getDailyActiveUsers = async (userId, token) => {
-  const activeUsers = await fetch(
+  const response = await axios(
     `${process.env.REACT_APP_API_URL}/api/user/onlinetoday/${userId}`,
     {
       method: "get",
@@ -43,11 +45,11 @@ export const getDailyActiveUsers = async (userId, token) => {
     }
   );
 
-  return await activeUsers.json({ activeUsers });
+  return response;
 };
 
 export const getUsersOnlineNow = async (userId, token) => {
-  const activeUsers = await fetch(
+  const response = await axios(
     `${process.env.REACT_APP_API_URL}/api/user/onlinenow/${userId}`,
     {
       method: "get",
@@ -59,5 +61,5 @@ export const getUsersOnlineNow = async (userId, token) => {
     }
   );
 
-  return await activeUsers.json({ activeUsers });
+  return response;
 };

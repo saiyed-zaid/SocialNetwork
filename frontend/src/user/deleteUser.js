@@ -17,21 +17,25 @@ class DeleteUser extends Component {
     const userId = this.props.userId;
 
     if (isAuthenticated().user.role === "admin") {
-      const response = await this.props.remove(userId, token);
+      try {
+        const response = await this.props.remove(userId, token);
 
-      if (response.isDeleted) {
-        this.setState({ redirect: true });
-      } else {
-        console.log(response.msg);
-      }
+        if (response.statsu === 200) {
+          this.setState({ redirect: true });
+        } else {
+          console.log(response.msg);
+        }
+      } catch (error) {}
     } else {
-      const response = await this.props.remove(userId, token);
-      if (response.error) {
-        console.log(data.error);
-      } else {
-        signout(() => console.log("deleted"));
-        this.setState({ redirect: true });
-      }
+      try {
+        const response = await this.props.remove(userId, token);
+        if (response.status === 200) {
+          signout(() => console.log("deleted"));
+          this.setState({ redirect: true });
+        } else {
+          console.log(data.error);
+        }
+      } catch (error) {}
     }
   };
 

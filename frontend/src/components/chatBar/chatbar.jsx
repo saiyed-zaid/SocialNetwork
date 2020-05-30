@@ -1,11 +1,9 @@
 import React, { Component } from "react";
 import defaultProfile from "../../images/avatar.jpg";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCaretRight} from "@fortawesome/free-solid-svg-icons";
+import { faCaretRight } from "@fortawesome/free-solid-svg-icons";
 
-// import classes from "./chatbar.css";
-
-export default class chatbar extends Component {
+export default class Chatbar extends Component {
   OnClose = () => {
     let chatbar = document.getElementById("chatbar");
     chatbar.classList.add("close-chatbar");
@@ -30,7 +28,7 @@ export default class chatbar extends Component {
           <FontAwesomeIcon
             icon={faCaretRight}
             onClick={this.OnClose}
-            className="text-danger col-sm-2"
+            className="text-dark col-sm-2"
           />
           <span className="col-sm-10 text-center text-light">Online</span>
         </div>
@@ -40,11 +38,7 @@ export default class chatbar extends Component {
               <li className="p-2 m-0 bg-dark" key={i}>
                 <img
                   className="col-sm-4"
-                  src={
-                    user.photo
-                      ? `${process.env.REACT_APP_API_URL}/${user.photo.path}`
-                      : defaultProfile
-                  }
+                  src={user.photo ? user.photo.photoURI : defaultProfile}
                   alt={user.name}
                   style={{ borderRadius: "50%" }}
                   onError={(e) => (e.target.src = defaultProfile)}
@@ -53,7 +47,7 @@ export default class chatbar extends Component {
                   className="text-primary chat-list"
                   data-userId={user._id}
                   data-name={user.name}
-                  onClick={this.props.hasChatBoxDisplay}
+                  onClick={() => this.props.handleOpen(user)}
                   style={{ background: "transparent", border: "transparent" }}
                 >
                   {user.name}

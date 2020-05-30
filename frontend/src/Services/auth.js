@@ -1,5 +1,6 @@
 import { validateAll } from "indicative/validator";
 import { isAuthenticated } from "../auth/index";
+import axios from "axios";
 
 export default class Authservice {
   /**
@@ -21,43 +22,38 @@ export default class Authservice {
     try {
       await validateAll(data, rules, messages);
 
-      try {
-        const response = await fetch(
-          `${process.env.REACT_APP_API_URL}/api/signin`,
-          {
-            method: "POST",
-            headers: {
-              Accept: "application/json",
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-              email: data.email,
-              password: data.password,
-            }),
-          }
-        ).then((result) => {
-          return result.json().then((result) => {
-            return result;
-          });
+      const response = await axios(
+        `${process.env.REACT_APP_API_URL}/api/signin`,
+        {
+          method: "POST",
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+          },
+          data: JSON.stringify({
+            email: data.email,
+            password: data.password,
+          }),
+        }
+      );
+      return response;
+    } catch (errors) {
+
+      if (errors.response && errors.response.status === 422) {
+        //SERVER ERRORS
+        return {
+          statusCode: errors.response.status,
+          msg: errors.response.data.error,
+        };
+      } else {
+        //VALIDATION ERRORS
+        var formattedErrors = {};
+        errors.forEach((error) => {
+          formattedErrors[error.field] = error.message;
         });
 
-        if (response.error) {
-          return Promise.reject({
-            responseError: response.error,
-          });
-        } else {
-          return response;
-        }
-      } catch (error) {
-        return Promise.reject(error);
+        return Promise.reject(formattedErrors);
       }
-    } catch (errors) {
-      var formattedErrors = {};
-      errors.forEach((error) => {
-        formattedErrors[error.field] = error.message;
-      });
-
-      return Promise.reject(formattedErrors);
     }
   }
 
@@ -93,7 +89,7 @@ export default class Authservice {
       };
 
       try {
-        const response = await fetch(
+        const response = await axios(
           `${process.env.REACT_APP_API_URL}/api/signup`,
           {
             method: "POST",
@@ -101,14 +97,14 @@ export default class Authservice {
               Accept: "application/json",
               "Content-Type": "application/json",
             },
-            body: JSON.stringify(user),
+            data: JSON.stringify(user),
           }
         );
 
         if (response.err) {
           return Promise.reject(response.err);
         } else {
-          return await response.json();
+          return response;
         }
       } catch (error) {
         return Promise.reject(error);
@@ -130,7 +126,7 @@ export default class Authservice {
    */
   async signout(next) {
     const token = isAuthenticated().user.token;
-    return fetch(`${process.env.REACT_APP_API_URL}/api/signout`, {
+    return axios(`${process.env.REACT_APP_API_URL}/api/signout`, {
       method: "GET",
       headers: {
         Accept: "application/json",
@@ -144,7 +140,7 @@ export default class Authservice {
         }
         next();
 
-        return response.json();
+        return response;
       })
       .catch((err) => console.log(err));
   }
@@ -177,7 +173,7 @@ export default class Authservice {
       };
 
       try {
-        const response = await fetch(
+        const response = await axios(
           `${process.env.REACT_APP_API_URL}/api/changePassword`,
           {
             method: "POST",
@@ -186,10 +182,10 @@ export default class Authservice {
               "Content-Type": "application/json",
               Authorization: `Bearer ${token}`,
             },
-            body: JSON.stringify(formData),
+            data: JSON.stringify(formData),
           }
         );
-        return await response.json();
+        return response;
       } catch (error) {
         console.log(error);
       }
@@ -223,7 +219,7 @@ export default class Authservice {
    * @param {json} resetInfo
    */
   async resetPassword(resetInfo) {
-    const resetData = await fetch(
+    const resetData = await axios(
       `${process.env.REACT_APP_API_URL}/api/reset-password/`,
       {
         method: "PUT",
@@ -231,10 +227,10 @@ export default class Authservice {
           Accept: "application/json",
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(resetInfo),
+        data: JSON.stringify(resetInfo),
       }
     );
-    return await resetData.json();
+    return resetData;
   }
 
   /**
@@ -242,7 +238,7 @@ export default class Authservice {
    * @param {} user
    */
   async socialLogin(user) {
-    const loginData = await fetch(
+    const response = await axios(
       `${process.env.REACT_APP_API_URL}/api/social-login/`,
       {
         method: "POST",
@@ -250,9 +246,9 @@ export default class Authservice {
           Accept: "application/json",
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(user),
+        data: JSON.stringify(user),
       }
     );
-    return await loginData.json();
+    return response;
   }
 }

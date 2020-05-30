@@ -5,8 +5,6 @@ import ChatBar from "../components/chatBar/chatbar";
 import Chattab from "../components/chatTab";
 import UsersList from "../components/users/index";
 import Alert from "../ui-components/Alert";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPaperPlane } from "@fortawesome/free-solid-svg-icons";
 
 class Users extends Component {
   constructor(props) {
@@ -60,13 +58,6 @@ class Users extends Component {
     }
   }
 
-  /* onMsg = () => {
-    let chatbar = document.getElementById("chatbar");
-    chatbar.style.display = "block";
-    chatbar.classList.remove("close-chatbar");
-    document.getElementById("floating-btn").style.display = "none";
-  };
- */
   /**
    * Function For Creating Controls For  Users Page
    *
@@ -85,43 +76,15 @@ class Users extends Component {
     </>
   );
 
-  /* handleChatBoxDisplay = (e) => {
-    e.persist();
-    if (!this.state.hasChatBoxDisplay) {
-      const token = isAuthenticated().user.token;
-      fetchMessage(
-        isAuthenticated().user._id,
-        e.target.getAttribute("data-userId"),
-        token
-      )
-        .then((result) => {
-          this.setState({
-            hasChatBoxDisplay: true,
-            receiverId: e.target.getAttribute("data-userId"),
-            receiverName: e.target.getAttribute("data-name"),
-            messages: result,
-          });
-        })
-        .catch((err) => {
-          if (err) {
-            console.log("Error while fetching record");
-          }
-        });
-    } else {
-      this.setState({
-        hasChatBoxDisplay: false,
-      });
-    }
-  }; */
-
   render() {
     const { users, onlineUsers, error } = this.state;
+    console.log(users, onlineUsers);
+
     if (this.state.isLoading) {
       return <Spinner />;
     }
     return (
       <div className="container-fluid">
-        {/* d-flex flex-column align-items-center */}
         {error ? <Alert message={error} type="danger" /> : null}
         <div
           id="chat-tab"
@@ -134,22 +97,9 @@ class Users extends Component {
         ></div>
         <div className="col-md-12">
           <div className="jumbotron p-3">
-            {/* <h4> Users</h4> */}
-            <div className="row">
-              {/* {!users.length && this.renderUsers(users)} */}
-              {this.renderUsers(users)}
-            </div>
+            <div className="row">{this.renderUsers(users)}</div>
           </div>
         </div>
-
-        {/*  <div
-          className="col-md-2 p-0 m-0"
-          style={{
-            height: "400px",
-            position: "fixed !important",
-            overflowY: "auto",
-          }}
-        ></div> */}
 
         <ChatBar data={onlineUsers} />
         {this.state.hasChatBoxDisplay ? (
@@ -162,9 +112,7 @@ class Users extends Component {
             messages={this.state.messages}
           />
         ) : null}
-        {/*  <button id="floating-btn" className="floating-btn" onClick={this.onMsg}>
-          <i className="fas fa-paper-plane anim-icon"></i>
-        </button> */}
+
         <GoToTop />
       </div>
     );
