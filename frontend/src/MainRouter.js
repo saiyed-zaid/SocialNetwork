@@ -33,11 +33,11 @@ import ScheduledPost from "./post/scheduledPosts";
 import MsgNotification from "./core/components/messageNotification";
 import EditScheduledPost from "./post/editScheduledPost";
 import Navbar from "./components/navbar";
-const isActive = (history, path) => {
+/* const isActive = (history, path) => {
   if (history.location.pathname === path) {
     return { color: "#e6cf23" };
   } else return { color: "#ffffff" };
-};
+}; */
 /* 
 const Navbar = withRouter(
   ({ history, authUser, handleLogout, signout, handleChatOpen }) => {

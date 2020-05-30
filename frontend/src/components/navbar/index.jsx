@@ -11,8 +11,8 @@ const isActive = (history, path) => {
   } else return { color: "#ffffff" };
 };
 
-const Navbar = 
-  withRouter(({ history, authUser, handleLogout, signout, handleChatOpen }) => {
+const Navbar = withRouter(
+  ({ history, authUser, handleLogout, signout, handleChatOpen }) => {
     return (
       <nav className="navbar sticky-top  navbar-expand-lg navbar-dark bg-dark">
         {authUser && authUser.role === "admin" ? (
@@ -307,6 +307,7 @@ const Navbar =
         </div>
       </nav>
     );
-  });
+  }
+);
 
 export default Navbar;
