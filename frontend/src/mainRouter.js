@@ -32,12 +32,13 @@ import ChangePassword from "./auth/pages/changePassword";
 import ScheduledPost from "./post/scheduledPosts";
 import MsgNotification from "./core/components/messageNotification";
 import EditScheduledPost from "./post/editScheduledPost";
+import Navbar from "./components/navbar";
 const isActive = (history, path) => {
   if (history.location.pathname === path) {
     return { color: "#e6cf23" };
   } else return { color: "#ffffff" };
 };
-
+/* 
 const Navbar = withRouter(
   ({ history, authUser, handleLogout, signout, handleChatOpen }) => {
     return (
@@ -270,7 +271,7 @@ const Navbar = withRouter(
                       <Notification authUser={authUser} />
                     </>
                   )}
-                  <li className="nav-item dropdown profile-btn ">
+                  <li className="nav-item dropdown">
                     <a
                       className="nav-link "
                       href="/"
@@ -291,7 +292,6 @@ const Navbar = withRouter(
                         onError={(e) => (e.target.src = avatar)}
                         alt="user "
                       />
-                      <span>&nbsp;{authUser.name.toUpperCase()}</span>
                     </a>
                     <div
                       className="dropdown-menu  dropdown-menu-right"
@@ -336,7 +336,7 @@ const Navbar = withRouter(
       </nav>
     );
   }
-);
+); */
 
 class MainRouter extends React.Component {
   constructor(props) {
@@ -353,7 +353,6 @@ class MainRouter extends React.Component {
 
     this.socket = openSocket("http://localhost:5000");
   }
-  
 
   componentDidMount() {
     if (this.state.authUser) {

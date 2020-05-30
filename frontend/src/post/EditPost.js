@@ -30,32 +30,33 @@ class EditPost extends React.Component {
       : this.props.postId;
 
     try {
-      const data = await this.props.fetchPost(postId);
+      const response = await this.props.fetchPost(postId);
+      console.log("POST TO EDIT", response);
 
-      if (data.error) {
-        this.setState({ redirectToProfile: true });
-      } else {
+      if (response.status === 200) {
         this.setState({
-          id: data._id,
-          title: data.title,
-          body: data.body,
+          id: response.data._id,
+          title: response.data.title,
+          body: response.data.body,
           error: "",
-          photo: data.photo ? data.photo : DefaultPost,
+          photo: response.data.photo ? response.data.photo : DefaultPost,
           user: this.props.authUser,
-          options: data.following,
-          selectedTags: data.tags,
+          options: response.data.following,
+          selectedTags: response.data.tags,
         });
+      } else {
+        this.setState({ redirectToProfile: true });
       }
     } catch (error) {
       console.log(error);
     }
 
     try {
-      const data = await this.props.read(userId, token);
-      if (data.err) {
+      const response = await this.props.read(userId, token);
+      if (response.data.err) {
         this.setState({ options: [] });
       } else {
-        this.setState({ options: data.following });
+        this.setState({ options: response.data.following });
       }
     } catch (error) {
       console.log(error);

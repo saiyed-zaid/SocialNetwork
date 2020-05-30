@@ -40,7 +40,7 @@ export default class PostCard extends Component {
             />
             <span className="username text-left">
               <Link to={posterId}>{posterName}</Link> &nbsp;
-              {post.tags.length > 1 ? (
+              {post.tags.length >= 1 && (
                 <small
                   data-toggle="tooltip"
                   data-placement="bottom"
@@ -49,7 +49,7 @@ export default class PostCard extends Component {
                 >
                   With {post.tags.length} More
                 </small>
-              ) : null}
+              )}
             </span>
 
             {this.props.profile ? (

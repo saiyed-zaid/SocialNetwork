@@ -49,8 +49,7 @@ class ChangePassword extends React.Component {
         this.setState({
           errors: formattedErrors,
         });
-        // console.log("result__", response);
-        // console.log("Formatted__", formattedErrors);
+
       } else {
         this.props.history.push(`/user/${this.props.authUser._id}`);
       }

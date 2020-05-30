@@ -63,7 +63,6 @@ class Notification extends React.Component {
 
     try {
       readPost().then((response) => {
-        console.log("data_", response);
         let newLikesList = [];
         let newCommentsList = [];
         if (response.status === 401) {

@@ -161,7 +161,7 @@ exports.updateUser = async (req, res, next) => {
       });
     } else {
       user.password = undefined;
-      await res.json(user);
+      await res.status(200).json(user);
     }
   });
 };

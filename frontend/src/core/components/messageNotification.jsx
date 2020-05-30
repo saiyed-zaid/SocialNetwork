@@ -12,15 +12,15 @@ export default class messageNotification extends Component {
   }
 
   componentDidMount() {
-    fetchNewMessage().then((data) => {
-      if (data.status === 401) {
+    fetchNewMessage().then((response) => {
+      if (response.status === 401) {
         localStorage.removeItem("jwt");
         this.props.history.push("/signin");
       }
-      if (data.err) {
-        console.log(data.err);
+      if (response.data.err) {
+        console.log(response.data.err);
       } else {
-        this.setState({ messages: data });
+        this.setState({ messages: response.data });
       }
     });
   }
@@ -60,7 +60,7 @@ export default class messageNotification extends Component {
             ))}
           {messages.length === 0 && (
             <button className="dropdown-item">
-              <p className="text-dark">No Messages</p>
+              <span className="text-dark">No Messages</span>
             </button>
           )}
         </div>

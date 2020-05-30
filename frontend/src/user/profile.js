@@ -36,7 +36,6 @@ class Profile extends Component {
     this.init(userId);
   }
   /*  componentDidUpdate(prevProps, prevState) {
-    console.log(prevProps.match.params.userId);
 
     if (prevProps.match.params.userId != this.props.match.params.userId) {
       const userId = this.props.match.params.userId;
@@ -61,7 +60,6 @@ class Profile extends Component {
   };
 
   checkFollow = (user) => {
-    console.log("user", user);
     const jwt = isAuthenticated();
     const match = user.followers.find((follower) => {
       return follower.user._id === jwt.user._id;

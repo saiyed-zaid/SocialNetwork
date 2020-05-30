@@ -43,7 +43,6 @@ export default class commentList extends Component {
   };
   showReplyBox = (e) => {
     const replybox = document.getElementById(this.props.i);
-    console.log(replybox);
 
     if (replybox.style.display === "none") {
       replybox.style.display = "flex";

@@ -159,10 +159,12 @@ export default class user extends Component {
   async updateUser(user, next) {
     if (typeof window != "undefined") {
       if (JSON.parse(localStorage.getItem("jwt")).user) {
+
         let auth = JSON.parse(localStorage.getItem("jwt"));
         auth.user = { token: auth.user.token, ...user };
         localStorage.setItem("jwt", JSON.stringify(auth));
         next();
+        
       }
     }
   }

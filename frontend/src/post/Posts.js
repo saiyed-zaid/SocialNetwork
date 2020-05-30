@@ -20,17 +20,16 @@ class Posts extends Component {
   async componentDidMount() {
     var postService = new Postservice();
 
-      try {
-        const response = await postService.fetchPosts();
-
-        if (response.error) {
-          return Promise.reject(response.error);
-        } else {
-          this.setState({ posts: response.data.posts, isLoading: false });
-        }
-      } catch (error) {
-        return Promise.reject(error);
+    try {
+      const response = await postService.fetchPosts();
+      if (response.status === 200) {
+        this.setState({ posts: response.data.posts, isLoading: false });
+      } else {
+        return Promise.reject(response.data.error);
       }
+    } catch (error) {
+      return Promise.reject(error);
+    }
   }
 
   render() {

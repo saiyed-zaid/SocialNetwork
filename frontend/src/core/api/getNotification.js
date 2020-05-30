@@ -85,7 +85,7 @@ export const readPost = async () => {
  */
 //userId, token
 export const fetchNewMessage = async () => {
-  const response = await fetch(
+  const response = await axios(
     `${process.env.REACT_APP_API_URL}/api/user/messages/${
       isAuthenticated().user._id
     }`,
@@ -98,7 +98,6 @@ export const fetchNewMessage = async () => {
       },
     }
   );
-  console.log("RESPONSE__", response);
 
   return response;
 };

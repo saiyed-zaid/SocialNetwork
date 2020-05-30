@@ -16,6 +16,7 @@ class NewPost extends React.Component {
       isSchedule: false,
       postScheduleTime: "",
       fileSizes: [],
+      options: [],
       errors: {},
     };
     this.postData = new FormData();
@@ -26,14 +27,12 @@ class NewPost extends React.Component {
   async componentDidMount() {
     /* this.setState({ user: this.props.authUser }); */
     try {
-      const data = await this.props.read(
+      const response = await this.props.read(
         this.props.authUser._id,
         this.props.authUser.token
       );
-      if (data.err) {
-        this.setState({ options: [] });
-      } else {
-        this.setState({ options: data.following });
+      if (response.status === 200) {
+        this.setState({ options: response.data.following });
       }
     } catch (errors) {
       this.setState({ errors });

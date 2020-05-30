@@ -30,19 +30,19 @@ class EditProfile extends Component {
 
     const response = await this.props.read(userId, token);
 
-    if (response.error) {
-      this.setState({ redirectToProfile: true });
-    } else {
+    if (response.status === 200) {
       this.setState({
-        id: response._id,
-        name: response.name,
-        gender: response.gender,
-        dob: response.dob,
-        email: response.email,
+        id: response.data._id,
+        name: response.data.name,
+        gender: response.data.gender,
+        dob: response.data.dob,
+        email: response.data.email,
         error: "",
-        about: response.about,
-        photo: response.photo ? response.photo.path : DefaultProfile,
+        about: response.data.about,
+        photo: response.data.photo ? response.data.photo.path : DefaultProfile,
       });
+    } else {
+      this.setState({ redirectToProfile: true });
     }
   };
 
