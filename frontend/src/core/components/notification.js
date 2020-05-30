@@ -28,7 +28,6 @@ class Notification extends React.Component {
 
     newFollowersList().then((response) => {
       if (response.status === 401) {
-        alert("401 notification");
         localStorage.removeItem("jwt");
       }
       var newFollowerList = [];
@@ -56,7 +55,6 @@ class Notification extends React.Component {
         let newLikesList = [];
         let newCommentsList = [];
         if (response.status === 401) {
-          alert("401 notification");
           localStorage.removeItem("jwt");
 
           return;
@@ -153,7 +151,6 @@ class Notification extends React.Component {
             this.state.newCommentList.length > 0 > 0) && (
             <>
               <span
-                // to="/"
                 className="dropdown-item "
                 style={{ display: "flex", justifyContent: " center" }}
               >

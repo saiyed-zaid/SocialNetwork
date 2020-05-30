@@ -295,7 +295,7 @@ class Profile extends Component {
                 update={this.props.update}
                 read={this.props.read}
                 authUser={this.props.authUser}
-                updateUser={this.props.updateUser}
+                updateLocalStorage={this.props.updateLocalStorage}
               />
             }
             title="Edit Profile"

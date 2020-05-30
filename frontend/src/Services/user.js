@@ -106,8 +106,8 @@ export default class user extends Component {
         }
       );
 
-      if (response.err) {
-        return Promise.reject(response.err);
+      if (response.error) {
+        return Promise.reject(response.error);
       } else {
         return response;
       }
@@ -126,7 +126,7 @@ export default class user extends Component {
    * @param {json} user       user Data
    * @param {function} next  Function To be Executed After Updating Data
    */
-  async updateUser(user, next) {
+  async updateLocalStorage(user, next) {
     if (typeof window != "undefined") {
       if (JSON.parse(localStorage.getItem("jwt")).user) {
         let auth = JSON.parse(localStorage.getItem("jwt"));

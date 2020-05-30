@@ -30,32 +30,32 @@ class EditPost extends React.Component {
       : this.props.postId;
 
     try {
-      const data = await this.props.fetchPost(postId);
+      const response = await this.props.fetchPost(postId);
 
-      if (data.error) {
-        this.setState({ redirectToProfile: true });
-      } else {
+      if (response.status === 200) {
         this.setState({
-          id: data._id,
-          title: data.title,
-          body: data.body,
+          id: response.data._id,
+          title: response.data.title,
+          body: response.data.body,
           error: "",
-          photo: data.photo ? data.photo : DefaultPost,
+          photo: response.data.photo ? response.data.photo : DefaultPost,
           user: this.props.authUser,
-          options: data.following,
-          selectedTags: data.tags,
+          options: response.data.following,
+          selectedTags: response.data.tags,
         });
+      } else {
+        this.setState({ redirectToProfile: true });
       }
     } catch (error) {
       console.log(error);
     }
 
     try {
-      const data = await this.props.read(userId, token);
-      if (data.err) {
-        this.setState({ options: [] });
+      const response = await this.props.read(userId, token);
+      if (response.status === 200) {
+        this.setState({ options: response.data.following });
       } else {
-        this.setState({ options: data.following });
+        this.setState({ options: [] });
       }
     } catch (error) {
       console.log(error);
@@ -103,13 +103,17 @@ class EditPost extends React.Component {
     try {
       this.setState({ errors: {} });
 
-      await this.props.editPost(
+      const response = await this.props.editPost(
         this.state,
         this.postData,
         this.state.id,
         token
       );
-      this.props.history.push(`/user/${userId}`);
+      if (response.status === 200) {
+        this.props.history.push(`/user/${userId}`);
+      } else {
+        console.log("error");
+      }
     } catch (errors) {
       this.setState({
         errors,

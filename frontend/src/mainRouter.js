@@ -358,7 +358,6 @@ class MainRouter extends React.Component {
 
     this.socket = openSocket("http://localhost:5000");
   }
-  
 
   async componentDidMount() {
     if (this.state.authUser) {
@@ -509,10 +508,16 @@ class MainRouter extends React.Component {
           data={this.state.onlineUsers}
           handleOpen={this.handleChatOpen}
         />
+        {this.state.authUser && (
+          <button
+            id="floating-btn"
+            className="floating-btn"
+            onClick={this.onMsg}
+          >
+            <FontAwesomeIcon icon={faPaperPlane} className="anim-icon" />
+          </button>
+        )}
 
-        <button id="floating-btn" className="floating-btn" onClick={this.onMsg}>
-          <FontAwesomeIcon icon={faPaperPlane} className="anim-icon" />
-        </button>
         <Switch>
           <Route path="/" exact component={Home} />
           <Route
@@ -626,7 +631,7 @@ class MainRouter extends React.Component {
             component={EditProfile}
             update={this.props.Userservice.update}
             read={this.props.Userservice.read}
-            updateUser={this.props.Userservice.updateUser}
+            updateLocalStorage={this.props.Userservice.updateLocalStorage}
           />
           <PrivateRoute
             path="/findpeople/:userId"
@@ -645,7 +650,7 @@ class MainRouter extends React.Component {
             read={this.props.Userservice.read}
             remove={this.props.Userservice.remove}
             fetchMessage={this.props.Userservice.fetchMessage}
-            updateUser={this.props.Userservice.updateUser}
+            updateLocalStorage={this.props.Userservice.updateLocalStorage}
             listByUser={this.props.Postservice.listByUser}
             updatePost={this.props.Postservice.editPost}
             unfollow={this.props.Userservice.unfollow}

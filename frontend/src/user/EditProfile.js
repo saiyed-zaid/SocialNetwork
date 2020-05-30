@@ -115,15 +115,13 @@ class EditProfile extends Component {
           redirectToProfile: true,
         });
       } else {
-        await this.props.updateUser(response.data, () => {
+        await this.props.updateLocalStorage(response.data, () => {
           this.setState({
             redirectToProfile: true,
           });
         });
       }
     } catch (errors) {
-      //alert("asd");
-      console.log(errors);
       this.setState({
         errors,
       });

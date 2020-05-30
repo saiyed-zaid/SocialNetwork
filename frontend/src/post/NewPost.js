@@ -26,14 +26,14 @@ class NewPost extends React.Component {
   async componentDidMount() {
     /* this.setState({ user: this.props.authUser }); */
     try {
-      const data = await this.props.read(
+      const response = await this.props.read(
         this.props.authUser._id,
         this.props.authUser.token
       );
-      if (data.err) {
-        this.setState({ options: [] });
+      if (response.status === 200) {
+        this.setState({ options: response.data.following });
       } else {
-        this.setState({ options: data.following });
+        this.setState({ options: [] });
       }
     } catch (errors) {
       this.setState({ errors });
@@ -104,14 +104,15 @@ class NewPost extends React.Component {
     try {
       this.setState({ errors: {} });
 
-      await this.props.addPost(
+      const response = await this.props.addPost(
         this.postData,
         data,
         this.props.authUser._id,
         this.props.authUser.token
       );
-
-      this.props.history.push(`/user/${this.props.authUser._id}`);
+      if (response.status === 200) {
+        this.props.history.push(`/user/${this.props.authUser._id}`);
+      }
     } catch (errors) {
       this.setState({
         errors,

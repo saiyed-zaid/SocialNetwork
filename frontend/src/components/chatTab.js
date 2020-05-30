@@ -211,7 +211,7 @@ export default class chatTab extends Component {
         handle=".handle"
         defaultPosition={{ x: 0, y: 0 }}
         position={null}
-        grid={[25, 25]}
+        grid={[1, 1]}
         scale={1}
         onStart={this.handleStart}
         onDrag={this.handleDrag}

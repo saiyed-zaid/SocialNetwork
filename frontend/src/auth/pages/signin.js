@@ -3,7 +3,6 @@ import { Link } from "react-router-dom";
 import SocialLogin from "./socialLogin";
 import Alert from "../../ui-components/Alert";
 
-
 class Signin extends React.Component {
   constructor(props) {
     super(props);
@@ -33,7 +32,6 @@ class Signin extends React.Component {
       this.setState({ errors: {}, responseError: null });
 
       const response = await this.props.loginUser(this.state);
-
       localStorage.setItem("jwt", JSON.stringify(response));
       this.props.handleAuthUserUpdate();
       response.user.role === "admin"

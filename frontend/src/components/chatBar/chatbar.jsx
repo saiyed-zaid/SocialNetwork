@@ -30,7 +30,7 @@ export default class chatbar extends Component {
           <FontAwesomeIcon
             icon={faCaretRight}
             onClick={this.OnClose}
-            className="text-danger col-sm-2"
+            className="text-dark col-sm-2"
           />
           <span className="col-sm-10 text-center text-light">Online</span>
         </div>
