@@ -296,33 +296,21 @@ exports.findPeople = async (req, res, next) => {
 };
 
 exports.newFollowerStatusChagne = (req, res, next) => {
-  User.findByIdAndUpdate(
-    req.auth._id,
+  User.updateOne(
+    {
+      _id: req.auth._id,
+
+      "followers.user": req.body.followerId,
+    },
     {
       $set: {
-        "followers.$[].isNewUser": false,
+        "followers.$.isNewUser": false,
       },
-    },
-    { multi: true }
+    }
   )
-    .then((result) => {})
-    .catch((err) => {
-      if (err) {
-        console.error(err);
-      }
-    });
-};
-exports.newLikesStatusChange = (req, res, next) => {
-  User.findByIdAndUpdate(
-    req.auth._id,
-    {
-      $set: {
-        "likes.$[].isNewLike": false,
-      },
-    },
-    { multi: true }
-  )
-    .then((result) => {})
+    .then((result) => {
+      return res.json(result);
+    })
     .catch((err) => {
       if (err) {
         console.error(err);
@@ -332,16 +320,17 @@ exports.newLikesStatusChange = (req, res, next) => {
 
 exports.getOnlinePeople = async (req, res, next) => {
   let following = req.profile.following;
-  // following.push(req.profile._id);
   try {
-    const users = await User.find(
-      {
-        _id: req.profile._id,
-      },
-      { following }
-    ).populate("following", "_id name isLoggedIn photo");
+    const users = await User.find({
+      _id: req.profile._id,
+    })
+      .populate({
+        path: "following",
+        match: { isLoggedIn: true },
+      })
+      .select("following");
 
-    await res.json(users);
+    return await res.json(users);
   } catch (error) {
     res.status(400).json({ err: error });
   }

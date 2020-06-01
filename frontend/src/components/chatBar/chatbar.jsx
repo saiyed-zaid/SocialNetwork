@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import defaultProfile from "../../images/avatar.jpg";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCaretRight } from "@fortawesome/free-solid-svg-icons";
+import { faArrowCircleRight } from "@fortawesome/free-solid-svg-icons";
 
 export default class Chatbar extends Component {
   OnClose = () => {
@@ -25,35 +25,37 @@ export default class Chatbar extends Component {
             cursor: "pointer",
           }}
         >
+          &nbsp;
           <FontAwesomeIcon
-            icon={faCaretRight}
+            icon={faArrowCircleRight}
             onClick={this.OnClose}
-            className="text-dark col-sm-2"
+            className="text-light"
           />
           <span className="col-sm-10 text-center text-light">Online</span>
         </div>
         <ul className="text-light p-0 m-0" style={{ listStyleType: "none" }}>
-          {this.props.data.map((user, i) =>
-            user.isLoggedIn === true ? (
-              <li className="p-2 m-0 bg-dark" key={i}>
-                <img
-                  className="col-sm-4"
-                  src={user.photo ? user.photo.photoURI : defaultProfile}
-                  alt={user.name}
-                  style={{ borderRadius: "50%" }}
-                  onError={(e) => (e.target.src = defaultProfile)}
-                />
-                <button
-                  className="text-primary chat-list"
-                  data-userId={user._id}
-                  data-name={user.name}
-                  onClick={() => this.props.handleOpen(user)}
-                  style={{ background: "transparent", border: "transparent" }}
-                >
-                  {user.name}
-                </button>
-              </li>
-            ) : null
+          {this.props.data.map(
+            (user, i) =>
+              user.isLoggedIn === true && (
+                <li className="p-2 m-0 bg-dark" key={i}>
+                  <img
+                    className="col-sm-4"
+                    src={user.photo ? user.photo.photoURI : defaultProfile}
+                    alt={user.name}
+                    style={{ borderRadius: "50%" }}
+                    onError={(e) => (e.target.src = defaultProfile)}
+                  />
+                  <button
+                    className="text-primary"
+                    data-userId={user._id}
+                    data-name={user.name}
+                    onClick={() => this.props.handleOpen(user)}
+                    style={{ background: "transparent", border: "transparent" }}
+                  >
+                    {user.name}
+                  </button>
+                </li>
+              )
           )}
         </ul>
       </div>

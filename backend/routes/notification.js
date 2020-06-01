@@ -5,53 +5,59 @@ const User = require("../models/user");
 const Post = require("../models/posts");
 const Message = require("../models/messages");
 var mongoose = require("mongoose");
+const { ObjectId } = require("mongodb");
 
 router.get("/api/newFollowers/user/:userId", authCheck, (req, res, next) => {
-  User.find(
-    {
-      _id: req.auth._id,
-      "followers.isNewUser": true,
-    },
-    (err, result) => {
-      if (result) {
-        if (result[0]) {
-          return res.status(200).json(result[0].followers);
-        }
-      }
+  User.find({ _id: new ObjectId(req.auth._id) }, (err, result) => {
+    if (err) {
+      console.log(err);
     }
-  )
-    .populate({ path: "followers.user", select: "name" })
-    .select("followers.followedFrom");
+    if (result[0]) {
+      console.log(result);
+      var newFollowers;
+      newFollowers = result[0].followers.filter((newFollower) => {
+        return newFollower.isNewUser === true && newFollower.user;
+      });
+
+      return res.status(200).json(newFollowers);
+    }
+  })
+    .populate("followers.user", "name")
+    .select("followers");
 });
 
 router.get(
   "/api/new/likeComments/post/by/:userId",
   authCheck,
-  (req, res, next) => {
-    Post.find(
-      {
-        postedBy: req.auth._id,
-        $or: [
-          {
-            "likes.isNewLike": true,
-          },
-          {
-            "comments.isNewComment": true,
-          },
-        ],
-      },
-      (err, result) => {
-        if (err) {
-          return res.json(err);
-        }
-        if (result) {
-          return res.json(result);
-        }
-      }
-    )
+  async (req, res, next) => {
+    const posts = await Post.find({
+      postedBy: req.auth._id,
+    })
       .populate("likes.user", "name")
       .populate("comments.postedBy", "name")
       .select("_id likes comments");
+
+    let newLikes = [],
+      newComments = [];
+    let filteredPosts = [];
+
+    posts.forEach((post) => {
+      newLikes = post.likes.filter((like) => {
+        return like.isNewLike === true;
+      });
+
+      newComments = post.comments.filter((comment) => {
+        return comment.isNewComment === true;
+      });
+
+      filteredPosts.push({
+        postId: post._id,
+        newLikes,
+        newComments,
+      });
+    });
+
+    return res.status(200).json(filteredPosts);
   }
 );
 

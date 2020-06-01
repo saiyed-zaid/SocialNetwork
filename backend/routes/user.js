@@ -33,7 +33,6 @@ router.post("/api/user/messages", auth_check, (req, res, next) => {
         console.log("error while fetching messages", err);
       }
     });
-
 });
 
 /**
@@ -74,6 +73,10 @@ router.put(
   auth_check,
   userController.newFollowerStatusChagne
 );
+
+
+
+
 
 router.put(
   "/api/user/messageStatusChange/:userId",

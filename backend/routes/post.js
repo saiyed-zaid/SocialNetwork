@@ -63,6 +63,18 @@ router.get(
   postController.getScheduledPost
 );
 
+/**
+ * @function put
+ * @description Handling put request which Update IsNewLike status false
+ * @param {middleware} Checking Authorization
+ * @param {middleware} newLikesStatusChange
+ */
+/* router.put(
+  "/api/user/newLikesStatusChange/:userId",
+  auth_check,
+  postController.newLikesStatusChange
+); */
+
 router.get("/api/post/schedule/edit/:postId", postController.getPost);
 
 /**
@@ -262,14 +274,26 @@ router.get(
 
 /**
  * @function put
- * @description Handling put request which Update isNewLike status false
+ * @description Handling put request which Update isNewUser status false
  * @param {middleware} Checking Authorization
- * @param {middleware} newLikesStatusChange
+ * @param {middleware}
  */
 router.put(
-  "/api/post/newLikesStatusChange/:postId",
+  "/api/user/newLikesStatusChange/:userId",
   auth_check,
-  userController.newFollowerStatusChagne
+  postController.newLikesStatusChange
+);
+
+/**
+ * @function put
+ * @description Handling put request which Update isNewUser status false
+ * @param {middleware} Checking Authorization
+ * @param {middleware}
+ */
+router.put(
+  "/api/user/newCommentStatusChange/:userId",
+  auth_check,
+  postController.newCommentStatusChange
 );
 
 /**

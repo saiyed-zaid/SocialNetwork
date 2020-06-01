@@ -49,7 +49,25 @@ exports.postById = async (req, res, next, id) => {
 exports.getPost = async (req, res, next) => {
   return res.status(200).json(req.post);
 };
+/* exports.newLikesStatusChange = (req, res, next) => {
+  User.updateOne(
+    { _id: req.body.postId, "likes.user": req.body.followerId },
 
+    {
+      $set: {
+        "likes.$.isNewLike": false,
+      },
+    }
+  )
+    .then((result) => {
+      return res.json(result);
+    })
+    .catch((err) => {
+      if (err) {
+        console.error(err);
+      }
+    });
+}; */
 /**
  * @function middleware
  * @description Handling get request which fetch all posts
@@ -601,6 +619,53 @@ exports.dailyNewPosts = async (req, res, next) => {
   }
 };
 
+exports.newLikesStatusChange = (req, res, next) => {
+  Post.updateOne(
+    {
+      _id: req.body.postId,
+
+      "likes.user": req.body.likeId,
+    },
+    {
+      $set: {
+        "likes.$[].isNewLike": false,
+      },
+    }
+  )
+    .then((result) => {
+      return res.json(result);
+    })
+    .catch((err) => {
+      if (err) {
+        console.error(err);
+      }
+    });
+};
+
+exports.newCommentStatusChange = (req, res, next) => {
+  console.log("respo....", req.body);
+
+  Post.updateOne(
+    {
+      _id: req.body.postId,
+
+      "comments.postedBy": req.body.commenterId,
+    },
+    {
+      $set: {
+        "comments.$[].isNewComment": false,
+      },
+    }
+  )
+    .then((result) => {
+      return res.json(result);
+    })
+    .catch((err) => {
+      if (err) {
+        console.error(err);
+      }
+    });
+};
 const uploadFile = (file) => {
   const storage = new Storage({
     projectId: process.env.GCLOUD_PROJECT_ID,

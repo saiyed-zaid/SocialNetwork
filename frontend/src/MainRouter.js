@@ -31,7 +31,7 @@ import Navbar from "./components/navbar";
 import ChatBar from "./components/chatBar/chatbar";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPaperPlane } from "@fortawesome/free-solid-svg-icons";
-
+// import Draggable from "react-draggable"; // Both at the same time
 
 class MainRouter extends React.Component {
   constructor(props) {
@@ -199,7 +199,10 @@ class MainRouter extends React.Component {
           data={this.state.onlineUsers}
           handleOpen={this.handleChatOpen}
         />
+
         {this.state.authUser && (
+          // Both at the same time
+
           <button
             id="floating-btn"
             className="floating-btn"

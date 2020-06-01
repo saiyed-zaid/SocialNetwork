@@ -71,19 +71,15 @@ class Profile extends Component {
     const userId = isAuthenticated().user._id;
     const token = isAuthenticated().user.token;
 
-    await callApi(userId, token, this.state.user._id)
-      .then((data) => {
-        if (data.error) {
-          this.setState({ error: data.error });
-        } else {
-          this.setState({
-            user: data,
-            following: !this.state.following,
-            followers: !this.state.followers,
-          });
-        }
-      })
-      .catch();
+    const response = await callApi(userId, token, this.state.user._id);
+    if (response.data.error) {
+      this.setState({ error: response.data.error });
+    } else {
+      this.setState({
+        user: response.data,
+        following: !this.state.following,
+      });
+    }
   };
 
   handleDeactivateModal = () => {
@@ -97,6 +93,8 @@ class Profile extends Component {
   };
 
   handlePostStatusChange = async (post) => {
+    console.log(post);
+
     const postId = post._id;
     let dataToUpdate = post;
     const data = new FormData();
@@ -104,6 +102,7 @@ class Profile extends Component {
     data.append("status", !dataToUpdate.status);
     try {
       const response = await this.props.updatePost(
+        post,
         data,
         postId,
         isAuthenticated().user.token
@@ -158,13 +157,12 @@ class Profile extends Component {
     const photoUrl =
       user._id && user.photo ? `${user.photo.photoURI}` : DefaultProfile;
 
-    /*  if (redirectToSignin) {
+    if (redirectToSignin) {
       return <Redirect to="/signin" />;
     }
     if (this.state.isLoading) {
       return this.state.isLoading && <Spinner />;
     }
- */
     return (
       <div
         className="bg-dark position-relative rounded"

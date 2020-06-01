@@ -7,12 +7,17 @@ import {
   faHeart,
   faCommentDots,
 } from "@fortawesome/free-solid-svg-icons";
+import {
+  isFollowStatusChange,
+  isLikesStatusChange,
+  isCommentStatusChange,
+} from "../api/getNotification";
 const Follow = (props) => {
   return (
     <div>
       {props.newFollowers &&
         props.newFollowers.map((follower, i) => (
-          <span className="noti w-100" key={i}>
+          <span className="noti " key={i}>
             <small className="mr-auto">
               <Link to={`/user/${follower.id}`}>
                 <FontAwesomeIcon icon={faUser} className="text-primary" />
@@ -27,13 +32,25 @@ const Follow = (props) => {
                 <TimeAgo date={follower.followedFrom} />
               ) : null}
             </small>
+            ;&nbsp;
+            <button
+              className="float-right"
+              style={{ border: "0px none", backgroundColor: "white" }}
+              onClick={() => isFollowStatusChange(follower.id)}
+            >
+              &times;
+            </button>
             <div className="dropdown-divider" />
           </span>
         ))}
 
       {props.newLikes &&
         props.newLikes.map((like, i) => (
-          <span className="noti w-100" key={i}>
+          <span
+            className="noti"
+            key={i}
+            style={{ maxWidth: "50px !important" }}
+          >
             <small className="mr-auto">
               <Link to={`/post/${like.postId}`}>
                 <FontAwesomeIcon
@@ -47,15 +64,23 @@ const Follow = (props) => {
             </small>
             <small>
               &nbsp;&nbsp;
-              {like.likedFrom ? <TimeAgo date={like.likedFrom} /> : null}
+              {like.likedFrom && <TimeAgo date={like.likedFrom} />}
             </small>
+            &nbsp;
+            <button
+              className="float-right"
+              style={{ border: "0px none", backgroundColor: "white" }}
+              onClick={() => isLikesStatusChange(like.postId, like.id)}
+            >
+              &times;
+            </button>
             <div className="dropdown-divider" />
           </span>
         ))}
       {props.newComments &&
         props.newComments.map((comment, i) => (
           <span className="noti w-100" key={i}>
-            <small className="mr-auto">
+            <small className="mr-auto w-50">
               <Link to={`/post/${comment.postId}`}>
                 <FontAwesomeIcon
                   icon={faCommentDots}
@@ -68,10 +93,18 @@ const Follow = (props) => {
             </small>
             <small>
               &nbsp;&nbsp;
-              {comment.commentedFrom ? (
+              {comment.commentedFrom && (
                 <TimeAgo date={comment.commentedFrom} />
-              ) : null}
+              )}
             </small>
+            &nbsp;
+            <button
+              // className="float-right"
+              style={{ border: "0px none", backgroundColor: "white" }}
+              onClick={() => isCommentStatusChange(comment.postId, comment.id)}
+            >
+              &times;
+            </button>
             <div className="dropdown-divider" />
           </span>
         ))}

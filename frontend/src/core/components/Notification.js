@@ -1,10 +1,7 @@
 import React from "react";
-import {
-  newFollowersList,
-  /* isFollowStatusChange */ readPost,
-} from "../api/getNotification";
+import { newFollowersList, readPost } from "../api/getNotification";
 
-import Follow from "./getNewFollower";
+import NotificationList from "./getNewFollower";
 import { isAuthenticated } from "../../auth";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBell } from "@fortawesome/free-solid-svg-icons";
@@ -58,26 +55,29 @@ class Notification extends React.Component {
 
           return;
         }
+
         if (response.data.length > 0) {
           response.data.forEach((post) => {
             //Likes Notification
-            post.likes.forEach((like, i) => {
+
+            post.newLikes.forEach((like, i) => {
               if (like.user._id !== isAuthenticated().user._id) {
                 newLikesList.push({
                   id: like.user._id,
-                  postId: post._id,
+                  postId: post.postId,
                   name: like.user.name,
                   likedFrom: like.likedFrom,
                 });
               }
             });
+            console.log(post.newComments);
 
             //Comment Notification
-            post.comments.forEach((comment, i) => {
+            post.newComments.forEach((comment, i) => {
               if (comment.postedBy._id !== isAuthenticated().user._id) {
                 newCommentsList.push({
                   id: comment.postedBy._id,
-                  postId: post._id,
+                  postId: post.postId,
                   name: comment.postedBy.name,
                   commentedFrom: comment.created,
                 });
@@ -99,26 +99,6 @@ class Notification extends React.Component {
       console.log(error);
     }
   }
-  /* likeStatusChange = () => {
-    if (this.state.hasNewLikes) {
-      const toast = document.querySelectorAll(".noti");
-      toast.forEach((t) => {
-        t.classList.replace("show", "hide");
-      });
-      clearTimeout(this.state.timer);
-      this.setState({ hasNewLikes: false });
-    }
-  }; followStatusChange = () => {
-    if (this.state.hasNewFollow) {
-      isFollowStatusChange();
-      const toast = document.querySelectorAll(".noti");
-      toast.forEach((t) => {
-        t.classList.replace("show", "hide");
-      });
-      clearTimeout(this.state.timer);
-      this.setState({ hasNewFollow: false });
-    }
-  }; */
 
   render() {
     return (
@@ -133,35 +113,30 @@ class Notification extends React.Component {
           aria-expanded="false"
         >
           <FontAwesomeIcon icon={faBell} />
-          {this.state.newFollowerList.length > 0 ||
-          this.state.newLikesList.length > 0 ||
-          this.state.newCommentList.length > 0 ? (
-            <span className="badge badge-warning ml-1">
-              {this.state.newFollowerList.length +
-                this.state.newLikesList.length +
-                this.state.newCommentList.length}
-            </span>
-          ) : null}
+          <span className="badge badge-warning ml-1">
+            {this.state.newFollowerList.length +
+              this.state.newLikesList.length +
+              this.state.newCommentList.length}
+          </span>
         </a>
 
         <div className="dropdown-menu dropdown-menu-lg-right noti-toggle">
           {((this.state.newFollowerList.length > 0 ||
             this.state.newLikesList.length > 0 ||
-            this.state.newCommentList.length > 0 > 0) && (
-            <>
-              <span
-                className="dropdown-item "
-                style={{ display: "flex", justifyContent: " center" }}
-              >
-                <span className=" text-muted text-sm">
-                  <Follow
-                    newFollowers={this.state.newFollowerList}
-                    newLikes={this.state.newLikesList}
-                    newComments={this.state.newCommentList}
-                  />
-                </span>
+            this.state.newCommentList.length > 0) && (
+            <span
+              className="dropdown-item "
+              style={{ display: "flex", justifyContent: " center" }}
+            >
+              <span className=" text-muted text-sm">
+                <NotificationList
+                  newFollowers={this.state.newFollowerList}
+                  newLikes={this.state.newLikesList}
+                  k
+                  newComments={this.state.newCommentList}
+                />
               </span>
-            </>
+            </span>
           )) || (
             <span className="dropdown-item dropdown-header">
               No Notifications
