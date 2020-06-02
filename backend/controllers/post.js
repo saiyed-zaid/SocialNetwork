@@ -13,7 +13,6 @@ const { uploadImageToFirebase } = require("../helper/uploadFile");
  */
 exports.postById = async (req, res, next, id) => {
   try {
-    console.log(req.params);
     let post = null;
     if (
       req.route.path !== "/api/post/schedule/:postId" &&

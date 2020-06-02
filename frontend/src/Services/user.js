@@ -12,19 +12,22 @@ export default class user extends Component {
    * @returns {json}
    */
   async read(userId, token) {
-    const response = await axios(
-      `${process.env.REACT_APP_API_URL}/api/user/${userId}`,
-      {
-        method: "GET",
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "Application/json",
-          Authorization: `Bearer ${token}`,
-        },
-      }
-    );
-
-    return response;
+    try {
+      const response = await axios(
+        `${process.env.REACT_APP_API_URL}/api/user/${userId}`,
+        {
+          method: "GET",
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "Application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      return response;
+    } catch (error) {
+      console.log(error);
+    }
   }
 
   /**
@@ -129,12 +132,10 @@ export default class user extends Component {
   async updateLocalStorage(user, next) {
     if (typeof window != "undefined") {
       if (JSON.parse(localStorage.getItem("jwt")).user) {
-
         let auth = JSON.parse(localStorage.getItem("jwt"));
         auth.user = { token: auth.user.token, ...user };
         localStorage.setItem("jwt", JSON.stringify(auth));
         next();
-        
       }
     }
   }
@@ -218,7 +219,6 @@ export default class user extends Component {
    * @returns {json}
    */
   async fetchMessage(senderId, receiverId, token) {
-    
     const response = await axios(
       `${process.env.REACT_APP_API_URL}/api/user/messages`,
       {

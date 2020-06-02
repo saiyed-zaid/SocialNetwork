@@ -94,17 +94,23 @@ exports.postSignup = async (req, res, next) => {
  * @description Handling post request for handling LOGIN
  */
 exports.postSignin = async (req, res, next) => {
-  const userExists = await User.findOne({ email: req.body.email });
+  const userExists = await User.findOne({
+    $and: [
+      {
+        email: req.body.email,
+      },
+      {
+        password: md5(req.body.password),
+      },
+    ],
+  });
+
   if (!userExists) {
     return res.status(422).json({
-      error: "User with this email does not exists.",
+      error: "Username or Password is Incorrect..",
     });
   }
-  if (userExists.password !== md5(req.body.password)) {
-    return res.status(422).json({
-      error: "Incorrect password.",
-    });
-  }
+
   if (!userExists.status) {
     return res.status(422).json({
       error: "Your account is deactiveted, Please contact admin.",
@@ -125,8 +131,8 @@ exports.postSignin = async (req, res, next) => {
       }
     });
 
-    let token;
-    token = jwt.sign(
+  let token;
+  token = jwt.sign(
     {
       _id: userExists._id,
       name: userExists.name,
@@ -154,7 +160,6 @@ exports.postSignin = async (req, res, next) => {
 };
 
 exports.chnagePassword = async (req, res, next) => {
-
   try {
     const user = await User.findOne({ password: md5(req.body.oldPassword) });
     if (!user) {

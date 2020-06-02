@@ -61,7 +61,7 @@ class Notification extends React.Component {
         if (response.data.length > 0) {
           response.data.forEach((post) => {
             //Likes Notification
-            post.likes.forEach((like, i) => {
+            post.newLikes.forEach((like, i) => {
               if (like.user._id !== isAuthenticated().user._id) {
                 newLikesList.push({
                   id: like.user._id,
@@ -73,7 +73,7 @@ class Notification extends React.Component {
             });
 
             //Comment Notification
-            post.comments.forEach((comment, i) => {
+            post.newComments.forEach((comment, i) => {
               if (comment.postedBy._id !== isAuthenticated().user._id) {
                 newCommentsList.push({
                   id: comment.postedBy._id,
