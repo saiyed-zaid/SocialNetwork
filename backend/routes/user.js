@@ -74,6 +74,10 @@ router.put(
   userController.newFollowerStatusChagne
 );
 
+
+
+
+
 router.put(
   "/api/user/messageStatusChange/:userId",
   auth_check,

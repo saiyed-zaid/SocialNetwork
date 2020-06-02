@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import defaultProfile from "../../images/avatar.jpg";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCaretRight } from "@fortawesome/free-solid-svg-icons";
+import { faArrowCircleRight } from "@fortawesome/free-solid-svg-icons";
 
 export default class Chatbar extends Component {
   OnClose = () => {
@@ -23,8 +23,9 @@ export default class Chatbar extends Component {
           }}
           className="bg-primary d-flex justify-content-start text-light align-items-center"
         >
+          &nbsp;
           <FontAwesomeIcon
-            icon={faCaretRight}
+            icon={faArrowCircleRight}
             onClick={this.OnClose}
             className="text-light"
           />

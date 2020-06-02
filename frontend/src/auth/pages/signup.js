@@ -48,8 +48,12 @@ class Signup extends React.Component {
     if (dobValidate > 18 && this.state.recatcha) {
       try {
         this.setState({ errors: {}, error: "" });
-        await this.props.registerUser(this.state);
-        this.props.history.push("/signin");
+        const response = await this.props.registerUser(this.state);
+        if (response.statusCode === 200) {
+          this.props.history.push("/signin");
+        } else {
+          this.setState({ responseError: response.msg });
+        }
       } catch (errors) {
         this.setState({
           errors,

@@ -4,6 +4,13 @@ import Notification from "../../core/components/notification";
 import avatar from "../../images/avatar.jpg";
 import { Link } from "react-router-dom";
 import MsgNotification from "../../core/components/messageNotification";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  faEdit,
+  faKey,
+  faClipboardList,
+  faSignOutAlt,
+} from "@fortawesome/free-solid-svg-icons";
 
 const isActive = (history, path) => {
   if (history.location.pathname === path) {
@@ -129,13 +136,14 @@ const Navbar = withRouter(
                       className="dropdown-item"
                       to={`/user/edit/${authUser._id}`}
                     >
-                      Manage Profile
+                      <FontAwesomeIcon icon={faEdit} /> &nbsp; Manage Profile
                     </Link>
                     <Link
                       className="dropdown-item"
                       to={`/user/changepassword/${authUser._id}`}
                     >
-                      Change Password
+                      <FontAwesomeIcon icon={faKey} />
+                      &nbsp; Change Password
                     </Link>
                     <Link
                       className="dropdown-item"
@@ -146,7 +154,7 @@ const Navbar = withRouter(
                         })
                       }
                     >
-                      Logout
+                      <FontAwesomeIcon icon={faSignOutAlt} /> &nbsp; Logout
                     </Link>
                   </div>
                 </li>
@@ -273,19 +281,21 @@ const Navbar = withRouter(
                         className="dropdown-item"
                         to={`/user/edit/${authUser._id}`}
                       >
-                        Manage Profile
+                        <FontAwesomeIcon icon={faEdit} />
+                        &nbsp; Manage Profile
                       </Link>
                       <Link
                         className="dropdown-item"
                         to={`/user/changepassword/${authUser._id}`}
                       >
-                        Change Password
+                        <FontAwesomeIcon icon={faKey} /> &nbsp; Change Password
                       </Link>
                       <Link
                         className="dropdown-item"
                         to={`/post/scheduledposts/${authUser._id}`}
                       >
-                        Scheduled Posts
+                        <FontAwesomeIcon icon={faClipboardList} />
+                        &nbsp; &nbsp; Scheduled Posts
                       </Link>
                       <Link
                         className="dropdown-item"
@@ -296,7 +306,8 @@ const Navbar = withRouter(
                           })
                         }
                       >
-                        Logout
+                        <FontAwesomeIcon icon={faSignOutAlt} />
+                        &nbsp; &nbsp; Logout
                       </Link>
                     </div>
                   </li>

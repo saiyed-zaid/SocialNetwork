@@ -38,7 +38,6 @@ export default class Authservice {
       );
       return response;
     } catch (errors) {
-
       if (errors.response && errors.response.status === 422) {
         //SERVER ERRORS
         return {
@@ -76,8 +75,6 @@ export default class Authservice {
       "password.confirmed": "Password Does Not Matched.",
     };
 
-    console.log("bday", new Date(data.year, data.month - 1, data.day));
-
     try {
       await validateAll(data, rules, messages);
 
@@ -88,34 +85,35 @@ export default class Authservice {
         dob: data.dob /*  new Date(data.year, data.month - 1, data.day + 1), */,
       };
 
-      try {
-        const response = await axios(
-          `${process.env.REACT_APP_API_URL}/api/signup`,
-          {
-            method: "POST",
-            headers: {
-              Accept: "application/json",
-              "Content-Type": "application/json",
-            },
-            data: JSON.stringify(user),
-          }
-        );
-
-        if (response.err) {
-          return Promise.reject(response.err);
-        } else {
-          return response;
+      const response = await axios(
+        `${process.env.REACT_APP_API_URL}/api/signup`,
+        {
+          method: "POST",
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+          },
+          data: JSON.stringify(user),
         }
-      } catch (error) {
-        return Promise.reject(error);
-      }
-    } catch (errors) {
-      var formattedErrors = {};
-      errors.forEach((error) => {
-        formattedErrors[error.field] = error.message;
-      });
+      );
 
-      return Promise.reject(formattedErrors);
+      return response;
+    } catch (errors) {
+      if (errors.response && errors.response.status !== 200) {
+        //SERVER ERRORS
+
+        return {
+          statusCode: errors.response.status,
+          msg: errors.response.data.msg,
+        };
+      } else {
+        var formattedErrors = {};
+        errors.forEach((error) => {
+          formattedErrors[error.field] = error.message;
+        });
+
+        return Promise.reject(formattedErrors);
+      }
     }
   }
 
@@ -172,32 +170,36 @@ export default class Authservice {
         password_confirmation: data.password_confirmation,
       };
 
-      try {
-        const response = await axios(
-          `${process.env.REACT_APP_API_URL}/api/changePassword`,
-          {
-            method: "POST",
-            headers: {
-              Accept: "application/json",
-              "Content-Type": "application/json",
-              Authorization: `Bearer ${token}`,
-            },
-            data: JSON.stringify(formData),
-          }
-        );
-        return response;
-      } catch (error) {
-        console.log(error);
-      }
+      const response = await axios(
+        `${process.env.REACT_APP_API_URL}/api/changePassword`,
+        {
+          method: "POST",
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          data: JSON.stringify(formData),
+        }
+      );
+      return response;
     } catch (errors) {
       //console.log(data);
+      if (errors.response && errors.response.status !== 200) {
+        //SERVER ERRORS
 
-      var formattedErrors = {};
-      errors.forEach((error) => {
-        formattedErrors[error.field] = error.message;
-      });
+        return {
+          statusCode: errors.response.status,
+          msg: errors.response.data.message,
+        };
+      } else {
+        var formattedErrors = {};
+        errors.forEach((error) => {
+          formattedErrors[error.field] = error.message;
+        });
 
-      return Promise.reject(formattedErrors);
+        return Promise.reject(formattedErrors);
+      }
     }
   }
 

@@ -56,8 +56,15 @@ class ForgotPassword extends Component {
   render() {
     return (
       <div className="container d-flex justify-content-center ">
-        <div className="card col-md-4 mt-3 m-5">
-          <h2 className="mt-5 ">Reset Password</h2>
+        <div
+          className="card col-md-4 mt-3 m-5 bg-dark"
+          style={{
+            transition: "unset",
+            animation: "unset",
+            transform: "unset",
+          }}
+        >
+          <h2 className="mt-5 text-light">Reset Password</h2>
           <h3 id="t"> </h3>
           {this.state.message && (
             <Alert message={this.state.message} type="info" />

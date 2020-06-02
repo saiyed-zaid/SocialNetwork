@@ -319,15 +319,20 @@ exports.newFollowerStatusChagne = (req, res, next) => {
 };
 exports.newLikesStatusChange = (req, res, next) => {
   User.findByIdAndUpdate(
-    req.auth._id,
+    {
+      _id: req.auth._id,
+
+      "followers.user": req.body.followerId,
+    },
     {
       $set: {
-        "likes.$[].isNewLike": false,
+        "followers.$.isNewUser": false,
       },
-    },
-    { multi: true }
+    }
   )
-    .then((result) => {})
+    .then((result) => {
+      return res.json(result);
+    })
     .catch((err) => {
       if (err) {
         console.error(err);

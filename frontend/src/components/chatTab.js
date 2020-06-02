@@ -6,7 +6,7 @@ import { Picker } from "emoji-mart";
 import moment from "moment";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSmile, faPaperPlane } from "@fortawesome/free-solid-svg-icons";
-import Draggable, { DraggableCore } from "react-draggable"; // Both at the same time
+import Draggable from "react-draggable"; // Both at the same time
 
 export default class chatTab extends Component {
   handleClose = () => {

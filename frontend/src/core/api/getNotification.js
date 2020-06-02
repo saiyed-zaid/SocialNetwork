@@ -27,7 +27,7 @@ export const newFollowersList = async () => {
   return response;
 };
 
-export const isFollowStatusChange = async () => {
+export const isFollowStatusChange = async (followerId) => {
   const response = await axios(
     `${process.env.REACT_APP_API_URL}/api/user/newFollowerStatusChange/${
       isAuthenticated().user._id
@@ -38,21 +38,42 @@ export const isFollowStatusChange = async () => {
         Accept: "application/json",
         Authorization: `Bearer ${isAuthenticated().user.token}`,
       },
+      data: { followerId },
     }
   );
 
   return response;
 };
 
-export const isLikesStatusChange = async (postId) => {
+export const isLikesStatusChange = async (postId, likeId) => {
   const response = await axios(
-    `${process.env.REACT_APP_API_URL}/api/post/newLikesStatusChange/${postId}`,
+    `${process.env.REACT_APP_API_URL}/api/user/newLikesStatusChange/${
+      isAuthenticated().user._id
+    }`,
     {
       method: "PUT",
       headers: {
         Accept: "application/json",
         Authorization: `Bearer ${isAuthenticated().user.token}`,
       },
+      data: { postId, likeId },
+    }
+  );
+
+  return response;
+};
+export const isCommentStatusChange = async (postId, commenterId) => {
+  const response = await axios(
+    `${process.env.REACT_APP_API_URL}/api/user/newCommentStatusChange/${
+      isAuthenticated().user._id
+    }`,
+    {
+      method: "PUT",
+      headers: {
+        Accept: "application/json",
+        Authorization: `Bearer ${isAuthenticated().user.token}`,
+      },
+      data: { postId, commenterId },
     }
   );
 
