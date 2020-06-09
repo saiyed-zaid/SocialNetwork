@@ -317,6 +317,28 @@ exports.newFollowerStatusChagne = (req, res, next) => {
       }
     });
 };
+exports.newLikesStatusChange = (req, res, next) => {
+  User.findByIdAndUpdate(
+    {
+      _id: req.auth._id,
+
+      "followers.user": req.body.followerId,
+    },
+    {
+      $set: {
+        "followers.$.isNewUser": false,
+      },
+    }
+  )
+    .then((result) => {
+      return res.json(result);
+    })
+    .catch((err) => {
+      if (err) {
+        console.error(err);
+      }
+    });
+};
 
 exports.getOnlinePeople = async (req, res, next) => {
   let following = req.profile.following;
@@ -330,7 +352,7 @@ exports.getOnlinePeople = async (req, res, next) => {
       })
       .select("following");
 
-    return await res.json(users);
+    return await res.status(200).json(users);
   } catch (error) {
     res.status(400).json({ err: error });
   }

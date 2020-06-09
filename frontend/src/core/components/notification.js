@@ -58,7 +58,6 @@ class Notification extends React.Component {
         if (response.data.length > 0) {
           response.data.forEach((post) => {
             //Likes Notification
-
             post.newLikes.forEach((like, i) => {
               if (like.user._id !== isAuthenticated().user._id) {
                 newLikesList.push({

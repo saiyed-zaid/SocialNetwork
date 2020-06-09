@@ -38,8 +38,8 @@ router.get(
       .select("_id likes comments");
 
     let newLikes = [],
-      newComments = [];
-    let filteredPosts = [];
+      newComments = [],
+      filteredPosts = [];
 
     posts.forEach((post) => {
       newLikes = post.likes.filter((like) => {
