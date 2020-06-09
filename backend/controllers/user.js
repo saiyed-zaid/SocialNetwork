@@ -430,7 +430,6 @@ const uploadFile = (file) => {
 };
 
 exports.messageStatusChange = (req, res, next) => {
-  console.log("BODY__", req.auth._id);
   Message.updateMany(
     { receiver: req.auth._id },
     {

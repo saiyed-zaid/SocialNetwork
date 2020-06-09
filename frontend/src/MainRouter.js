@@ -31,8 +31,7 @@ import Navbar from "./components/navbar";
 import ChatBar from "./components/chatBar/chatbar";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPaperPlane } from "@fortawesome/free-solid-svg-icons";
-// import Draggable from "react-draggable"; // Both at the same time
-
+import AdminScheduledPosts from "./admin/shceduledPosts";
 class MainRouter extends React.Component {
   constructor(props) {
     super(props);
@@ -200,9 +199,7 @@ class MainRouter extends React.Component {
           handleOpen={this.handleChatOpen}
         />
 
-        {this.state.authUser && (
-          // Both at the same time
-
+        {this.state.authUser && this.state.authUser.role === "subscriber" && (
           <button
             id="floating-btn"
             className="floating-btn"
@@ -227,11 +224,24 @@ class MainRouter extends React.Component {
           />
           <Route
             exact
+            path="/admin/scheduledposts"
+            render={() => (
+              <AdminScheduledPosts
+                editScheduledPost={this.props.Postservice.editScheduledPost}
+                fetchAllScheduledPosts={
+                  this.props.Postservice.fetchAllScheduledPosts
+                }
+                deleteScheduledPost={this.props.Postservice.deleteScheduledPost}
+              />
+            )}
+          />
+          <Route
+            exact
             path="/admin/users"
             render={() => (
               <AdminUsers
                 remove={this.props.Userservice.remove}
-                list={this.props.Userservice.list}
+                getAll={this.props.Userservice.getAll}
                 update={this.props.Userservice.update}
               />
             )}

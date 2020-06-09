@@ -10,7 +10,7 @@ import Modal from "../components/modal/modal";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTrash, faEdit } from "@fortawesome/free-solid-svg-icons";
 
-class Posts extends Component {
+class ScheduledPosts extends Component {
   constructor() {
     super();
 
@@ -28,11 +28,14 @@ class Posts extends Component {
 
   async componentDidMount() {
     const token = isAuthenticated().user.token;
+
     try {
-      const response = await this.props.list(true, token);
+      const response = await this.props.fetchAllScheduledPosts(token);
       if (response.error) {
-        console.log(response.data.error);
+        console.log(response.data);
       } else {
+        console.log("sche post", response.data);
+
         this.setState({ posts: response.data.posts, isLoading: false });
         const script = document.createElement("script");
         script.src = "/js/dataTables.js";
@@ -46,14 +49,14 @@ class Posts extends Component {
   deletePost = async (postId) => {
     const token = isAuthenticated().user.token;
     try {
-      const response = await this.props.remove(postId, token);
+      const response = await this.props.deleteScheduledPost(postId, token);
       if (response.data.error) {
         console.log(response.data.error);
       } else {
         this.setState({ redirectToHome: true });
         // setTimeout(this.toastPopupEnable, 8000);
-        document.getElementById("deleteprofile").style.display = "none";
-        document.getElementById("deleteprofile").classList.remove("show");
+        document.getElementById("deleteposts").style.display = "none";
+        document.getElementById("deleteposts").classList.remove("show");
       }
     } catch (error) {
       console.log(error);
@@ -114,8 +117,8 @@ class Posts extends Component {
     this.setState({ checkBox: arr });
   };
   handleMulltipleDeleteModal = () => {
-    document.getElementById("deleteprofile").style.display = "block";
-    document.getElementById("deleteprofile").classList.add("show");
+    document.getElementById("deleteposts").style.display = "block";
+    document.getElementById("deleteposts").classList.add("show");
   };
   deleteMultiple = () => {
     const { checkBox } = this.state;
@@ -138,8 +141,8 @@ class Posts extends Component {
             console.log(data.msg);
           }
         });
-        document.getElementById("deleteprofile").style.display = "none";
-        document.getElementById("deleteprofile").classList.remove("show");
+        document.getElementById("deleteposts").style.display = "none";
+        document.getElementById("deleteposts").classList.remove("show");
       });
     }
   };
@@ -193,8 +196,8 @@ class Posts extends Component {
   handleDeleteModal = (postId) => {
     this.setState({ deleteId: postId });
 
-    document.getElementById("deleteprofile").style.display = "block";
-    document.getElementById("deleteprofile").classList.add("show");
+    document.getElementById("deleteposts").style.display = "block";
+    document.getElementById("deleteposts").classList.add("show");
   };
 
   render() {
@@ -227,7 +230,7 @@ class Posts extends Component {
           }}
         ></div>
         {/* Toast / */}
-        <table id="poststable" className="table table-hover">
+        <table id="scheduledpoststable" className="table table-hover">
           <thead className="thead-dark">
             <tr>
               <th scope="col" width="5%">
@@ -244,10 +247,8 @@ class Posts extends Component {
               <th scope="col">Title</th>
               <th scope="col">Description</th>
               <th scope="col">Author</th>
-              <th scope="col">Likes</th>
-              <th scope="col">Comments</th>
-              <th scope="col">Posted</th>
-              <th scope="col">Status</th>
+              <th scope="col">tags</th>
+              <th scope="col">Posted On</th>
               <th scope="col" style={{ width: "10px" }}>
                 Edit
               </th>
@@ -259,7 +260,8 @@ class Posts extends Component {
           <tbody className="bg-light">
             {posts.map((post, i) => {
               return (
-                <tr id={post._id} className="table-row">
+                <tr id={post._id} key={post._id} className="table-row">
+                  {console.log(post)}
                   <th>
                     <input
                       name="childchk"
@@ -281,26 +283,13 @@ class Posts extends Component {
                     {post.body.substring(0, 10)}...
                   </td>
                   <td>{post.postedBy.name}</td>
-                  <td>{post.likes.length}</td>
-                  <td> {post.comments.length}</td>
-                  <td> {new Date(post.created).toDateString()}</td>
-                  <td>
-                    <div
-                      className={post.status ? "switch on" : "switch off"}
-                      onClick={this.handlePostStatusChange}
-                      data-index={i}
-                    >
-                      <div
-                        className="switch-toggle"
-                        style={{ pointerEvents: "none" }}
-                      ></div>
-                    </div>
-                  </td>
+                  <td>{post.tags.map((tag) => tag.name)}</td>
+                  <td> {new Date(post.scheduleTime).toDateString()}</td>
                   <td>
                     <Link
                       className="btn btn-sm  "
                       style={{ boxShadow: "unset" }}
-                      to={`/post/edit/${post._id}`}
+                      to={`/post/scheduledpost/edit/${post._id}`}
                     >
                       <FontAwesomeIcon icon={faEdit} className="text-primary" />
                     </Link>
@@ -324,7 +313,7 @@ class Posts extends Component {
           </tbody>
         </table>
         <Modal
-          id="deleteprofile"
+          id="deleteposts"
           title="Delete Record"
           body="Are Your Sure You Want To Delete ?"
           buttonText="Delete"
@@ -340,4 +329,4 @@ class Posts extends Component {
   }
 }
 
-export default Posts;
+export default ScheduledPosts;

@@ -13,6 +13,8 @@ import {
   isCommentStatusChange,
 } from "../api/getNotification";
 const Follow = (props) => {
+
+  
   return (
     <div>
       {props.newFollowers &&

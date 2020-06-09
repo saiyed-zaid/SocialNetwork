@@ -67,6 +67,15 @@ const Navbar = withRouter(
                     POSTS
                   </Link>
                 </li>
+                <li className="nav-item">
+                  <Link
+                    className="nav-link"
+                    to="/admin/scheduledposts"
+                    style={isActive(history, `/admin/scheduledposts`)}
+                  >
+                    SCHEDULED POSTS
+                  </Link>
+                </li>
 
                 <li className="nav-item">
                   <Link
@@ -100,7 +109,7 @@ const Navbar = withRouter(
               </ul>
 
               <ul className="navbar-nav ml-auto ">
-                {authUser && authUser.roll !== "admin" && (
+                {authUser && authUser.role !== "admin" && (
                   <Notification authUser={authUser} />
                 )}
                 <li className="nav-item dropdown profile-btn ">
@@ -242,7 +251,7 @@ const Navbar = withRouter(
               </ul>
               {authUser ? (
                 <ul className="navbar-nav ml-auto nav-mobile ">
-                  {authUser && authUser.roll !== "admin" && (
+                  {authUser && authUser.role !== "admin" && (
                     <>
                       <MsgNotification
                         handleOpen={handleChatOpen}

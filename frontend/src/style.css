@@ -571,6 +571,7 @@ div.content {
   justify-content: space-evenly;
   border-bottom-left-radius: 50%;
   border-top-left-radius: 50%;
+  z-index: 5000;
 }
 
 .floating-btn:hover {
@@ -750,7 +751,7 @@ div.content {
   position: fixed;
   bottom: 20px;
   right: 30px;
-  z-index: 9999;
+  z-index: 9909;
   border: none;
   outline: none;
   background-color: grey;
@@ -761,8 +762,10 @@ div.content {
   font-size: 18px;
   height: 50px;
   width: 50px;
-  transition: all 2s;
+  transition: ease-out 2s;
+  
 }
+
 
 .profile-btn {
   display: block;

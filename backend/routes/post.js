@@ -42,6 +42,23 @@ router.get(
   },
   postController.getPostsForAdmin
 );
+/**
+ * @function get
+ * @description Handling get request which fetch all Scheduled  posts FOR ADMIN
+ * @param {String} path of router
+ * @param {property} property getPosts
+ */
+router.get(
+  "/api/admin/scheduledposts",
+  auth_check,
+  (req, res, next) => {
+    if (req.auth.role != "admin") {
+      return res.json("Route access DENIED.");
+    }
+    next();
+  },
+  postController.getScheduledPostsForAdmin
+);
 
 /**
  * @function get
