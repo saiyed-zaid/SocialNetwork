@@ -32,6 +32,8 @@ import ChatBar from "./components/chatBar/chatbar";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPaperPlane } from "@fortawesome/free-solid-svg-icons";
 import AdminScheduledPosts from "./admin/shceduledPosts";
+import Insights from "./reports/index";
+
 class MainRouter extends React.Component {
   constructor(props) {
     super(props);
@@ -385,6 +387,15 @@ class MainRouter extends React.Component {
             editScheduledPost={this.props.Postservice.editScheduledPost}
             fetchScheduledPost={this.props.Postservice.fetchScheduledPost}
             read={this.props.Userservice.read}
+          />
+          <PrivateRoute
+            path="/user/insights/:userId"
+            exact
+            component={Insights}
+            getYearlyReport={this.props.Reportservice.getYearlyReport}
+            getMonthlyReport={this.props.Reportservice.getMonthlyReport}
+            getDailyReport={this.props.Reportservice.getDailyReport}
+            authUser={this.state.authUser}
           />
         </Switch>
       </div>

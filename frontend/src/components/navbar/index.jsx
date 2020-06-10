@@ -10,6 +10,7 @@ import {
   faKey,
   faClipboardList,
   faSignOutAlt,
+  faThList,
 } from "@fortawesome/free-solid-svg-icons";
 
 const isActive = (history, path) => {
@@ -305,6 +306,13 @@ const Navbar = withRouter(
                       >
                         <FontAwesomeIcon icon={faClipboardList} />
                         &nbsp; &nbsp; Scheduled Posts
+                      </Link>
+                      <Link
+                        className="dropdown-item"
+                        to={`/user/insights/${authUser._id}`}
+                      >
+                        <FontAwesomeIcon icon={faThList} />
+                        &nbsp; &nbsp; Insights
                       </Link>
                       <Link
                         className="dropdown-item"
