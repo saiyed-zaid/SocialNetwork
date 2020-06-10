@@ -909,3 +909,12 @@ span.other {
   /* justify-content: center; */
   background-color: white;
 }
+body.light-mode {
+  background-color: #002b36 !important;
+  color: #333;
+  transition: background-color 0.3s ease;
+}
+body.dark-mode {
+  background-color: #1a1919;
+  color: #999;
+}

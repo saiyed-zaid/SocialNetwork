@@ -43,18 +43,20 @@ class Profile extends Component {
     }
   } */
   init = async (userId) => {
-    const token = this.props.authUser.token;
-    const response = await this.props.read(userId, token);
-    if (response.status === 401) {
-      localStorage.removeItem("jwt");
-      return this.props.history.push("/signin");
-    } else {
-      if (response.data.err) {
-        this.setState({ redirectToSignin: true });
+    if (this.props.authUser) {
+      const token = this.props.authUser.token;
+      const response = await this.props.read(userId, token);
+      if (response && response.status === 401) {
+        localStorage.removeItem("jwt");
+        return this.props.history.push("/signin");
       } else {
-        let following = this.checkFollow(response.data);
-        this.setState({ user: response.data, following, isLoading: false });
-        this.loadPosts(userId);
+        if (response.data.err) {
+          this.setState({ redirectToSignin: true });
+        } else {
+          let following = this.checkFollow(response.data);
+          this.setState({ user: response.data, following, isLoading: false });
+          this.loadPosts(userId);
+        }
       }
     }
   };

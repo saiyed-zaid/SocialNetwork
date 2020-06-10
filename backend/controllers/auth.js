@@ -5,8 +5,6 @@ const { validationResult } = require("express-validator");
 const sendMail = require("../helper/mailer");
 const _ = require("lodash");
 const fs = require("fs");
-const path = require("path");
-const cookieParser = require("cookie-parser");
 
 /**
  * @function middleware
@@ -14,16 +12,19 @@ const cookieParser = require("cookie-parser");
  */
 exports.postSignup = async (req, res, next) => {
   const errs = validationResult(req);
+
   if (!errs.isEmpty()) {
     const err = errs.array()[0].msg;
     return res.status(422).json({
       err,
     });
   }
+
   try {
     const userExists = await User.findOne({ email: req.body.email });
+
     if (userExists) {
-      return res.status(403).json({ msg: "Email already exists" });
+      return res.status(403).json({ error: "Email already exists" });
     }
 
     const user = new User({
@@ -79,7 +80,7 @@ exports.postSignup = async (req, res, next) => {
           console.log("Directory Not created successfully");
         }
          */ /* Creating Directory For This User OVER */
-        res.status(200).json({ msg: "Signup successfully, proced to login!" });
+        res.status(201).json({ msg: "Signup successfully, proced to login!" });
       })
       .catch((err) => {
         console.log("Error While Creating user", err);

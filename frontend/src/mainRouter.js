@@ -33,6 +33,10 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPaperPlane } from "@fortawesome/free-solid-svg-icons";
 import AdminScheduledPosts from "./admin/shceduledPosts";
 import Insights from "./reports/index";
+import Notification_Sockets from "./services/sockets";
+import UseDarkMode from "./components/UseDarkMode";
+
+// import Draggable from "react-draggable"; // Both at the same time
 
 class MainRouter extends React.Component {
   constructor(props) {
@@ -48,29 +52,50 @@ class MainRouter extends React.Component {
       onlineUsers: [],
     };
 
-    this.socket = openSocket("http://localhost:5000");
+    this.socket = openSocket(process.env.REACT_APP_API_URL);
+    this.notify = undefined;
+  }
+
+  componentWillMount() {
+    if (this.state.authUser) {
+      const hourDiff = this.timeDiffCalc(
+        new Date(isAuthenticated().user.lastLoggedIn),
+        Date.now()
+      );
+      if (hourDiff >= 1) {
+        this.setState({ authUser: null, isAuthorized: false }, () => {
+          localStorage.removeItem("jwt");
+          this.props.history.push("/signin");
+        });
+      }
+    }
   }
 
   async componentDidMount() {
     if (this.state.authUser) {
       this.socket.on(this.state.authUser._id, (data) => {
+        this.notify = new Notification(`New Message From ${data.senderName}.`, {
+          body: data.message,
+          icon: data.senderPhotoUri,
+        });
+
         fetchMessage(
           this.state.authUser._id,
           data.sender,
           this.state.authUser.token
         )
           .then((result) => {
-            this.setState({
-              hasNewMsg: true,
-              receiverId: data.sender,
-              receiverName: data.senderName,
-              messages: result,
-            });
+            this.notify.onclick = () => {
+              this.setState({
+                hasNewMsg: true,
+                receiverId: data.sender,
+                receiverName: data.senderName,
+                messages: result,
+              });
+            };
           })
           .catch((err) => {
-            if (err) {
-              console.log("Error while fetching record");
-            }
+            console.log("Error while fetching record");
           });
       });
 
@@ -91,24 +116,10 @@ class MainRouter extends React.Component {
     }
   }
 
-  componentWillMount() {
-    if (this.state.authUser) {
-      const hourDiff = this.timeDiffCalc(
-        new Date(isAuthenticated().user.lastLoggedIn),
-        Date.now()
-      );
-      if (hourDiff >= 1) {
-        this.setState({ authUser: null, isAuthorized: false }, () => {
-          localStorage.removeItem("jwt");
-          this.props.history.push("/signin");
-        });
-      }
-    }
-  }
-
   handleChatClose = () => {
     this.setState({ hasNewMsg: false });
   };
+
   handleChatOpen = (user) => {
     this.setState({
       hasNewMsg: true,
@@ -131,12 +142,14 @@ class MainRouter extends React.Component {
       authUser: isAuthenticated().user,
     });
   };
+
   onMsg = () => {
     let chatbar = document.getElementById("chatbar");
     chatbar.style.display = "block";
     chatbar.classList.remove("close-chatbar");
     document.getElementById("floating-btn").style.display = "none";
   };
+
   timeDiffCalc(dateFuture, dateNow) {
     let diffInMilliSeconds = Math.abs(dateFuture - dateNow) / 1000;
 
@@ -171,6 +184,7 @@ class MainRouter extends React.Component {
   render() {
     return (
       <div>
+        {/* <UseDarkMode /> */}
         {this.state.hasNewMsg && (
           <div
             id="chat-tab"
@@ -202,6 +216,8 @@ class MainRouter extends React.Component {
         />
 
         {this.state.authUser && this.state.authUser.role === "subscriber" && (
+          // Both at the same time
+
           <button
             id="floating-btn"
             className="floating-btn"
@@ -210,7 +226,6 @@ class MainRouter extends React.Component {
             <FontAwesomeIcon icon={faPaperPlane} className="anim-icon" />
           </button>
         )}
-
         <Switch>
           <Route path="/" exact component={Home} />
           <Route

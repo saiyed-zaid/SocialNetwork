@@ -57,6 +57,7 @@ app.use(notificationRoutes);
 app.use(authRoute);
 app.use(postRoutes);
 app.use(reportRoutes);
+
 /* 
   Context: Handle Errors
 */

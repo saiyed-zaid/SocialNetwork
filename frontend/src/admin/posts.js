@@ -33,10 +33,11 @@ class Posts extends Component {
       if (response.error) {
         console.log(response.data.error);
       } else {
-        this.setState({ posts: response.data.posts, isLoading: false });
-        const script = document.createElement("script");
-        script.src = "/js/dataTables.js";
-        document.body.appendChild(script);
+        this.setState({ posts: response.data.posts, isLoading: false }, () => {
+          const script = document.createElement("script");
+          script.src = "/js/dataTables.js";
+          document.body.appendChild(script);
+        });
       }
     } catch (error) {
       console.log(error);
@@ -256,11 +257,11 @@ class Posts extends Component {
               </th>
             </tr>
           </thead>
-          <tbody className="bg-light">
+          <tbody className="bg-dark text-light">
             {posts.map((post, i) => {
               return (
                 <tr id={post._id} className="table-row">
-                  <th>
+                  <td>
                     <input
                       name="childchk"
                       type="checkbox"
@@ -268,9 +269,11 @@ class Posts extends Component {
                       onChange={(e) => this.handleSingleCheckBox(e)}
                       width="1%"
                     />
-                  </th>
-                  <th scope="row">{i + 1}</th>
-
+                  </td>
+                  <td scope="row">{i + 1}</td>
+                  <td>
+                    <Avatar src={post.photo ? post.photo : DefaultPost} />
+                  </td>
                   <td>{post.title}</td>
                   <td
                     data-toggle="tooltip"
