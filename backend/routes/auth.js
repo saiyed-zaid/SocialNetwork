@@ -6,7 +6,7 @@ const userController = require("../controllers/user");
 const auth_check = require("../middleware/auth-check");
 const User = require("../models/user");
 const md5 = require("md5");
-
+const jwt = require("jsonwebtoken");
 /**
  * @function post
  * @description Handling post request for creating new post
@@ -109,14 +109,21 @@ router.put(
   authController.resetPassword
 );
 
-router.get("/api/signout", auth_check, (req, res, next) => {
-  try {
+router.get(
+  "/api/signout",
+  auth_check,
+  (req, res, next) => {
+    jwt.sign({}, process.env.JWT_KEY, { expiresIn: 0 });
+    next();
+  },
+  (req, res, next) => {
     User.updateOne(
       { _id: req.auth._id },
       { isLoggedIn: false, lastLoggedIn: Date.now() }
     ).then((result) => {
-      res.json({
+      res.status(200).json({
         msg: "Logout Success",
+        isLoggedIn: false,
       });
       /*  .catch((err) => {
           if (err) {
@@ -124,10 +131,8 @@ router.get("/api/signout", auth_check, (req, res, next) => {
           }
         }); */
     });
-  } catch (error) {
-    console.log(error);
   }
-});
+);
 
 /**
  * @function param

@@ -24,11 +24,11 @@ const Navbar = withRouter(
       <nav className="navbar sticky-top  navbar-expand-lg navbar-dark bg-dark">
         {authUser && authUser.role === "admin" ? (
           <Link className="navbar-brand " to="/admin/home">
-            Retwit
+            SocialSynch
           </Link>
         ) : (
           <Link className="navbar-brand" to="/">
-            Retwit
+            SocialSynch
           </Link>
         )}
 

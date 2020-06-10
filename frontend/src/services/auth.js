@@ -36,6 +36,10 @@ export default class Authservice {
           }),
         }
       );
+      Notification.requestPermission().then((permission) => {
+      });
+      /* var notify = new Notification("Allow Friends New Message Pop-up");
+      console.log(notify); */
       return response;
     } catch (errors) {
       if (errors.response && errors.response.status === 422) {
@@ -99,14 +103,16 @@ export default class Authservice {
 
       return response;
     } catch (errors) {
-      if (errors.response && errors.response.status !== 200) {
+      if (errors.response && errors.response.status === 403) {
         //SERVER ERRORS
 
         return {
           statusCode: errors.response.status,
-          msg: errors.response.data.msg,
+          msg: errors.response.data.error,
         };
       } else {
+        //Client Side Validation
+
         var formattedErrors = {};
         errors.forEach((error) => {
           formattedErrors[error.field] = error.message;
@@ -133,7 +139,7 @@ export default class Authservice {
       },
     })
       .then((response) => {
-        if (typeof window !== "undefined") {
+        if (typeof window !== "undefined" && response.status === 200) {
           localStorage.removeItem("jwt");
         }
         next();

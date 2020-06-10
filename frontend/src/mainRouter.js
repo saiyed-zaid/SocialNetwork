@@ -31,6 +31,9 @@ import Navbar from "./components/navbar";
 import ChatBar from "./components/chatBar/chatbar";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPaperPlane } from "@fortawesome/free-solid-svg-icons";
+import Notification_Sockets from "./services/sockets";
+import UseDarkMode from "./components/UseDarkMode";
+
 // import Draggable from "react-draggable"; // Both at the same time
 
 class MainRouter extends React.Component {
@@ -47,29 +50,50 @@ class MainRouter extends React.Component {
       onlineUsers: [],
     };
 
-    this.socket = openSocket("http://localhost:5000");
+    this.socket = openSocket(process.env.REACT_APP_API_URL);
+    this.notify = undefined;
+  }
+
+  componentWillMount() {
+    if (this.state.authUser) {
+      const hourDiff = this.timeDiffCalc(
+        new Date(isAuthenticated().user.lastLoggedIn),
+        Date.now()
+      );
+      if (hourDiff >= 1) {
+        this.setState({ authUser: null, isAuthorized: false }, () => {
+          localStorage.removeItem("jwt");
+          this.props.history.push("/signin");
+        });
+      }
+    }
   }
 
   async componentDidMount() {
     if (this.state.authUser) {
       this.socket.on(this.state.authUser._id, (data) => {
+        this.notify = new Notification(`New Message From ${data.senderName}.`, {
+          body: data.message,
+          icon: data.senderPhotoUri,
+        });
+
         fetchMessage(
           this.state.authUser._id,
           data.sender,
           this.state.authUser.token
         )
           .then((result) => {
-            this.setState({
-              hasNewMsg: true,
-              receiverId: data.sender,
-              receiverName: data.senderName,
-              messages: result,
-            });
+            this.notify.onclick = () => {
+              this.setState({
+                hasNewMsg: true,
+                receiverId: data.sender,
+                receiverName: data.senderName,
+                messages: result,
+              });
+            };
           })
           .catch((err) => {
-            if (err) {
-              console.log("Error while fetching record");
-            }
+            console.log("Error while fetching record");
           });
       });
 
@@ -90,24 +114,10 @@ class MainRouter extends React.Component {
     }
   }
 
-  componentWillMount() {
-    if (this.state.authUser) {
-      const hourDiff = this.timeDiffCalc(
-        new Date(isAuthenticated().user.lastLoggedIn),
-        Date.now()
-      );
-      if (hourDiff >= 1) {
-        this.setState({ authUser: null, isAuthorized: false }, () => {
-          localStorage.removeItem("jwt");
-          this.props.history.push("/signin");
-        });
-      }
-    }
-  }
-
   handleChatClose = () => {
     this.setState({ hasNewMsg: false });
   };
+
   handleChatOpen = (user) => {
     this.setState({
       hasNewMsg: true,
@@ -130,12 +140,14 @@ class MainRouter extends React.Component {
       authUser: isAuthenticated().user,
     });
   };
+
   onMsg = () => {
     let chatbar = document.getElementById("chatbar");
     chatbar.style.display = "block";
     chatbar.classList.remove("close-chatbar");
     document.getElementById("floating-btn").style.display = "none";
   };
+
   timeDiffCalc(dateFuture, dateNow) {
     let diffInMilliSeconds = Math.abs(dateFuture - dateNow) / 1000;
 
@@ -170,6 +182,7 @@ class MainRouter extends React.Component {
   render() {
     return (
       <div>
+        {/* <UseDarkMode /> */}
         {this.state.hasNewMsg && (
           <div
             id="chat-tab"
@@ -199,7 +212,6 @@ class MainRouter extends React.Component {
           data={this.state.onlineUsers}
           handleOpen={this.handleChatOpen}
         />
-
         {this.state.authUser && (
           // Both at the same time
 
@@ -211,7 +223,6 @@ class MainRouter extends React.Component {
             <FontAwesomeIcon icon={faPaperPlane} className="anim-icon" />
           </button>
         )}
-
         <Switch>
           <Route path="/" exact component={Home} />
           <Route
@@ -231,7 +242,7 @@ class MainRouter extends React.Component {
             render={() => (
               <AdminUsers
                 remove={this.props.Userservice.remove}
-                list={this.props.Userservice.list}
+                list={this.props.Userservice.getAll}
                 update={this.props.Userservice.update}
               />
             )}

@@ -29,13 +29,14 @@ export default class chatTab extends Component {
     this.masterUl.style.listStyle = "none"; */
 
     /* INVOKED WHENEVER SOMEONE MESSAGE YOU -BEGIN*/
-    this.socket = openSocket("https://retwit-backend.herokuapp.com");
+    this.socket = openSocket("http://localhost:5000");
     this.socket.on(this.props.senderId, (data) => {
       const li = this.appendReceivedMsg(data);
       let myMsg = document.querySelector("#myMsg");
       const chatBox = document.querySelector("#chatBox");
-      myMsg.appendChild(li);
-      chatBox.scrollTo(0, chatBox.scrollHeight);
+      myMsg && myMsg.appendChild(li);
+
+      chatBox && chatBox.scrollTo(0, chatBox.scrollHeight);
     });
     /* INVOKED WHENEVER SOMEONE MESSAGE YOU -BEGIN*/
 
@@ -159,6 +160,7 @@ export default class chatTab extends Component {
       message: msg.value,
       sender: this.props.senderId,
       senderName: this.props.senderName,
+      senderPhotoUri: this.props.authUser.photo.photoURI,
       receiver: this.props.receiverId,
     });
 

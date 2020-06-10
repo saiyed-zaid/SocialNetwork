@@ -63,8 +63,8 @@ class ChangePassword extends React.Component {
 
   render() {
     return (
-      <div className="container bg-light p-2 my-3 col-md-4">
-        <div className="jumbotron" style={{ padding: "0.5rem 2rem" }}>
+      <div className="container bg-dark p-2 my-3 col-md-4">
+        <div className="jumbotron text-light" style={{ padding: "0.5rem 2rem" }}>
           {this.state.responseError && (
             <Alert message={this.state.responseError} type="danger" />
           )}

@@ -36,11 +36,11 @@ class Users extends Component {
       if (response.data.error) {
         console.log(response.error);
       } else {
-        this.setState({ users: response.data.users, isLoading: false });
-
-        const script = document.createElement("script");
-        script.src = "/js/dataTables.js";
-        document.body.appendChild(script);
+        this.setState({ users: response.data.users, isLoading: false }, () => {
+          const script = document.createElement("script");
+          script.src = "/js/dataTables.js";
+          document.body.appendChild(script);
+        });
       }
     } catch (error) {
       console.log(error);
@@ -267,7 +267,7 @@ class Users extends Component {
                 </th>
               </tr>
             </thead>
-            <tbody className="bg-light">
+            <tbody className="bg-dark text-light">
               {users.map((user, i) => {
                 return (
                   <tr

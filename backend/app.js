@@ -1,4 +1,6 @@
-/* Import Required Packages BEGIN*/
+/* 
+  Context: IMPORT Packages
+*/
 const express = require("express");
 const app = express();
 
@@ -9,41 +11,54 @@ const bodyParser = require("body-parser");
 const morgan = require("morgan");
 const dotenv = require("dotenv");
 const mongoose = require("mongoose");
+const path = require("path");
+var fs = require('fs')
+const notifier = require("node-notifier");
 const cors = require("cors");
-
 const compression = require("compression");
-
 const Message = require("./models/messages");
 
 dotenv.config();
-/* Import Required Packages END*/
 
-/* Importing Routes BEGIN*/
+/* 
+  Context: IMPORT Routes
+*/
 const postRoutes = require("./routes/post");
 const authRoute = require("./routes/auth");
 const userRoutes = require("./routes/user");
 const notificationRoutes = require("./routes/notification");
-/* Importing Routes END*/
 
-//Make /upload folder public
+/* 
+  Context: STATIC Directory
+*/
 app.use("/upload", express.static("upload"));
 
-/* Registering middleware BEGIN*/
+/* 
+  Context: Create Writable Stream For LOG
+*/
+var accessLogStream = fs.createWriteStream(path.join(__dirname, "access.log"), {
+  flags: "a",
+});
+
+/* 
+  Context: Helper Middleware
+*/
 app.use(cors());
 app.use(compression());
 app.use(bodyParser.json());
-app.use(morgan("dev"));
-/* Registering middleware END*/
+app.use(morgan("combined", { stream: accessLogStream }));
 
-/* Handling Requests BEGIN */
-
+/* 
+  Context: Handle HTTP Request (GET, POST, PUT, DELETE, PATCH, OPTIONS)
+*/
 app.use(userRoutes);
 app.use(notificationRoutes);
 app.use(authRoute);
 app.use(postRoutes);
-/* Handling Requests END */
 
-/* Error Handling Middleware BEGIN */
+/* 
+  Context: Handle Errors
+*/
 app.use((error, req, res, next) => {
   if (!req.isAuthorized) {
     res.status(401).json({
@@ -51,14 +66,15 @@ app.use((error, req, res, next) => {
       err: error.message,
     });
   } else {
-    res.status(401).json({
+    res.json({
       err: error.message,
     });
   }
 });
-/* Error Handling Middleware END */
 
-/* Connecting with DATABASE BEGIN*/
+/* 
+  Context: Database Connection
+*/
 mongoose
   .connect(process.env.MONGO_URI, {
     useNewUrlParser: true,
@@ -66,26 +82,38 @@ mongoose
     useFindAndModify: false,
   })
   .then((result) => {
-    server.listen(process.env.PORT || 5000, () => {
-      console.log("Server is up and running", "Connected with mongoDb");
-      io.on("connection", function (socket) {
-        socket.on("msg", function (data) {
-          const msg = new Message(data);
-          msg
-            .save()
-            .then((result) => {
-              io.emit(data.receiver, data);
-            })
-            .catch((err) => {
-              if (err) {
-                console.log("Error while inserting message", err);
-              }
-            });
-        });
-      });
+    notifier.notify({
+      title: "Database Connection",
+      message: "Mongodb Connected",
+      icon: `${__dirname}/public/images/mongodb.png`,
     });
   })
   .catch((err) => {
-    console.log("Error while connecting with database", err);
+    notifier.notify({
+      title: "Database Connection",
+      message: "Database Not Connected",
+      icon: `${__dirname}/public/images/mongodb.png`,
+    });
+    //console.log("Error while connecting with database", err);
   });
-/* Connecting with DATABASE END*/
+
+/* 
+  Context: Server Startup
+*/
+server.listen(process.env.PORT || 5000, () => {
+  io.on("connection", function (socket) {
+    socket.on("msg", function (data) {
+      const msg = new Message(data);
+      msg
+        .save()
+        .then((result) => {
+          io.emit(data.receiver, data);
+        })
+        .catch((err) => {
+          if (err) {
+            console.log("Error while inserting message", err);
+          }
+        });
+    });
+  });
+});
