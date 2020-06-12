@@ -15,7 +15,7 @@ export default class Yearly extends Component {
   selectYear = async (date) => {
     this.setState({ date: date });
     try {
-      const response = await this.props.getYearlyReport(
+      const response = await this.props.getYearlyFollower(
         date.getFullYear(),
         this.props.authUser.token
       );

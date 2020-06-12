@@ -12,58 +12,242 @@ export default class index extends Component {
       <div className="row pt-1 pr-0 mr-0">
         <div className="col-3 bg-dark p-0">
           <div
-            className="nav flex-column nav-pills text-center"
-            id="v-pills-tab"
-            role="tablist"
-            aria-orientation="vertical"
+            className="accordion"
+            id="accordionExample"
             style={{ height: "89vh" }}
           >
-            <a
-              className="nav-link active text-light"
-              id="v-pills-home-tab"
-              data-toggle="pill"
-              href="#v-pills-monthly"
-              role="tab"
-              aria-controls="v-pills-monthly"
-              aria-selected="true"
-            >
-              yearly
-            </a>
-            <a
-              className="nav-link text-light"
-              id="v-pills-yearly-tab"
-              data-toggle="pill"
-              href="#v-pills-yearly"
-              role="tab"
-              aria-controls="v-pills-yearly"
-              aria-selected="false"
-            >
-              Monthly
-            </a>
-            <a
-              className="nav-link text-light"
-              id="v-pills-Daily-tab"
-              data-toggle="pill"
-              href="#v-pills-Daily"
-              role="tab"
-              aria-controls="v-pills-Daily"
-              aria-selected="false"
-            >
-              Daily
-            </a>
-            <a
-              className="nav-link text-light"
-              id="v-pills-between-tab"
-              data-toggle="pill"
-              href="#v-pills-between"
-              role="tab"
-              aria-controls="v-pills-between"
-              aria-selected="false"
-            >
-              Between Dates
-            </a>
+            <div className="card border-0">
+              <div className="card-header" id="headingOne">
+                <h2 className="mb-0">
+                  <button
+                    className="btn btn-link btn-block text-left btn-accordian "
+                    type="button"
+                    data-toggle="collapse"
+                    data-target="#collapseOne"
+                    aria-expanded="true"
+                    aria-controls="collapseOne"
+                  >
+                    Followers
+                  </button>
+                </h2>
+              </div>
+              <div
+                id="collapseOne"
+                className="collapse show "
+                aria-labelledby="headingOne"
+                data-parent="#accordionExample"
+              >
+                <div className="card-body bg-dark ">
+                  <div
+                    className="nav flex-column nav-pills text-center"
+                    id="v-pills-tab"
+                    role="tablist"
+                    aria-orientation="vertical"
+                  >
+                    <a
+                      className="nav-link active "
+                      id="v-pills-home-tab"
+                      data-toggle="pill"
+                      href="#v-pills-monthly"
+                      role="tab"
+                      aria-controls="v-pills-monthly"
+                      aria-selected="true"
+                    >
+                      yearly
+                    </a>
+                    <a
+                      className="nav-link "
+                      id="v-pills-yearly-tab"
+                      data-toggle="pill"
+                      href="#v-pills-yearly"
+                      role="tab"
+                      aria-controls="v-pills-yearly"
+                      aria-selected="false"
+                    >
+                      Monthly
+                    </a>
+                    <a
+                      className="nav-link"
+                      id="v-pills-Daily-tab"
+                      data-toggle="pill"
+                      href="#v-pills-Daily"
+                      role="tab"
+                      aria-controls="v-pills-Daily"
+                      aria-selected="false"
+                    >
+                      Daily
+                    </a>
+                    <a
+                      className="nav-link "
+                      id="v-pills-between-tab"
+                      data-toggle="pill"
+                      href="#v-pills-between"
+                      role="tab"
+                      aria-controls="v-pills-between"
+                      aria-selected="false"
+                    >
+                      Between Dates
+                    </a>
+                  </div>
+                </div>
+              </div>
+            </div>
+            {/*   <div className="card">
+              <div className="card-header" id="headingTwo">
+                <h2 className="mb-0">
+                  <button
+                    className="btn btn-link btn-block text-left collapsed btn-accordian"
+                    type="button"
+                    data-toggle="collapse"
+                    data-target="#collapseTwo"
+                    aria-expanded="false"
+                    aria-controls="collapseTwo"
+                  >
+                    Likes{" "}
+                  </button>
+                </h2>
+              </div>
+              <div
+                id="collapseTwo"
+                className="collapse"
+                aria-labelledby="headingTwo"
+                data-parent="#accordionExample"
+              >
+                <div className="card-body">
+                  <div
+                    className="nav flex-column nav-pills text-center"
+                    id="v-pills-tab"
+                    role="tablist"
+                    aria-orientation="vertical"
+                  >
+                    <a
+                      className="nav-link active "
+                      id="v-pills-home-tab"
+                      data-toggle="pill"
+                      href="#v-pills-monthly"
+                      role="tab"
+                      aria-controls="v-pills-monthly"
+                      aria-selected="true"
+                    >
+                      yearly
+                    </a>
+                    <a
+                      className="nav-link "
+                      id="v-pills-yearly-tab"
+                      data-toggle="pill"
+                      href="#v-pills-yearly"
+                      role="tab"
+                      aria-controls="v-pills-yearly"
+                      aria-selected="false"
+                    >
+                      Monthly
+                    </a>
+                    <a
+                      className="nav-link"
+                      id="v-pills-Daily-tab"
+                      data-toggle="pill"
+                      href="#v-pills-Daily"
+                      role="tab"
+                      aria-controls="v-pills-Daily"
+                      aria-selected="false"
+                    >
+                      Daily
+                    </a>
+                    <a
+                      className="nav-link "
+                      id="v-pills-between-tab"
+                      data-toggle="pill"
+                      href="#v-pills-between"
+                      role="tab"
+                      aria-controls="v-pills-between"
+                      aria-selected="false"
+                    >
+                      Between Dates
+                    </a>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div className="card">
+              <div className="card-header" id="headingThree">
+                <h2 className="mb-0">
+                  <button
+                    className="btn btn-link btn-block text-left collapsed btn-accordian "
+                    type="button"
+                    data-toggle="collapse"
+                    data-target="#collapseThree"
+                    aria-expanded="false"
+                    aria-controls="collapseThree"
+                  >
+                    Comments{" "}
+                  </button>
+                </h2>
+              </div>
+              <div
+                id="collapseThree"
+                className="collapse"
+                aria-labelledby="headingThree"
+                data-parent="#accordionExample"
+              >
+                <div className="card-body">
+                  <div
+                    className="nav flex-column nav-pills text-center"
+                    id="v-pills-tab"
+                    role="tablist"
+                    aria-orientation="vertical"
+                  >
+                    <a
+                      className="nav-link active "
+                      id="v-pills-home-tab"
+                      data-toggle="pill"
+                      href="#v-pills-monthly"
+                      role="tab"
+                      aria-controls="v-pills-monthly"
+                      aria-selected="true"
+                    >
+                      yearly
+                    </a>
+                    <a
+                      className="nav-link "
+                      id="v-pills-yearly-tab"
+                      data-toggle="pill"
+                      href="#v-pills-yearly"
+                      role="tab"
+                      aria-controls="v-pills-yearly"
+                      aria-selected="false"
+                    >
+                      Monthly
+                    </a>
+                    <a
+                      className="nav-link"
+                      id="v-pills-Daily-tab"
+                      data-toggle="pill"
+                      href="#v-pills-Daily"
+                      role="tab"
+                      aria-controls="v-pills-Daily"
+                      aria-selected="false"
+                    >
+                      Daily
+                    </a>
+                    <a
+                      className="nav-link "
+                      id="v-pills-between-tab"
+                      data-toggle="pill"
+                      href="#v-pills-between"
+                      role="tab"
+                      aria-controls="v-pills-between"
+                      aria-selected="false"
+                    >
+                      Between Dates
+                    </a>
+                  </div>
+                </div>
+              </div>
+            </div>
+         */}{" "}
           </div>
         </div>
+
         <div className="col-9">
           <div className="tab-content insights-tab" id="v-pills-tabContent">
             <div
@@ -73,7 +257,7 @@ export default class index extends Component {
               aria-labelledby="v-pills-monthly-tab"
             >
               <Yearly
-                getYearlyReport={this.props.getYearlyReport}
+                getYearlyFollower={this.props.getYearlyFollower}
                 authUser={this.props.authUser}
               />
             </div>
@@ -84,7 +268,7 @@ export default class index extends Component {
               aria-labelledby="v-pills-yearly-tab"
             >
               <Monthly
-                getMonthlyReport={this.props.getMonthlyReport}
+                getMonthlyFollower={this.props.getMonthlyFollower}
                 authUser={this.props.authUser}
               />
             </div>
@@ -95,7 +279,7 @@ export default class index extends Component {
               aria-labelledby="v-pills-Daily-tab"
             >
               <Daily
-                getDailyReport={this.props.getDailyReport}
+                getDailyFollower={this.props.getDailyFollower}
                 authUser={this.props.authUser}
               />
             </div>

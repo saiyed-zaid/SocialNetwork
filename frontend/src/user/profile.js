@@ -18,6 +18,7 @@ class Profile extends Component {
       user: { followers: [], following: [] },
       redirectToSignin: false,
       following: false,
+      followed: false,
       error: "",
       posts: [],
       hasPostStatusUpdated: false,
@@ -72,14 +73,15 @@ class Profile extends Component {
   clickFollowButton = async (callApi) => {
     const userId = isAuthenticated().user._id;
     const token = isAuthenticated().user.token;
-
+    this.setState({ followed: true });
     const response = await callApi(userId, token, this.state.user._id);
     if (response.data.error) {
-      this.setState({ error: response.data.error });
+      this.setState({ error: response.data.error, followed: false });
     } else {
       this.setState({
         user: response.data,
         following: !this.state.following,
+        followed: false,
       });
     }
   };
@@ -258,6 +260,7 @@ class Profile extends Component {
                 handleChatBoxDisplay={this.handleChatBoxDisplay}
                 unfollow={this.props.unfollow}
                 follow={this.props.follow}
+                followed={this.state.followed}
               />
             ) /* || (
             <div className="row justify-content-center">

@@ -407,9 +407,9 @@ class MainRouter extends React.Component {
             path="/user/insights/:userId"
             exact
             component={Insights}
-            getYearlyReport={this.props.Reportservice.getYearlyReport}
-            getMonthlyReport={this.props.Reportservice.getMonthlyReport}
-            getDailyReport={this.props.Reportservice.getDailyReport}
+            getYearlyFollower={this.props.Reportservice.getYearlyFollower}
+            getMonthlyFollower={this.props.Reportservice.getMonthlyFollower}
+            getDailyFollower={this.props.Reportservice.getDailyFollower}
             authUser={this.state.authUser}
           />
         </Switch>

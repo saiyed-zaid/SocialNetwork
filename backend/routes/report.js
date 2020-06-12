@@ -87,8 +87,6 @@ router.get("/api/reports/daily", authCheck, async (req, res, next) => {
     var dailyFollowers = {
       name: new Date().toDateString(),
       amt: 0,
-      uv: amt,
-      pv: amt,
     };
 
     const user = await User.findById(req.auth._id, {

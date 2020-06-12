@@ -11,7 +11,9 @@ export default class yearly extends Component {
     };
   }
   async componentDidMount() {
-    const response = await this.props.getDailyReport(this.props.authUser.token);
+    const response = await this.props.getDailyFollower(
+      this.props.authUser.token
+    );
     console.log("response", response);
 
     try {

@@ -29,9 +29,9 @@ const PrivateRoute = ({
   deleteScheduledPost,
   fetchScheduledPost,
   editScheduledPost,
-  getYearlyReport,
-  getMonthlyReport,
-  getDailyReport,
+  getYearlyFollower,
+  getMonthlyFollower,
+  getDailyFollower,
   ...rest
 }) => {
   return (
@@ -62,9 +62,9 @@ const PrivateRoute = ({
               deleteScheduledPost={deleteScheduledPost}
               fetchScheduledPost={fetchScheduledPost}
               editScheduledPost={editScheduledPost}
-              getYearlyReport={getYearlyReport}
-              getMonthlyReport={getMonthlyReport}
-              getDailyReport={getDailyReport}
+              getYearlyFollower={getYearlyFollower}
+              getMonthlyFollower={getMonthlyFollower}
+              getDailyFollower={getDailyFollower}
             />
           </>
         ) : (

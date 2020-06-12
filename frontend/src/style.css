@@ -53,10 +53,10 @@ p {
     margin: 8px;
   }
 }
-.card:hover {
+/* .card:hover {
   transform: translateY(-3px);
   box-shadow: 0.1em 0.1em 0.5em #000304;
-}
+} */
 
 .card-body {
   display: flex;
@@ -917,4 +917,16 @@ body.light-mode {
 body.dark-mode {
   background-color: #1a1919;
   color: #999;
+}
+
+.btn-accordian{
+  box-shadow: none;
+  text-decoration: none;
+
+}
+.btn-accordian:hover{
+  text-decoration: none;
+  background-color: rgba(226, 226, 226, 0.3);
+  color: #0073ff;
+
 }

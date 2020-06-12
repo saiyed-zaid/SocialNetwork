@@ -17,7 +17,7 @@ export default class yearly extends Component {
 
     this.setState({ date: date });
     try {
-      const response = await this.props.getMonthlyReport(
+      const response = await this.props.getMonthlyFollower(
         date.getFullYear(),
         date.getMonth(),
         this.props.authUser.token

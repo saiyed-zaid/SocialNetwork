@@ -21,6 +21,7 @@ export default class chatTab extends Component {
       displayEmoji: false,
       msgText: "",
       messages: null,
+      isLoading: false,
     };
 
     /* INVOKED WHENEVER SOMEONE MESSAGE YOU -BEGIN*/
@@ -45,6 +46,7 @@ export default class chatTab extends Component {
   }
 
   async componentDidMount() {
+    this.setState({ isLoading: true });
     try {
       const result = await this.props.fetchMessage(
         this.props.senderId,
@@ -57,9 +59,10 @@ export default class chatTab extends Component {
         receiverId: this.props.senderId,
         receiverName: this.props.senderName,
         messages: result.data,
+        isLoading: false,
       });
     } catch (error) {
-      console.log(error);
+      this.setState({ isLoading: false });
     }
 
     const chatBox = document.querySelector("#chatBox");
@@ -68,6 +71,8 @@ export default class chatTab extends Component {
   }
   async componentDidUpdate(prevProps, prevState) {
     if (prevProps.receiverId !== this.props.receiverId) {
+      this.setState({ isLoading: true });
+
       try {
         const result = await this.props.fetchMessage(
           this.props.senderId,
@@ -80,9 +85,11 @@ export default class chatTab extends Component {
           receiverId: this.props.senderId,
           receiverName: this.props.senderName,
           messages: result,
+          isLoading: false,
         });
       } catch (error) {
         console.log(error);
+        this.setState({ isLoading: false });
       }
 
       const chatBox = document.querySelector("#chatBox");
@@ -125,6 +132,7 @@ export default class chatTab extends Component {
     const msg = document.querySelector("#btn-input");
     const chatBox = document.querySelector("#chatBox");
     let myMsg = document.querySelector("#myMsg");
+    console.log(this.props.authUser);
 
     this.socket.emit("msg", {
       message: msg.value,
@@ -221,7 +229,14 @@ export default class chatTab extends Component {
               style={{ height: "200px", overflowY: "scroll", padding: "5px" }}
             >
               <ul className="p-0 m-0" id="myMsg" style={{ listStyle: "none" }}>
-                {messages &&
+                {this.state.isLoading ? (
+                  <div className="d-flex justify-content-center">
+                    <div className="spinner-border" role="status">
+                      <span className="sr-only">Loading...</span>
+                    </div>
+                  </div>
+                ) : (
+                  messages &&
                   messages.map((msg, i) =>
                     msg.sender === this.props.authUser._id ? (
                       <div className="bubbleWrapper">
@@ -261,7 +276,8 @@ export default class chatTab extends Component {
                         </span>
                       </div>
                     )
-                  )}
+                  )
+                )}
               </ul>
             </div>
             <div className="card-footer bg-dark">

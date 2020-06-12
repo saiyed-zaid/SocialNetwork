@@ -1,7 +1,7 @@
 import axios from "axios";
 
 export default class Reportsservice {
-  async getYearlyReport(year, token) {
+  async getYearlyFollower(year, token) {
     const response = await axios(
       `${process.env.REACT_APP_API_URL}/api/reports/yearly/${year}`,
       {
@@ -13,7 +13,7 @@ export default class Reportsservice {
     );
     return response;
   }
-  async getMonthlyReport(year, month, token) {
+  async getMonthlyFollower(year, month, token) {
     const response = await axios(
       `${process.env.REACT_APP_API_URL}/api/reports/monthly/${year}/${month}`,
       {
@@ -25,7 +25,7 @@ export default class Reportsservice {
     );
     return response;
   }
-  async getDailyReport(token) {
+  async getDailyFollower(token) {
     const response = await axios(
       `${process.env.REACT_APP_API_URL}/api/reports/daily`,
       {

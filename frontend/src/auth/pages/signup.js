@@ -12,14 +12,12 @@ class Signup extends React.Component {
       email: "",
       password: "",
       password_confirmation: "",
-      day: 0,
-      month: 0,
-      year: 0,
       errors: {},
       responseError: null,
       recatcha: false,
       error: "",
       dob: "",
+      isLoading: false,
     };
 
     this.postData = new FormData();
@@ -40,7 +38,7 @@ class Signup extends React.Component {
 
   handleSubmit = async (event) => {
     event.preventDefault();
-
+    this.setState({ isLoading: true });
     const date1 = new Date();
     const date2 = new Date(this.state.dob);
     const dobValidate = this.diff_years(date1, date2);
@@ -52,14 +50,18 @@ class Signup extends React.Component {
         const response = await this.props.registerUser(this.state);
         if (response.status === 201) {
           this.props.history.push("/signin");
+          this.set({ isLoading: false });
+
         }
       } catch (errors) {
         this.setState({
           errors,
+          isLoading: false,
         });
       }
     } else {
       this.setState({
+        isLoading: false,
         errors: {
           captcha: "Captcha Invalid",
           dob: "User  Must Be Atleast 18 Years Old",
@@ -75,6 +77,7 @@ class Signup extends React.Component {
   };
 
   render() {
+    const { isLoading } = this.state;
     return (
       <div
         className="container col-md-4 my-3"
@@ -248,9 +251,19 @@ class Signup extends React.Component {
 
             <div className="row">
               <div className="col">
-                <button type="submit" className="btn btn-primary">
-                  Submit
-                </button>
+                {isLoading ? (
+                  <button type="submit" className="btn btn-primary" disabled>
+                    <span
+                      className="spinner-border spinner-border-sm"
+                      role="status"
+                      aria-hidden="true"
+                    />
+                  </button>
+                ) : (
+                  <button type="submit" className="btn btn-primary">
+                    Submit
+                  </button>
+                )}
               </div>
               <div className="col">
                 <Link

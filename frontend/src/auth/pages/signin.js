@@ -12,6 +12,7 @@ class Signin extends React.Component {
       password: "",
       errors: {},
       responseError: null,
+      isLoading: false,
     };
 
     this.postData = new FormData();
@@ -27,28 +28,29 @@ class Signin extends React.Component {
 
   handleSubmit = async (event) => {
     event.preventDefault();
-
+    this.setState({ isLoading: true });
     try {
       this.setState({ errors: {}, responseError: null });
 
       const response = await this.props.loginUser(this.state);
 
       if (response.statusCode === 422) {
-        this.setState({ responseError: response.msg });
+        this.setState({ responseError: response.msg, isLoading: false });
       } else {
         localStorage.setItem("jwt", JSON.stringify(response.data));
         this.props.handleAuthUserUpdate();
-
+        this.setState({ isLoading: false });
         response.data.user.role === "admin"
           ? this.props.history.push("/admin/home")
           : this.props.history.push("/");
       }
     } catch (errors) {
-      this.setState({ errors });
+      this.setState({ errors, isLoading: false });
     }
   };
 
   render() {
+    const { isLoading } = this.state;
     return (
       <div
         className="container col-md-4 my-3"
@@ -116,10 +118,21 @@ class Signin extends React.Component {
 
             <div className="row">
               <div className="col">
-                <button type="submit" className="btn btn-primary">
-                  Submit
-                </button>
+                {isLoading ? (
+                  <button type="submit" className="btn btn-primary" disabled>
+                    <span
+                      className="spinner-border spinner-border-sm"
+                      role="status"
+                      aria-hidden="true"
+                    />
+                  </button>
+                ) : (
+                  <button type="submit" className="btn btn-primary">
+                    Submit
+                  </button>
+                )}
               </div>
+
               <div className="col">
                 <Link
                   className="stretched-link"
