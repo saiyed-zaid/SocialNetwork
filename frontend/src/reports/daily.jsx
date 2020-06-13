@@ -24,8 +24,8 @@ export default class yearly extends Component {
 
         const name = [];
         const values = [];
-        response.data.map((day) => name.push(day.name));
-        response.data.map((day) => values.push(day.amt));
+        response.data.map((day) => name.push(day.day));
+        response.data.map((day) => values.push(day.followersCount));
         var chartData = {
           labels: name,
           datasets: [

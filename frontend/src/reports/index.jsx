@@ -9,35 +9,34 @@ export default class index extends Component {
   }
   render() {
     return (
-      <div className="row pt-1 pr-0 mr-0">
+      <div className="row pt-1 p-0 m-0">
         <div className="col-3 bg-dark p-0">
           <div
             className="accordion"
             id="accordionExample"
-            style={{ height: "89vh" }}
+            style={{ minHeight: "89vh" }}
           >
-            <div className="card border-0">
+            <div className="card border-0  bg-dark">
               <div className="card-header" id="headingOne">
                 <h2 className="mb-0">
-                  <button
-                    className="btn btn-link btn-block text-left btn-accordian "
-                    type="button"
+                  <span
+                    className="btn-link"
                     data-toggle="collapse"
                     data-target="#collapseOne"
                     aria-expanded="true"
                     aria-controls="collapseOne"
                   >
                     Followers
-                  </button>
+                  </span>
                 </h2>
               </div>
               <div
                 id="collapseOne"
-                className="collapse show "
+                className="collapse"
                 aria-labelledby="headingOne"
                 data-parent="#accordionExample"
               >
-                <div className="card-body bg-dark ">
+                <div className="card-body">
                   <div
                     className="nav flex-column nav-pills text-center"
                     id="v-pills-tab"

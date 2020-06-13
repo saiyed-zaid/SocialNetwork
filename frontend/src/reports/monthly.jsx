@@ -11,25 +11,21 @@ export default class yearly extends Component {
     };
   }
   selectMonth = async (date) => {
-    {
-      console.log(this.props);
-    }
-
     this.setState({ date: date });
     try {
       const response = await this.props.getMonthlyFollower(
         date.getFullYear(),
-        date.getMonth(),
+        date.getMonth() + 1,
         this.props.authUser.token
       );
       if (response.data.error) {
         console.log(response.data.error);
       } else {
-        console.log(response.data);
+        console.log(response);
         const name = [];
         const values = [];
-        response.data.map((day) => name.push(day.name));
-        response.data.map((day) => values.push(day.amt));
+        response.data.map((day) => name.push(day.day));
+        response.data.map((day) => values.push(day.followersCount));
         var chartData = {
           labels: name,
           datasets: [

@@ -14,6 +14,8 @@ export default class Reportsservice {
     return response;
   }
   async getMonthlyFollower(year, month, token) {
+    console.log(year,month);
+    
     const response = await axios(
       `${process.env.REACT_APP_API_URL}/api/reports/monthly/${year}/${month}`,
       {
