@@ -7,10 +7,6 @@ const cron = require("node-cron");
 const PostSchedule = require("../models/postSchedules");
 const { uploadImageToFirebase } = require("../helper/uploadFile");
 
-/**
- * @function middleware
- * @description Handling get request which fetch Single Post by postId
- */
 exports.postById = async (req, res, next, id) => {
   try {
     let post = null;
@@ -36,15 +32,11 @@ exports.postById = async (req, res, next, id) => {
       req.post = post;
     }
   } catch (error) {
-    console.log("Error while fatching post.", error);
+    res.status(500).json({ error: "Something went wrong...." });
   }
   next();
 };
 
-/**
- * @function middleware
- * @description Handling get request which fetch single post by postId
- */
 exports.getPost = async (req, res, next) => {
   return res.status(200).json(req.post);
 };
@@ -67,10 +59,7 @@ exports.getPost = async (req, res, next) => {
       }
     });
 }; */
-/**
- * @function middleware
- * @description Handling get request which fetch all posts
- */
+
 exports.getPosts = async (req, res, next) => {
   try {
     const posts = await Post.find({ status: true })
@@ -79,16 +68,13 @@ exports.getPosts = async (req, res, next) => {
       .populate("tags", "_id name")
       .select("_id title body created comments likes photo status tags")
       .sort({ created: -1 });
+
     res.status(200).json({ posts });
   } catch (error) {
-    res.status(422).json({ msg: "Error while fetching posts" });
+    res.status(500).json({ error: "Something went wrong...." });
   }
 };
 
-/**
- * @function middleware
- * @description Handling get request which fetch all schedule posts by user
- */
 exports.getScheduledPost = async (req, res, next) => {
   try {
     const posts = await PostSchedule.find({
@@ -108,16 +94,10 @@ exports.getScheduledPost = async (req, res, next) => {
       posts,
     });
   } catch (error) {
-    return res.status(500).json({
-      msg: "Error while fetching Posts",
-    });
+    res.status(500).json({ error: "Something went wrong...." });
   }
 };
 
-/**
- * @function middleware
- * @description Handling delete request which delete Schesuled post in database
- */
 exports.deleteScheduledPost = async (req, res, next) => {
   const post = req.post;
 
@@ -135,16 +115,12 @@ exports.deleteScheduledPost = async (req, res, next) => {
   }
   try {
     const result = await post.remove({ _id: req.post._id });
-    return res.json({ msg: "Post deleted successfully." });
+    return res.status(200).json({ msg: "Post deleted successfully." });
   } catch (error) {
     return res.status(500).json({ msg: "Something Went Wrong..." });
   }
 };
 
-/**
- * @function middleware
- * @description Handling get request which fetch all posts FOR ADMIN
- */
 exports.getPostsForAdmin = async (req, res, next) => {
   try {
     const posts = await Post.find()
@@ -156,14 +132,10 @@ exports.getPostsForAdmin = async (req, res, next) => {
     res.json({ posts });
   } catch (error) {
     console.log("Error while fetching posts", error);
-    res.status(500).json({ msg: "Something Went Wrong..." });
+    res.status(500).json({ error: "Something Went Wrong..." });
   }
 };
 
-/**
- * @function middleware
- * @description Handling get request which fetch all posts by userId
- */
 exports.getPostsByUser = async (req, res, next) => {
   try {
     const posts = await Post.find({
@@ -192,18 +164,16 @@ exports.getPostsByUser = async (req, res, next) => {
       .select("_id title body created likes replies comments status photo tags")
       .sort("_created");
     if (posts.length == 0) {
-      return res.json({
+      return res.status(200).json({
         msg: "There is no posts by this user",
         posts: [],
       });
     }
-    return res.json({
+    return res.status(200).json({
       posts,
     });
   } catch (error) {
-    return res.status(500).json({
-      msg: "Something Went Wrong...",
-    });
+    res.status(500).json({ error: "Something went wrong...." });
   }
 };
 
@@ -225,18 +195,20 @@ exports.hasAuthorization = (req, res, next) => {
   next();
 };
 
-/**
- * @function middleware
- * @description Handling post request which create new post in database
- */
 exports.createPost = async (req, res, next) => {
   var tags = [];
+  const reqFiles = [];
   if (req.body.tags) {
     tags = JSON.parse(req.body.tags);
   }
   const errors = validationResult(req);
 
-  const reqFiles = [];
+  if (!errors.isEmpty()) {
+    const allErrors = errors.array();
+    return res.status(422).json({
+      errors: allErrors,
+    });
+  }
 
   //const url = req.protocol + "://" + req.get("host");
   for (var i = 0; i < req.files.length; i++) {
@@ -247,12 +219,6 @@ exports.createPost = async (req, res, next) => {
     // reqFiles.push(
     //   `${url}/upload/users/${req.auth._id}/posts/${req.files[i].filename}`
     // );
-  }
-  if (!errors.isEmpty()) {
-    const allErrors = errors.array();
-    return res.status(422).json({
-      errors: allErrors,
-    });
   }
 
   const post = new Post({
@@ -267,14 +233,10 @@ exports.createPost = async (req, res, next) => {
     const result = await post.save();
     res.status(200).json({ result });
   } catch (err) {
-    res.status(500).json("Something Went Wrong...");
+    res.status(500).json({ error: "Something Went Wrong..." });
   }
 };
 
-/**
- * @function middleware
- * @description Handling post request which create new Schedule Post in database
- */
 exports.createPostSchedule = async (req, res, next) => {
   if (req.body.isSchedule) {
     const reqScheduleTime = new Date(req.body.postScheduleTime);
@@ -305,11 +267,8 @@ exports.createPostSchedule = async (req, res, next) => {
             }
           }
         } catch (error) {
-          console.log("error while find", error);
+          res.status(500).json({ error: "Something Went Wrong..." });
         }
-
-        console.log("Congrats post public.");
-
         task.destroy();
       }
     );
@@ -317,6 +276,7 @@ exports.createPostSchedule = async (req, res, next) => {
 
     const tags = JSON.parse(req.body.tags);
     const errors = validationResult(req);
+
     if (!errors.isEmpty()) {
       const allErrors = errors.array();
       return res.status(422).json({
@@ -328,7 +288,6 @@ exports.createPostSchedule = async (req, res, next) => {
     //const url = req.protocol + "://" + req.get("host");
     for (var i = 0; i < req.files.length; i++) {
       var fileUrl = uploadImageToFirebase(req.files[i]);
-      console.log("path", fileUrl);
       reqFiles.push(fileUrl);
     }
 
@@ -346,8 +305,8 @@ exports.createPostSchedule = async (req, res, next) => {
 
       res.status(200).json({ result });
     } catch (err) {
-      return res.status(500).json("Something Went Wrong...");
       console.log("Error while Creating Post", err);
+      return res.status(500).json("Something Went Wrong...");
     }
   } else {
     next();
@@ -355,10 +314,6 @@ exports.createPostSchedule = async (req, res, next) => {
   //return res.json(req.body);
 };
 
-/**
- * @function middleware
- * @description Handling delete request which delete post in database
- */
 exports.deletePost = async (req, res, next) => {
   const post = req.post;
   if (!post) {
@@ -378,14 +333,10 @@ exports.deletePost = async (req, res, next) => {
     const result = await Post.remove({ _id: req.post._id });
     return res.status(200).json({ msg: "Post deleted successfully." });
   } catch (error) {
-    return res.status(500).json({ msg: "Something Went Wrong." });
+    return res.status(500).json("Something Went Wrong...");
   }
 };
 
-/**
- * @function middleware
- * @description Handling patch request which update post in database
- */
 exports.updatePost = async (req, res, next) => {
   let reqTags;
   let tags = [];
@@ -416,9 +367,6 @@ exports.updatePost = async (req, res, next) => {
     } else {
       req.body.photo = post.photo;
     }
-    //const prevPostPhoto = post.photo;
-    console.log("photos", req.body.photo);
-    console.log("files path", reqFiles);
   }
 
   post = _.extend(post, req.body);
@@ -428,9 +376,7 @@ exports.updatePost = async (req, res, next) => {
     const result = await post.save();
     res.status(200).json({ post });
   } catch (error) {
-    res.status(500).json({
-      msg: "Something Went Wrong...",
-    });
+    return res.status(500).json("Something Went Wrong...");
   }
 };
 
@@ -464,9 +410,6 @@ exports.updateSchedulePost = async (req, res, next) => {
     } else {
       req.body.photo = post.photo;
     }
-    //const prevPostPhoto = post.photo;
-    console.log("photos", req.body.photo);
-    console.log("files path", reqFiles);
   }
 
   post = _.extend(post, req.body);
@@ -477,15 +420,11 @@ exports.updateSchedulePost = async (req, res, next) => {
     res.status(200).json({ post });
   } catch (error) {
     res.status(500).json({
-      msg: "Something Went Wrong",
+      error: "Something Went Wrong",
     });
   }
 };
 
-/**
- * @function middleware
- * @description Handling patch request which update post like in database
- */
 exports.likePost = async (req, res, next) => {
   try {
     const UpdatedLikePost = await Post.findByIdAndUpdate(
@@ -502,14 +441,12 @@ exports.likePost = async (req, res, next) => {
     );
     res.status(200).json(UpdatedLikePost);
   } catch (error) {
-    res.status(500).json(error);
+    res.status(500).json({
+      error: "Something Went Wrong",
+    });
   }
 };
 
-/**
- * @function middleware
- * @description Handling patch request which update post unlike in database
- */
 exports.unlikePost = async (req, res, next) => {
   try {
     const UpdatedLikePost = await Post.findByIdAndUpdate(
@@ -522,14 +459,12 @@ exports.unlikePost = async (req, res, next) => {
     );
     res.status(200).json(UpdatedLikePost);
   } catch (error) {
-    res.status(500).json(error);
+    res.status(500).json({
+      error: "Something Went Wrong",
+    });
   }
 };
 
-/**
- * @function middleware
- * @description Handling patch request which update/Add post Comment in database
- */
 exports.commentPost = async (req, res, next) => {
   try {
     let comment = req.body.comment;
@@ -546,14 +481,12 @@ exports.commentPost = async (req, res, next) => {
       .populate("postedBy", "_id name");
     res.status(200).json(UpdatedCommentPost);
   } catch (error) {
-    res.status(500).json(error);
+    res.status(500).json({
+      error: "Something Went Wrong",
+    });
   }
 };
 
-/**
- * @function middleware
- * @description Handling patch request which update post Uncomment in database
- */
 exports.uncommentPost = async (req, res, next) => {
   try {
     let comment = req.body.comment;
@@ -569,14 +502,12 @@ exports.uncommentPost = async (req, res, next) => {
       .populate("postedBy", "_id name");
     res.status(200).json(UpdatedCommentPost);
   } catch (error) {
-    res.status(500).json(error);
+    res.status(500).json({
+      error: "Something Went Wrong",
+    });
   }
 };
 
-/**
- * @function middleware
- * @description Handling patch request which update/Add post Comment Reply in database
- */
 exports.commentPostReply = async (req, res, next) => {
   try {
     const post = await Post.findOne({
@@ -599,7 +530,9 @@ exports.commentPostReply = async (req, res, next) => {
     res.status(200).json(updatedrecord);
   } catch (error) {
     console.log("error", error);
-    res.status(500).json(error);
+    res.status(500).json({
+      error: "Something Went Wrong",
+    });
   }
 };
 
@@ -614,7 +547,9 @@ exports.dailyNewPosts = async (req, res, next) => {
 
     return await res.status(200).json(posts);
   } catch (error) {
-    res.status(500).json({ err: error });
+    res.status(500).json({
+      error: "Something Went Wrong",
+    });
   }
 };
 
@@ -632,17 +567,18 @@ exports.newLikesStatusChange = (req, res, next) => {
     }
   )
     .then((result) => {
-      return res.json(result);
+      return res.status(200).json(result);
     })
     .catch((err) => {
       if (err) {
-        console.error(err);
+        res.status(500).json({
+          error: "Something Went Wrong",
+        });
       }
     });
 };
 
 exports.newCommentStatusChange = (req, res, next) => {
-  console.log("respo....", req.body);
 
   Post.updateOne(
     {
@@ -657,31 +593,28 @@ exports.newCommentStatusChange = (req, res, next) => {
     }
   )
     .then((result) => {
-      return res.json(result);
+      return res.status(200).json(result);
     })
     .catch((err) => {
       if (err) {
-        console.error(err);
+        res.status(500).json({
+          error: "Something Went Wrong",
+        });
       }
     });
 };
+
 const uploadFile = (file) => {
   const storage = new Storage({
     projectId: process.env.GCLOUD_PROJECT_ID,
     keyFilename: process.env.GCLOUD_APPLICATION_CREDENTIALS,
   });
 
-  //social-network-48b35.appspot.com
-
-  //const bucket = storage.bucket("posts");
-  //const file = bucket.file('my-existing-file.png');
-
   const bucket = storage.bucket(`${process.env.GCLOUD_STORAGE_BUCKET_URL}`);
   let publicUrl;
 
   try {
     const blob = bucket.file(`posts/${file.originalname}`);
-    console.log("bucket__name__", bucket.name);
     const blobStream = blob.createWriteStream({
       metadata: {
         contentType: file.mimetype,

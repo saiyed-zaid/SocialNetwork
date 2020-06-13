@@ -12,7 +12,7 @@ const morgan = require("morgan");
 const dotenv = require("dotenv");
 const mongoose = require("mongoose");
 const path = require("path");
-var fs = require('fs')
+const fs = require("fs");
 const notifier = require("node-notifier");
 const cors = require("cors");
 const compression = require("compression");
@@ -27,6 +27,7 @@ const postRoutes = require("./routes/post");
 const authRoute = require("./routes/auth");
 const userRoutes = require("./routes/user");
 const notificationRoutes = require("./routes/notification");
+const reportRoutes = require("./routes/report");
 
 /* 
   Context: STATIC Directory
@@ -55,7 +56,7 @@ app.use(userRoutes);
 app.use(notificationRoutes);
 app.use(authRoute);
 app.use(postRoutes);
-
+app.use(reportRoutes);
 /* 
   Context: Handle Errors
 */
@@ -94,7 +95,6 @@ mongoose
       message: "Database Not Connected",
       icon: `${__dirname}/public/images/mongodb.png`,
     });
-    //console.log("Error while connecting with database", err);
   });
 
 /* 

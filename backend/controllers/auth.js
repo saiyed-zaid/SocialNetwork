@@ -6,10 +6,6 @@ const sendMail = require("../helper/mailer");
 const _ = require("lodash");
 const fs = require("fs");
 
-/**
- * @function middleware
- * @description Handling post request for creating new USER
- */
 exports.postSignup = async (req, res, next) => {
   const errs = validationResult(req);
 
@@ -90,74 +86,75 @@ exports.postSignup = async (req, res, next) => {
   }
 };
 
-/**
- * @function middleware
- * @description Handling post request for handling LOGIN
- */
+
 exports.postSignin = async (req, res, next) => {
-  const userExists = await User.findOne({
-    $and: [
+  try {
+    const userExists = await User.findOne({
+      $and: [
+        {
+          email: req.body.email,
+        },
+        {
+          password: md5(req.body.password),
+        },
+      ],
+    });
+
+    if (!userExists) {
+      return res.status(422).json({
+        error: "Username or Password is Incorrect..",
+      });
+    }
+
+    if (!userExists.status) {
+      return res.status(422).json({
+        error: "Your account is deactiveted, Please contact admin.",
+      });
+    }
+
+    /* Updatting isLoggedIn and lastLoggedIn fields */
+    User.updateOne(
+      { email: req.body.email },
+      { isLoggedIn: true, lastLoggedIn: Date.now() }
+    )
+      .then((result) => {
+        console.log("Logged in Flag updated");
+      })
+      .catch((err) => {
+        if (err) {
+          console.log("Loggedin flag not updated");
+        }
+      });
+
+    let token;
+    token = jwt.sign(
       {
-        email: req.body.email,
+        _id: userExists._id,
+        name: userExists.name,
+        email: userExists.email,
+        role: userExists.role,
+        photo: userExists.photo,
+        token: token,
       },
-      {
-        password: md5(req.body.password),
+      process.env.JWT_KEY,
+      { expiresIn: "1h" }
+    );
+
+    res.json({
+      msg: "Logged in!",
+      user: {
+        _id: userExists._id,
+        name: userExists.name,
+        email: userExists.email,
+        role: userExists.role,
+        photo: userExists.photo,
+        lastLoggedIn: Date.now(),
+        token: token,
       },
-    ],
-  });
-
-  if (!userExists) {
-    return res.status(422).json({
-      error: "Username or Password is Incorrect..",
     });
+  } catch (error) {
+    res.status(500).json({ error: "Something went wrong...." });
   }
-
-  if (!userExists.status) {
-    return res.status(422).json({
-      error: "Your account is deactiveted, Please contact admin.",
-    });
-  }
-
-  /* Updatting isLoggedIn and lastLoggedIn fields */
-  User.updateOne(
-    { email: req.body.email },
-    { isLoggedIn: true, lastLoggedIn: Date.now() }
-  )
-    .then((result) => {
-      console.log("Logged in Flag updated");
-    })
-    .catch((err) => {
-      if (err) {
-        console.log("Loggedin flag not updated");
-      }
-    });
-
-  let token;
-  token = jwt.sign(
-    {
-      _id: userExists._id,
-      name: userExists.name,
-      email: userExists.email,
-      role: userExists.role,
-      photo: userExists.photo,
-      token: token,
-    },
-    process.env.JWT_KEY,
-    { expiresIn: "1h" }
-  );
-
-  res.json({
-    msg: "Logged in!",
-    user: {
-      _id: userExists._id,
-      name: userExists.name,
-      email: userExists.email,
-      role: userExists.role,
-      photo: userExists.photo,
-      lastLoggedIn: Date.now(),
-      token: token,
-    },
-  });
 };
 
 exports.chnagePassword = async (req, res, next) => {
@@ -188,7 +185,7 @@ exports.chnagePassword = async (req, res, next) => {
       }
     );
   } catch (error) {
-    console.log("errr", error);
+    res.status(500).json({ error: "Something went wrong...." });
   }
 };
 
@@ -255,7 +252,7 @@ exports.resetPassword = async (req, res) => {
       message: `Great! Now you can login with your new password.`,
     });
   } catch (error) {
-    return res.status("401").json(error);
+    res.status(500).json({ error: "Something went wrong...." });
   }
 };
 

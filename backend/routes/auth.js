@@ -7,12 +7,11 @@ const auth_check = require("../middleware/auth-check");
 const User = require("../models/user");
 const md5 = require("md5");
 const jwt = require("jsonwebtoken");
+
 /**
- * @function post
- * @description Handling post request for creating new post
- * @param {String} path of router
- * @param {array} validations
- * @param {property} controller name
+  * @route    POST /api/signup
+  * @description Signup User
+  * @access PUBLIC
  */
 router.post(
   "/api/signup",
@@ -30,28 +29,23 @@ router.post(
 );
 
 /**
- * @function post
- * @description Handling post request for handling login with social
- * @param {String} path of router
- * @param {property} controller postSignin
+  * @route    POST /api/social-login
+  * @description Signup User With Social Network
+  * @access PUBLIC
  */
 router.post("/api/social-login", authController.socialLogin);
 
 /**
- * @function post
- * @description Handling post request for handling login data
- * @param {String} path of router
- * @param {property} controller name
+  * @route    POST /api/signin
+  * @description Login User
+  * @access PUBLIC
  */
 router.post("/api/signin", authController.postSignin);
 
-/* test */
 /**
- * @function post
- * @description Handling post request for creating new post
- * @param {String} path of router
- * @param {array} validations
- * @param {property} controller name
+  * @route    POST /api/changePassword
+  * @description Change Password
+  * @access PRIVATE
  */
 router.post(
   "/api/changePassword",
@@ -83,20 +77,17 @@ router.post(
   authController.chnagePassword
 );
 
-/* test */
-
 /**
- * @function put
- * @description Handling put request which send mail for forget password
- * @param {middleware} forgetPassword
+  * @route    PUT /api/forgot-password
+  * @description Forget Password
+  * @access PUBLIC
  */
-
 router.put("/api/forgot-password", authController.forgetPassword);
 
 /**
- * @function put
- * @description Handling put request which Reset user password
- * @param {middleware} resetPassword
+  * @route    PUT /api/reset-password
+  * @description Reset Password
+  * @access PUBLIC
  */
 router.put(
   "/api/reset-password",
@@ -109,6 +100,11 @@ router.put(
   authController.resetPassword
 );
 
+/**
+  * @route    GET /api/signout
+  * @description User Signout
+  * @access PRIVATE
+ */
 router.get(
   "/api/signout",
   auth_check,
@@ -134,11 +130,11 @@ router.get(
   }
 );
 
+
 /**
- * @function param
- * @description Invoked whenever param with userId appended in url and store user data in req object
- * @param {String} param name
- * @param {property} property userId
+  * @route    PARAM /:USERiD
+  * @description Store user data in req object
+  * @access PRIVATE
  */
 router.param("userId", userController.userById);
 

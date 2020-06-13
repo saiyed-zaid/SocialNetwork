@@ -9,10 +9,9 @@ const User = require("../models/user");
 const Message = require("../models/messages");
 
 /**
- * @function get
- * @description Handling get request which fetch messages
- * @param {middleware} Checking Authorization
- * @param {middleware} findPeople
+ * @route    POST /api/user/messages
+ * @description Fetch user messages
+ * @access PRIVATE
  */
 router.post("/api/user/messages", auth_check, (req, res, next) => {
   Message.find({
@@ -36,12 +35,10 @@ router.post("/api/user/messages", auth_check, (req, res, next) => {
 });
 
 /**
- * @function get
- * @description Handling get request which fetch new messages for user
- * @param {middleware} Checking Authorization
- * @param {middleware} findPeople
+ * @route    GET /api/user/messages/:userId
+ * @description Fetch messages notification
+ * @access PRIVATE
  */
-
 router.get("/api/user/messages/:userId", auth_check, (req, res, next) => {
   Message.aggregate()
     .match({ receiver: req.profile._id, isNewMessage: true })
@@ -55,18 +52,17 @@ router.get("/api/user/messages/:userId", auth_check, (req, res, next) => {
     .unwind("$users")
     .project("users.name count")
     .then((response) => {
-      console.log(response);
-      res.json(response);
+      res.status(200).json(response);
     })
     .catch((error) => {
       console.log("err", error);
     });
 });
+
 /**
- * @function put
- * @description Handling put request which Update isNewUser status false
- * @param {middleware} Checking Authorization
- * @param {middleware} newFollowerStatusChagne
+ * @route    PUT /api/user/newFollowerStatusChange/:userId
+ * @description Edit newFollowers flag
+ * @access PRIVATE
  */
 router.put(
   "/api/user/newFollowerStatusChange/:userId",
@@ -74,20 +70,21 @@ router.put(
   userController.newFollowerStatusChagne
 );
 
-
-
-
-
+/**
+ * @route    PUT /api/user/messageStatusChange/:userId
+ * @description Edit newMessage flag
+ * @access PRIVATE
+ */
 router.put(
   "/api/user/messageStatusChange/:userId",
   auth_check,
   userController.messageStatusChange
 );
+
 /**
- * @function put
- * @description Handling put request which Update user follow and add followers
- * @param {middleware} Checking Authorization
- * @param {middleware} updateUser
+ * @route    PUT /api/user/follow/:userId
+ * @description Follow user
+ * @access PRIVATE
  */
 router.put(
   "/api/user/follow/:userId",
@@ -96,6 +93,11 @@ router.put(
   userController.addFollower
 );
 
+/**
+ * @route    PUT /api/user/unfollow/:userId
+ * @description Unfollow user
+ * @access PRIVATE
+ */
 router.put(
   "/api/user/unfollow/:userId",
   auth_check,
@@ -104,26 +106,23 @@ router.put(
 );
 
 /**
- * @function get
- * @description Handling get request which fetch all Users
- * @param {String} path of router
- * @param {middleware} property getUsers
+ * @route    GET /api/users
+ * @description Fetch users
+ * @access PRIVATE
  */
 router.get("/api/users", auth_check, userController.getUsers);
 
 /**
- * @function get
- * @description Handling get request which fetch single User
- * @param {middleware} Checking Authorization
- * @param {middleware} getUser
+ * @route    GET /api/user/:userId
+ * @description Fetch user
+ * @access PRIVATE
  */
 router.get("/api/user/:userId", auth_check, userController.getUser);
 
 /**
- * @function put
- * @description Handling put request which Update single user
- * @param {middleware} Checking Authorization
- * @param {middleware} updateUser
+ * @route    PUT /api/user/:userId
+ * @description Update user
+ * @access PRIVATE
  */
 router.put(
   "/api/user/:userId",
@@ -149,10 +148,9 @@ router.put(
 );
 
 /**
- * @function delete
- * @description Handling delete request which delete single user
- * @param {middleware} Checking Authorization
- * @param {middleware} deleteUser
+ * @route    DELETE /api/user/:userId
+ * @description Delete user
+ * @access PRIVATE
  */
 router.delete(
   "/api/user/:userId",
@@ -162,10 +160,9 @@ router.delete(
 );
 
 /**
- * @function get
- * @description Handling get request which findpeople to follow
- * @param {middleware} Checking Authorization
- * @param {middleware} findPeople
+ * @route    GET /api/user/findpeople/:userId
+ * @description Find people
+ * @access PRIVATE
  */
 router.get(
   "/api/user/findpeople/:userId",
@@ -173,23 +170,44 @@ router.get(
   userController.findPeople
 );
 
+/**
+ * @route    GET /api/user/getonline/:userId
+ * @description Fetch online users
+ * @access PRIVATE
+ */
 router.get(
   "/api/user/getonline/:userId",
   auth_check,
   userController.getOnlinePeople
 );
 
+/**
+ * @route    GET /api/user/newusers/:userId
+ * @description Fetch new registered users
+ * @access PRIVATE
+ */
 router.get(
   "/api/user/newusers/:userId",
   auth_check,
   userController.dailyNewUsers
 );
 
+/**
+ * @route    GET /api/user/onlinetoday/:userId
+ * @description Fetch current online users
+ * @access PRIVATE
+ */
 router.get(
   "/api/user/onlinetoday/:userId",
   auth_check,
   userController.userOnlineToday
 );
+
+/**
+ * @route    GET /api/user/onlinenow/:userId
+ * @description Fetch online users
+ * @access PRIVATE
+ */
 router.get(
   "/api/user/onlinenow/:userId",
   auth_check,
@@ -197,9 +215,9 @@ router.get(
 );
 
 /**
- * @function router.param("userId", userController.userById);
- * @description Invoked callback function whenever userId appended in URL which fetch user data and stored in req object
- * @param {middleware} userById
+ * @route    PARAM /:userId
+ * @description Store user in request object
+ * @access PUBLIC
  */
 router.param("userId", userController.userById);
 

@@ -17,7 +17,7 @@ exports.userById = async (req, res, next, id) => {
     req.profile = user;
     next();
   } catch (error) {
-    return next(new Error("Something Went Wrong..."));
+    return res.status.json({ error: "Something Went Wrong..." });
   }
 };
 
@@ -32,17 +32,13 @@ exports.hasAuthorization = (req, res, next) => {
   }
 
   if (req.auth._id != req.profile._id) {
-    return res.json({
+    return res.status(401).json({
       msg: "Not authorized user for this action id not matched.",
     });
   }
   next();
 };
 
-/**
- * @function middleware
- * @description Handling get request which fetch all Users
- */
 exports.getUsers = async (req, res, next) => {
   try {
     const users = await User.find({
@@ -67,27 +63,16 @@ exports.getUsers = async (req, res, next) => {
 
     return res.json({ users, isAuthorized: req.auth.isAuthorized });
   } catch (error) {
-    console.log(error);
-    return res.status(404).json({
-      msg: "Something Whent Wrong...",
-    });
+    return res.status.json({ error: "Something Went Wrong..." });
   }
 };
 
-/**
- * @function get
- * @description Handling get request which fetch single User
- */
 exports.getUser = async (req, res, next) => {
   req.profile.password = undefined;
 
-  return res.json(req.profile);
+  return res.status(200).json(req.profile);
 };
 
-/**
- * @function middleware
- * @description Handling put request which Update single user
- */
 exports.updateUser = async (req, res, next) => {
   //const url = req.protocol + "://" + req.get("host");
   var reqFilePath;
@@ -140,7 +125,6 @@ exports.updateUser = async (req, res, next) => {
     } */
 
     var reqFilePath = uploadFile(req.file);
-    console.log("PROFILE IMAGE URL", reqFilePath);
     //    reqFiles.push(reqFilePath);
   }
 
@@ -166,27 +150,18 @@ exports.updateUser = async (req, res, next) => {
   });
 };
 
-/**
- * @function middleware
- * @description Handling delete request which delete single user
- */
 exports.deleteUser = async (req, res, next) => {
   let user = req.profile;
   try {
     const result = await user.remove();
-    res.json({ msg: "User Deleted succesfully", isDeleted: true });
+    res.status(200).json({ msg: "User Deleted succesfully", isDeleted: true });
   } catch (error) {
-    res.status(400).json({
-      msg: "Something Went Wrong...",
-      isDeleted: false,
+    res.status(500).json({
+      error: "Something Went Wrong...",
     });
   }
 };
 
-/**
- * @function middleware
- * @description Handling put request which add following
- */
 exports.addFollowing = async (req, res, next) => {
   try {
     //req.body.userId
@@ -197,15 +172,12 @@ exports.addFollowing = async (req, res, next) => {
     });
     next();
   } catch (error) {
-    return res.status(400).json({
-      err: error,
+    return res.status(500).json({
+      error: "Something went wrong...",
     });
   }
 };
-/**
- * @function middleware
- * @description Handling put request which add followers
- */
+
 exports.addFollower = async (req, res, next) => {
   try {
     //req.body.userId
@@ -227,16 +199,12 @@ exports.addFollower = async (req, res, next) => {
       .populate("followers.user", "_id name");
     return res.json(result);
   } catch (error) {
-    return res.status(400).json({
-      err: "Something Went Wrong...",
+    return res.status(500).json({
+      error: "Something went wrong...",
     });
   }
 };
 
-/**
- * @function middleware
- * @description Handling put request which remove following
- */
 exports.removeFollowing = async (req, res, next) => {
   try {
     //req.body.userId
@@ -253,10 +221,6 @@ exports.removeFollowing = async (req, res, next) => {
   }
 };
 
-/**
- * @function middleware
- * @description Handling put request which remove followers
- */
 exports.removeFollower = async (req, res, next) => {
   try {
     //req.body.userId
@@ -276,7 +240,7 @@ exports.removeFollower = async (req, res, next) => {
     res.json(result);
   } catch (error) {
     return res.status(400).json({
-      err: error,
+      err: "Something Went Wrong",
     });
   }
 };
@@ -291,7 +255,9 @@ exports.findPeople = async (req, res, next) => {
       .populate("followers", "_id");
     await res.json(users);
   } catch (error) {
-    res.status(400).json({ err: error });
+    return res.status(400).json({
+      err: "Something Went Wrong",
+    });
   }
 };
 
@@ -309,7 +275,7 @@ exports.newFollowerStatusChagne = (req, res, next) => {
     }
   )
     .then((result) => {
-      return res.json(result);
+      return res.status(200).json(result);
     })
     .catch((err) => {
       if (err) {
@@ -317,6 +283,7 @@ exports.newFollowerStatusChagne = (req, res, next) => {
       }
     });
 };
+
 exports.newLikesStatusChange = (req, res, next) => {
   User.findByIdAndUpdate(
     {
@@ -354,7 +321,9 @@ exports.getOnlinePeople = async (req, res, next) => {
 
     return await res.status(200).json(users);
   } catch (error) {
-    res.status(400).json({ err: error });
+    return res.status(400).json({
+      err: "Something Went Wrong",
+    });
   }
 };
 
@@ -367,9 +336,11 @@ exports.dailyNewUsers = async (req, res, next) => {
       created: { $gte: startDate.toDateString() },
     });
 
-    return await res.json(users);
+    return await res.status(200).json(users);
   } catch (error) {
-    res.status(400).json({ err: error });
+    return res.status(400).json({
+      err: "Something Went Wrong",
+    });
   }
 };
 
@@ -383,7 +354,9 @@ exports.userOnlineToday = async (req, res, next) => {
     });
     return await res.json(users);
   } catch (error) {
-    res.status(400).json({ err: error });
+    return res.status(400).json({
+      err: "Something Went Wrong",
+    });
   }
 };
 
@@ -395,7 +368,9 @@ exports.userOnlineNow = async (req, res, next) => {
     });
     return await res.json(users);
   } catch (error) {
-    res.status(400).json({ err: error });
+    return res.status(400).json({
+      err: "Something Went Wrong",
+    });
   }
 };
 
@@ -452,7 +427,6 @@ const uploadFile = (file) => {
 };
 
 exports.messageStatusChange = (req, res, next) => {
-  console.log("BODY__", req.auth._id);
   Message.updateMany(
     { receiver: req.auth._id },
     {

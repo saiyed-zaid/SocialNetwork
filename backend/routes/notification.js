@@ -7,13 +7,17 @@ const Message = require("../models/messages");
 var mongoose = require("mongoose");
 const { ObjectId } = require("mongodb");
 
+/**
+  * @route    GET /api/newFollowers/user/:userId
+  * @description Fetch new followers
+  * @access PRIVATE
+ */
 router.get("/api/newFollowers/user/:userId", authCheck, (req, res, next) => {
   User.find({ _id: new ObjectId(req.auth._id) }, (err, result) => {
     if (err) {
       console.log(err);
     }
     if (result[0]) {
-      console.log(result);
       var newFollowers;
       newFollowers = result[0].followers.filter((newFollower) => {
         return newFollower.isNewUser === true && newFollower.user;
@@ -26,6 +30,11 @@ router.get("/api/newFollowers/user/:userId", authCheck, (req, res, next) => {
     .select("followers");
 });
 
+/**
+  * @route    GET /api/new/likeComments/post/by/:userId
+  * @description Fetch new Likes, Comments
+  * @access PRIVATE
+ */
 router.get(
   "/api/new/likeComments/post/by/:userId",
   authCheck,
@@ -61,6 +70,11 @@ router.get(
   }
 );
 
+/**
+  * @route    GET /api/messages/changesisNewMessage
+  * @description Change New Message Flag
+  * @access PRIVATE
+ */
 router.get("/api/messages/changesisNewMessage", authCheck, (req, res, next) => {
   Message.updateMany(
     {
@@ -75,7 +89,7 @@ router.get("/api/messages/changesisNewMessage", authCheck, (req, res, next) => {
     },
     (err, result) => {
       if (err) {
-        res.status(400).json(err);
+        res.status(500).json({ error: " Something went wrong..." });
       }
       if (result) {
         res.status(200).json(result);

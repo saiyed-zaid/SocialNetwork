@@ -10,26 +10,23 @@ const Post = require("../models/posts");
 const PostSchedule = require("../models/postSchedules");
 
 /**
- * @function get
- * @description Handling get request which fetch single post
- * @param {String} path of router
- * @param {property} property getPost
+ * @route    GET /api/post/:postId
+ * @description Fetch post by its id
+ * @access PUBLIC
  */
 router.get("/api/post/:postId", postController.getPost);
 
 /**
- * @function get
- * @description Handling get request which fetch all posts
- * @param {String} path of router
- * @param {property} property getPosts
+ * @route    GET /api/posts
+ * @description Fetch posts
+ * @access PUBLIC
  */
 router.get("/api/posts", postController.getPosts);
 
 /**
- * @function get
- * @description Handling get request which fetch all posts FOR ADMIN
- * @param {String} path of router
- * @param {property} property getPosts
+ * @route    GET /api/admin/posts
+ * @description Fetch post for admin
+ * @access PRIVATE
  */
 router.get(
   "/api/admin/posts",
@@ -44,18 +41,16 @@ router.get(
 );
 
 /**
- * @function get
- * @description Handling get request which fetch all posts by userId
- * @param {String} path of router
- * @param {property} property getPostsByUser
+ * @route    GET /api/post/by/:userId
+ * @description Fetch user posts
+ * @access PRIVATE
  */
 router.get("/api/post/by/:userId", auth_check, postController.getPostsByUser);
 
 /**
- * @function get
- * @description Handling get request which fetch all Scheduled posts by userId
- * @param {String} path of router
- * @param {property} property getPostsByUser
+ * @route    GET /api/post/schedule/by/:userId
+ * @description Fetch schedule post of user
+ * @access PRIVATE
  */
 router.get(
   "/api/post/schedule/by/:userId",
@@ -64,26 +59,21 @@ router.get(
 );
 
 /**
- * @function put
- * @description Handling put request which Update IsNewLike status false
- * @param {middleware} Checking Authorization
- * @param {middleware} newLikesStatusChange
+ * @route    GET /api/user/newLikesStatusChange/:userId
+ * @description New likes flag change
+ * @access PRIVAte
  */
 /* router.put(
   "/api/user/newLikesStatusChange/:userId",
   auth_check,
   postController.newLikesStatusChange
 ); */
-
 router.get("/api/post/schedule/edit/:postId", postController.getPost);
 
 /**
- * @function post
- * @description Handling post request which create new post in database
- * @param {String} path of router
- * @param {router} auth_check for checking authorization
- * @param {array} validation
- * @param {property} property createPost
+ * @route    POST /api/post/:userId
+ * @description Add new post
+ * @access PRIVATE
  */
 router.post(
   "/api/post/:userId",
@@ -125,58 +115,48 @@ router.post(
 );
 
 /**
- * @function patch
- * @description Handling patch request which update post Like status in database
- * @param {String} path of router
- * @param {router} auth_check for checking authorization
- * @param {property} property likePost
+ * @route    PATCH /api/post/like
+ * @description Add like on post
+ * @access PRIVATE
  */
 router.patch("/api/post/like", auth_check, postController.likePost);
 
 /**
- * @function patch
- * @description Handling patch request which update post Unlike status in database
- * @param {String} path of router
- * @param {router} auth_check for checking authorization
- * @param {property} property unlikePost
+ * @route    PATCH /api/post/unlike
+ * @description Remove like from post
+ * @access PRIVATE
  */
 router.patch("/api/post/unlike", auth_check, postController.unlikePost);
 
 /**
- * @function patch
- * @description Handling patch request which update/Add post Comment in database
- * @param {String} path of router
- * @param {router} auth_check for checking authorization
- * @param {property} property commentPost
+ * @route    PATCH /api/post/comment
+ * @description Add commenct on post
+ * @access PRIVATE
  */
 router.patch("/api/post/comment", auth_check, postController.commentPost);
 
 /**
- * @function patch
- * @description Handling patch request which update/Add post Comment Reply in database
- * @param {String} path of router
- * @param {router} auth_check for checking authorization
- * @param {property} property reply commentPost
+ * @route    PATCH /api/post/comment/reply
+ * @description Add reply on post comment
+ * @access PRIVATE
  */
 router.patch(
   "/api/post/comment/reply",
   auth_check,
   postController.commentPostReply
 );
+
 /**
- * @function patch
- * @description Handling patch request which update post Uncomment in database
- * @param {String} path of router
- * @param {router} auth_check for checking authorization
- * @param {property} property uncommentPost
+ * @route    PATCH /api/post/uncomment
+ * @description Remove comment on post
+ * @access PRIVATE
  */
 router.patch("/api/post/uncomment", auth_check, postController.uncommentPost);
+
 /**
- * @function delete
- * @description Handling delete request which delete post in database
- * @param {String} path of router
- * @param {router} auth_check for checking authorization
- * @param {property} property deletePost
+ * @route    DELETE /api/post/:postId
+ * @description Delete post
+ * @access PRIVATE
  */
 router.delete(
   "/api/post/:postId",
@@ -186,11 +166,9 @@ router.delete(
 );
 
 /**
- * @function patch
- * @description Handling patch request which Add comment reply  in post database
- * @param {String} path of router
- * @param {router} auth_check for checking authorization
- * @param {property} property commentreply
+ * @route    PATCH /api/post/comment/reply
+ * @description Add reply on comment
+ * @access PRIVATE
  */
 router.patch(
   "/api/post/comment/reply",
@@ -199,11 +177,9 @@ router.patch(
 );
 
 /**
- * @function patch
- * @description Handling patch request which update post in database
- * @param {String} path of router
- * @param {router} auth_check for checking authorization
- * @param {property} property updatePost
+ * @route    PATCH /api/post/:postId
+ * @description Edit Post
+ * @access PRIVATE
  */
 router.patch(
   "/api/post/:postId",
@@ -233,11 +209,9 @@ router.patch(
 );
 
 /**
- * @function patch
- * @description Handling patch request which update schedule post in database
- * @param {String} path of router
- * @param {router} auth_check for checking authorization
- * @param {property} property update Schedule Post
+ * @route    PATCH /api/post/schedule/:postId
+ * @description Edit schedule post
+ * @access PRIVATE
  */
 router.patch(
   "/api/post/schedule/:postId",
@@ -266,6 +240,11 @@ router.patch(
   postController.updateSchedulePost
 );
 
+/**
+ * @route    GET /api/post/newpost/:userId
+ * @description Fetch today new posts
+ * @access PRIVATE
+ */
 router.get(
   "/api/post/newpost/:userId",
   auth_check,
@@ -273,10 +252,9 @@ router.get(
 );
 
 /**
- * @function put
- * @description Handling put request which Update isNewUser status false
- * @param {middleware} Checking Authorization
- * @param {middleware}
+ * @route    PUT /api/user/newLikesStatusChange/:userId
+ * @description Change newLike Status
+ * @access PRIVATE
  */
 router.put(
   "/api/user/newLikesStatusChange/:userId",
@@ -285,10 +263,9 @@ router.put(
 );
 
 /**
- * @function put
- * @description Handling put request which Update isNewUser status false
- * @param {middleware} Checking Authorization
- * @param {middleware}
+ * @route    PUT /api/user/newCommentStatusChange/:userId
+ * @description Change newComment status
+ * @access PRIVATE
  */
 router.put(
   "/api/user/newCommentStatusChange/:userId",
@@ -297,11 +274,9 @@ router.put(
 );
 
 /**
- * @function delete
- * @description Handling delete request which delete schedule post in database
- * @param {String} path of router
- * @param {router} auth_check for checking authorization
- * @param {property} property deletePost
+ * @route    DELETE /api/post/schedule/:postId
+ * @description Delete schedule post
+ * @access PRIVATE
  */
 router.delete(
   "/api/post/schedule/:postId",
@@ -311,18 +286,16 @@ router.delete(
 );
 
 /**
- * @function param
- * @description Invoked a callback function whenever userId appended in URL
- * @param {String} userId
- * @param {property} property userById
+ * @route    PARAM /:userId
+ * @description Store useer in req object
+ * @access PUBLIC
  */
 router.param("userId", userController.userById);
 
 /**
- * @function param
- * @description Invoked a callback function whenever postId appended in URL
- * @param {String} userId
- * @param {property} property postById
+ * @route    GET /:postId
+ * @description Store post in request object
+ * @access PUBLIC
  */
 router.param("postId", postController.postById);
 
