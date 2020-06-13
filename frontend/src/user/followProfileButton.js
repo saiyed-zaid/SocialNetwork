@@ -11,7 +11,19 @@ class FollowProfileButton extends Component {
     return (
       <div className="row justify-content-center">
         <div className="form-group">
-          {!this.props.following ? (
+          {this.props.followed ? (
+            <button
+              type="button"
+              disabled
+              className="btn btn-primary btn-sm mr-1"
+            >
+              <span
+                class="spinner-border spinner-border-sm"
+                role="status"
+                aria-hidden="true"
+              ></span>
+            </button>
+          ) : !this.props.following ? (
             <button
               type="button"
               onClick={this.followClick}

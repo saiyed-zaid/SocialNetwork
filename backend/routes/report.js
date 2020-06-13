@@ -17,6 +17,8 @@ router.get("/api/reports/yearly/:year", authCheck, async (req, res, next) => {
       _id: 0,
     }).populate("followers.user");
 
+    var yearlyFollower = [];
+
     for (let index = 1; index <= 12; index++) {
       yearlyFollower.push({
         month: index,
@@ -135,6 +137,7 @@ router.get("/api/reports/daily", authCheck, async (req, res, next) => {
  * @description Fetch between dattes followers
  * @access PRIVATE
  */
+
 router.get(
   "/api/reports/:fromDate/:toDate",
   authCheck,

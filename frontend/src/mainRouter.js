@@ -31,6 +31,8 @@ import Navbar from "./components/navbar";
 import ChatBar from "./components/chatBar/chatbar";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPaperPlane } from "@fortawesome/free-solid-svg-icons";
+import AdminScheduledPosts from "./admin/shceduledPosts";
+import Insights from "./reports/index";
 import Notification_Sockets from "./services/sockets";
 import UseDarkMode from "./components/UseDarkMode";
 
@@ -212,7 +214,8 @@ class MainRouter extends React.Component {
           data={this.state.onlineUsers}
           handleOpen={this.handleChatOpen}
         />
-        {this.state.authUser && (
+
+        {this.state.authUser && this.state.authUser.role === "subscriber" && (
           // Both at the same time
 
           <button
@@ -238,11 +241,24 @@ class MainRouter extends React.Component {
           />
           <Route
             exact
+            path="/admin/scheduledposts"
+            render={() => (
+              <AdminScheduledPosts
+                editScheduledPost={this.props.Postservice.editScheduledPost}
+                fetchAllScheduledPosts={
+                  this.props.Postservice.fetchAllScheduledPosts
+                }
+                deleteScheduledPost={this.props.Postservice.deleteScheduledPost}
+              />
+            )}
+          />
+          <Route
+            exact
             path="/admin/users"
             render={() => (
               <AdminUsers
                 remove={this.props.Userservice.remove}
-                list={this.props.Userservice.getAll}
+                getAll={this.props.Userservice.getAll}
                 update={this.props.Userservice.update}
               />
             )}
@@ -386,6 +402,15 @@ class MainRouter extends React.Component {
             editScheduledPost={this.props.Postservice.editScheduledPost}
             fetchScheduledPost={this.props.Postservice.fetchScheduledPost}
             read={this.props.Userservice.read}
+          />
+          <PrivateRoute
+            path="/user/insights/:userId"
+            exact
+            component={Insights}
+            getYearlyFollower={this.props.Reportservice.getYearlyFollower}
+            getMonthlyFollower={this.props.Reportservice.getMonthlyFollower}
+            getDailyFollower={this.props.Reportservice.getDailyFollower}
+            authUser={this.state.authUser}
           />
         </Switch>
       </div>

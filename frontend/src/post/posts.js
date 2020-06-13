@@ -35,9 +35,9 @@ class Posts extends Component {
   render() {
     const { posts } = this.state;
 
-    /*  if (posts.length <= 0 || this.state.isLoading) {
+    if (posts.length <= 0 || this.state.isLoading) {
       return <Spinner />;
-    } */
+    }
     return (
       <div className="row justify-content-md-center">
         {posts.map((post, i) => {

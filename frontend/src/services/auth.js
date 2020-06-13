@@ -36,8 +36,7 @@ export default class Authservice {
           }),
         }
       );
-      Notification.requestPermission().then((permission) => {
-      });
+      Notification.requestPermission().then((permission) => {});
       /* var notify = new Notification("Allow Friends New Message Pop-up");
       console.log(notify); */
       return response;
@@ -81,6 +80,7 @@ export default class Authservice {
 
     try {
       await validateAll(data, rules, messages);
+      console.log(data);
 
       var user = {
         name: data.name,

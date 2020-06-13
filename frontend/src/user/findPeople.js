@@ -91,6 +91,7 @@ class FindPeople extends Component {
           >
             <img
               className="img-thumbnail"
+              style={{ maxWidth: "238px" }}
               src={user.photo ? user.photo.photoURI : DefaultProfile}
               onError={(i) => (i.target.src = `${DefaultProfile}`)}
               alt={user.name}
@@ -113,23 +114,6 @@ class FindPeople extends Component {
               </ul>
 
               <div>
-                {/*
-                
-
-              <div className="d-flex flex-column">
-                { <button
-                  onClick={() => this.clickFollow(user, i)}
-                  className="btn btn-outline-info"
-                  style={{
-                    flex: "1",
-                    margin: "1px",
-                  }}
-                  disabled={this.state.isProcessing}
-                >
-                  {this.state.isProcessing && <Spinner />}
-                  &nbsp; Follow
-                </button>} */}
-
                 <Link to={`/user/${user._id}`} className="btn btn-info w-100">
                   View Profile
                 </Link>

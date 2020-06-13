@@ -32,7 +32,7 @@ class Users extends Component {
 
   async componentDidMount() {
     try {
-      const response = await this.props.list(isAuthenticated().user.token);
+      const response = await this.props.getAll(isAuthenticated().user.token);
       if (response.data.error) {
         console.log(response.error);
       } else {

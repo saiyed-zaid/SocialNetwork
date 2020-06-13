@@ -1,6 +1,5 @@
 import React from "react";
 import { newFollowersList, readPost } from "../api/getNotification";
-
 import NotificationList from "./getNewFollower";
 import { isAuthenticated } from "../../auth";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -100,6 +99,7 @@ class Notification extends React.Component {
   }
 
   render() {
+    const { newFollowerList, newLikesList, newCommentList } = this.state;
     return (
       <li className="nav-item dropdown float-right">
         <a
@@ -113,26 +113,25 @@ class Notification extends React.Component {
         >
           <FontAwesomeIcon icon={faBell} />
           <span className="badge badge-warning ml-1">
-            {this.state.newFollowerList.length +
-              this.state.newLikesList.length +
-              this.state.newCommentList.length}
+            {newFollowerList.length +
+              newLikesList.length +
+              newCommentList.length}
           </span>
         </a>
 
         <div className="dropdown-menu dropdown-menu-lg-right noti-toggle">
-          {((this.state.newFollowerList.length > 0 ||
-            this.state.newLikesList.length > 0 ||
-            this.state.newCommentList.length > 0) && (
+          {((newFollowerList.length > 0 ||
+            newLikesList.length > 0 ||
+            newCommentList.length > 0) && (
             <span
               className="dropdown-item "
               style={{ display: "flex", justifyContent: " center" }}
             >
               <span className=" text-muted text-sm">
                 <NotificationList
-                  newFollowers={this.state.newFollowerList}
-                  newLikes={this.state.newLikesList}
-                  k
-                  newComments={this.state.newCommentList}
+                  newFollowers={newFollowerList}
+                  newLikes={newLikesList}
+                  newComments={newCommentList}
                 />
               </span>
             </span>

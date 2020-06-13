@@ -26,3 +26,16 @@ $(function () {
     ],
   });
 });
+$(function () {
+  $("#scheduledpoststable").DataTable({
+    responsive: true,
+    lengthMenu: [5, 10, 15, 25, 50, 100],
+    pageLength: 5,
+    columnDefs: [
+      {
+        targets: [0, 7, 8],
+        orderable: false,
+      },
+    ],
+  });
+});

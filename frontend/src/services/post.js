@@ -447,4 +447,24 @@ export default class Postservice {
       return Promise.reject(formattedErrors);
     }
   }
+
+  /** Api for Fetching All Scheduled Posts
+   *
+   * @param {*} isAdmin  Check Role OF the USer
+   * @param {*} token Authentication Token
+   */
+  async fetchAllScheduledPosts(token) {
+    const response = await axios(
+      `${process.env.REACT_APP_API_URL}/api/admin/scheduledposts`,
+      {
+        method: "GET",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "Application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    return response;
+  }
 }

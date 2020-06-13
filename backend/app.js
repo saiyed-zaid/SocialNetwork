@@ -13,6 +13,7 @@ const dotenv = require("dotenv");
 const mongoose = require("mongoose");
 const path = require("path");
 const fs = require("fs");
+
 const notifier = require("node-notifier");
 const cors = require("cors");
 const compression = require("compression");
@@ -57,6 +58,7 @@ app.use(notificationRoutes);
 app.use(authRoute);
 app.use(postRoutes);
 app.use(reportRoutes);
+
 /* 
   Context: Handle Errors
 */

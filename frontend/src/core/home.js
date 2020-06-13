@@ -12,7 +12,7 @@ class Home extends Component {
   }
 
   componentDidMount() {
-    document.title = "Retwit | HOME";
+    document.title = "Socialsync | HOME";
   }
 
   render() {

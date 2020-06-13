@@ -21,12 +21,8 @@ export default class chatTab extends Component {
       displayEmoji: false,
       msgText: "",
       messages: null,
+      isLoading: false,
     };
-
-    /*    this.masterUl = document.createElement("ul");
-    this.masterUl.setAttribute("id", "myMsg");
-    this.masterUl.classList.add("p-0", "m-0");
-    this.masterUl.style.listStyle = "none"; */
 
     /* INVOKED WHENEVER SOMEONE MESSAGE YOU -BEGIN*/
     this.socket = openSocket("http://localhost:5000");
@@ -40,13 +36,6 @@ export default class chatTab extends Component {
     });
     /* INVOKED WHENEVER SOMEONE MESSAGE YOU -BEGIN*/
 
-    /* APPENDING PREVIOUS MESSAGES BEGIN */
-    /* if (this.state.messages) {
-      alert("set");
-       
-    } */
-    /* APPENDING PREVIOUS MESSAGES BEGIN */
-
     /* SEND MESSAGE WHEN ENTER KEY PRESS BEGIN */
     window.onkeypress = (e) => {
       if (e.keyCode === 13) {
@@ -57,8 +46,7 @@ export default class chatTab extends Component {
   }
 
   async componentDidMount() {
-    /* Fetching Message When This Component INVOKED */
-    /*END Fetching Message When This Component INVOKED */
+    this.setState({ isLoading: true });
     try {
       const result = await this.props.fetchMessage(
         this.props.senderId,
@@ -66,27 +54,15 @@ export default class chatTab extends Component {
         this.props.authUser.token
       );
 
-      this.setState(
-        {
-          hasNewMsg: true,
-          receiverId: this.props.senderId,
-          receiverName: this.props.senderName,
-          messages: result.data,
-        }
-        /*  () => {
-          let myMsg = document.querySelector("#myMsg");
-          const chatBox = document.querySelector("#chatBox");
-
-          chatBox.scrollTo(0, chatBox.scrollHeight);
-
-          this.state.messages.forEach((message) => {
-            const li = this.appendReceivedMsg(message);
-            myMsg.appendChild(li);
-          });
-        } */
-      );
+      this.setState({
+        hasNewMsg: true,
+        receiverId: this.props.senderId,
+        receiverName: this.props.senderName,
+        messages: result.data,
+        isLoading: false,
+      });
     } catch (error) {
-      console.log(error);
+      this.setState({ isLoading: false });
     }
 
     const chatBox = document.querySelector("#chatBox");
@@ -95,6 +71,8 @@ export default class chatTab extends Component {
   }
   async componentDidUpdate(prevProps, prevState) {
     if (prevProps.receiverId !== this.props.receiverId) {
+      this.setState({ isLoading: true });
+
       try {
         const result = await this.props.fetchMessage(
           this.props.senderId,
@@ -107,9 +85,11 @@ export default class chatTab extends Component {
           receiverId: this.props.senderId,
           receiverName: this.props.senderName,
           messages: result,
+          isLoading: false,
         });
       } catch (error) {
         console.log(error);
+        this.setState({ isLoading: false });
       }
 
       const chatBox = document.querySelector("#chatBox");
@@ -121,9 +101,6 @@ export default class chatTab extends Component {
   appendReceivedMsg = (data) => {
     // console.log(data);
 
-    /* if (data.msg.length === 0) {
-      return alert("Please enter msg");
-    } */
     const appendLi = document.createElement("li");
     const appendMsg = document.createElement("span");
     const personImg = document.createElement("img");
@@ -155,6 +132,7 @@ export default class chatTab extends Component {
     const msg = document.querySelector("#btn-input");
     const chatBox = document.querySelector("#chatBox");
     let myMsg = document.querySelector("#myMsg");
+    console.log(this.props.authUser);
 
     this.socket.emit("msg", {
       message: msg.value,
@@ -166,9 +144,9 @@ export default class chatTab extends Component {
 
     // if (msg.value.length === 0) {
 
-    /* if (data.msg.length === 0) {
-      return alert("Please enter msg");
-    }*/
+    if (msg.value.length === 0) {
+      return alert("You Can't Send Blank Message");
+    }
     const appendLi = document.createElement("li");
     const appendMsg = document.createElement("span");
     const personImg = document.createElement("img");
@@ -251,7 +229,14 @@ export default class chatTab extends Component {
               style={{ height: "200px", overflowY: "scroll", padding: "5px" }}
             >
               <ul className="p-0 m-0" id="myMsg" style={{ listStyle: "none" }}>
-                {messages &&
+                {this.state.isLoading ? (
+                  <div className="d-flex justify-content-center">
+                    <div className="spinner-border" role="status">
+                      <span className="sr-only">Loading...</span>
+                    </div>
+                  </div>
+                ) : (
+                  messages &&
                   messages.map((msg, i) =>
                     msg.sender === this.props.authUser._id ? (
                       <div className="bubbleWrapper">
@@ -291,7 +276,8 @@ export default class chatTab extends Component {
                         </span>
                       </div>
                     )
-                  )}
+                  )
+                )}
               </ul>
             </div>
             <div className="card-footer bg-dark">

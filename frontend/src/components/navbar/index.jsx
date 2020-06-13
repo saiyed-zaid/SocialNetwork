@@ -10,6 +10,7 @@ import {
   faKey,
   faClipboardList,
   faSignOutAlt,
+  faThList,
 } from "@fortawesome/free-solid-svg-icons";
 
 const isActive = (history, path) => {
@@ -24,11 +25,11 @@ const Navbar = withRouter(
       <nav className="navbar sticky-top  navbar-expand-lg navbar-dark bg-dark">
         {authUser && authUser.role === "admin" ? (
           <Link className="navbar-brand " to="/admin/home">
-            SocialSynch
+            SocialSync
           </Link>
         ) : (
           <Link className="navbar-brand" to="/">
-            SocialSynch
+            SocialSync
           </Link>
         )}
 
@@ -67,6 +68,15 @@ const Navbar = withRouter(
                     POSTS
                   </Link>
                 </li>
+                <li className="nav-item">
+                  <Link
+                    className="nav-link"
+                    to="/admin/scheduledposts"
+                    style={isActive(history, `/admin/scheduledposts`)}
+                  >
+                    SCHEDULED POSTS
+                  </Link>
+                </li>
 
                 <li className="nav-item">
                   <Link
@@ -96,67 +106,6 @@ const Navbar = withRouter(
                       </Link>
                     </>
                   )}
-                </li>
-              </ul>
-
-              <ul className="navbar-nav ml-auto ">
-                {authUser && authUser.roll !== "admin" && (
-                  <Notification authUser={authUser} />
-                )}
-                <li className="nav-item dropdown profile-btn ">
-                  <a
-                    className="nav-link d-flex align-items-center"
-                    href="/"
-                    id="navbarDropdownMenuLink"
-                    role="button"
-                    data-toggle="dropdown"
-                    aria-haspopup="true"
-                    aria-expanded="false"
-                  >
-                    <img
-                      style={{
-                        borderRadius: "50%",
-                        height: "30px !important",
-                        width: "30px !important",
-                      }}
-                      className="nav-link  p-0 m-0 ml-1 img-circle float-right "
-                      src={authUser.photo ? authUser.photo.photoURI : avatar}
-                      width="30px "
-                      height="30px"
-                      onError={(e) => (e.target.src = avatar)}
-                      alt="user "
-                    />
-                    <span>&nbsp;{authUser.name.toUpperCase()}</span>
-                  </a>
-                  <div
-                    className="dropdown-menu  dropdown-menu-right"
-                    aria-labelledby="navbarDropdownMenuLink"
-                  >
-                    <Link
-                      className="dropdown-item"
-                      to={`/user/edit/${authUser._id}`}
-                    >
-                      <FontAwesomeIcon icon={faEdit} /> &nbsp; Manage Profile
-                    </Link>
-                    <Link
-                      className="dropdown-item"
-                      to={`/user/changepassword/${authUser._id}`}
-                    >
-                      <FontAwesomeIcon icon={faKey} />
-                      &nbsp; Change Password
-                    </Link>
-                    <Link
-                      className="dropdown-item"
-                      to="/signin"
-                      onClick={() =>
-                        signout(() => {
-                          handleLogout();
-                        })
-                      }
-                    >
-                      <FontAwesomeIcon icon={faSignOutAlt} /> &nbsp; Logout
-                    </Link>
-                  </div>
                 </li>
               </ul>
             </>
@@ -242,7 +191,7 @@ const Navbar = withRouter(
               </ul>
               {authUser ? (
                 <ul className="navbar-nav ml-auto nav-mobile ">
-                  {authUser && authUser.roll !== "admin" && (
+                  {authUser && authUser.role !== "admin" && (
                     <>
                       <MsgNotification
                         handleOpen={handleChatOpen}
@@ -296,6 +245,13 @@ const Navbar = withRouter(
                       >
                         <FontAwesomeIcon icon={faClipboardList} />
                         &nbsp; &nbsp; Scheduled Posts
+                      </Link>
+                      <Link
+                        className="dropdown-item"
+                        to={`/user/insights/${authUser._id}`}
+                      >
+                        <FontAwesomeIcon icon={faThList} />
+                        &nbsp; &nbsp; Insights
                       </Link>
                       <Link
                         className="dropdown-item"

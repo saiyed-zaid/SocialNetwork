@@ -9,8 +9,9 @@ export default class Chatbar extends Component {
     chatbar.classList.add("close-chatbar");
 
     // chatbar.addEventListener("animationend", () => {
-    chatbar.style.display = "none";
+    chatbar.classList.remove("close-chatbar");
     // });
+    chatbar.style.display = "none";
     document.getElementById("floating-btn").style.display = "block";
   };
 

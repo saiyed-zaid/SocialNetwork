@@ -135,6 +135,23 @@ exports.getPostsForAdmin = async (req, res, next) => {
     res.status(500).json({ error: "Something Went Wrong..." });
   }
 };
+/**
+ * @function middleware
+ * @description Handling get request which fetch all posts FOR ADMIN
+ */
+exports.getScheduledPostsForAdmin = async (req, res, next) => {
+  try {
+    const posts = await PostSchedule.find()
+      .populate("postedBy", "_id name")
+      .populate("tags", "_id name")
+      .select("_id title body scheduleTime tags")
+      .sort({ created: -1 });
+    res.json({ posts });
+  } catch (error) {
+    console.log("Error while fetching posts", error);
+    res.status(500).json({ msg: "Something Went Wrong..." });
+  }
+};
 
 exports.getPostsByUser = async (req, res, next) => {
   try {

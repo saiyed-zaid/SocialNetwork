@@ -18,6 +18,7 @@ class Profile extends Component {
       user: { followers: [], following: [] },
       redirectToSignin: false,
       following: false,
+      followed: false,
       error: "",
       posts: [],
       hasPostStatusUpdated: false,
@@ -72,14 +73,15 @@ class Profile extends Component {
   clickFollowButton = async (callApi) => {
     const userId = isAuthenticated().user._id;
     const token = isAuthenticated().user.token;
-
+    this.setState({ followed: true });
     const response = await callApi(userId, token, this.state.user._id);
     if (response.data.error) {
-      this.setState({ error: response.data.error });
+      this.setState({ error: response.data.error, followed: false });
     } else {
       this.setState({
         user: response.data,
         following: !this.state.following,
+        followed: false,
       });
     }
   };
@@ -225,28 +227,30 @@ class Profile extends Component {
           </p>
           <hr className="my-4"></hr>
           {/* Follow/Following Details */}
-          <div className="d-flex justify-content-center m-3 text-center">
-            <p className="lead ml-2" onClick={this.showFollowList}>
-              <h5 className="card-subtitle mb-2 text-muted">Follower</h5>
-              <h6 className="card-title text-warning">
-                {this.state.user.followers.length}
-              </h6>
-            </p>
+          {this.state.user.role !== "admin" ? (
+            <div className="d-flex justify-content-center m-3 text-center">
+              <p className="lead ml-2" onClick={this.showFollowList}>
+                <h5 className="card-subtitle mb-2 text-muted">Follower</h5>
+                <h6 className="card-title text-warning">
+                  {this.state.user.followers.length}
+                </h6>
+              </p>
 
-            <p className="lead ml-2" onClick={this.showFollowList}>
-              <h5 className="card-subtitle mb-2 text-muted">Following</h5>
-              <h6 className="card-title text-warning">
-                {this.state.user.following.length}
-              </h6>
-            </p>
+              <p className="lead ml-2" onClick={this.showFollowList}>
+                <h5 className="card-subtitle mb-2 text-muted">Following</h5>
+                <h6 className="card-title text-warning">
+                  {this.state.user.following.length}
+                </h6>
+              </p>
 
-            <p className="lead ml-2">
-              <h5 className="card-subtitle mb-2 text-muted">Posts</h5>
-              <h6 className="card-title text-warning">
-                {this.state.posts.length}
-              </h6>
-            </p>
-          </div>
+              <p className="lead ml-2">
+                <h5 className="card-subtitle mb-2 text-muted">Posts</h5>
+                <h6 className="card-title text-warning">
+                  {this.state.posts.length}
+                </h6>
+              </p>
+            </div>
+          ) : null}
           {/* End Follow/Following Details */}
           {
             this.props.authUser._id !== this.state.user._id && (
@@ -256,6 +260,7 @@ class Profile extends Component {
                 handleChatBoxDisplay={this.handleChatBoxDisplay}
                 unfollow={this.props.unfollow}
                 follow={this.props.follow}
+                followed={this.state.followed}
               />
             ) /* || (
             <div className="row justify-content-center">
