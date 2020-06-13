@@ -1,13 +1,16 @@
 import React, { Component } from "react";
 import DateTimePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-import { Bar } from "react-chartjs-2";
+import BarChart from "../ui-components/barChart";
+
 export default class yearly extends Component {
   constructor() {
     super();
     this.state = {
       month: "",
       data: [],
+      xlabels: null,
+      chartValues: null,
     };
   }
   selectMonth = async (date) => {
@@ -21,40 +24,36 @@ export default class yearly extends Component {
       if (response.data.error) {
         console.log(response.data.error);
       } else {
-        console.log(response);
         const name = [];
         const values = [];
         response.data.map((day) => name.push(day.day));
         response.data.map((day) => values.push(day.followersCount));
-        var chartData = {
-          labels: name,
-          datasets: [
-            {
-              data: values,
-            },
-          ],
-        };
-        this.setState({ data: chartData });
+        this.setState({ xlabels: name, chartValues: values });
       }
     } catch (error) {
       console.log(error);
     }
   };
+  componentDidMount() {}
   render() {
-    const { month, data } = this.state;
+    const { date, xlabels, chartValues } = this.state;
+
     return (
       <>
         <DateTimePicker
           className="form-control"
-          selected={month}
+          selected={date}
           onChange={(date) => this.selectMonth(date)}
           dateFormat="MM/yyyy"
           showMonthYearPicker
           placeholderText="Select Month"
         />
         <div className="text-dark">
-          {" "}
-          <Bar data={data} width={100} height={50} />
+          <BarChart
+            xlabels={xlabels}
+            title="Monthly Followers"
+            values={chartValues}
+          />
         </div>
       </>
     );
