@@ -14,6 +14,8 @@ const Message = require("../models/messages");
  * @access PRIVATE
  */
 router.post("/api/user/messages", auth_check, (req, res, next) => {
+  console.log("body", req.body);
+
   Message.find({
     $or: [{ sender: req.body.sender }, { sender: req.body.receiver }],
     $and: [
@@ -24,6 +26,7 @@ router.post("/api/user/messages", auth_check, (req, res, next) => {
   })
     .sort({ created: 1 })
     .then((result) => {
+      console.table(result);
       res.json(result);
       //io.emit(data.receiver, data);
     })

@@ -14,8 +14,8 @@ export default class Reportsservice {
     return response;
   }
   async getMonthlyFollower(year, month, token) {
-    console.log(year,month);
-    
+    console.log(year, month);
+
     const response = await axios(
       `${process.env.REACT_APP_API_URL}/api/reports/monthly/${year}/${month}`,
       {
@@ -30,6 +30,18 @@ export default class Reportsservice {
   async getDailyFollower(token) {
     const response = await axios(
       `${process.env.REACT_APP_API_URL}/api/reports/daily`,
+      {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    return response;
+  }
+  async getFollowerBetweenDates(fromDate, toDate, token) {
+    const response = await axios(
+      `${process.env.REACT_APP_API_URL}/api/reports/${fromDate}/${toDate}`,
       {
         method: "GET",
         headers: {

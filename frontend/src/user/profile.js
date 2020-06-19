@@ -143,10 +143,11 @@ class Profile extends Component {
     getModal.classList.add("show");
   };
 
-  handleChatBoxDisplay = (e) => {
+  handleChatBoxDisplay = (e, receiver) => {
     e.persist();
     this.setState({
       hasChatBoxDisplay: !this.state.hasChatBoxDisplay,
+      receiver: receiver,
     });
   };
   showFollowList = () => {
@@ -185,8 +186,8 @@ class Profile extends Component {
               authUser={this.props.authUser}
               senderId={this.props.authUser._id}
               senderName={this.props.authUser.name}
-              receiverId={this.state.user._id}
-              receiverName={this.state.user.name}
+              receiverId={this.state.receiver._id}
+              receiverName={this.state.receiver.name}
               messages={this.state.messages}
               handleChatBoxDisplay={this.handleChatBoxDisplay}
               fetchMessage={this.props.fetchMessage}

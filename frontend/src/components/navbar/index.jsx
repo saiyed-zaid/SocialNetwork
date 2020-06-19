@@ -108,6 +108,62 @@ const Navbar = withRouter(
                   )}
                 </li>
               </ul>
+              <ul className="navbar-nav ml-auto nav-mobile ">
+                <li className="nav-item dropdown">
+                  <a
+                    className="nav-link "
+                    href="/"
+                    id="navbarDropdownMenuLink"
+                    role="button"
+                    data-toggle="dropdown"
+                    aria-haspopup="true"
+                    aria-expanded="false"
+                  >
+                    <img
+                      style={{
+                        borderRadius: "50%",
+                      }}
+                      className="nav-link  p-0 m-0 ml-1 img-circle float-right "
+                      src={authUser.photo ? authUser.photo.photoURI : avatar}
+                      width="30px"
+                      height="30px"
+                      onError={(e) => (e.target.src = avatar)}
+                      alt="user "
+                    />
+                  </a>
+                  <div
+                    className="dropdown-menu  dropdown-menu-right"
+                    aria-labelledby="navbarDropdownMenuLink"
+                  >
+                    <Link
+                      className="dropdown-item"
+                      to={`/user/edit/${authUser._id}`}
+                    >
+                      <FontAwesomeIcon icon={faEdit} />
+                      &nbsp; Manage Profile
+                    </Link>
+                    <Link
+                      className="dropdown-item"
+                      to={`/user/changepassword/${authUser._id}`}
+                    >
+                      <FontAwesomeIcon icon={faKey} /> &nbsp; Change Password
+                    </Link>
+
+                    <Link
+                      className="dropdown-item"
+                      to="/signin"
+                      onClick={() =>
+                        signout(() => {
+                          handleLogout();
+                        })
+                      }
+                    >
+                      <FontAwesomeIcon icon={faSignOutAlt} />
+                      &nbsp; &nbsp; Logout
+                    </Link>
+                  </div>
+                </li>
+              </ul>
             </>
           ) : (
             <>
@@ -191,7 +247,7 @@ const Navbar = withRouter(
               </ul>
               {authUser ? (
                 <ul className="navbar-nav ml-auto nav-mobile ">
-                  {authUser && authUser.role !== "admin" && (
+                  {authUser.role !== "admin" && (
                     <>
                       <MsgNotification
                         handleOpen={handleChatOpen}

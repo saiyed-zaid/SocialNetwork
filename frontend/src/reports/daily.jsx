@@ -13,12 +13,10 @@ export default class yearly extends Component {
     };
   }
   async componentDidMount() {
-    const response = await this.props.getDailyFollower(
-      this.props.authUser.token
-    );
-    console.log("response", response);
-
     try {
+      const response = await this.props.getDailyFollower(
+        this.props.authUser.token
+      );
       if (response.data.error) {
         console.log(response.data.error);
       } else {

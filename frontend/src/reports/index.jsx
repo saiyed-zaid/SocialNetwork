@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import Monthly from "./monthly";
 import Yearly from "./yearly";
 import Daily from "./daily";
+import BetweenDates from "./betweenDates";
 
 export default class index extends Component {
   constructor() {
@@ -91,159 +92,6 @@ export default class index extends Component {
                 </div>
               </div>
             </div>
-            {/*   <div className="card">
-              <div className="card-header" id="headingTwo">
-                <h2 className="mb-0">
-                  <button
-                    className="btn btn-link btn-block text-left collapsed btn-accordian"
-                    type="button"
-                    data-toggle="collapse"
-                    data-target="#collapseTwo"
-                    aria-expanded="false"
-                    aria-controls="collapseTwo"
-                  >
-                    Likes{" "}
-                  </button>
-                </h2>
-              </div>
-              <div
-                id="collapseTwo"
-                className="collapse"
-                aria-labelledby="headingTwo"
-                data-parent="#accordionExample"
-              >
-                <div className="card-body">
-                  <div
-                    className="nav flex-column nav-pills text-center"
-                    id="v-pills-tab"
-                    role="tablist"
-                    aria-orientation="vertical"
-                  >
-                    <a
-                      className="nav-link active "
-                      id="v-pills-home-tab"
-                      data-toggle="pill"
-                      href="#v-pills-monthly"
-                      role="tab"
-                      aria-controls="v-pills-monthly"
-                      aria-selected="true"
-                    >
-                      yearly
-                    </a>
-                    <a
-                      className="nav-link "
-                      id="v-pills-yearly-tab"
-                      data-toggle="pill"
-                      href="#v-pills-yearly"
-                      role="tab"
-                      aria-controls="v-pills-yearly"
-                      aria-selected="false"
-                    >
-                      Monthly
-                    </a>
-                    <a
-                      className="nav-link"
-                      id="v-pills-Daily-tab"
-                      data-toggle="pill"
-                      href="#v-pills-Daily"
-                      role="tab"
-                      aria-controls="v-pills-Daily"
-                      aria-selected="false"
-                    >
-                      Daily
-                    </a>
-                    <a
-                      className="nav-link "
-                      id="v-pills-between-tab"
-                      data-toggle="pill"
-                      href="#v-pills-between"
-                      role="tab"
-                      aria-controls="v-pills-between"
-                      aria-selected="false"
-                    >
-                      Between Dates
-                    </a>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div className="card">
-              <div className="card-header" id="headingThree">
-                <h2 className="mb-0">
-                  <button
-                    className="btn btn-link btn-block text-left collapsed btn-accordian "
-                    type="button"
-                    data-toggle="collapse"
-                    data-target="#collapseThree"
-                    aria-expanded="false"
-                    aria-controls="collapseThree"
-                  >
-                    Comments{" "}
-                  </button>
-                </h2>
-              </div>
-              <div
-                id="collapseThree"
-                className="collapse"
-                aria-labelledby="headingThree"
-                data-parent="#accordionExample"
-              >
-                <div className="card-body">
-                  <div
-                    className="nav flex-column nav-pills text-center"
-                    id="v-pills-tab"
-                    role="tablist"
-                    aria-orientation="vertical"
-                  >
-                    <a
-                      className="nav-link active "
-                      id="v-pills-home-tab"
-                      data-toggle="pill"
-                      href="#v-pills-monthly"
-                      role="tab"
-                      aria-controls="v-pills-monthly"
-                      aria-selected="true"
-                    >
-                      yearly
-                    </a>
-                    <a
-                      className="nav-link "
-                      id="v-pills-yearly-tab"
-                      data-toggle="pill"
-                      href="#v-pills-yearly"
-                      role="tab"
-                      aria-controls="v-pills-yearly"
-                      aria-selected="false"
-                    >
-                      Monthly
-                    </a>
-                    <a
-                      className="nav-link"
-                      id="v-pills-Daily-tab"
-                      data-toggle="pill"
-                      href="#v-pills-Daily"
-                      role="tab"
-                      aria-controls="v-pills-Daily"
-                      aria-selected="false"
-                    >
-                      Daily
-                    </a>
-                    <a
-                      className="nav-link "
-                      id="v-pills-between-tab"
-                      data-toggle="pill"
-                      href="#v-pills-between"
-                      role="tab"
-                      aria-controls="v-pills-between"
-                      aria-selected="false"
-                    >
-                      Between Dates
-                    </a>
-                  </div>
-                </div>
-              </div>
-            </div>
-         */}{" "}
           </div>
         </div>
 
@@ -288,7 +136,10 @@ export default class index extends Component {
               role="tabpanel"
               aria-labelledby="v-pills-between-tab"
             >
-              d
+              <BetweenDates
+                getFollowerBetweenDates={this.props.getFollowerBetweenDates}
+                authUser={this.props.authUser}
+              />
             </div>
           </div>
         </div>

@@ -160,7 +160,9 @@ class ProfileTabs extends Component {
                           className="btn btn-primary"
                           data-userId={person._id}
                           data-name={person.name}
-                          onClick={this.props.hasChatBoxDisplay}
+                          onClick={(e) =>
+                            this.props.hasChatBoxDisplay(e, person)
+                          }
                         >
                           <FontAwesomeIcon icon={faPaperPlane} />
                         </button>
