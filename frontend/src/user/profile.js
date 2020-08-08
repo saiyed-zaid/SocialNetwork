@@ -47,7 +47,7 @@ class Profile extends Component {
     if (this.props.authUser) {
       const token = this.props.authUser.token;
       const response = await this.props.read(userId, token);
-      console.log('r',response);
+      console.log("r", response);
       if (response && response.status === 401) {
         localStorage.removeItem("jwt");
         return this.props.history.push("/signin");
@@ -58,6 +58,7 @@ class Profile extends Component {
           let following = this.checkFollow(response.data);
           this.setState({ user: response.data, following, isLoading: false });
           this.loadPosts(userId);
+          console.log("))Res", response.data);
         }
       }
     }
@@ -66,6 +67,7 @@ class Profile extends Component {
   checkFollow = (user) => {
     const jwt = isAuthenticated();
     const match = user.followers.find((follower) => {
+      console.log(follower);
       return follower.user._id === jwt.user._id;
     });
     return match;
@@ -177,6 +179,7 @@ class Profile extends Component {
           minHeight: "calc(100vh - 22vh)",
         }}
       >
+        {console.log(this.props)}
         {/* DISPLAY CHATBOX */}
         {this.state.hasChatBoxDisplay && (
           <div
@@ -187,8 +190,8 @@ class Profile extends Component {
               authUser={this.props.authUser}
               senderId={this.props.authUser._id}
               senderName={this.props.authUser.name}
-              receiverId={this.state.receiver._id}
-              receiverName={this.state.receiver.name}
+              receiverId={this.state.user._id}
+              receiverName={this.state.user.name}
               messages={this.state.messages}
               handleChatBoxDisplay={this.handleChatBoxDisplay}
               fetchMessage={this.props.fetchMessage}

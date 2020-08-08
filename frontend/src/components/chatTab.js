@@ -182,6 +182,8 @@ export default class chatTab extends Component {
     const msg = document.querySelector("#btn-input");
     let emoji = e.native;
     msg.value += emoji;
+
+    console.log(msg.value);
   };
   showEmoji = () => {
     this.setState({ displayEmoji: !this.state.displayEmoji });
