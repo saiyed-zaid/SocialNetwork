@@ -47,6 +47,7 @@ class Profile extends Component {
     if (this.props.authUser) {
       const token = this.props.authUser.token;
       const response = await this.props.read(userId, token);
+      console.log('r',response);
       if (response && response.status === 401) {
         localStorage.removeItem("jwt");
         return this.props.history.push("/signin");
@@ -221,7 +222,19 @@ class Profile extends Component {
         </div>
 
         <div className="jumbotron text-center">
-          <h1 className="display-4">Hello, {this.state.user.name}!</h1>
+          {this.props.authUser._id !== this.state.user._id ? (
+            <h1 className="display-4">
+              {this.state.user.name.charAt(0).toUpperCase() +
+                this.state.user.name.slice(1)}
+            </h1>
+          ) : (
+            <h1 className="display-4">
+              Hello,{" "}
+              {this.state.user.name.charAt(0).toUpperCase() +
+                this.state.user.name.slice(1)}
+            </h1>
+          )}
+
           <p className="lead" style={{ color: "#b7b7b7" }}>
             {this.state.user.about}
           </p>

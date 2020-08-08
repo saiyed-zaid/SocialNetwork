@@ -125,7 +125,7 @@ class SinglePost extends Component {
     const posterName = post.postedBy ? post.postedBy.name : "Unknown";
     const { like, likes } = this.state;
     return (
-      <div>
+      <div className="mt-2">
         <div>
           {post.photo.length > 1 ? (
             <div style={{ height: "500px !important" }}>

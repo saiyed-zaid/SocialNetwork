@@ -165,12 +165,12 @@ exports.deleteUser = async (req, res, next) => {
 exports.addFollowing = async (req, res, next) => {
   try {
     //req.body.userId
-    const result = await User.findByIdAndUpdate(req.body.userId, {
-      $push: {
-        following: req.body.followId,
-      },
-    });
-    next();
+    const user = await User.findById(req.body.userId);
+    if (user.following.indexOf(req.body.followId) === -1) {
+      user.following.push(req.body.followId);
+      user.save();
+      next();
+    }
   } catch (error) {
     return res.status(500).json({
       error: "Something went wrong...",
@@ -256,7 +256,7 @@ exports.findPeople = async (req, res, next) => {
     await res.json(users);
   } catch (error) {
     return res.status(400).json({
-      err: "Something Went Wrong",
+      error: "Something Went Wrong",
     });
   }
 };

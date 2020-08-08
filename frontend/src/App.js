@@ -10,7 +10,6 @@ import Reportservice from "./services/report";
 export default class App extends Component {
   constructor(props) {
     super(props);
-
     this.state = {
       logginStatus: true,
       warn: false,
@@ -31,6 +30,7 @@ export default class App extends Component {
   render() {
     return (
       <Router>
+       
         <MainRouter
           Authservice={new Authservice()}
           Postservice={new Postservice()}

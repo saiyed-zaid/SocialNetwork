@@ -184,7 +184,6 @@ class MainRouter extends React.Component {
   render() {
     return (
       <div>
-        {/* <UseDarkMode /> */}
         {this.state.hasNewMsg && (
           <div
             id="chat-tab"
