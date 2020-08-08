@@ -29,8 +29,8 @@ class Posts extends Component {
   async componentDidMount() {
     const token = isAuthenticated().user.token;
     try {
-      const response = await this.props.list(true, token);
-      if (response.error) {
+      const response = await this.props.getAllPost(true, token);
+      if (response.data.error) {
         console.log(response.data.error);
       } else {
         this.setState({ posts: response.data.posts, isLoading: false }, () => {
@@ -47,7 +47,7 @@ class Posts extends Component {
   deletePost = async (postId) => {
     const token = isAuthenticated().user.token;
     try {
-      const response = await this.props.remove(postId, token);
+      const response = await this.props.removePost  (postId, token);
       if (response.data.error) {
         console.log(response.data.error);
       } else {
@@ -252,6 +252,7 @@ class Posts extends Component {
               <th scope="col" style={{ width: "10px" }}>
                 Edit
               </th>
+
               <th scope="col" style={{ width: "10px" }}>
                 Delete
               </th>
@@ -271,9 +272,7 @@ class Posts extends Component {
                     />
                   </td>
                   <td scope="row">{i + 1}</td>
-                  <td>
-                    <Avatar src={post.photo ? post.photo : DefaultPost} />
-                  </td>
+
                   <td>{post.title}</td>
                   <td
                     data-toggle="tooltip"
@@ -321,6 +320,7 @@ class Posts extends Component {
                       />
                     </button>
                   </td>
+                  <td style={{ display: "none" }}></td>
                 </tr>
               );
             })}

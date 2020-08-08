@@ -47,12 +47,15 @@ export default class chatTab extends Component {
 
   async componentDidMount() {
     this.setState({ isLoading: true });
+    console.log("msg", this.props);
+
     try {
       const result = await this.props.fetchMessage(
         this.props.senderId,
         this.props.receiverId,
         this.props.authUser.token
       );
+      console.log(result);
 
       this.setState({
         hasNewMsg: true,
@@ -207,6 +210,7 @@ export default class chatTab extends Component {
               animation: "none",
               transition: "none",
               maxWidth: "283px",
+              zIndex: 9999,
             }}
           >
             <div className="card-header text-left text-light bg-dark handle">

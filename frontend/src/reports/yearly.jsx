@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import DateTimePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { Bar } from "react-chartjs-2";
+import BarChart from "../ui-components/barChart";
 
 export default class Yearly extends Component {
   constructor() {
@@ -9,6 +10,8 @@ export default class Yearly extends Component {
     this.state = {
       date: "",
       data: [],
+      xlabels: null,
+      chartValues: null,
     };
   }
 
@@ -24,8 +27,8 @@ export default class Yearly extends Component {
       } else {
         const values = [];
         response.data.map((year) => values.push(year.followersCount));
-        var chartData = {
-          labels: [
+        this.setState({
+          xlabels: [
             "January",
             "February",
             "March",
@@ -39,13 +42,8 @@ export default class Yearly extends Component {
             "November",
             "December",
           ],
-          datasets: [
-            {
-              data: values,
-            },
-          ],
-        };
-        this.setState({ data: chartData });
+          chartValues: values,
+        });
       }
     } catch (error) {
       console.log(error);
@@ -53,7 +51,7 @@ export default class Yearly extends Component {
   };
 
   render() {
-    const { date, data } = this.state;
+    const { date, xlabels, chartValues } = this.state;
 
     return (
       <div>
@@ -70,7 +68,11 @@ export default class Yearly extends Component {
           />
         </div>
         <div className="text-dark">
-          <Bar data={data} width={100} height={50} />
+          <BarChart
+            xlabels={xlabels}
+            title="Yearly Followers"
+            values={chartValues}
+          />
         </div>
       </div>
     );

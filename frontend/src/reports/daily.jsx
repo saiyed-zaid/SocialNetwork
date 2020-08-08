@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 
-import { Bar } from "react-chartjs-2";
+import BarChart from "../ui-components/barChart";
 
 export default class yearly extends Component {
   constructor() {
@@ -8,15 +8,15 @@ export default class yearly extends Component {
     this.state = {
       month: "",
       data: [],
+      xlabels: null,
+      chartValues: null,
     };
   }
   async componentDidMount() {
-    const response = await this.props.getDailyFollower(
-      this.props.authUser.token
-    );
-    console.log("response", response);
-
     try {
+      const response = await this.props.getDailyFollower(
+        this.props.authUser.token
+      );
       if (response.data.error) {
         console.log(response.data.error);
       } else {
@@ -26,26 +26,22 @@ export default class yearly extends Component {
         const values = [];
         response.data.map((day) => name.push(day.day));
         response.data.map((day) => values.push(day.followersCount));
-        var chartData = {
-          labels: name,
-          datasets: [
-            {
-              data: values,
-            },
-          ],
-        };
-        this.setState({ data: chartData });
+        this.setState({ xlabels: name, chartValues: values });
       }
     } catch (error) {
       console.log(error);
     }
   }
   render() {
-    const { data } = this.state;
+    const { xlabels, chartValues } = this.state;
     return (
       <>
         <div className="text-dark">
-          <Bar data={data} width={100} height={50} />
+          <BarChart
+            xlabels={xlabels}
+            title="Daily Followers"
+            values={chartValues}
+          />{" "}
         </div>
       </>
     );

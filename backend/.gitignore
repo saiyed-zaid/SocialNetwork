@@ -4,4 +4,4 @@
 /node_modules
 /upload
 /services
-./access.log
+access.log

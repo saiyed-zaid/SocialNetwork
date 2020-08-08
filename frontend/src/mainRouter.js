@@ -226,41 +226,32 @@ class MainRouter extends React.Component {
           </button>
         )}
         <Switch>
-          <Route path="/" exact component={Home} />
-          <Route
+          <PrivateRoute path="/" exact component={Home} />
+          <PrivateRoute
             exact
             path="/admin/posts"
-            render={() => (
-              <AdminPosts
-                updatePost={this.props.Postservice.editPost}
-                list={this.props.Postservice.fetchPosts}
-                remove={this.props.Postservice.deletePost}
-              />
-            )}
+            component={AdminPosts}
+            updatePost={this.props.Postservice.editPost}
+            getAllPost={this.props.Postservice.fetchPosts}
+            removePost={this.props.Postservice.deletePost}
           />
-          <Route
+          <PrivateRoute
             exact
             path="/admin/scheduledposts"
-            render={() => (
-              <AdminScheduledPosts
-                editScheduledPost={this.props.Postservice.editScheduledPost}
-                fetchAllScheduledPosts={
-                  this.props.Postservice.fetchAllScheduledPosts
-                }
-                deleteScheduledPost={this.props.Postservice.deleteScheduledPost}
-              />
-            )}
+            component={AdminScheduledPosts}
+            editScheduledPost={this.props.Postservice.editScheduledPost}
+            fetchAllScheduledPosts={
+              this.props.Postservice.fetchAllScheduledPosts
+            }
+            deleteScheduledPost={this.props.Postservice.deleteScheduledPost}
           />
-          <Route
+          <PrivateRoute
             exact
             path="/admin/users"
-            render={() => (
-              <AdminUsers
-                remove={this.props.Userservice.remove}
-                getAll={this.props.Userservice.getAll}
-                update={this.props.Userservice.update}
-              />
-            )}
+            component={AdminUsers}
+            remove={this.props.Userservice.remove}
+            getAll={this.props.Userservice.getAll}
+            update={this.props.Userservice.update}
           />
           <PrivateRoute exact path="/admin/home" component={AdminHome} />
           <PrivateRoute exact path="/admin" component={Admin} />
@@ -409,6 +400,9 @@ class MainRouter extends React.Component {
             getYearlyFollower={this.props.Reportservice.getYearlyFollower}
             getMonthlyFollower={this.props.Reportservice.getMonthlyFollower}
             getDailyFollower={this.props.Reportservice.getDailyFollower}
+            getFollowerBetweenDates={
+              this.props.Reportservice.getFollowerBetweenDates
+            }
             authUser={this.state.authUser}
           />
         </Switch>
